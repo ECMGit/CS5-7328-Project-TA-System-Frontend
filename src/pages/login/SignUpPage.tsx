@@ -38,7 +38,7 @@ const RegistrationPage: React.FC = () => {
         window.location.reload();
       },
       (error: AxiosError | Error) => {
-        // Correct Error types
+        // Test commit
         let resMessage;
         if (error instanceof AxiosError) {
           resMessage =
