@@ -17,6 +17,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
 import { AxiosError } from 'axios';
+import FileUpload from '../../components/FileUpload';
 
 const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -38,7 +39,6 @@ const RegistrationPage: React.FC = () => {
         window.location.reload();
       },
       (error: AxiosError | Error) => {
-        // Test commit
         let resMessage;
         if (error instanceof AxiosError) {
           resMessage =
