@@ -1,62 +1,83 @@
 import React, { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: '16px', // Manually define spacing, e.g., 16px
+    margin: 'auto',
+    maxWidth: 600,
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+  },
+}));
 
 const TaApply = () => {
-  // Define state variables for input fields
+  const classes = useStyles();
+
   const [courseId, setCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
   const [name, setName] = useState('');
   const [status, setStatus] = useState('');
   const [hoursPerWeek, setHoursPerWeek] = useState('');
-  // const [coursesTaken, setCoursesTaken] = useState([]);
   const [coursesTaken, setCoursesTaken] = useState<string[]>([]);
   const [gpaToDate, setGpaToDate] = useState('');
   const [requiredCourses, setRequiredCourses] = useState<string[]>([]);
   const [requiredSkills, setRequiredSkills] = useState<string[]>([]);
-  const [resumeFile, setResumeFile] = useState<File | null>(null); // Allow null or File object
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // You can perform further actions here, such as sending data to a server
-
-    // Display success message
     setSuccessMessage('Application submitted successfully!');
   };
 
   return (
-    <div>
-      <h1>TA Job Application</h1>
-      {successMessage && <div>{successMessage}</div>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Course ID:
-          <input type="text" value={courseId} onChange={(e) => setCourseId(e.target.value)} />
-        </label>
+    <Container maxWidth="md">
+      <Paper className={classes.paper}>
+        <Typography variant="h5" align="center">
+          TA Job Application
+        </Typography>
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <TextField
+            label="Course ID"
+            fullWidth
+            value={courseId}
+            onChange={(e) => setCourseId(e.target.value)}
+          />
 
-        <p></p>
-        <label>
-          Course Name:
-          <input type="text" value={courseName} onChange={(e) => setCourseName(e.target.value)} />
-        </label>
+          <TextField
+            label="Course Name"
+            fullWidth
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
+          />
 
-        <p></p>
-        <label>
-          Student Name:
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        </label>
+          <TextField
+            label="Student Name"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <p></p>
-        <label>
-          Status:
-          <input type="text" value={status} onChange={(e) => setStatus(e.target.value)} />
-        </label>
-        <p></p>
+          <TextField
+            label="Status"
+            fullWidth
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          />
 
-        <label>
-          Hours could work per week:
-          <input type="text" value={hoursPerWeek}
+          <TextField
+            label="Hours could work per week"
+            fullWidth
+            value={hoursPerWeek}
             onChange={(e) => {
               const input = e.target.value;
               if (/^\d*\.?\d*$/.test(input)) {
@@ -66,18 +87,18 @@ const TaApply = () => {
               }
             }}
           />
-        </label>
 
-        <p></p>
-        <label>
-          Courses taken:
-          <input type="text" value={coursesTaken.join(',')} onChange={(e) => setCoursesTaken(e.target.value.split(','))} />
-        </label>
-        
-        <p></p>
-        <label>
-          GPA to date:
-          <input type="text" value={gpaToDate}
+          <TextField
+            label="Courses taken"
+            fullWidth
+            value={coursesTaken.join(',')}
+            onChange={(e) => setCoursesTaken(e.target.value.split(','))}
+          />
+
+          <TextField
+            label="GPA to date"
+            fullWidth
+            value={gpaToDate}
             onChange={(e) => {
               const input = e.target.value;
               if (/^\d*\.?\d*$/.test(input)) {
@@ -87,36 +108,38 @@ const TaApply = () => {
               }
             }}
           />
-        </label>
 
-        <p></p>
-        <label>
-          Required courses taken:
-          <input type="text" value={requiredCourses.join(',')} onChange={(e) => setRequiredCourses(e.target.value.split(','))} />
-        </label>
+          <TextField
+            label="Required courses taken"
+            fullWidth
+            value={requiredCourses.join(',')}
+            onChange={(e) => setRequiredCourses(e.target.value.split(','))}
+          />
 
-        <p></p>
-        <label>
-          Required skills:
-          <input type="text" value={requiredSkills.join(',')} onChange={(e) => setRequiredSkills(e.target.value.split(','))} />
-        </label>
+          <TextField
+            label="Required skills"
+            fullWidth
+            value={requiredSkills.join(',')}
+            onChange={(e) => setRequiredSkills(e.target.value.split(','))}
+          />
 
+          <input
+            type="file"
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setResumeFile(e.target.files[0]);
+              } else {
+                setResumeFile(null);
+              }
+            }}
+          />
 
-        
-      
-        <p><input type="file" onChange={(e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            setResumeFile(e.target.files[0]);
-          }else{
-            setResumeFile(null); // Set to null if no file is selected
-          }
-        }}
-        /></p>
-
-        <p></p>
-        <button type="submit">Submit Resume</button>
-      </form>
-    </div>
+          <Button type="submit" variant="contained" color="primary" size="large">
+            Submit Resume
+          </Button>
+        </form>
+      </Paper>
+    </Container>
   );
 };
 
