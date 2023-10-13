@@ -9,7 +9,7 @@ const getTAApplications = () => {
   });
 };
 
-const updateTAApplication = (id: string) => {
+const getTAApplicationById = (id: string) => {
   return axios.put(TA_API_URL + `/${id}`).then( res => {
     console.log(res);
   });
@@ -20,7 +20,7 @@ const updateTAApplication = (id: string) => {
 // Adding TA-related functions to your AuthService export
 const AuthService = {          
   getTAApplications, 
-  updateTAApplication  
+  getTAApplicationById  
 };
 
 export default AuthService;
