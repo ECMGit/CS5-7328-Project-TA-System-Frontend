@@ -37,7 +37,24 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#1976D2', // Blue color
+          color: '#FFF', // White color
+          padding: '16px', // Adjust the padding as needed
+        }}
+      >
+        {/* Add an image that, when clicked, redirects to the first page */}
+        <img
+          src="your-image-source.jpg" // Provide the actual image source
+          alt="Click to go back"
+          style={{ cursor: 'pointer' }}
+        />
+      </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -135,7 +152,6 @@ const Profile: React.FC = () => {
           </Box>
         </Grid>
       </Grid>
-      
     </Container>
   );
 
