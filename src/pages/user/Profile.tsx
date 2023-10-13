@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
   function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = a FileReader();
+      const reader = new FileReader();
       reader.onload = (e) => {
         const uploadedResume = e.target?.result as string;
         setResume(uploadedResume);
@@ -53,6 +53,7 @@ const Profile: React.FC = () => {
               <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleUploadClick}>
                 Upload Profile
               </Button>
+              <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
             </Grid>
             <Grid item xs={6}>
               <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={() => document.getElementById('resumeUpload')?.click()}>
@@ -69,6 +70,7 @@ const Profile: React.FC = () => {
               fullWidth
               value={name}
               onChange={(e) => setName(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <TextField
               label="Graduation Year"
@@ -76,6 +78,7 @@ const Profile: React.FC = () => {
               fullWidth
               value={graduationYear}
               onChange={(e) => setGraduationYear(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <TextField
               label="Major"
@@ -83,6 +86,7 @@ const Profile: React.FC = () => {
               fullWidth
               value={major}
               onChange={(e) => setMajor(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
             {resume && (
