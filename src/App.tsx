@@ -7,6 +7,7 @@ import UserProfile from './pages/user/Profile';
 import SignUpPage from './pages/login/SignUpPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
+import ApplicationPage from './pages/apply/ApplicationPage';
 // import { fakeAuthProvider } from "./auth";
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<LoginPage />} />
+        <Route path="/apply" element={<ApplicationPage />} />
       </Routes>
     </Router>
   );
