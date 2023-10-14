@@ -23,6 +23,7 @@ import '@fontsource/roboto/700.css';
 import FileUpload from '../../components/FileUpload';
 import BottomPanel from '../../components/BottomPanel';
 
+// TODO: this needs to come from back-end in the future
 // Static variable field
 const courses = [
   'Math 101',
@@ -57,7 +58,6 @@ function ApplicationPage() {
   // Basic Information
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [courseId, setCourseId] = useState('');
   const [courseName, setCourseName] = useState('');
   const [status, setStatus] = useState('');
   const [weeklyHours, setWeeklyHours] = useState('');
@@ -79,7 +79,6 @@ function ApplicationPage() {
    */
   const formatFormData = () => {
     // Convert data
-    const formatCourseId = Number(courseId);
     const formatGpa = parseFloat(gpa);
     const formatSelectedCourse = selectedCourses.join(',');
     const formatSelectedSkills = selectedSkills.join(',');
@@ -88,7 +87,6 @@ function ApplicationPage() {
     return {
       firstName,
       lastName,
-      courseId: formatCourseId,
       courseName,
       status,
       weeklyHours,
@@ -180,25 +178,6 @@ function ApplicationPage() {
                   autoComplete="family-name"
                   onChange={(e) => setLastName(e.target.value)}
                   value={lastName}
-                  variant="standard"
-                />
-              </Grid>
-
-              <Grid item xs={12} sx={{ mt: 2 }}>
-                <Typography component="h2" variant="h6" justifyContent="center">
-                  Course ID
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  required
-                  fullWidth
-                  id="courseId"
-                  label="Course ID"
-                  name="courseId"
-                  autoComplete="family-name"
-                  onChange={(e) => setCourseId(e.target.value)}
-                  value={courseId}
                   variant="standard"
                 />
               </Grid>
