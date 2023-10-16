@@ -146,7 +146,7 @@ function ApplicationPage() {
           >
             <Grid
               container
-              spacing={1}
+              spacing={2}
               alignItems="flex-start"
               justifyContent="flex-start"
             >
@@ -155,7 +155,7 @@ function ApplicationPage() {
                   Name
                 </Typography>
               </Grid>
-              <Grid item xs={6} sm={6}>
+              <Grid item xs={12} sm={5}>
                 <TextField
                   required
                   fullWidth
@@ -168,7 +168,7 @@ function ApplicationPage() {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={6} sm={6}>
+              <Grid item xs={12} sm={5}>
                 <TextField
                   required
                   fullWidth
@@ -187,7 +187,7 @@ function ApplicationPage() {
                   Course Name
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   required
                   fullWidth
@@ -206,7 +206,7 @@ function ApplicationPage() {
                   Status <span>(Working Full-time/Part-time?)</span>
                 </Typography>
               </Grid>
-              <Grid item xs={8} sm={8}>
+              <Grid item xs={12} sm={8}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Type
@@ -233,7 +233,7 @@ function ApplicationPage() {
                   How many hours do you prefer to work per week?
                 </Typography>
               </Grid>
-              <Grid item xs={8} sm={8}>
+              <Grid item xs={12} sm={8}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Time
@@ -264,9 +264,9 @@ function ApplicationPage() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sx={{ mt: 2 }}>
+              <Grid item xs={12} sm={12} sx={{ mt: 2 }}>
                 <Typography component="h2" variant="h4" justifyContent="center">
-                  Now, tell us how you well do in school 🚀
+                  Now, tell us how well you do in school 🚀
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ mt: 2 }}>
@@ -294,7 +294,7 @@ function ApplicationPage() {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControl sx={{ m: 1, width: 500 }}>
+                <FormControl sx={{ m: 1, width: 400 }}>
                   <InputLabel>Courses Chosen</InputLabel>
                   <Select
                     multiple
@@ -339,7 +339,7 @@ function ApplicationPage() {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControl sx={{ m: 1, width: 500 }}>
+                <FormControl sx={{ m: 1, width: 400 }}>
                   <InputLabel>Skills Chosen</InputLabel>
                   <Select
                     multiple
