@@ -104,7 +104,7 @@ function ApplicationPage() {
       status,
       hoursCanWorkPerWeek,
       gpa: formatGpa,
-      coursesTaken: formatSelectedCourse,
+      requiredCourses: formatSelectedCourse,
       requiredSkills: formatSelectedSkills,
       fileName,
     };
