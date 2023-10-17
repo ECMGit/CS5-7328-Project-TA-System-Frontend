@@ -9,10 +9,13 @@ type FileUploadProps = {
   setFileStatus: React.Dispatch<React.SetStateAction<boolean>>;
   fileName: string;
   setFileName: React.Dispatch<React.SetStateAction<string>>;
+  fileEntity: File|undefined;
+  setFileEntity: React.Dispatch<React.SetStateAction<File|undefined>>;
+
 };
 
 /* File Upload Button */
-export default function FileUpload({ fileStatus, setFileStatus, fileName, setFileName }: FileUploadProps) {
+export default function FileUpload({ fileStatus, setFileStatus, fileName, setFileName, fileEntity, setFileEntity }: FileUploadProps) {
   // Style the upload button
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -31,10 +34,11 @@ export default function FileUpload({ fileStatus, setFileStatus, fileName, setFil
    * @param e: the event from browser event loop.
    */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+    fileEntity = e.target.files?.[0];
+    if (fileEntity) {
       setFileStatus(true);
-      setFileName(file.name);
+      setFileName(fileEntity.name);
+      setFileEntity(fileEntity);
     }
   };
 
