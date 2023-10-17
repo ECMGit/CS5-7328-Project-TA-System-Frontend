@@ -59,12 +59,16 @@ const skills = [
 function ApplicationPage() {
   /* State Field */
   // Basic Information
+  // TODO: these ids need to come from previous endpoinds in the future
+  const [taJobId] = useState(1);
+  const [courseId] = useState(1);
+  const [studentId] = useState(1);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [courseName, setCourseName] = useState('');
   const [status, setStatus] = useState('');
-  const [weeklyHours, setWeeklyHours] = useState('');
-  const [gpa, setGpa] = useState('');
+  const [hoursCanWorkPerWeek, setWeeklyHours] = useState('');
+  const [GPA, setGpa] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
@@ -83,7 +87,7 @@ function ApplicationPage() {
    */
   const formatFormData = () => {
     // Convert data
-    const formatGpa = parseFloat(gpa);
+    const formatGpa = parseFloat(GPA);
     const formatSelectedCourse = selectedCourses.join(',');
     const formatSelectedSkills = selectedSkills.join(',');
 
@@ -91,14 +95,17 @@ function ApplicationPage() {
 
     // Return the object that includes all the key-value pairs.
     return {
+      taJobId,
+      courseId,
+      studentId,
       firstName,
       lastName,
       courseName,
       status,
-      weeklyHours,
+      hoursCanWorkPerWeek,
       gpa: formatGpa,
-      selectedCourses: formatSelectedCourse,
-      selectedSkills: formatSelectedSkills,
+      coursesTaken: formatSelectedCourse,
+      requiredSkills: formatSelectedSkills,
       fileName,
     };
   };
@@ -272,7 +279,7 @@ function ApplicationPage() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={weeklyHours}
+                    value={hoursCanWorkPerWeek}
                     label="WeeklyHours"
                     onChange={(e) => setWeeklyHours(e.target.value)}
                   >
@@ -314,7 +321,7 @@ function ApplicationPage() {
                   name="gpa"
                   autoComplete="family-name"
                   onChange={(e) => setGpa(e.target.value)}
-                  value={gpa}
+                  value={GPA}
                   variant="standard"
                 />
               </Grid>
@@ -411,7 +418,7 @@ function ApplicationPage() {
 
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography component="h2" variant="h6" justifyContent="center">
-                  Upload your resumef
+                  Upload your resume
                 </Typography>
                 <FileUpload
                   fileStatus={fileStatus}

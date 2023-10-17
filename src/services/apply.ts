@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { AxiosResponse } from 'axios';
 
-const Apply_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;
+const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;
+const APPLICATION_API_URL: string | undefined = BASE_API_URL + '/ta-application/';
 /**
  * @param dataJson
  * @param Resume
@@ -9,11 +10,11 @@ const Apply_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;
 
 
 const apply = (dataJson: JSON, Resume: File): Promise<AxiosResponse> => {
-  console.log('1');
+  console.log(BASE_API_URL);
   const formData = new FormData();
-  formData.append('file', Resume); 
+  formData.append('resumeFile', Resume); 
   formData.append('data',JSON.stringify(dataJson));
-  return axios.post(Apply_API_URL+'ta-application', formData);
+  return axios.post(APPLICATION_API_URL, formData);
 };
 
 const ApplyService = {
