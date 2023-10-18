@@ -60,17 +60,21 @@ function ApplicationPage() {
   /* State Field */
   // Basic Information
   // TODO: these ids need to come from previous endpoinds in the future
-  const [taJobId] = useState(1);
-  const [courseId] = useState(1);
-  const [studentId] = useState(1);
+  const [studentId, setStudentId] = useState<number>(1);
+  const [courseId, setCourseId] = useState<number>(1);
+  const [taJobId, setTaJobId] = useState<number>(1);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [courseName, setCourseName] = useState('');
   const [status, setStatus] = useState('');
-  const [hoursCanWorkPerWeek, setWeeklyHours] = useState('');
+  const [hoursCanworkPerWeek, sethoursCanworkPerWeek] = useState('');
   const [GPA, setGpa] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  // Verifications for GPA states formats
+  const [gpaError, setGpaError] = useState(false);
+  const [gpaErrorMessage, setGpaErrorMessage] = useState('');
 
   // File Upload:
   // This would indicate the file upload status, and file name.
@@ -102,7 +106,7 @@ function ApplicationPage() {
       lastName,
       courseName,
       status,
-      hoursCanWorkPerWeek,
+      hoursCanworkPerWeek,
       gpa: formatGpa,
       requiredCourses: formatSelectedCourse,
       requiredSkills: formatSelectedSkills,
@@ -151,6 +155,44 @@ function ApplicationPage() {
 
   };
 
+  /**
+   * Handles the change of GPA input, prompt errors if user
+   * input is not a valid number, or outside of the range
+   * between 0.0 to 4.0
+   * @param event: user input event
+   */
+  const handleGpaChange = function (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    // event.preventDefault();
+    const valueStr = event.target.value;
+    const value = parseFloat(valueStr);
+    if (valueStr.trim() === '') {
+      setGpaError(false);
+      setGpaErrorMessage('');
+      setGpa(valueStr);
+      return;
+    }
+
+    // Check if the value is a valid number and within the range 0.0 to 4.0
+    if (isNaN(value) || value > 4.0 || value < 0.0) {
+      setGpaError(true);
+
+      if (isNaN(value)) {
+        setGpaErrorMessage('Input must be a number.');
+      } else {
+        setGpaErrorMessage('GPA must be between 0.0 and 4.0.');
+      }
+
+      // Prevent invalid values from being set to the state (optional)
+      // event.preventDefault();
+    } else {
+      setGpaError(false);
+      setGpaErrorMessage('');
+      setGpa(valueStr);
+    }
+  };
+
   return (
     <>
       <Container component="main" maxWidth="md">
@@ -193,7 +235,7 @@ function ApplicationPage() {
                   Name
                 </Typography>
               </Grid>
-              <Grid item xs={6} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -206,7 +248,7 @@ function ApplicationPage() {
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={6} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -279,9 +321,9 @@ function ApplicationPage() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={hoursCanWorkPerWeek}
-                    label="WeeklyHours"
-                    onChange={(e) => setWeeklyHours(e.target.value)}
+                    value={hoursCanworkPerWeek}
+                    label="hoursCanworkPerWeek"
+                    onChange={(e) => sethoursCanworkPerWeek(e.target.value)}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -304,7 +346,7 @@ function ApplicationPage() {
 
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography component="h2" variant="h4" justifyContent="center">
-                  Now, tell us how you well do in school 🚀
+                  Now, tell us how well you do in school 🚀
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ mt: 2 }}>
@@ -312,7 +354,7 @@ function ApplicationPage() {
                   Your GPA
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -320,9 +362,11 @@ function ApplicationPage() {
                   label="GPA"
                   name="gpa"
                   autoComplete="family-name"
-                  onChange={(e) => setGpa(e.target.value)}
                   value={GPA}
                   variant="standard"
+                  onChange={handleGpaChange}
+                  error={gpaError}
+                  helperText={gpaErrorMessage}
                 />
               </Grid>
 
@@ -332,7 +376,7 @@ function ApplicationPage() {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControl sx={{ m: 1, width: 500 }}>
+                <FormControl sx={{ m: 1, width: 400 }}>
                   <InputLabel>Courses Chosen</InputLabel>
                   <Select
                     multiple
@@ -377,7 +421,7 @@ function ApplicationPage() {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <FormControl sx={{ m: 1, width: 500 }}>
+                <FormControl sx={{ m: 1, width: 400 }}>
                   <InputLabel>Skills Chosen</InputLabel>
                   <Select
                     multiple
