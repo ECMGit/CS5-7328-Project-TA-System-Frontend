@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import userRoutes from './modules/user/user.routes';
-import * as UserController from './modules/user/user.controller';import taApplicationRoutes from './modules/user/taApplication.routes';
+import * as UserController from './modules/user/user.controller';
+import taApplicationRoutes from './modules/user/taApplication.routes';
 
 
 const app = express();
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
 
 // import routes which are defined in modules
 app.use('/user', userRoutes);
-
+app.use('/taApplication', taApplicationRoutes);
 
 
 app.get("/", (req, res) => {

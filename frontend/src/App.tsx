@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
       
         {
-              <Route path="/" element={<ViewApplications />} />
+          <Route path="/" element={<ViewApplications />} />
               
 
         /* <Route path="/login" element={<LoginPage/>}/>

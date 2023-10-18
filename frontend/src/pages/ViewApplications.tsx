@@ -1,159 +1,81 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell, Link } from '../pages/user/styledComponents';
-
-// Define the application type
-type TAApplicationType = {
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
+//this is the data type for the TAApplication table
+type TAApplicationData = {
+  //id is the primary key for the table
   id: number;
   courseId: number;
   studentId: number;
   hoursCanWorkPerWeek: number;
+  coursesTaken: string;
   GPA: number;
+  requiredCourses: string;
+  requiredSkills: string;
   resumeFile: string;
-  student: {
-    smuNo: number;
-    firstName: string;
-    lastName: string;
-  };
-  course: {
-    title: string;
-  };
-  status: string; // This can be an enum or a string based on the application's status
+  taJobId: number;
 };
-
-// Mock data (assuming you only want a few fields for the mock)
-const mockApplications: TAApplicationType[] = [
-  {
-    id: 1,
-    courseId: 1,
-    studentId: 1,
-    hoursCanWorkPerWeek: 10,
-    GPA: 3.5,
-    resumeFile: "/path/to/resume1.pdf",
-    student: {
-      smuNo: 1,
-      firstName: "John",
-      lastName: "Doe",
-    },
-    course: {
-      title: "CSE101",
-    },
-    status: "Pending", // This would need to be added to your SQL structure or fetched from an API.
-  },
-  {
-    id: 2,
-    courseId: 2,
-    studentId: 2,
-    hoursCanWorkPerWeek: 12,
-    GPA: 3.8,
-    resumeFile: "/path/to/resume2.pdf",
-    student: {
-      smuNo: 2,
-      firstName: "Jane",
-      lastName: "Doe",
-    },
-    course: {
-      title: "CSE102",
-    },
-    status: "Approved", // As an example status.
-  },
-  {
-    id: 3,
-    courseId: 3,
-    studentId: 3,
-    hoursCanWorkPerWeek: 10,
-    GPA: 3.7,
-    resumeFile: "/path/to/resume3.pdf",
-    student: {
-      smuNo: 3,
-      firstName: "Alice",
-      lastName: "White",
-    },
-    course: {
-      title: "CSE103",
-    },
-    status: "Rejected", // As another example status.
-  },
-  // Add two more mock applications below:
-  {
-    id: 4,
-    courseId: 4,
-    studentId: 4,
-    hoursCanWorkPerWeek: 15,
-    GPA: 3.9,
-    resumeFile: "/path/to/resume4.pdf",
-    student: {
-      smuNo: 4,
-      firstName: "Bob",
-      lastName: "Smith",
-    },
-    course: {
-      title: "CSE104",
-    },
-    status: "Approved", // Example status.
-  },
-  {
-    id: 5,
-    courseId: 5,
-    studentId: 5,
-    hoursCanWorkPerWeek: 8,
-    GPA: 3.6,
-    resumeFile: "/path/to/resume5.pdf",
-    student: {
-      smuNo: 5,
-      firstName: "Charlie",
-      lastName: "Brown",
-    },
-    course: {
-      title: "CSE105",
-    },
-    status: "Pending", // Example status.
-  },
-  // ... add more mock applications as needed based on the inserts you've provided ...
-];
-
-type SortField = "student.smuNo" | "student.firstName" | "status" | "hoursCanWorkPerWeek" | "GPA";
-type SortDirection = "asc" | "desc";
-
+//these are the fields that can be sorted
+type SortField = 'studentId' | 'hoursCanWorkPerWeek' | 'GPA';
+//these are the directions that can be sorted
+type SortDirection = 'asc' | 'desc';
+//this is the ViewApplications component
 const ViewApplications: React.FC = () => {
-  const [applications, setApplications] = useState<TAApplicationType[]>([]);
+  //this is the state for the applications
+  const [applications, setApplications] = useState<TAApplicationData[]>([]);
+  //this is the state for the sort configuration
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: SortDirection } | null>(null);
 
   useEffect(() => {
-    setApplications(mockApplications);
+    // Fetch data from API
+    axios.get('http://localhost:9000/taApplication')
+    //this is the response from the API
+      .then(response => {
+        //this is the data from the API
+        setApplications(response.data);
+      })
+      //error from the API
+      .catch(error => {
+        //this is the error message
+        console.error('Error fetching data: ', error);
+      });
   }, []);
-
+//this is the sorted applications
   const sortedApplications = useMemo(() => {
+    //if there is no sort configuration, return the applications
     if (!sortConfig) return applications;
-  
+    //otherwise, sort the applications
     return [...applications].sort((a, b) => {
-      // Extract nested values when necessary
-      const aValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as keyof typeof obj], a);
-const bValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as keyof typeof obj], b);
-
-
-  
-      if (sortConfig.direction === "asc") {
-        if (typeof aValue === 'string') {
-          return aValue.localeCompare(bValue);
-        } else {
-          return aValue - bValue;
-        }
-      } else {
-        if (typeof aValue === 'string') {
-          return bValue.localeCompare(aValue);
-        } else {
-          return bValue - aValue;
-        }
+      //get the values for the sort configuration
+      const aValue = a[sortConfig.field];
+      //get the values for the sort configuration
+      const bValue = b[sortConfig.field];
+      //if the aValue is less than the bValue, return -1
+      if (aValue < bValue) {
+        //if the direction is ascending, return -1, otherwise return 1
+        return sortConfig.direction === 'asc' ? -1 : 1;
       }
+      //if the aValue is greater than the bValue, return 1
+      if (aValue > bValue) {
+        //if the direction is ascending, return 1, otherwise return -1
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      //otherwise, return 0
+      return 0;
     });
+    //if the applications change, return the applications
   }, [applications, sortConfig]);
-  
-
+  //this is the request sort function
   const requestSort = (field: SortField) => {
-    let direction: SortDirection = "asc";
-    if (sortConfig?.field === field && sortConfig?.direction === "asc") {
-      direction = "desc";
+    //this is the direction
+    let direction: SortDirection = 'asc';
+    //if the sort configuration exists, and the field is the same, and the direction is ascending, set the direction to descending
+    if (sortConfig && sortConfig.field === field && sortConfig.direction === 'asc') {
+      //set the direction to descending
+      direction = 'desc';
     }
+    //set the sort configuration
     setSortConfig({ field, direction });
   };
 
@@ -163,43 +85,36 @@ const bValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as 
       <Table>
         <TableHead>
           <TableRow>
-          <TableHeader onClick={() => requestSort("student.smuNo")}>
-  Student ID
-  {sortConfig?.field === "student.smuNo" && (sortConfig.direction === "asc" ? '▲' : '▼')}
-</TableHeader>
-
-            <TableHeader onClick={() => requestSort("student.firstName")}>
-              Student Name
-              {sortConfig?.field === "student.firstName" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+            <TableHeader onClick={() => requestSort('studentId')}>
+              Student ID
+              {sortConfig?.field === 'studentId' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader onClick={() => requestSort("status")}>
-              Status
-              {sortConfig?.field === "status" && (sortConfig.direction === "asc" ? '▲' : '▼')}
-            </TableHeader>
-            <TableHeader onClick={() => requestSort("hoursCanWorkPerWeek")}>
+            <TableHeader>Course ID</TableHeader>
+            <TableHeader>Student Name</TableHeader>
+            <TableHeader>Status</TableHeader>
+            <TableHeader onClick={() => requestSort('hoursCanWorkPerWeek')}>
               Hours/Week
-              {sortConfig?.field === "hoursCanWorkPerWeek" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+              {sortConfig?.field === 'hoursCanWorkPerWeek' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader onClick={() => requestSort("GPA")}>
+            <TableHeader onClick={() => requestSort('GPA')}>
               GPA
-              {sortConfig?.field === "GPA" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+              {sortConfig?.field === 'GPA' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader>View</TableHeader>
+            <TableHeader>Resume</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedApplications.map(app => (
-            <TableRow key={app.id}>
-              <TableCell>
-                <Link href={`studentProfile/${app.student.smuNo}`}>{app.student.smuNo}</Link>
-              </TableCell>
-              <TableCell>{app.student.firstName} {app.student.lastName}</TableCell>
-              <TableCell>{app.status}</TableCell>
-              <TableCell>{app.hoursCanWorkPerWeek}</TableCell>
-              <TableCell>{app.GPA}</TableCell>
-              <TableCell>
-                <Link href={`application/${app.id}`}>View Application</Link>
-              </TableCell>
+          {sortedApplications.map((application) => (
+            <TableRow key={application.id}>
+              <TableCell><Link to={`/student/${application.studentId}`}>{application.studentId}</Link></TableCell>
+              {/* Replace these with actual data */}
+              <TableCell>{application.courseId}</TableCell>
+              <TableCell>student</TableCell>
+              <TableCell>status</TableCell>
+              <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
+              <TableCell>{application.GPA}</TableCell>
+              {/* Add a link to view the application */}
+              <TableCell><Link to={`/application/${application.id}`}>View</Link></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -209,5 +124,3 @@ const bValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as 
 };
 
 export default ViewApplications;
-
-

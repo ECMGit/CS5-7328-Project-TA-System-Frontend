@@ -5,9 +5,7 @@ import { prisma } from '../../../prisma/index';
  * You can use this file to create, update, delete, or get data from database
  * And you can use the value returned from this file to do complex logic in the controller
  */
-const bigintToString = (data: any) => {
-    return JSON.stringify(data, (_key, value) => typeof value === 'bigint' ? value.toString() : value);
-}
+
 
 export const getUsers = async () => {
     console.log('getUsers');
