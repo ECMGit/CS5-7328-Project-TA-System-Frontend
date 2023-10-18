@@ -52,18 +52,35 @@ const skills = [
   'Teaching',
 ];
 
+// Props type definition
+interface ApplicationPageProps {
+  studentId: number;
+  courseId: number;
+  setStudentId: (id: number) => void;
+  setCourseId: (id: number) => void;
+}
+
 /* Component for the application page */
-function ApplicationPage() {
+function ApplicationPage({
+  studentId,
+  courseId,
+  setStudentId,
+  setCourseId,
+}: ApplicationPageProps) {
   /* State Field */
   // Basic Information
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [courseName, setCourseName] = useState('');
-  const [status, setStatus] = useState('');
+  const [firstName, setFirstName] = useState<string>();
+  const [lastName, setLastName] = useState<string>();
+  const [courseName, setCourseName] = useState<string>();
+  const [status, setStatus] = useState<string>('');
   const [weeklyHours, setWeeklyHours] = useState('');
   const [gpa, setGpa] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  // Verifications for GPA states formats
+  const [gpaError, setGpaError] = useState(false);
+  const [gpaErrorMessage, setGpaErrorMessage] = useState('');
 
   // File Upload:
   // This would indicate the file upload status, and file name.
@@ -111,6 +128,44 @@ function ApplicationPage() {
     console.log(jsonData);
 
     // Consider to add navigation and success prompt here.
+  };
+
+  /**
+   * Handles the change of GPA input, prompt errors if user
+   * input is not a valid number, or outside of the range
+   * between 0.0 to 4.0
+   * @param event: user input event
+   */
+  const handleGpaChange = function (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    // event.preventDefault();
+    const valueStr = event.target.value;
+    const value = parseFloat(valueStr);
+    if (valueStr.trim() === '') {
+      setGpaError(false);
+      setGpaErrorMessage('');
+      setGpa(valueStr);
+      return;
+    }
+
+    // Check if the value is a valid number and within the range 0.0 to 4.0
+    if (isNaN(value) || value > 4.0 || value < 0.0) {
+      setGpaError(true);
+
+      if (isNaN(value)) {
+        setGpaErrorMessage('Input must be a number.');
+      } else {
+        setGpaErrorMessage('GPA must be between 0.0 and 4.0.');
+      }
+
+      // Prevent invalid values from being set to the state (optional)
+      // event.preventDefault();
+    } else {
+      setGpaError(false);
+      setGpaErrorMessage('');
+      setGpa(valueStr);
+    }
   };
 
   return (
@@ -187,7 +242,7 @@ function ApplicationPage() {
                   Course Name
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={8}>
                 <TextField
                   required
                   fullWidth
@@ -274,7 +329,7 @@ function ApplicationPage() {
                   Your GPA
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -282,9 +337,11 @@ function ApplicationPage() {
                   label="GPA"
                   name="gpa"
                   autoComplete="family-name"
-                  onChange={(e) => setGpa(e.target.value)}
                   value={gpa}
                   variant="standard"
+                  onChange={handleGpaChange}
+                  error={gpaError}
+                  helperText={gpaErrorMessage}
                 />
               </Grid>
 
