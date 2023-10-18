@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import {
   Box,
   Container,
@@ -22,6 +22,9 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import FileUpload from '../../components/FileUpload';
 import BottomPanel from '../../components/BottomPanel';
+import ApplyService from '../../services/apply';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 // TODO: this needs to come from back-end in the future
 // Static variable field
@@ -52,29 +55,20 @@ const skills = [
   'Teaching',
 ];
 
-// Props type definition
-interface ApplicationPageProps {
-  studentId: number;
-  courseId: number;
-  setStudentId: (id: number) => void;
-  setCourseId: (id: number) => void;
-}
-
 /* Component for the application page */
-function ApplicationPage({
-  studentId,
-  courseId,
-  setStudentId,
-  setCourseId,
-}: ApplicationPageProps) {
+function ApplicationPage() {
   /* State Field */
   // Basic Information
-  const [firstName, setFirstName] = useState<string>();
-  const [lastName, setLastName] = useState<string>();
-  const [courseName, setCourseName] = useState<string>();
-  const [status, setStatus] = useState<string>('');
+  // TODO: these ids need to come from previous endpoinds in the future
+  const [studentId, setStudentId] = useState<number>(1);
+  const [courseId, setCourseId] = useState<number>(1);
+  const [taJobId, setTaJobId] = useState<number>(1);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [status, setStatus] = useState('');
   const [weeklyHours, setWeeklyHours] = useState('');
-  const [gpa, setGpa] = useState('');
+  const [GPA, setGpa] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
@@ -87,6 +81,7 @@ function ApplicationPage({
   // fileStatus false: no file was uploaded, true otherwise.
   const [fileStatus, setFileStatus] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>('');
+  const [fileEntity, setFileEntity] = useState<File | undefined>(new File([], ''));
 
   /* Helper Functions */
   /**
@@ -96,23 +91,30 @@ function ApplicationPage({
    */
   const formatFormData = () => {
     // Convert data
-    const formatGpa = parseFloat(gpa);
+    const formatGpa = parseFloat(GPA);
     const formatSelectedCourse = selectedCourses.join(',');
     const formatSelectedSkills = selectedSkills.join(',');
 
+    
+
     // Return the object that includes all the key-value pairs.
     return {
+      taJobId,
+      courseId,
+      studentId,
       firstName,
       lastName,
       courseName,
       status,
       weeklyHours,
       gpa: formatGpa,
-      selectedCourses: formatSelectedCourse,
-      selectedSkills: formatSelectedSkills,
+      requiredCourses: formatSelectedCourse,
+      requiredSkills: formatSelectedSkills,
       fileName,
     };
   };
+
+  const navigate = useNavigate();
 
   /* DOM Event Handlers */
   /**
@@ -120,14 +122,37 @@ function ApplicationPage({
    */
   const handleSubmit = function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     // Get the data in json format.
-    const jsonData = formatFormData();
-
+    const tempData=JSON.stringify(formatFormData());
+    const jsonData = JSON.parse(tempData);
+    // const jsonData=formatFormData();
+    const resume = fileEntity;
     // For testing purpose
     console.log(jsonData);
-
+    
     // Consider to add navigation and success prompt here.
+    if(resume){
+      ApplyService.apply(jsonData,resume).then(
+        () => {
+          navigate('/login');
+          window.location.reload();
+        },
+        (error: AxiosError | Error) => {
+          let resMessage;
+          if (error instanceof AxiosError) {
+            resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          } else {
+            resMessage = error.message || 'An error occurred';
+          }
+        }
+      );
+    }
+
   };
 
   /**
@@ -201,7 +226,7 @@ function ApplicationPage({
           >
             <Grid
               container
-              spacing={2}
+              spacing={1}
               alignItems="flex-start"
               justifyContent="flex-start"
             >
@@ -210,7 +235,7 @@ function ApplicationPage({
                   Name
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={5}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -223,7 +248,7 @@ function ApplicationPage({
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={5}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -261,7 +286,7 @@ function ApplicationPage({
                   Status <span>(Working Full-time/Part-time?)</span>
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={8} sm={8}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Type
@@ -288,7 +313,7 @@ function ApplicationPage({
                   How many hours do you prefer to work per week?
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={8} sm={8}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id="demo-simple-select-helper-label">
                     Time
@@ -319,7 +344,7 @@ function ApplicationPage({
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sm={12} sx={{ mt: 2 }}>
+              <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography component="h2" variant="h4" justifyContent="center">
                   Now, tell us how well you do in school 🚀
                 </Typography>
@@ -337,7 +362,7 @@ function ApplicationPage({
                   label="GPA"
                   name="gpa"
                   autoComplete="family-name"
-                  value={gpa}
+                  value={GPA}
                   variant="standard"
                   onChange={handleGpaChange}
                   error={gpaError}
@@ -444,6 +469,8 @@ function ApplicationPage({
                   setFileStatus={setFileStatus}
                   fileName={fileName}
                   setFileName={setFileName}
+                  fileEntity={fileEntity}
+                  setFileEntity={setFileEntity}
                 />
               </Grid>
 
