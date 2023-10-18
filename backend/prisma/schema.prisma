@@ -16,7 +16,7 @@ model User {
   lastName         String
   password         String
   resetToken       String?   @unique
-  resetTokenExpiry BigInt?
+  resetTokenExpiry Int?
   updatedAt        DateTime? @updatedAt
   faculty          Faculty?
   student          Student?
@@ -117,7 +117,7 @@ model TAApplication {
   requiredSkills      String // A comma separated list of required skills
   resumeFile          String // URL or path to the file. This depends on how you handle file uploads.
   taJobId             Int
-  taJob               TAJob       @relation(fields: [taJobId], references: [id])
+  taJob               TAJob   @relation(fields: [taJobId], references: [id])
 }
 
 generator client {
