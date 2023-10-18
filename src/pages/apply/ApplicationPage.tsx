@@ -67,7 +67,7 @@ function ApplicationPage() {
   const [lastName, setLastName] = useState('');
   const [courseName, setCourseName] = useState('');
   const [status, setStatus] = useState('');
-  const [hoursCanworkPerWeek, sethoursCanworkPerWeek] = useState('');
+  const [hoursCanWorkPerWeek, sethoursCanWorkPerWeek] = useState('');
   const [GPA, setGpa] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
@@ -106,7 +106,7 @@ function ApplicationPage() {
       lastName,
       courseName,
       status,
-      hoursCanworkPerWeek,
+      hoursCanWorkPerWeek,
       gpa: formatGpa,
       requiredCourses: formatSelectedCourse,
       requiredSkills: formatSelectedSkills,
@@ -321,9 +321,9 @@ function ApplicationPage() {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    value={hoursCanworkPerWeek}
-                    label="hoursCanworkPerWeek"
-                    onChange={(e) => sethoursCanworkPerWeek(e.target.value)}
+                    value={hoursCanWorkPerWeek}
+                    label="hoursCanWorkPerWeek"
+                    onChange={(e) => sethoursCanWorkPerWeek(e.target.value)}
                   >
                     <MenuItem value="">
                       <em>None</em>
