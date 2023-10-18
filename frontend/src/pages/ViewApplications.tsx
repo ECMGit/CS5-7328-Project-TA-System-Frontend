@@ -15,7 +15,23 @@ type TAApplicationData = {
   requiredSkills: string;
   resumeFile: string;
   taJobId: number;
+  TAStats:string;
 };
+
+type TAJobData = {
+  id: number  
+  title: string
+  courseId: number;
+  courseSchedule:string
+  totalHoursPerWeek:number
+  maxNumberOfTAs:number
+  requiredCourses:string
+  requiredSkills:string
+  TAStats:string 
+  notes:string
+  facultyId :number
+}
+
 //these are the fields that can be sorted
 type SortField = 'studentId' | 'hoursCanWorkPerWeek' | 'GPA';
 //these are the directions that can be sorted
@@ -27,6 +43,9 @@ const ViewApplications: React.FC = () => {
   //this is the state for the sort configuration
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: SortDirection } | null>(null);
 
+  const [jobs, setJobs] = useState<TAJobData[]>([]);
+
+
   useEffect(() => {
     // Fetch data from API
     axios.get('http://localhost:9000/taApplication')
@@ -34,14 +53,27 @@ const ViewApplications: React.FC = () => {
       .then(response => {
         //this is the data from the API
         setApplications(response.data);
+        // console.log(response.data);
       })
       //error from the API
       .catch(error => {
         //this is the error message
         console.error('Error fetching data: ', error);
       });
+
+    axios.get('http://localhost:9000/taJob').then(response => {
+      //this is the data from the API
+      setJobs(response.data);
+      console.log(response.data);
+    })
+    //error from the API
+      .catch(error => {
+        //this is the error message
+        console.error('Error fetching data: ', error);
+      });
+
   }, []);
-//this is the sorted applications
+  //this is the sorted applications
   const sortedApplications = useMemo(() => {
     //if there is no sort configuration, return the applications
     if (!sortConfig) return applications;
@@ -104,19 +136,27 @@ const ViewApplications: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedApplications.map((application) => (
-            <TableRow key={application.id}>
-              <TableCell><Link to={`/student/${application.studentId}`}>{application.studentId}</Link></TableCell>
-              {/* Replace these with actual data */}
-              <TableCell>{application.courseId}</TableCell>
-              <TableCell>student</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
-              <TableCell>{application.GPA}</TableCell>
-              {/* Add a link to view the application */}
-              <TableCell><Link to={`/application/${application.id}`}>View</Link></TableCell>
-            </TableRow>
-          ))}
+          {sortedApplications.map((application) => {
+            // Find the corresponding job using courseId
+            const matchingJob = jobs.find(job => job.courseId === application.courseId);
+            
+            return (
+              <TableRow key={application.id}>
+                <TableCell>
+                  <Link to={`/student/${application.studentId}`}>{application.studentId}</Link>
+                </TableCell>
+                <TableCell>{application.courseId}</TableCell>
+                <TableCell>student</TableCell>
+                <TableCell>{matchingJob ? matchingJob.TAStats : 'N/A'}</TableCell>
+                <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
+                <TableCell>{application.GPA}</TableCell>
+                <TableCell>
+                  <Link to={`/application/${application.id}`}>View</Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+
         </TableBody>
       </Table>
     </Container>
