@@ -34,6 +34,8 @@ const TAJobDisplayComponent = () => {
       .catch(err => {
         console.error('An error occurred while fetching TA jobs:', err);
       });
+
+    handleFetchJobs();
   }, []);
 
   const handleGetJobById = () => {
@@ -49,6 +51,26 @@ const TAJobDisplayComponent = () => {
       .catch(err => {
         console.error(`An error occurred while fetching TA job with ID ${selectedId}:`, err);
       });
+  };
+
+  const handleFetchJobs = async () => {
+    try {
+      // Define your filters based on the requirements. 
+      const filters = {
+        title: 'Assistant for CS101',
+        totalHoursPerWeek: 20,
+        courseId: 1,
+      };
+
+      const filteredJobs = await AuthService.fetchTAJobsWithFilters(filters);
+
+      // Now 'filteredJobs' will contain the TA jobs that match the criteria.
+      // You can set this to state or do whatever is needed in your application.
+      console.log(filteredJobs);
+    } catch (error) {
+      console.error('Failed to fetch jobs with filters', error);
+      // Handle the error appropriately.
+    }
   };
 
   return (

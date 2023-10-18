@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const TA_API_URL = "http://localhost:9000/jobs";
+const TA_API_URL = 'http://localhost:9000/jobs';
 
 const getTAJobs = () => {
   // Return the promise itself
@@ -66,7 +66,7 @@ const fetchTAJobsWithFilters = async (filters) => {
     const queryString = new URLSearchParams(filters).toString();
 
     // Make a GET request with the query string.
-    const response = await axios.get(`${TA_API_URL}/ta-jobs/query?${queryString}`);
+    const response = await axios.get(`${TA_API_URL}/query?${queryString}`);
     return response.data; // TA jobs data.
   } catch (error) {
     console.error('Error fetching TA jobs with filters:', error);
