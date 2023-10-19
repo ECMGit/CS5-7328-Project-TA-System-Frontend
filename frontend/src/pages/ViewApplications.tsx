@@ -3,7 +3,7 @@ import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MockResume from './MockResume';
-import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
+import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell, Navbar, NavbarButton } from '../pages/user/styledComponents';
 //this is the data type for the TAApplication table
 export type TAApplicationData = {
   //id is the primary key for the table
@@ -215,10 +215,18 @@ const ViewApplications: React.FC = () => {
 
   return (
     <Container>
+      <Navbar>
+        
+        <NavbarButton onClick={() => {
+          // You can add an onClick handler here, if you want the button to navigate or perform an action.
+        }}>
+        View TA Applications
+        </NavbarButton>
+      </Navbar>
       <Title>View Applications for Course</Title>
-      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '1.5%' }}>
-        <div style={{ flexGrow: 3 }}></div> {/* Placeholder divs to position the select */}
-        <div style={{ flexGrow: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '0%' }}>
+        <div style={{ flexGrow: 2.5 }}></div> {/* Placeholder divs to position the select */}
+        <div style={{ flexGrow: 0.5 }}>
           <input
             type="text"
             placeholder="Search by Name"
