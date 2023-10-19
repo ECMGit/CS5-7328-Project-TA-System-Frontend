@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuthService from '../services/TAJobService'; // Update with your actual service for TA jobs
+import TAJobComponent from '../components/TAJobComponent';
 
 interface TAJobs {
   id: number;
@@ -83,9 +84,10 @@ const TAJobDisplayComponent = () => {
         {taJobs.length > 0 ? (
           taJobs.map((job, index) => (
             <div key={index}>
-              {/* Displaying some key information about each job */}
-              <span><strong>Title:</strong> {job.title} ({job.id})</span><br />
-              <span><strong>Course Schedule:</strong> {job.courseSchedule}</span>
+              {/* Displaying some key information about each job using the TAJobComponent */}
+              <TAJobComponent tajob={job}/>
+              {/* <span><strong>Title:</strong> {job.title} ({job.id})</span><br />
+              <span><strong>Course Schedule:</strong> {job.courseSchedule}</span> */}
             </div>
           ))
         ) : (
