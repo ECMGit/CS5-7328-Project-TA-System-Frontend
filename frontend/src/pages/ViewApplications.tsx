@@ -30,6 +30,20 @@ type TAJobData = {
   TAStats:string 
   notes:string
   facultyId :number
+};
+
+type userData = {
+  id               :number       
+  smuNo            :number
+  username         :string    
+  email            :string    
+  firstName        :string
+  lastName         :string
+  password         :string
+  resetToken       :string
+  resetTokenExpiry :number
+  updatedAt        :Date
+
 }
 
 //these are the fields that can be sorted
@@ -44,6 +58,9 @@ const ViewApplications: React.FC = () => {
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: SortDirection } | null>(null);
 
   const [jobs, setJobs] = useState<TAJobData[]>([]);
+
+  const [users, setUsers] = useState<userData[]>([]);
+
 
 
   useEffect(() => {
@@ -70,6 +87,16 @@ const ViewApplications: React.FC = () => {
       .catch(error => {
         //this is the error message
         console.error('Error fetching data: ', error);
+      });
+
+    // Fetch user data
+    axios.get('http://localhost:9000/user')  // Adjust the endpoint if needed
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching user data: ', error);
+      
       });
 
   }, []);
@@ -139,14 +166,16 @@ const ViewApplications: React.FC = () => {
           {sortedApplications.map((application) => {
             // Find the corresponding job using courseId
             const matchingJob = jobs.find(job => job.courseId === application.courseId);
-            
+            const user = users.find(u => u.id === application.studentId);
+
             return (
               <TableRow key={application.id}>
                 <TableCell>
                   <Link to={`/student/${application.studentId}`}>{application.studentId}</Link>
                 </TableCell>
                 <TableCell>{application.courseId}</TableCell>
-                <TableCell>student</TableCell>
+                <TableCell>{user ? `${user.firstName} ${user.lastName}` : 'N/A'}</TableCell>
+
                 <TableCell>{matchingJob ? matchingJob.TAStats : 'N/A'}</TableCell>
                 <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
                 <TableCell>{application.GPA}</TableCell>
