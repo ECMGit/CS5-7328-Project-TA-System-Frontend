@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo,  } from 'react';
+import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
@@ -64,6 +65,9 @@ const ViewApplications: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [uniqueStatuses, setUniqueStatuses] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [gpaRange, setGpaRange] = useState({ min: 0, max: 4.0 });
+
+
 
 
 
@@ -170,9 +174,16 @@ const ViewApplications: React.FC = () => {
         return matchingJob && matchingJob.TAStats === selectedStatus;
       });
     }
+
+    // GPA Filtering Logic
+    sorted = sorted.filter(application => {
+      const user = users.find(u => u.id === application.studentId);
+      // Assuming each user has a 'gpa' field
+      return user && application.GPA >= gpaRange.min && application.GPA <= gpaRange.max;
+    });
   
     return sorted;
-  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm]);
+  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange]);
   
   //this is the request sort function
   const requestSort = (field: SortField) => {
@@ -208,7 +219,11 @@ const ViewApplications: React.FC = () => {
             <option value="">Select Status Option</option>
             {uniqueStatuses.map(status => <option key={status} value={status}>{status}</option>)}
           </select>
-        </div>
+        </div >
+        
+
+
+
         
         <div style={{ flexGrow: 5 }}></div> {/* Placeholder divs to take up remaining space */}
       </div>
