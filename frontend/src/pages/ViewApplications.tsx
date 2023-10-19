@@ -47,7 +47,7 @@ type userData = {
 }
 
 //these are the fields that can be sorted
-type SortField = 'studentId' | 'hoursCanWorkPerWeek' | 'GPA';
+type SortField = 'studentId' | 'courseId' | 'hoursCanWorkPerWeek' | 'GPA' | 'studentName' | 'TAStats'; // <-- Added 'TAStats'
 //these are the directions that can be sorted
 type SortDirection = 'asc' | 'desc';
 //this is the ViewApplications component
@@ -102,29 +102,33 @@ const ViewApplications: React.FC = () => {
   }, []);
   //this is the sorted applications
   const sortedApplications = useMemo(() => {
-    //if there is no sort configuration, return the applications
     if (!sortConfig) return applications;
-    //otherwise, sort the applications
     return [...applications].sort((a, b) => {
-      //get the values for the sort configuration
-      const aValue = a[sortConfig.field];
-      //get the values for the sort configuration
-      const bValue = b[sortConfig.field];
-      //if the aValue is less than the bValue, return -1
-      if (aValue < bValue) {
-        //if the direction is ascending, return -1, otherwise return 1
-        return sortConfig.direction === 'asc' ? -1 : 1;
+      // Added logic to sort by student name
+      if (sortConfig.field === 'studentName') {
+        const userA = users.find(u => u.id === a.studentId);
+        const userB = users.find(u => u.id === b.studentId);
+        const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
+        const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
+        if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
+      } else if (sortConfig.field === 'TAStats') { // <-- Added this block
+        const jobA = jobs.find(job => job.courseId === a.courseId);
+        const jobB = jobs.find(job => job.courseId === b.courseId);
+        const statusA = jobA ? jobA.TAStats : '';
+        const statusB = jobB ? jobB.TAStats : '';
+        if (statusA < statusB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (statusA > statusB) return sortConfig.direction === 'asc' ? 1 : -1;
       }
-      //if the aValue is greater than the bValue, return 1
-      if (aValue > bValue) {
-        //if the direction is ascending, return 1, otherwise return -1
-        return sortConfig.direction === 'asc' ? 1 : -1;
+      else {
+        const aValue = a[sortConfig.field];
+        const bValue = b[sortConfig.field];
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
       }
-      //otherwise, return 0
       return 0;
     });
-    //if the applications change, return the applications
-  }, [applications, sortConfig]);
+  }, [applications, sortConfig, users,jobs]);
   //this is the request sort function
   const requestSort = (field: SortField) => {
     //this is the direction
@@ -148,9 +152,19 @@ const ViewApplications: React.FC = () => {
               Student ID
               {sortConfig?.field === 'studentId' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader>Course ID</TableHeader>
-            <TableHeader>Student Name</TableHeader>
-            <TableHeader>Status</TableHeader>
+            <TableHeader onClick={() => requestSort('courseId')}> {/* Updated this line */}
+              Course ID
+              {sortConfig?.field === 'courseId' && (sortConfig.direction === 'asc' ? '▲' : '▼')} {/* Updated this line */}
+            </TableHeader>
+            <TableHeader onClick={() => requestSort('studentName')}>
+              Student Name
+              {sortConfig?.field === 'studentName' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </TableHeader>
+
+            <TableHeader onClick={() => requestSort('TAStats')}> {/* <-- Updated this line */}
+            Status
+              {sortConfig?.field === 'TAStats' && (sortConfig.direction === 'asc' ? '▲' : '▼')} {/* <-- Updated this line */}
+            </TableHeader>
             <TableHeader onClick={() => requestSort('hoursCanWorkPerWeek')}>
               Hours/Week
               {sortConfig?.field === 'hoursCanWorkPerWeek' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
