@@ -61,6 +61,10 @@ const ViewApplications: React.FC = () => {
 
   const [users, setUsers] = useState<userData[]>([]);
 
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [uniqueStatuses, setUniqueStatuses] = useState<string[]>([]);
+
+
 
 
   useEffect(() => {
@@ -81,6 +85,9 @@ const ViewApplications: React.FC = () => {
     axios.get('http://localhost:9000/taJob').then(response => {
       //this is the data from the API
       setJobs(response.data);
+      const statuses = Array.from(new Set(response.data.map((job: TAJobData) => job.TAStats))) as string[];
+      setUniqueStatuses(statuses);
+
       console.log(response.data);
     })
     //error from the API
@@ -101,34 +108,47 @@ const ViewApplications: React.FC = () => {
 
   }, []);
   //this is the sorted applications
-  const sortedApplications = useMemo(() => {
-    if (!sortConfig) return applications;
-    return [...applications].sort((a, b) => {
-      // Added logic to sort by student name
-      if (sortConfig.field === 'studentName') {
-        const userA = users.find(u => u.id === a.studentId);
-        const userB = users.find(u => u.id === b.studentId);
-        const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
-        const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
-        if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
-      } else if (sortConfig.field === 'TAStats') { // <-- Added this block
-        const jobA = jobs.find(job => job.courseId === a.courseId);
-        const jobB = jobs.find(job => job.courseId === b.courseId);
-        const statusA = jobA ? jobA.TAStats : '';
-        const statusB = jobB ? jobB.TAStats : '';
-        if (statusA < statusB) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (statusA > statusB) return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-      else {
-        const aValue = a[sortConfig.field];
-        const bValue = b[sortConfig.field];
-        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }, [applications, sortConfig, users,jobs]);
+  const sortedAndFilteredApplications = useMemo(() => {
+    let sorted = [...applications];
+  
+    // Sorting Logic
+    if (sortConfig) {
+      sorted = sorted.sort((a, b) => {
+        if (sortConfig.field === 'studentName') {
+          const userA = users.find(u => u.id === a.studentId);
+          const userB = users.find(u => u.id === b.studentId);
+          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
+          const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
+          if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
+        } else if (sortConfig.field === 'TAStats') {
+          const jobA = jobs.find(job => job.courseId === a.courseId);
+          const jobB = jobs.find(job => job.courseId === b.courseId);
+          const statusA = jobA ? jobA.TAStats : '';
+          const statusB = jobB ? jobB.TAStats : '';
+          if (statusA < statusB) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (statusA > statusB) return sortConfig.direction === 'asc' ? 1 : -1;
+        } else {
+          const aValue = a[sortConfig.field];
+          const bValue = b[sortConfig.field];
+          if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+  
+    // Filtering Logic
+    if (selectedStatus) {
+      sorted = sorted.filter(application => {
+        const matchingJob = jobs.find(job => job.courseId === application.courseId);
+        return matchingJob && matchingJob.TAStats === selectedStatus;
+      });
+    }
+  
+    return sorted;
+  }, [applications, sortConfig, users, jobs, selectedStatus]);
+  
   //this is the request sort function
   const requestSort = (field: SortField) => {
     //this is the direction
@@ -145,6 +165,20 @@ const ViewApplications: React.FC = () => {
   return (
     <Container>
       <Title>View Applications for Course</Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '13%' }}>
+        <div style={{ flexGrow: 3 }}></div> {/* Placeholder divs to position the select */}
+        <div>
+          <select
+            value={selectedStatus || ''}
+            onChange={e => setSelectedStatus(e.target.value)}
+          >
+            <option value="">Select Status Option</option>
+            {uniqueStatuses.map(status => <option key={status} value={status}>{status}</option>)}
+          </select>
+        </div>
+        <div style={{ flexGrow: 5 }}></div> {/* Placeholder divs to take up remaining space */}
+      </div>
+
       <Table>
         <TableHead>
           <TableRow>
@@ -177,7 +211,7 @@ const ViewApplications: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedApplications.map((application) => {
+          {sortedAndFilteredApplications.map((application) => {
             // Find the corresponding job using courseId
             const matchingJob = jobs.find(job => job.courseId === application.courseId);
             const user = users.find(u => u.id === application.studentId);
