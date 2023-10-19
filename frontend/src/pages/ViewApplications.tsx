@@ -2,9 +2,10 @@ import React, { useState, useEffect, useMemo,  } from 'react';
 import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import MockResume from './MockResume';
 import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
 //this is the data type for the TAApplication table
-type TAApplicationData = {
+export type TAApplicationData = {
   //id is the primary key for the table
   id: number;
   courseId: number;
@@ -66,6 +67,8 @@ const ViewApplications: React.FC = () => {
   const [uniqueStatuses, setUniqueStatuses] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [gpaRange, setGpaRange] = useState({ min: 0, max: 4.0 });
+  const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+
 
 
 
@@ -113,6 +116,18 @@ const ViewApplications: React.FC = () => {
       });
 
   }, []);
+
+  const handleViewClick = (studentId: number) => {
+    const selectedApplication = applications.find(app => app.studentId === studentId);
+    if (selectedApplication) {
+      setCurrentApplication(selectedApplication);
+    } else {
+    // Handle the case when the application is not found
+      console.error(`Application for studentId ${studentId} not found.`);
+    }
+  };
+
+
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -227,6 +242,7 @@ const ViewApplications: React.FC = () => {
         
         <div style={{ flexGrow: 5 }}></div> {/* Placeholder divs to take up remaining space */}
       </div>
+      
 
       <Table>
         <TableHead>
@@ -256,7 +272,7 @@ const ViewApplications: React.FC = () => {
               GPA
               {sortConfig?.field === 'GPA' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader>Resume</TableHeader>
+            <TableHeader>More Application Details</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -276,15 +292,21 @@ const ViewApplications: React.FC = () => {
                 <TableCell>{matchingJob ? matchingJob.TAStats : 'N/A'}</TableCell>
                 <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
                 <TableCell>{application.GPA}</TableCell>
+                
                 <TableCell>
-                  <Link to={`/application/${application.id}`}>View</Link>
+                  <a href="#" onClick={() => handleViewClick(application.studentId)}>View</a>
                 </TableCell>
               </TableRow>
+              
             );
           })}
 
         </TableBody>
       </Table>
+      <div>
+        {/* ...Your other table and components... */}
+        {currentApplication && <MockResume application={currentApplication} />}
+      </div>
     </Container>
   );
 };
