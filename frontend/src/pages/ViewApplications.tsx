@@ -63,6 +63,8 @@ const ViewApplications: React.FC = () => {
 
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [uniqueStatuses, setUniqueStatuses] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
 
 
 
@@ -107,6 +109,11 @@ const ViewApplications: React.FC = () => {
       });
 
   }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   //this is the sorted applications
   const sortedAndFilteredApplications = useMemo(() => {
     let sorted = [...applications];
@@ -137,6 +144,24 @@ const ViewApplications: React.FC = () => {
         return 0;
       });
     }
+
+    // Search Logic
+    if (searchTerm) {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      sorted = sorted.filter(application => {
+        const user = users.find(u => u.id === application.studentId);
+        const job = jobs.find(job => job.courseId === application.courseId);
+
+        const name = user ? `${user.firstName} ${user.lastName}` : '';
+        const status = job ? job.TAStats : '';
+        
+        return name.toLowerCase().includes(lowercasedSearchTerm) || 
+               status.toLowerCase().includes(lowercasedSearchTerm) ||
+               Object.values(application).some(val => 
+                 String(val).toLowerCase().includes(lowercasedSearchTerm)
+               );
+      });
+    }
   
     // Filtering Logic
     if (selectedStatus) {
@@ -147,7 +172,7 @@ const ViewApplications: React.FC = () => {
     }
   
     return sorted;
-  }, [applications, sortConfig, users, jobs, selectedStatus]);
+  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm]);
   
   //this is the request sort function
   const requestSort = (field: SortField) => {
@@ -165,9 +190,17 @@ const ViewApplications: React.FC = () => {
   return (
     <Container>
       <Title>View Applications for Course</Title>
-      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '13%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '1.5%' }}>
         <div style={{ flexGrow: 3 }}></div> {/* Placeholder divs to position the select */}
-        <div>
+        <div style={{ flexGrow: 1 }}>
+          <input
+            type="text"
+            placeholder="Search by Name"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '0%' }}>
           <select
             value={selectedStatus || ''}
             onChange={e => setSelectedStatus(e.target.value)}
@@ -176,6 +209,7 @@ const ViewApplications: React.FC = () => {
             {uniqueStatuses.map(status => <option key={status} value={status}>{status}</option>)}
           </select>
         </div>
+        
         <div style={{ flexGrow: 5 }}></div> {/* Placeholder divs to take up remaining space */}
       </div>
 
