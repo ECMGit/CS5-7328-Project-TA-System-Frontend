@@ -1,213 +1,314 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell, Link } from '../pages/user/styledComponents';
-
-// Define the application type
-type TAApplicationType = {
+import React, { useState, useEffect, useMemo,  } from 'react';
+import ReactSlider from 'react-slider';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import MockResume from './MockResume';
+import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
+//this is the data type for the TAApplication table
+export type TAApplicationData = {
+  //id is the primary key for the table
   id: number;
   courseId: number;
   studentId: number;
   hoursCanWorkPerWeek: number;
+  coursesTaken: string;
   GPA: number;
+  requiredCourses: string;
+  requiredSkills: string;
   resumeFile: string;
-  student: {
-    smuNo: number;
-    firstName: string;
-    lastName: string;
-  };
-  course: {
-    title: string;
-  };
-  status: string; // This can be an enum or a string based on the application's status
+  taJobId: number;
+  TAStats:string;
 };
 
-// Mock data (assuming you only want a few fields for the mock)
-const mockApplications: TAApplicationType[] = [
-  {
-    id: 1,
-    courseId: 1,
-    studentId: 1,
-    hoursCanWorkPerWeek: 10,
-    GPA: 3.5,
-    resumeFile: "/path/to/resume1.pdf",
-    student: {
-      smuNo: 1,
-      firstName: "John",
-      lastName: "Doe",
-    },
-    course: {
-      title: "CSE101",
-    },
-    status: "Pending", // This would need to be added to your SQL structure or fetched from an API.
-  },
-  {
-    id: 2,
-    courseId: 2,
-    studentId: 2,
-    hoursCanWorkPerWeek: 12,
-    GPA: 3.8,
-    resumeFile: "/path/to/resume2.pdf",
-    student: {
-      smuNo: 2,
-      firstName: "Jane",
-      lastName: "Doe",
-    },
-    course: {
-      title: "CSE102",
-    },
-    status: "Approved", // As an example status.
-  },
-  {
-    id: 3,
-    courseId: 3,
-    studentId: 3,
-    hoursCanWorkPerWeek: 10,
-    GPA: 3.7,
-    resumeFile: "/path/to/resume3.pdf",
-    student: {
-      smuNo: 3,
-      firstName: "Alice",
-      lastName: "White",
-    },
-    course: {
-      title: "CSE103",
-    },
-    status: "Rejected", // As another example status.
-  },
-  // Add two more mock applications below:
-  {
-    id: 4,
-    courseId: 4,
-    studentId: 4,
-    hoursCanWorkPerWeek: 15,
-    GPA: 3.9,
-    resumeFile: "/path/to/resume4.pdf",
-    student: {
-      smuNo: 4,
-      firstName: "Bob",
-      lastName: "Smith",
-    },
-    course: {
-      title: "CSE104",
-    },
-    status: "Approved", // Example status.
-  },
-  {
-    id: 5,
-    courseId: 5,
-    studentId: 5,
-    hoursCanWorkPerWeek: 8,
-    GPA: 3.6,
-    resumeFile: "/path/to/resume5.pdf",
-    student: {
-      smuNo: 5,
-      firstName: "Charlie",
-      lastName: "Brown",
-    },
-    course: {
-      title: "CSE105",
-    },
-    status: "Pending", // Example status.
-  },
-  // ... add more mock applications as needed based on the inserts you've provided ...
-];
+type TAJobData = {
+  id: number  
+  title: string
+  courseId: number;
+  courseSchedule:string
+  totalHoursPerWeek:number
+  maxNumberOfTAs:number
+  requiredCourses:string
+  requiredSkills:string
+  TAStats:string 
+  notes:string
+  facultyId :number
+};
 
-type SortField = "student.smuNo" | "student.firstName" | "status" | "hoursCanWorkPerWeek" | "GPA";
-type SortDirection = "asc" | "desc";
+type userData = {
+  id               :number       
+  smuNo            :number
+  username         :string    
+  email            :string    
+  firstName        :string
+  lastName         :string
+  password         :string
+  resetToken       :string
+  resetTokenExpiry :number
+  updatedAt        :Date
 
+}
+
+//these are the fields that can be sorted
+type SortField = 'studentId' | 'courseId' | 'hoursCanWorkPerWeek' | 'GPA' | 'studentName' | 'TAStats'; // <-- Added 'TAStats'
+//these are the directions that can be sorted
+type SortDirection = 'asc' | 'desc';
+//this is the ViewApplications component
 const ViewApplications: React.FC = () => {
-  const [applications, setApplications] = useState<TAApplicationType[]>([]);
+  //this is the state for the applications
+  const [applications, setApplications] = useState<TAApplicationData[]>([]);
+  //this is the state for the sort configuration
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: SortDirection } | null>(null);
 
+  const [jobs, setJobs] = useState<TAJobData[]>([]);
+
+  const [users, setUsers] = useState<userData[]>([]);
+
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [uniqueStatuses, setUniqueStatuses] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [gpaRange, setGpaRange] = useState({ min: 0, max: 4.0 });
+  const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+
+
+
+
+
+
+
+
   useEffect(() => {
-    setApplications(mockApplications);
+    // Fetch data from API
+    axios.get('http://localhost:9000/taApplication')
+    //this is the response from the API
+      .then(response => {
+        //this is the data from the API
+        setApplications(response.data);
+        // console.log(response.data);
+      })
+      //error from the API
+      .catch(error => {
+        //this is the error message
+        console.error('Error fetching data: ', error);
+      });
+
+    axios.get('http://localhost:9000/taJob').then(response => {
+      //this is the data from the API
+      setJobs(response.data);
+      const statuses = Array.from(new Set(response.data.map((job: TAJobData) => job.TAStats))) as string[];
+      setUniqueStatuses(statuses);
+
+      console.log(response.data);
+    })
+    //error from the API
+      .catch(error => {
+        //this is the error message
+        console.error('Error fetching data: ', error);
+      });
+
+    // Fetch user data
+    axios.get('http://localhost:9000/user')  // Adjust the endpoint if needed
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching user data: ', error);
+      
+      });
+
   }, []);
 
-  const sortedApplications = useMemo(() => {
-    if (!sortConfig) return applications;
-  
-    return [...applications].sort((a, b) => {
-      // Extract nested values when necessary
-      const aValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as keyof typeof obj], a);
-const bValue = sortConfig.field.split('.').reduce<any>((obj, key) => obj[key as keyof typeof obj], b);
-
-
-  
-      if (sortConfig.direction === "asc") {
-        if (typeof aValue === 'string') {
-          return aValue.localeCompare(bValue);
-        } else {
-          return aValue - bValue;
-        }
-      } else {
-        if (typeof aValue === 'string') {
-          return bValue.localeCompare(aValue);
-        } else {
-          return bValue - aValue;
-        }
-      }
-    });
-  }, [applications, sortConfig]);
-  
-
-  const requestSort = (field: SortField) => {
-    let direction: SortDirection = "asc";
-    if (sortConfig?.field === field && sortConfig?.direction === "asc") {
-      direction = "desc";
+  const handleViewClick = (studentId: number) => {
+    const selectedApplication = applications.find(app => app.studentId === studentId);
+    if (selectedApplication) {
+      setCurrentApplication(selectedApplication);
+    } else {
+    // Handle the case when the application is not found
+      console.error(`Application for studentId ${studentId} not found.`);
     }
+  };
+
+
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  //this is the sorted applications
+  const sortedAndFilteredApplications = useMemo(() => {
+    let sorted = [...applications];
+  
+    // Sorting Logic
+    if (sortConfig) {
+      sorted = sorted.sort((a, b) => {
+        if (sortConfig.field === 'studentName') {
+          const userA = users.find(u => u.id === a.studentId);
+          const userB = users.find(u => u.id === b.studentId);
+          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
+          const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
+          if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
+        } else if (sortConfig.field === 'TAStats') {
+          const jobA = jobs.find(job => job.courseId === a.courseId);
+          const jobB = jobs.find(job => job.courseId === b.courseId);
+          const statusA = jobA ? jobA.TAStats : '';
+          const statusB = jobB ? jobB.TAStats : '';
+          if (statusA < statusB) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (statusA > statusB) return sortConfig.direction === 'asc' ? 1 : -1;
+        } else {
+          const aValue = a[sortConfig.field];
+          const bValue = b[sortConfig.field];
+          if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    // Search Logic
+    if (searchTerm) {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      sorted = sorted.filter(application => {
+        const user = users.find(u => u.id === application.studentId);
+        const job = jobs.find(job => job.courseId === application.courseId);
+
+        const name = user ? `${user.firstName} ${user.lastName}` : '';
+        const status = job ? job.TAStats : '';
+        
+        return name.toLowerCase().includes(lowercasedSearchTerm) || 
+               status.toLowerCase().includes(lowercasedSearchTerm) ||
+               Object.values(application).some(val => 
+                 String(val).toLowerCase().includes(lowercasedSearchTerm)
+               );
+      });
+    }
+  
+    // Filtering Logic
+    if (selectedStatus) {
+      sorted = sorted.filter(application => {
+        const matchingJob = jobs.find(job => job.courseId === application.courseId);
+        return matchingJob && matchingJob.TAStats === selectedStatus;
+      });
+    }
+
+    // GPA Filtering Logic
+    sorted = sorted.filter(application => {
+      const user = users.find(u => u.id === application.studentId);
+      // Assuming each user has a 'gpa' field
+      return user && application.GPA >= gpaRange.min && application.GPA <= gpaRange.max;
+    });
+  
+    return sorted;
+  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange]);
+  
+  //this is the request sort function
+  const requestSort = (field: SortField) => {
+    //this is the direction
+    let direction: SortDirection = 'asc';
+    //if the sort configuration exists, and the field is the same, and the direction is ascending, set the direction to descending
+    if (sortConfig && sortConfig.field === field && sortConfig.direction === 'asc') {
+      //set the direction to descending
+      direction = 'desc';
+    }
+    //set the sort configuration
     setSortConfig({ field, direction });
   };
 
   return (
     <Container>
       <Title>View Applications for Course</Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '1.5%' }}>
+        <div style={{ flexGrow: 3 }}></div> {/* Placeholder divs to position the select */}
+        <div style={{ flexGrow: 1 }}>
+          <input
+            type="text"
+            placeholder="Search by Name"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '0%' }}>
+          <select
+            value={selectedStatus || ''}
+            onChange={e => setSelectedStatus(e.target.value)}
+          >
+            <option value="">Select Status Option</option>
+            {uniqueStatuses.map(status => <option key={status} value={status}>{status}</option>)}
+          </select>
+        </div >
+        
+
+
+
+        
+        <div style={{ flexGrow: 5 }}></div> {/* Placeholder divs to take up remaining space */}
+      </div>
+      
+
       <Table>
         <TableHead>
           <TableRow>
-          <TableHeader onClick={() => requestSort("student.smuNo")}>
-  Student ID
-  {sortConfig?.field === "student.smuNo" && (sortConfig.direction === "asc" ? '▲' : '▼')}
-</TableHeader>
-
-            <TableHeader onClick={() => requestSort("student.firstName")}>
+            <TableHeader onClick={() => requestSort('studentId')}>
+              Student ID
+              {sortConfig?.field === 'studentId' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </TableHeader>
+            <TableHeader onClick={() => requestSort('courseId')}> {/* Updated this line */}
+              Course ID
+              {sortConfig?.field === 'courseId' && (sortConfig.direction === 'asc' ? '▲' : '▼')} {/* Updated this line */}
+            </TableHeader>
+            <TableHeader onClick={() => requestSort('studentName')}>
               Student Name
-              {sortConfig?.field === "student.firstName" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+              {sortConfig?.field === 'studentName' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader onClick={() => requestSort("status")}>
-              Status
-              {sortConfig?.field === "status" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+
+            <TableHeader onClick={() => requestSort('TAStats')}> {/* <-- Updated this line */}
+            Status
+              {sortConfig?.field === 'TAStats' && (sortConfig.direction === 'asc' ? '▲' : '▼')} {/* <-- Updated this line */}
             </TableHeader>
-            <TableHeader onClick={() => requestSort("hoursCanWorkPerWeek")}>
+            <TableHeader onClick={() => requestSort('hoursCanWorkPerWeek')}>
               Hours/Week
-              {sortConfig?.field === "hoursCanWorkPerWeek" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+              {sortConfig?.field === 'hoursCanWorkPerWeek' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader onClick={() => requestSort("GPA")}>
+            <TableHeader onClick={() => requestSort('GPA')}>
               GPA
-              {sortConfig?.field === "GPA" && (sortConfig.direction === "asc" ? '▲' : '▼')}
+              {sortConfig?.field === 'GPA' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
-            <TableHeader>View</TableHeader>
+            <TableHeader>More Application Details</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedApplications.map(app => (
-            <TableRow key={app.id}>
-              <TableCell>
-                <Link href={`studentProfile/${app.student.smuNo}`}>{app.student.smuNo}</Link>
-              </TableCell>
-              <TableCell>{app.student.firstName} {app.student.lastName}</TableCell>
-              <TableCell>{app.status}</TableCell>
-              <TableCell>{app.hoursCanWorkPerWeek}</TableCell>
-              <TableCell>{app.GPA}</TableCell>
-              <TableCell>
-                <Link href={`application/${app.id}`}>View Application</Link>
-              </TableCell>
-            </TableRow>
-          ))}
+          {sortedAndFilteredApplications.map((application) => {
+            // Find the corresponding job using courseId
+            const matchingJob = jobs.find(job => job.courseId === application.courseId);
+            const user = users.find(u => u.id === application.studentId);
+
+            return (
+              <TableRow key={application.id}>
+                <TableCell>
+                  <Link to={`/student/${application.studentId}`}>{application.studentId}</Link>
+                </TableCell>
+                <TableCell>{application.courseId}</TableCell>
+                <TableCell>{user ? `${user.firstName} ${user.lastName}` : 'N/A'}</TableCell>
+
+                <TableCell>{matchingJob ? matchingJob.TAStats : 'N/A'}</TableCell>
+                <TableCell>{application.hoursCanWorkPerWeek}</TableCell>
+                <TableCell>{application.GPA}</TableCell>
+                
+                <TableCell>
+                  <a href="#" onClick={() => handleViewClick(application.studentId)}>View</a>
+                </TableCell>
+              </TableRow>
+              
+            );
+          })}
+
         </TableBody>
       </Table>
+      <div>
+        {/* ...Your other table and components... */}
+        {currentApplication && <MockResume application={currentApplication} />}
+      </div>
     </Container>
   );
 };
 
 export default ViewApplications;
-
-
