@@ -68,6 +68,8 @@ const ViewApplications: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [gpaRange, setGpaRange] = useState({ min: 0, max: 4.0 });
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+
 
 
 
@@ -137,6 +139,15 @@ const ViewApplications: React.FC = () => {
   const sortedAndFilteredApplications = useMemo(() => {
     let sorted = [...applications];
   
+    // Faculty Filter Logic
+    if (facultyFilter !== null) {
+      sorted = sorted.filter(application => {
+        const matchingJob = jobs.find(job => job.id === application.taJobId);
+        return matchingJob && matchingJob.facultyId === facultyFilter;
+      });
+    }
+
+
     // Sorting Logic
     if (sortConfig) {
       sorted = sorted.sort((a, b) => {
@@ -198,7 +209,7 @@ const ViewApplications: React.FC = () => {
     });
   
     return sorted;
-  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange]);
+  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange, facultyFilter]);
   
   //this is the request sort function
   const requestSort = (field: SortField) => {
@@ -222,6 +233,19 @@ const ViewApplications: React.FC = () => {
         }}>
         View TA Applications
         </NavbarButton>
+        <NavbarButton onClick={() => {
+        // Filter by Faculty 1.
+          setFacultyFilter(1);
+        }}>
+          Faculty 1 Log In View
+        </NavbarButton>
+        <NavbarButton onClick={() => {
+          // Clear the faculty filter.
+          setFacultyFilter(null);
+        }}>
+        Clear Faculty Filter
+        </NavbarButton>
+
       </Navbar>
       <Title>View Applications for Course</Title>
       <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '0%' }}>
