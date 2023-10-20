@@ -9,7 +9,7 @@ import Home from './pages/Home';
 import './stylesheets/App.css';
 import ViewApplications from './pages/ViewApplications';
 import MockResume from './pages/MockResume';
-import { TAApplicationData } from '../../frontend/src/pages/ViewApplications';
+import { TAApplicationData } from '../src/pages/ViewApplications';
 // import { fakeAuthProvider } from "./auth";
 const App: React.FC = () => {
   return (
