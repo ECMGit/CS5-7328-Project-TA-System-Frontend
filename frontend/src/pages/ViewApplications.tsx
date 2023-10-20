@@ -3,7 +3,7 @@ import ReactSlider from 'react-slider';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MockResume from './MockResume';
-import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '../pages/user/styledComponents';
+import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell, Navbar, NavbarButton } from '../pages/user/styledComponents';
 //this is the data type for the TAApplication table
 export type TAApplicationData = {
   //id is the primary key for the table
@@ -68,6 +68,8 @@ const ViewApplications: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [gpaRange, setGpaRange] = useState({ min: 0, max: 4.0 });
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+
 
 
 
@@ -137,6 +139,15 @@ const ViewApplications: React.FC = () => {
   const sortedAndFilteredApplications = useMemo(() => {
     let sorted = [...applications];
   
+    // Faculty Filter Logic
+    if (facultyFilter !== null) {
+      sorted = sorted.filter(application => {
+        const matchingJob = jobs.find(job => job.id === application.taJobId);
+        return matchingJob && matchingJob.facultyId === facultyFilter;
+      });
+    }
+
+
     // Sorting Logic
     if (sortConfig) {
       sorted = sorted.sort((a, b) => {
@@ -198,7 +209,7 @@ const ViewApplications: React.FC = () => {
     });
   
     return sorted;
-  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange]);
+  }, [applications, sortConfig, users, jobs, selectedStatus, searchTerm,gpaRange, facultyFilter]);
   
   //this is the request sort function
   const requestSort = (field: SortField) => {
@@ -215,10 +226,31 @@ const ViewApplications: React.FC = () => {
 
   return (
     <Container>
+      <Navbar>
+        
+        <NavbarButton onClick={() => {
+          // You can add an onClick handler here, if you want the button to navigate or perform an action.
+        }}>
+        View TA Applications
+        </NavbarButton>
+        <NavbarButton onClick={() => {
+        // Filter by Faculty 1.
+          setFacultyFilter(1);
+        }}>
+          Faculty 1 Log In View
+        </NavbarButton>
+        <NavbarButton onClick={() => {
+          // Clear the faculty filter.
+          setFacultyFilter(null);
+        }}>
+        Clear Faculty Filter
+        </NavbarButton>
+
+      </Navbar>
       <Title>View Applications for Course</Title>
-      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '1.5%' }}>
-        <div style={{ flexGrow: 3 }}></div> {/* Placeholder divs to position the select */}
-        <div style={{ flexGrow: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', left: '0%' }}>
+        <div style={{ flexGrow: 2.5 }}></div> {/* Placeholder divs to position the select */}
+        <div style={{ flexGrow: 0.5 }}>
           <input
             type="text"
             placeholder="Search by Name"
