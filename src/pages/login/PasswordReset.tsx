@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import AuthService from '../../services/auth';
 import { useParams } from 'react-router-dom';
 import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 
 const PasswordReset: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    setMessage('');
+    setLoading(true);
 
     if (password !== confirmPassword) {
       setMessage('Passwords do not match.');
@@ -25,9 +29,9 @@ const PasswordReset: React.FC = () => {
       setMessage('Token is missing. Please try again.');
       return;
     }
-    AuthService.resetPassword(token, password).then(
+    AuthService.set_new_password(token, password).then(
       () => {
-        navigate('/login');
+        navigate('/');
         // window.location.reload();
       },
       (error) => {
@@ -39,6 +43,7 @@ const PasswordReset: React.FC = () => {
           error.toString();
 
         setMessage(resMessage);
+        setLoading(false);
       }
     );
   };

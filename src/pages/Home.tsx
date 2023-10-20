@@ -21,8 +21,10 @@ const Home: React.FC = () => {
       ) : (
         <Typography variant='h1'>Please log in.</Typography>
       )}
+
     </Container>
   );
 };
 
 export default Home;
+

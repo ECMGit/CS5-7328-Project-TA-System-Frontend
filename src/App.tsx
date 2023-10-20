@@ -5,6 +5,7 @@ import PasswordResetPage from './pages/login/PasswordReset';
 import LoginPage from './pages/login/LoginPage';
 import UserProfile from './pages/user/Profile';
 import SignUpPage from './pages/login/SignUpPage';
+import UserDataPage from './pages/user/UserDataPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
 import ApplicationPage from './pages/apply/ApplicationPage';
@@ -16,9 +17,10 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
-        <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/reset-password/:token" element={<PasswordResetPage />} />
+        <Route path="/home" element={<Home/>}/>
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/userdatapage" element={<UserDataPage />} />
         <Route path="*" element={<LoginPage />} />
         <Route path="/apply" element={<ApplicationPage />} />
       </Routes>
