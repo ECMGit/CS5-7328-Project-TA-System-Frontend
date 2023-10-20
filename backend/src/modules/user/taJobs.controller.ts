@@ -17,3 +17,21 @@ export const getTAJobs = async (req: Request, res: Response, next: NextFunction)
         next(error);
     }
 };
+/**
+ * get user by id
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ */
+export const getTAJobsByFacultyId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await UserService.getTAJobsByFacultyId(Number(req.params.facultyId));
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+};
