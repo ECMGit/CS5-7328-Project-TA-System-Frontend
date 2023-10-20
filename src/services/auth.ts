@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/api/';
-const USER_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/user/';
+const USER_API_URL: string | undefined = 'http://localhost:9000/user';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
@@ -114,6 +114,15 @@ const fakeAuthProvider = {
   },
 };
 
+const getUserById = (id: number) => {
+  // It seems odd to use 'put' for getting data, usually 'put' is used for updating.
+  // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
+  return axios.get(USER_API_URL + `/${id}`).then((res) => {
+    console.log(res);
+    return res; // Same here, we return the response
+  });
+};
+
 
 const AuthService = {
   signUp,
@@ -122,6 +131,7 @@ const AuthService = {
   getCurrentUser,
   resetPassword,
   resetPasswordRequest,
+  getUserById,
   fakeAuthProvider,
 };
   
