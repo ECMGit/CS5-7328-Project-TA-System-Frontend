@@ -179,9 +179,9 @@ const ViewApplications: React.FC = () =>
       {
         if (sortConfig.field === 'studentName') 
         {
-          const userA = users.find(u => u.id === a.studentId);
+          const userA = users.find(u => u.id === a.studentId); //Search for users with matching id values from the list users
           const userB = users.find(u => u.id === b.studentId);
-          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
+          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : ''; //create full names of the found students (default empty string)
           const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
           if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
           if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
