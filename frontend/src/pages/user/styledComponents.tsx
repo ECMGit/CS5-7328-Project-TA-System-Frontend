@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-
+// This is a acontainer with a gradient background, padding, and a custom font. On hover, it shows a shadow.
 export const Container = styled.div`
   padding: 40px;
   font-family: 'Poppins', sans-serif;  
@@ -12,12 +12,15 @@ export const Container = styled.div`
 }
 `;
 
+// This styles a title with a bottom margin, custom font size, color, and a text shadow.
+
 export const Title = styled.h1`
   margin-bottom: 30px;
   font-size: 26px;
   color: #333;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 `;
+// This styles a table styled to take up the full width with rounded corners, a shadow, and collapsed borders.
 
 export const Table = styled.table`
   width: 100%;
@@ -29,11 +32,13 @@ export const Table = styled.table`
 
 export const TableHead = styled.thead``;
 
+//This styles table rows with alternating backgrounds for even rows.
 export const TableRow = styled.tr`
   &:nth-child(even) {
     background-color: #f2f2f2;
   }
 `;
+// This styles Table headers with padding, left alignment, and hover effect that changes the background color.
 
 export const TableHeader = styled.th`
   padding: 15px 20px;
@@ -50,11 +55,13 @@ export const TableHeader = styled.th`
 
 export const TableBody = styled.tbody``;
 
+// This stylesTable cells styled with padding and a top border.
 export const TableCell = styled.td`
   padding: 10px 20px;
   border-top: 1px solid #ddd;
 `;
 
+// This styles link with a custom color. On hover, it gets underlined and the color darkens.
 export const Link = styled.a`
   color: #0077cc;
   text-decoration: none;
@@ -66,12 +73,14 @@ export const Link = styled.a`
   }
 `;
 
+// An applicant title styled with a custom color, font size, and a bottom margin.
 export const ApplicantTitle = styled.h2`
     color: #333;
     font-size: 24px;
     margin-bottom: 15px;
 `;
 
+// Applicant info paragraph with custom font size and color. On hover, it enlarges.
 export const ApplicantInfo = styled.p`
   font-size: 16px;
   margin-bottom: 10px;
@@ -88,6 +97,8 @@ export const ApplicantInfo = styled.p`
   }
 `;
 
+// A navbar styled with a background color, padding, and flexbox for content alignment.
+
 export const Navbar = styled.div`
   background-color: #333;
   color: white;
@@ -96,6 +107,8 @@ export const Navbar = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
+
+// Navbar buttons with no border, custom padding, rounded corners, and a hover effect that darkens the background.
 
 export const NavbarButton = styled.button`
   background-color: #555;
