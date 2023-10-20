@@ -1,7 +1,7 @@
 // MockResume.tsx
 
 import React from 'react';
-import { TAApplicationData } from '../pages/ViewApplications';  // adjust the path
+import { TAApplicationData } from '../pages/ViewApplications';  
 import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledComponents';
 
 
