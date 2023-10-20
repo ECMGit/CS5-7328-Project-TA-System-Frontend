@@ -106,6 +106,26 @@ const TAJobDisplayComponent = () => {
         />
         <button onClick={handleGetJobById}>Get Job Details</button>
 
+        {/*<DataGrid
+          initialState={{
+            filter: {
+              filterModel: {
+                items: [{ field: 'rating', operator: '>', value: '2.5' }],
+              },
+            },
+          }}
+        />*/}
+
+        {/*<h2>Get Jobs by Filters:</h2>
+        <input
+          type="text"
+          value={selectedID}
+          onChange={(e) => setSelectedId(e.target.value)}
+          placeholder="Enter filter value"
+        />
+        <button onClick={handleFetchTAJobsWithFilters}>Get Job Details</button>
+        */}
+
         {jobData && (
           <div>
             <h3>Job Details:</h3>
