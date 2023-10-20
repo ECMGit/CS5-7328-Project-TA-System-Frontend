@@ -79,6 +79,47 @@ const TAJobDisplayComponent = () => {
           <p>No job openings available.</p>
         )}
       </div>
+
+      {/*}
+          <Box sx={{ display: "flex", marginTop: "1rem" }} >
+            {screenWidth > 450 ? <Box sx={{ marginLeft: "2rem" }}>
+                <Button variant="contained" sx={{ width: "100%", marginBottom: "1rem" }} onClick={handlePostClick}>Post</Button>
+                <Typography sx={{ color: "black", fontSize: 24, fontWeight: "bold", textAlign: "left" }}>
+                  Filter:
+                </Typography>
+                <FormGroup>
+                  {categories.map((category, index) => <FormControlLabel control={<Checkbox disabled={updatingFilter} onChange={() => handleCheckboxChange(category)} checked={checked[category.name]} />} label={`${category.name} (${category.num_posts})`} />)}
+                </FormGroup>
+              </Box> : null}
+            <Box sx={{ display: "block", width: "100%" }}>
+              {
+                taJobs.filter((p) => p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
+              }
+              {
+                taJobs.filter((p) => !p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
+              }
+            </Box>
+            </Box>
+            </>*/}
+      {/*<DataGrid
+          initialState={{
+            filter: {
+              filterModel: {
+                items: [{ field: 'rating', operator: '>', value: '2.5' }],
+              },
+            },
+          }}
+        />*/}
+
+      {/*<h2>Get Jobs by Filters:</h2>
+        <input
+          type="text"
+          value={selectedID}
+          onChange={(e) => setSelectedId(e.target.value)}
+          placeholder="Enter filter value"
+        />
+        <button onClick={handleFetchTAJobsWithFilters}>Get Job Details</button>
+        */}
     </div>
   );
 };
