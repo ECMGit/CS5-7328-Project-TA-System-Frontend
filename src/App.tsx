@@ -8,19 +8,22 @@ import SignUpPage from './pages/login/SignUpPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
 import JobInfo from './pages/JobInfo';
+
+import ApplicationPage from './pages/apply/ApplicationPage';
 // import { fakeAuthProvider } from "./auth";
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/signup" element={<SignUpPage/>}/>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
         <Route path="/home" element={<Home/>}/>
         <Route path="/jobs/details/:id" element={<JobInfo/>}/>
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="*" element={<LoginPage/>} />
+        <Route path="*" element={<LoginPage />} />
+        <Route path="/apply" element={<ApplicationPage />} />
       </Routes>
     </Router>
   );
