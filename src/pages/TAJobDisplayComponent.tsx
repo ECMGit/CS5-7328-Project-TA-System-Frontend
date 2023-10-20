@@ -39,21 +39,6 @@ const TAJobDisplayComponent = () => {
     handleFetchJobs();
   }, []);
 
-  const handleGetJobById = () => {
-    if (selectedId.trim() === '') return;
-
-    AuthService.getTAJobById(selectedId)
-      .then(res => {
-        // Handling the response by setting it to state
-        if (res.data) {
-          setJobData(res.data);
-        }
-      })
-      .catch(err => {
-        console.error(`An error occurred while fetching TA job with ID ${selectedId}:`, err);
-      });
-  };
-
   const handleFetchJobs = async () => {
     try {
       // Define your filters based on the requirements. 
@@ -92,33 +77,6 @@ const TAJobDisplayComponent = () => {
           ))
         ) : (
           <p>No job openings available.</p>
-        )}
-      </div>
-
-      {/* Section to input an ID and fetch a specific job */}
-      <div>
-        <h2>Get Job Details by ID:</h2>
-        <input
-          type="text"
-          value={selectedId}
-          onChange={(e) => setSelectedId(e.target.value)}
-          placeholder="Enter Job ID"
-        />
-        <button onClick={handleGetJobById}>Get Job Details</button>
-
-        {jobData && (
-          <div>
-            <h3>Job Details:</h3>
-            {/* Displaying structured information about the selected job */}
-            <p><strong>Title:</strong> {jobData.title}</p>
-            <p><strong>Course Schedule:</strong> {jobData.courseSchedule}</p>
-            <p><strong>Hours per Week:</strong> {jobData.totalHoursPerWeek}</p>
-            <p><strong>Required Courses:</strong> {jobData.requiredCourses}</p>
-            <p><strong>Skills:</strong> {jobData.requiredSkills}</p>
-            <p><strong>Notes:</strong> {jobData.notes}</p>
-            <p><strong>Deadline to Apply:</strong> {new Date(jobData.deadlineToApply).toDateString()}</p>
-            {/* Add other fields of the job that you want to display */}
-          </div>
         )}
       </div>
     </div>
