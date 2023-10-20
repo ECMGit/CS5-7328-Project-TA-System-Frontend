@@ -39,21 +39,6 @@ const TAJobDisplayComponent = () => {
     handleFetchJobs();
   }, []);
 
-  const handleGetJobById = () => {
-    if (selectedId.trim() === '') return;
-
-    AuthService.getTAJobById(selectedId)
-      .then(res => {
-        // Handling the response by setting it to state
-        if (res.data) {
-          setJobData(res.data);
-        }
-      })
-      .catch(err => {
-        console.error(`An error occurred while fetching TA job with ID ${selectedId}:`, err);
-      });
-  };
-
   const handleFetchJobs = async () => {
     try {
       // Define your filters based on the requirements. 
@@ -92,75 +77,6 @@ const TAJobDisplayComponent = () => {
           ))
         ) : (
           <p>No job openings available.</p>
-        )}
-      </div>
-
-      {/* Section to input an ID and fetch a specific job */}
-      <div>
-        <h2>Get Job Details by ID:</h2>
-        <input
-          type="text"
-          value={selectedId}
-          onChange={(e) => setSelectedId(e.target.value)}
-          placeholder="Enter Job ID"
-        />
-        <button onClick={handleGetJobById}>Get Job Details</button>
-        
-        {/*}
-          <Box sx={{ display: "flex", marginTop: "1rem" }} >
-            {screenWidth > 450 ? <Box sx={{ marginLeft: "2rem" }}>
-                <Button variant="contained" sx={{ width: "100%", marginBottom: "1rem" }} onClick={handlePostClick}>Post</Button>
-                <Typography sx={{ color: "black", fontSize: 24, fontWeight: "bold", textAlign: "left" }}>
-                  Filter:
-                </Typography>
-                <FormGroup>
-                  {categories.map((category, index) => <FormControlLabel control={<Checkbox disabled={updatingFilter} onChange={() => handleCheckboxChange(category)} checked={checked[category.name]} />} label={`${category.name} (${category.num_posts})`} />)}
-                </FormGroup>
-              </Box> : null}
-            <Box sx={{ display: "block", width: "100%" }}>
-              {
-                taJobs.filter((p) => p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
-              }
-              {
-                taJobs.filter((p) => !p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
-              }
-            </Box>
-            </Box>
-            </>*/}
-            
-        {/*<DataGrid
-          initialState={{
-            filter: {
-              filterModel: {
-                items: [{ field: 'rating', operator: '>', value: '2.5' }],
-              },
-            },
-          }}
-        />*/}
-
-        {/*<h2>Get Jobs by Filters:</h2>
-        <input
-          type="text"
-          value={selectedID}
-          onChange={(e) => setSelectedId(e.target.value)}
-          placeholder="Enter filter value"
-        />
-        <button onClick={handleFetchTAJobsWithFilters}>Get Job Details</button>
-        */}
-
-        {jobData && (
-          <div>
-            <h3>Job Details:</h3>
-            {/* Displaying structured information about the selected job */}
-            <p><strong>Title:</strong> {jobData.title}</p>
-            <p><strong>Course Schedule:</strong> {jobData.courseSchedule}</p>
-            <p><strong>Hours per Week:</strong> {jobData.totalHoursPerWeek}</p>
-            <p><strong>Required Courses:</strong> {jobData.requiredCourses}</p>
-            <p><strong>Skills:</strong> {jobData.requiredSkills}</p>
-            <p><strong>Notes:</strong> {jobData.notes}</p>
-            <p><strong>Deadline to Apply:</strong> {new Date(jobData.deadlineToApply).toDateString()}</p>
-            {/* Add other fields of the job that you want to display */}
-          </div>
         )}
       </div>
     </div>
