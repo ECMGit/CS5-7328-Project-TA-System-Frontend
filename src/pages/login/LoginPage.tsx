@@ -80,10 +80,10 @@ const LoginPage: React.FC = () => {
             <TextField margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="usernam"
+              label="Username"
+              name="username"
+              autoComplete="username"
               onChange={(e) => setEmail(e.target.value)} value={email}
               autoFocus
             />
