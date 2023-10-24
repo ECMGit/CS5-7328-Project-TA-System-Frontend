@@ -1,9 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent} from 'react';
 import AuthService from '../../services/auth';
 import { Container, Typography, Button, TextField, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { LoadingButton  } from '@mui/lab';
 
 const PasswordResetRequest: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    setMessage('');
+    setLoading(true);
+    // console.log(email);
+    // Handle the password reset logic here
+    AuthService.sendResetLink(email).then(
+      () => {
+        alert('Password reset link sent!');
+        navigate('/login');
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        
+        alert(resMessage);
+        setLoading(false);
+        setMessage(resMessage);
+      }
+    );
+  };
 
   return (
     <Container maxWidth="sm">
@@ -32,27 +64,6 @@ const PasswordResetRequest: React.FC = () => {
       </Box>
     </Container>
   );
-
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    console.log(email);
-    // Handle the password reset logic here
-    AuthService.resetPasswordRequest(email).then(
-      () => {
-        alert('Password reset link sent!');
-      },
-      (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-        alert(resMessage);
-      }
-    );
-  }
 };
 
 export default PasswordResetRequest;

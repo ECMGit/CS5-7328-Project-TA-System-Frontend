@@ -24,7 +24,8 @@ const defaultTheme = createTheme();
 
 const LoginPage: React.FC = () => {
 
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -39,7 +40,7 @@ const LoginPage: React.FC = () => {
     setMessage('');
     setLoading(true);
     // Add your login logic here
-    AuthService.login(email, password).then(
+    AuthService.login(username, password).then(
       () => {
         navigate('/home');
         // window.location.reload();
@@ -80,11 +81,11 @@ const LoginPage: React.FC = () => {
             <TextField margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              onChange={(e) => setEmail(e.target.value)} value={email}
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              onChange={(e) => setUsername(e.target.value)} value={username}
               autoFocus
             />
             <TextField

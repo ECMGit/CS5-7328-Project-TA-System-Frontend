@@ -7,6 +7,11 @@ For SMU software engineering, this is a template for frontend development.
 Author: [Junhao Shen](junhaos@smu.edu)
 ## Available Scripts
 
+Create a `.env` file and put the following in it:
+```
+REACT_APP_BACKEND_URL=http://localhost:9000
+```
+
 In the project directory, you can run:
 
 ### `npm start`

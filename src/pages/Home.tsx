@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Container } from '@mui/material';
-import TAJobDisplayComponent from './TAJobDisplayComponent';
 
 interface User {
   username: string;
@@ -22,9 +21,10 @@ const Home: React.FC = () => {
       ) : (
         <Typography variant='h1'>Please log in.</Typography>
       )}
-      <TAJobDisplayComponent></TAJobDisplayComponent>
+
     </Container>
   );
 };
 
 export default Home;
+
