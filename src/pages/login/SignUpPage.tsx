@@ -22,7 +22,9 @@ const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [LastName, setLastName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [smuNo, setSmuNo] = useState('');
+  const [username, setUsername] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -32,7 +34,7 @@ const RegistrationPage: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // Add your registration logic here
-    AuthService.signUp(firstName, LastName, email, password).then(
+    AuthService.signUp(firstName, lastName, email, username, smuNo, password).then(
       () => {
         navigate('/login');
         window.location.reload();
@@ -97,7 +99,31 @@ const RegistrationPage: React.FC = () => {
                 name="lastName"
                 autoComplete="family-name"
                 onChange={(e) => setLastName(e.target.value)}
-                value={LastName}
+                value={lastName}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="smuNo"
+                label="SMU ID Number"
+                name="smuNo"
+                autoComplete="smuNo"
+                onChange={(e) => setSmuNo(e.target.value)}
+                value={smuNo}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
               />
             </Grid>
             <Grid item xs={12}>
