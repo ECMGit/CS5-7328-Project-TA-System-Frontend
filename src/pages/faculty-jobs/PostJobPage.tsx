@@ -39,20 +39,21 @@ const PostJob: React.FC = () => {
       notes: notes,
       deadlineToApply: new Date(deadline),
       facultyId: 1, // TODO: Make this read the logged in user's ID
-    }).then(() => {
-      navigate('/jobs');
-      window.location.reload();
-    }, (error) => {
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+    }).then(
+      () => {
+        navigate('/jobs');
+        window.location.reload();
+      }, (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-      setLoading(false);
-      setMessage(resMessage);
-    });
+        setLoading(false);
+        setMessage(resMessage);
+      });
   };
 
   return (
