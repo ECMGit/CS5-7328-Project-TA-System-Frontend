@@ -9,6 +9,13 @@ import {
   Link,
   Avatar,
   Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -18,6 +25,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
 import { AxiosError } from 'axios';
 
+// JUST ADDED
+// import InputLabel from '@mui/material/InputLabel';
+// import MenuItem from '@mui/material/MenuItem';
+//import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,6 +39,8 @@ const RegistrationPage: React.FC = () => {
   const [smuNo, setSmuNo] = useState('');
   const [username, setUsername] = useState('');
 
+  const [userType, setUserType] = useState('');
+  const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -57,6 +72,14 @@ const RegistrationPage: React.FC = () => {
     );
   };
 
+  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserType((event.target as HTMLInputElement).value);
+  };
+
+  const handleYearChange = (event: SelectChangeEvent) => {
+    setYear(event.target.value);
+  };
+
   return (
     // <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
@@ -76,6 +99,46 @@ const RegistrationPage: React.FC = () => {
           Sign up
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+
+          <FormControl fullWidth>
+            <FormLabel id="userType">User Type</FormLabel>
+            <RadioGroup
+              row 
+              aria-labelledby="userType group" 
+              defaultValue="student" 
+              value={userType}
+              onChange={handleTypeChange}
+              name="radio-button-group"
+            >
+              <FormControlLabel value="student" control={<Radio />} label="Student" />
+              <FormControlLabel value="faculty" control={<Radio />} label="Faculty" />
+            </RadioGroup>  
+          </FormControl>
+
+
+          {userType == 'student' && (
+            <p>
+              <FormControl fullWidth>
+                <InputLabel id="studentYear">School Year</InputLabel>
+                <Select
+                  labelId="studentYear"
+                  id="studentYear"
+                  value={year}
+                  label="studentYear"
+                  onChange={handleYearChange}
+                >
+                  <MenuItem value={1}>First Year</MenuItem>
+                  <MenuItem value={2}>Sophomore</MenuItem>
+                  <MenuItem value={3}>Junior</MenuItem>
+                  <MenuItem value={4}>Senior</MenuItem>
+                  <MenuItem value={5}>Graduate</MenuItem>
+                </Select> 
+              </FormControl>
+            </p>
+          )} 
+
+
+
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
