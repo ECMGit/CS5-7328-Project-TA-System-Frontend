@@ -41,6 +41,7 @@ const PostJob: React.FC = () => {
       facultyId: 1, // TODO: Make this read the logged in user's ID
     }).then(() => {
       navigate('/jobs');
+      window.location.reload();
     }, (error) => {
       const resMessage =
         (error.response &&
