@@ -1,24 +1,13 @@
-# CS5/7326 SoftEngineering Team Project Frontend
+# React frontend template
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
-For SMU software engineering, this is a template for the Team project frontend.
+For SMU software engineering, this is a template for frontend development.
 
 Author: [Junhao Shen](junhaos@smu.edu)
-
-## Dependencies installation
-You need to install the following dependencies before you start the project.
-
-### `npm install`
-or 
-### `yarn install` (Recommended )
-you may need to install yarn first `npm install -g yarn`
-
-
 ## Available Scripts
 
 In the project directory, you can run:
-
 
 ### `npm start`
 
@@ -78,11 +67,5 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 │   │   └── index.css
 │   └── __test__                            # Test folder, write your test case under this folder
 │       └── App.test.tsx
-├── .eslintrc.js                            # ESLint configuration file
-└── tsconfig.json                           # TypeScript configuration file
+└── tsconfig.json
 ```
-
-
-## Recommended VSCode extensions:
-- ESLint or Prettier ESLint
-- GitLens
