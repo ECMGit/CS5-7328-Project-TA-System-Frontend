@@ -10,6 +10,7 @@ import api from '../../services/faculty-job';
 
 const ViewJobs: React.FC = () => {
 
+  // Type definition for formatting jobs
   type Job = {
     id: number;
     title: string;
