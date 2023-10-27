@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const JOBS_API_URL = 'http://localhost:9000/jobs';
+const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
 
 const getJobs = () => {
   return axios.get(JOBS_API_URL).then(res => {
