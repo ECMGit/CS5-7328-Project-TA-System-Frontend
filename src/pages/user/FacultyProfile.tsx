@@ -7,10 +7,12 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
 
+  // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
 
+  // Function to handle the change of the profile image file
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
@@ -23,6 +25,7 @@ const FacultyProfile: React.FC = () => {
     }
   }
 
+  // Function to handle the change of the resume file
   function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
@@ -101,13 +104,13 @@ const FacultyProfile: React.FC = () => {
                 <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
-              View Resume
+                    View Resume
                   </a>
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                 <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
-            Save
+                  Save
                 </Button>
               </Box>
             </Box>
