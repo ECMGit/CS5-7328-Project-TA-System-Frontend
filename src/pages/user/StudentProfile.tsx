@@ -43,11 +43,7 @@ const StudentProfile: React.FC = () => {
         }}
       >
         {/* Add an image that, when clicked, redirects to the first page */}
-        <img
-          src="logo192.png" // Provide the actual image source
-          alt="Click to go back"
-          style={{ cursor: 'pointer' }}
-        />
+        
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
