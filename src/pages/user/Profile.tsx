@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
+import axios from 'axios';
+import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid, requirePropFactory } from '@mui/material';
+import AuthService from '../../services/auth';
 
 const Profile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -155,8 +157,12 @@ const Profile: React.FC = () => {
     </Container>
   );
 
-  function handleSave() {
+  function handleSave(event: React.FormEvent){
     // Handle saving the user's information
+    //this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    if (profileImage != null && resume!= null){
+      AuthService.saveProfile(name,profileImage,graduationYear,major,resume);
+    }
   }
 };
 

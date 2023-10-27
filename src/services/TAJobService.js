@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const TA_API_URL = 'http://localhost:9000/jobs';
 
+//TODO: add comments for each function, convert this file to typescript
+
 const getTAJobs = () => {
   // Return the promise itself
   return axios.get(TA_API_URL).then((res) => {

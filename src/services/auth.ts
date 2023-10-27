@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/api/';
-const USER_API_URL: string | undefined = 'http://localhost:9000/user';
+const USER_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/user/';
+const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/profile/';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
@@ -99,6 +100,22 @@ const resetPassword = async (token: string, password: string) => {
 };
 
 
+// For Handling saveProfile feature
+const saveProfile = async (name: string, profileImage: string, graduationYear: string, major: string, resumeFile: string) =>{
+  try {
+    return axios.post(PROFILE_API_URL + 'save',{
+      name,
+      profileImage,
+      graduationYear,
+      major,
+      resumeFile,
+    });
+  } catch (error){
+    console.error(error);
+    throw new Error ('Error saving profile. Please try again');
+  }
+  
+};
 /**
  * This represents some generic auth provider API, like Firebase.
  */
@@ -133,6 +150,10 @@ const AuthService = {
   resetPasswordRequest,
   getUserById,
   fakeAuthProvider,
+  saveProfile,
 };
+
+
+
   
 export default AuthService;
