@@ -16,7 +16,7 @@ const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/
  * @returns 
  */
 
-const signUp = (firstName: string, lastName: string, email: string, username:string, smuNo:string, password: string) => {
+const signUp = (firstName: string, lastName: string, email: string, username:string, smuNo:string, password: string, year: string, userType: string) => {
   return axios.post(USER_API_URL + 'signUp', {
     firstName,
     lastName,
@@ -24,6 +24,8 @@ const signUp = (firstName: string, lastName: string, email: string, username:str
     username,
     smuNo,
     password,
+    userType,
+    year,
   });
 };
 

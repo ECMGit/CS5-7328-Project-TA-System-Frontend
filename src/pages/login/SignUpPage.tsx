@@ -49,7 +49,7 @@ const RegistrationPage: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // Add your registration logic here
-    AuthService.signUp(firstName, lastName, email, username, smuNo, password).then(
+    AuthService.signUp(firstName, lastName, email, username, smuNo, password, year, userType).then(
       () => {
         navigate('/login');
         window.location.reload();
@@ -111,7 +111,7 @@ const RegistrationPage: React.FC = () => {
               name="radio-button-group"
             >
               <FormControlLabel value="student" control={<Radio />} label="Student" />
-              <FormControlLabel value="faculty" control={<Radio />} label="Faculty" />
+              <FormControlLabel value="faculty" control={<Radio />} label="Faculty" required />
             </RadioGroup>  
           </FormControl>
 
