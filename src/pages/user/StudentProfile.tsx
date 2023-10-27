@@ -43,7 +43,7 @@ const StudentProfile: React.FC = () => {
         }}
       >
         {/* Add an image that, when clicked, redirects to the first page */}
-        
+        My Student Dashboard
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>

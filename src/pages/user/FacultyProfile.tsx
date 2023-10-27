@@ -50,6 +50,7 @@ const FacultyProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
+        My Faculty Dashboard
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
