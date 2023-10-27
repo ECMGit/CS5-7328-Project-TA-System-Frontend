@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { backendURL } from '../config';
 
-const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/api/';
-const USER_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/user/';
-const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/profile/';
+const BASE_API_URL: string | undefined = backendURL+'/api/';
+const USER_API_URL: string | undefined = backendURL+'/user/';
+const PROFILE_API_URL: string | undefined = backendURL+'/profile/';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
@@ -16,7 +17,15 @@ const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/
  * @returns 
  */
 
-const signUp = (firstName: string, lastName: string, email: string, username:string, smuNo:string, password: string, year: string, userType: string) => {
+const signUp = (firstName: string, 
+  lastName: string, 
+  email: string, 
+  username:string, 
+  smuNo: string, 
+  password: string, 
+  year: string, 
+  userType: string) => {
+  console.log(USER_API_URL + 'signUp');
   return axios.post(USER_API_URL + 'signUp', {
     firstName,
     lastName,
@@ -36,6 +45,7 @@ const signUp = (firstName: string, lastName: string, email: string, username:str
  * @returns 
  */
 const login = (username: string, password: string) => {
+  console.log(USER_API_URL + 'login');
   return axios
     .post(USER_API_URL + 'login', {
       username,
@@ -147,6 +157,15 @@ const getUserById = (id: number) => {
   });
 };
 
+// get user info from backend
+const getUserData =() => {
+  return axios.get(USER_API_URL + '/').then((res) => {
+    console.log(res);
+    return res; // Same here, we return the response
+  });
+};
+
+
 
 const AuthService = {
   signUp,
@@ -158,6 +177,7 @@ const AuthService = {
   getUserById,
   fakeAuthProvider,
   saveProfile,
+  getUserData,
 };
 
 
