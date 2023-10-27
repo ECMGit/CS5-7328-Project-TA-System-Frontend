@@ -50,12 +50,6 @@ const FacultyProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-        {/* Add an image that, when clicked, redirects to the first page */}
-        <img
-          src="your-image-source.jpg" // Provide the actual image source
-          alt="Click to go back"
-          style={{ cursor: 'pointer' }}
-        />
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
