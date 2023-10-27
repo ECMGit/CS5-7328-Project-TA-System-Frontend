@@ -87,7 +87,6 @@ const getCurrentUser = () => {
  * @param email 
  * @returns 
  */
-
 const resetPasswordRequest = (email: string) => {
   return axios.post(BASE_API_URL + 'password-reset-link', {
     email,
@@ -147,7 +146,9 @@ const fakeAuthProvider = {
     setTimeout(callback, 100);
   },
 };
-
+/**
+ * This represents some generic auth provider API, like Firebase.
+ */
 const getUserById = (id: number) => {
   // It seems odd to use 'put' for getting data, usually 'put' is used for updating.
   // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
@@ -157,7 +158,10 @@ const getUserById = (id: number) => {
   });
 };
 
-// get user info from backend
+/**
+ * For get user info from backend 
+ * @returns response with user data
+ */
 const getUserData =() => {
   return axios.get(USER_API_URL + '/').then((res) => {
     console.log(res);

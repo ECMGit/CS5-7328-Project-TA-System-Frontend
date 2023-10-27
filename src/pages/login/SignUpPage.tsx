@@ -32,13 +32,13 @@ import { AxiosError } from 'axios';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const RegistrationPage: React.FC = () => {
+  // set the initial state of the data
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [smuNo, setSmuNo] = useState('');
   const [username, setUsername] = useState('');
-
   const [userType, setUserType] = useState('');
   const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
@@ -46,6 +46,7 @@ const RegistrationPage: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // submission handler for the form to register a new user
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // Add your registration logic here
@@ -72,10 +73,12 @@ const RegistrationPage: React.FC = () => {
     );
   };
 
+  // Change handlers for button input (radio)
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserType((event.target as HTMLInputElement).value);
   };
 
+  // Change handlers for year input (select)
   const handleYearChange = (event: SelectChangeEvent) => {
     setYear(event.target.value);
   };

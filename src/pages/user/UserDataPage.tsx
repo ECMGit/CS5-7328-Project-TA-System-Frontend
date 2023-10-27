@@ -5,11 +5,13 @@ import userService from '../../services/auth';
 import { Typography, Container, Box } from '@mui/material';
 
 const UserDataPage: React.FC = () => {
+  // set the initial state of the data
   const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
   //eslint-disable-next-line
   const [rows, setRows] = useState<any[]>([]);
 
+  // set the columns for the table
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -28,6 +30,7 @@ const UserDataPage: React.FC = () => {
     { field: 'updatedAt', headerName: 'Updated At', width: 120 },
   ];
 
+  // fetch the data from the api
   useEffect(() => {
     const getAllUserData = async () => {
       try {
@@ -40,7 +43,6 @@ const UserDataPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     getAllUserData();
   }, []);
 
