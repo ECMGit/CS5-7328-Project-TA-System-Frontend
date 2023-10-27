@@ -98,6 +98,38 @@ const resetPassword = async (token: string, password: string) => {
   }
 };
 
+// Fetch data from API regarding the TA Application. 
+const getTaApplication = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/taApplication');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
+
+// Fetch data from API regarding the TAJob. 
+const getTaJob = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/taJob');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
+
+// Fetch data from API regarding the user. 
+const getUser = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/user');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
 
 /**
  * This represents some generic auth provider API, like Firebase.
@@ -123,6 +155,9 @@ const AuthService = {
   resetPassword,
   resetPasswordRequest,
   fakeAuthProvider,
+  getTaApplication,
+  getTaJob, 
+  getUser
 };
   
 export default AuthService;

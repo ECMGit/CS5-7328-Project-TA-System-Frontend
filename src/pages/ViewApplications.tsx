@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import MockResume from './MockResume'; //This import is used so that we can display additional application details for a particular applicant
 import { Container, Title, Table, TableHead, TableRow, TableHeader, TableBody, TableCell, Navbar, NavbarButton } from '../pages/user/styledComponents';
+import AuthService from '../services/auth';
 // Define the data structure for a TA Application entry that we will get from database
 export type TAApplicationData = 
 {
@@ -87,49 +88,12 @@ const ViewApplications: React.FC = () =>
   useEffect(() => 
   {
     // Fetch data from API regarding the TA Application. 
-    axios.get('http://localhost:9000/taApplication')
-    //this is the response from the API
-      .then(response => 
-      {
-        //this is the data from the API
-        setApplications(response.data);
-        // console.log(response.data);
-      })
-      //error from the API
-      .catch(error => 
-      {
-        
-        console.error('Error fetching data: ', error);
-      });
-
-    axios.get('http://localhost:9000/taJob').then(response => 
-    {
-      //this is the data from the API
-      setJobs(response.data);
-      const statuses = Array.from(new Set(response.data.map((job: TAJobData) => job.TAStats))) as string[];
+    AuthService.getTaApplication().then((x) => {setApplications(x);});
+    AuthService.getTaJob().then((x) => {setJobs(x);}).then(() => {
+      const statuses = Array.from(new Set(jobs.map((job: TAJobData) => job.TAStats))) as string[];
       setUniqueStatuses(statuses);
-
-      console.log(response.data);
-    })
-    //error from the API
-      .catch(error => 
-      {
-        
-        console.error('Error fetching data: ', error);
-      });
-
-    // Fetch user data
-    axios.get('http://localhost:9000/user')  
-      .then(response => 
-      {
-        setUsers(response.data);
-      })
-      .catch(error => 
-      {
-        console.error('Error fetching user data: ', error);
-      
-      });
-
+    });
+    AuthService.getUser().then((x) => {setUsers(x);});
   }, []);
     
   
