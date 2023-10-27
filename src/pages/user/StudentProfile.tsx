@@ -110,6 +110,8 @@ const StudentProfile: React.FC = () => {
                 </Button>
               </Box>
             </Box>
+            {/* This stuff should be sent to the database following successful submission. Upon login, this will
+              be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
             {name && graduationYear && major && (
               <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
                 <Typography variant="h6">User Information</Typography>
@@ -124,22 +126,33 @@ const StudentProfile: React.FC = () => {
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
           <Box sx={{ mt: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* This <Box> component contains a set of job-related information */}
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
               <Typography variant="h6">Job Title 1</Typography>
               <Typography>Description of Job 1</Typography>
               <Typography>Date Submitted: 2023-10-15</Typography>
+              <Button variant="contained" color="primary">
+      Check Application Status
+              </Button>
             </Paper>
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
               <Typography variant="h6">Job Title 2</Typography>
               <Typography>Description of Job 2</Typography>
               <Typography>Date Submitted: 2023-10-16</Typography>
+              <Button variant="contained" color="primary">
+      Check Application Status
+              </Button>
             </Paper>
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
               <Typography variant="h6">Job Title 3</Typography>
               <Typography>Description of Job 3</Typography>
               <Typography>Date Submitted: 2023-10-17</Typography>
+              <Button variant="contained" color="primary">
+      Check Application Status
+              </Button>
             </Paper>
           </Box>
+
         </Grid>
       </Grid>
     </Container>
