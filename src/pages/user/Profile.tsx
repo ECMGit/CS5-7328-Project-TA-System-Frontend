@@ -50,7 +50,7 @@ const Profile: React.FC = () => {
       >
         {/* Add an image that, when clicked, redirects to the first page */}
         <img
-          src="your-image-source.jpg" // Provide the actual image source
+          src="logo192.png" // Provide the actual image source
           alt="Click to go back"
           style={{ cursor: 'pointer' }}
         />
