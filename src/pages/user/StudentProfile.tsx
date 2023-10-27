@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Input,
+  TextField,
+  Paper,
+  Grid,
+} from '@mui/material';
 
 const StudentProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -13,27 +23,11 @@ const StudentProfile: React.FC = () => {
   }
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const uploadedImage = e.target?.result as string;
-        setProfileImage(uploadedImage);
-      };
-      reader.readAsDataURL(file);
-    }
+    // Handle image file upload
   }
 
   function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const uploadedResume = e.target?.result as string;
-        setResume(uploadedResume);
-      };
-      reader.readAsDataURL(file);
-    }
+    // Handle resume file upload
   }
 
   return (
@@ -49,11 +43,7 @@ const StudentProfile: React.FC = () => {
         }}
       >
         {/* Add an image that, when clicked, redirects to the first page */}
-        <img
-          src="logo192.png" // Provide the actual image source
-          alt="Click to go back"
-          style={{ cursor: 'pointer' }}
-        />
+        
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
