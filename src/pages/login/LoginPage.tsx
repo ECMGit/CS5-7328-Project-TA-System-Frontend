@@ -19,17 +19,13 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '../../services/auth';
 import Copyright from '../../components/Copyright';
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 const LoginPage: React.FC = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-
-
 
   const navigate = useNavigate();
 
@@ -38,11 +34,10 @@ const LoginPage: React.FC = () => {
 
     setMessage('');
     setLoading(true);
-    // Add your login logic here
+
     AuthService.login(email, password).then(
       () => {
         navigate('/home');
-        // window.location.reload();
       },
       (error) => {
         const resMessage =
@@ -56,6 +51,14 @@ const LoginPage: React.FC = () => {
         setMessage(resMessage);
       }
     );
+  };
+
+  const navigateToStudentProfile = () => {
+    navigate('/student-profile');
+  };
+
+  const navigateToFacultyProfile = () => {
+    navigate('/faculty-profile');
   };
 
   return (
@@ -122,6 +125,12 @@ const LoginPage: React.FC = () => {
                   {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>
+            </Grid>
+            <Grid item>
+              {/* Button to navigate to /student-profile */}
+              <LoadingButton onClick={navigateToStudentProfile}>Student Profile</LoadingButton>
+              {/* Button to navigate to /faculty-profile */}
+              <LoadingButton onClick={navigateToFacultyProfile}>Faculty Profile</LoadingButton>
             </Grid>
             <FormHelperText>{message}</FormHelperText>
           </Box>
