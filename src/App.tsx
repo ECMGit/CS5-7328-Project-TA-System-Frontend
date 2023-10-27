@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
 import LoginPage from './pages/login/LoginPage';
-import UserProfile from './pages/user/Profile';
+import StudentProfile from './pages/user/StudentProfile';
 import SignUpPage from './pages/login/SignUpPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
@@ -17,7 +17,7 @@ const App: React.FC = () => {
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
         <Route path="/home" element={<Home/>}/>
-        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/student-profile" element={<StudentProfile />} />
         <Route path="*" element={<LoginPage/>} />
       </Routes>
     </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
 
-const Profile: React.FC = () => {
+const StudentProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [graduationYear, setGraduationYear] = useState<string>('');
@@ -160,4 +160,4 @@ const Profile: React.FC = () => {
   }
 };
 
-export default Profile;
+export default StudentProfile;
