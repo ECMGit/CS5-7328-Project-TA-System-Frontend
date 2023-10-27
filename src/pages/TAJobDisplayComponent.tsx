@@ -81,7 +81,7 @@ const TAJobDisplayComponent = () => {
       </div>
 
       {/*}
-      TODO: code to handle filtering functions
+      code to handle filtering functions
           <Box sx={{ display: "flex", marginTop: "1rem" }} >
             {screenWidth > 450 ? <Box sx={{ marginLeft: "2rem" }}>
                 <Button variant="contained" sx={{ width: "100%", marginBottom: "1rem" }} onClick={handlePostClick}>Post</Button>
