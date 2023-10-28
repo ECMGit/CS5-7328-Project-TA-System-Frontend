@@ -24,6 +24,7 @@ const PostJob: React.FC = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     api.postJob({
@@ -38,24 +39,28 @@ const PostJob: React.FC = () => {
       notes: notes,
       deadlineToApply: new Date(deadline),
       facultyId: 1, // TODO: Make this read the logged in user's ID
-    }).then((error) => {
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+    }).then(
+      () => {
+        navigate('/jobs');
+        window.location.reload();
+      }, (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-      setLoading(false);
-      setMessage(resMessage);
-    });
+        setLoading(false);
+        setMessage(resMessage);
+      });
   };
 
   return (
     <Container maxWidth="sm">
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8, }} >
         <Typography component="h1" variant="h5">
-          Register
+          Post TA Job
         </Typography>
         <Box component="form" onSubmit={handleSubmit} mt={3}>
           <TextField label="Title" margin="normal" required fullWidth autoComplete="name" onChange={(e) => { setTitle(e.target.value); }} autoFocus />
