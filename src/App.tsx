@@ -13,6 +13,9 @@ import JobInfo from './pages/JobInfo';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
+import ViewApplications from './pages/ViewApplications';
+import MockResume from './pages/MockResume';
+import { TAApplicationData } from '../src/pages/ViewApplications';
 // import { fakeAuthProvider } from "./auth";
 
 const App: React.FC = () => {
@@ -30,6 +33,7 @@ const App: React.FC = () => {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<LoginPage />} />
         <Route path="/application-form" element={<ApplicationPage />} />
+        <Route path="/" element={<ViewApplications />} />
       </Routes>
     </Router>
   );

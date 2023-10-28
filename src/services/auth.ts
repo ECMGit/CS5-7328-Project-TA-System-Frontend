@@ -39,7 +39,6 @@ const login = (username: string, password: string) => {
       if (response.data.user) {
         localStorage.setItem('user', JSON.stringify(response.data.user));
       }
-
       return response.data;
     });
 };
@@ -99,6 +98,38 @@ const resetPassword = async (token: string, password: string) => {
   }
 };
 
+// Fetch data from API regarding the TA Application. 
+const getTaApplication = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/taApplication');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
+
+// Fetch data from API regarding the TAJob. 
+const getTaJob = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/taJob');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
+
+// Fetch data from API regarding the user. 
+const getUser = async () => {
+  try {
+    const response = await axios.get('http://localhost:9000/user');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error; 
+  }
+};
 
 // For Handling saveProfile feature
 const saveProfile = async (name: string, profileImage: string, graduationYear: string, major: string, resumeFile: string) =>{
@@ -151,9 +182,9 @@ const AuthService = {
   getUserById,
   fakeAuthProvider,
   saveProfile,
+  getTaApplication,
+  getTaJob, 
+  getUser
 };
 
-
-
-  
 export default AuthService;

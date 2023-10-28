@@ -1,4 +1,7 @@
+// Import React, useState, and FormEvent from the 'react' library.
 import React, { useState, FormEvent } from 'react';
+
+// Import Material-UI components and elements for styling and form handling.
 import {
   Box,
   Container,
@@ -10,6 +13,7 @@ import {
   Avatar,
   Typography,
 } from '@mui/material';
+
 import { LoadingButton } from '@mui/lab';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/auth';
@@ -18,24 +22,30 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
 import { AxiosError } from 'axios';
 
+
 const RegistrationPage: React.FC = () => {
+  // Define and initialize state variables for form fields, loading status, and error messages.
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  // Use 'useNavigate' for programmatic navigation.
   const navigate = useNavigate();
 
+  // Define a function to handle form submission.
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // Add your registration logic here
+
+    // Call the 'signUp' method from the 'AuthService' service for user registration.
     AuthService.signUp(firstName, LastName, email, password).then(
       () => {
-        navigate('/login');
-        window.location.reload();
+        navigate('/login'); // Navigate to the login page on successful registration.
+        window.location.reload(); // Reload the page to clear any state.
       },
       (error: AxiosError | Error) => {
         let resMessage;
@@ -56,7 +66,7 @@ const RegistrationPage: React.FC = () => {
   };
 
   return (
-    // <ThemeProvider theme={defaultTheme}>
+    // Render the component within a container with a maximum width of 'sm'.
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Box
@@ -67,6 +77,7 @@ const RegistrationPage: React.FC = () => {
           alignItems: 'center',
         }}
       >
+        {/* Display an avatar and a title. */}
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -76,6 +87,7 @@ const RegistrationPage: React.FC = () => {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
+              {/* First name input field */}
               <TextField
                 autoComplete="given-name"
                 name="firstName"
@@ -89,6 +101,7 @@ const RegistrationPage: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
+              {/* Last name input field */}
               <TextField
                 required
                 fullWidth
@@ -101,6 +114,7 @@ const RegistrationPage: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
+              {/* Email input field */}
               <TextField
                 required
                 fullWidth
@@ -113,6 +127,7 @@ const RegistrationPage: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
+              {/* Password input field */}
               <TextField
                 required
                 fullWidth
@@ -126,10 +141,7 @@ const RegistrationPage: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              {/* <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              /> */}
+              {/* Display error message if registration fails. */}
               <FormHelperText>{message}</FormHelperText>
             </Grid>
           </Grid>
@@ -144,6 +156,7 @@ const RegistrationPage: React.FC = () => {
           </LoadingButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
+              {/* Link to the login page for users who already have an account. */}
               <Link href="#" variant="body2">
                 Already have an account? Sign in
               </Link>
@@ -153,8 +166,8 @@ const RegistrationPage: React.FC = () => {
       </Box>
       <Copyright sx={{ mt: 5 }} />
     </Container>
-    // </ThemeProvider>
   );
 };
 
+// Export the 'RegistrationPage' component for use in other parts of the application.
 export default RegistrationPage;
