@@ -142,8 +142,8 @@ const LoginPage: React.FC = () => {
               </Grid>
               <Grid item>
                 {/* Link to the "Sign Up" page for users without an account. */}
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href='/signup' variant='body2'>
+                  {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>
             </Grid>

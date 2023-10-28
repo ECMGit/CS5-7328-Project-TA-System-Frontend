@@ -22,7 +22,7 @@ const PasswordResetRequest: React.FC = () => {
         </Typography>
         <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
           {/* Provide instructions for the user about resetting their password. */}
-          Enter your email address, and we'll send you a link to reset your password.
+          Enter your email address, and we&apos;ll send you a link to reset your password.
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, width: '100%' }}>
           {/* Email input field for the user to enter their email address. */}
