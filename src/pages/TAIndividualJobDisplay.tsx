@@ -30,7 +30,8 @@ const TAJobDisplayComponent = () => {
   useEffect(() => {
     // Fetch the job data based on the ID from the route parameter
     if (id) {
-      AuthService.getTAJobById(id)
+      const numericId = parseInt(id, 10);
+      AuthService.getTAJobById(numericId)
         .then((res) => {
           if (res.data) {
             setJobData(res.data);
