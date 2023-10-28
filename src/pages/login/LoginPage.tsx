@@ -32,7 +32,6 @@ import AuthService from '../../services/auth';
 // Import the 'Copyright' component.
 import Copyright from '../../components/Copyright';
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 // Define a functional component called 'LoginPage' using the React.FC (Functional Component) type.
@@ -72,6 +71,14 @@ const LoginPage: React.FC = () => {
         setMessage(resMessage); // Display an error message if login fails.
       }
     );
+  };
+
+  const navigateToStudentProfile = () => {
+    navigate('/student-profile');
+  };
+
+  const navigateToFacultyProfile = () => {
+    navigate('/faculty-profile');
   };
 
   return (
@@ -145,6 +152,12 @@ const LoginPage: React.FC = () => {
                   {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>
+            </Grid>
+            <Grid item>
+              {/* Button to navigate to /student-profile */}
+              <LoadingButton onClick={navigateToStudentProfile}>Student Profile</LoadingButton>
+              {/* Button to navigate to /faculty-profile */}
+              <LoadingButton onClick={navigateToFacultyProfile}>Faculty Profile</LoadingButton>
             </Grid>
             {/* Display an error message if 'message' is not null. */}
             <FormHelperText>{message}</FormHelperText>
