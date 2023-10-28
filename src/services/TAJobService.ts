@@ -1,117 +1,57 @@
-import * as UserService from './tajob.service';
-import { Request, Response, NextFunction } from 'express';
+import axios, { AxiosResponse } from 'axios';
+
+const TA_API_URL = 'http://localhost:9000/jobs';
 
 /**
- * Get all TA jobs.
- * @param req - The request object.
- * @param res - The response object.
- * @param next - The next middleware function.
- * @returns A JSON response with TA jobs or an error.
+ * Fetches all TA jobs.
+ * @returns A promise that resolves to the Axios response containing TA jobs data.
  */
-export const getAllTAJobs = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  console.log('in get all');
-
-  try {
-    const taJobs = await UserService.getAllTAJobs();
-    if (taJobs.length === 0) {
-      return res.status(404).json({ message: 'No job listings found.' });
-    }
-    res.json(taJobs);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
+const getTAJobs = (): Promise<AxiosResponse> => {
+  // Return the promise itself
+  return axios.get(TA_API_URL).then((res) => {
+    console.log(res);
+    return res; // Here we return the response so the calling code gets it through the promise
+  });
 };
 
 /**
- * Get a TA job by ID.
- * @param req - The request object containing the job ID as a parameter.
- * @param res - The response object.
- * @param next - The next middleware function.
- * @returns A JSON response with the TA job or an error.
+ * Fetches a TA job by its ID.
+ * @param id - The ID of the TA job to fetch.
+ * @returns A promise that resolves to the Axios response containing TA job data.
  */
-export const getTAJobById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const taJob = await UserService.getTAJobById(Number(req.params.id));
-    if (!taJob) {
-      return res.status(404).json({ message: 'TA job not found' });
-    }
-    res.json(taJob);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
+const getTAJobById = (id: number): Promise<AxiosResponse> => {
+  // It seems odd to use 'put' for getting data, usually 'get' is used for retrieving data.
+  // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
+  return axios.get(`${TA_API_URL}/${id}`).then((res) => {
+    console.log(res);
+    return res; // Same here, we return the response
+  });
 };
 
 /**
- * Get TA jobs with filters.
- * @param req - The request object containing query parameters as filters.
- * @param res - The response object.
- * @param next - The next middleware function.
- * @returns A JSON response with filtered TA jobs or an error.
+ * Fetches TA jobs with filters.
+ * @param filters - An object containing filter criteria.
+ * @returns A promise that resolves to the filtered TA jobs data.
  */
-export const getTAJobsWithFilters = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  console.log('in controller');
-
+const fetchTAJobsWithFilters = async (filters: Record<string, any>): Promise<any> => {
   try {
-    console.log(req.query);
+    // Convert the 'filters' object into a query string.
+    const queryString = new URLSearchParams(filters).toString();
 
-    // Extract query parameters from the request. These will be your filters.
-    const queryParams = req.query;
-
-    // Call the service function, passing in the filters.
-    const filteredTAJobs = await UserService.getTAJobsWithFilters(queryParams);
-
-    // Send back the filtered data.
-    res.json(filteredTAJobs);
+    // Make a GET request with the query string.
+    const response = await axios.get(`${TA_API_URL}/query?${queryString}`);
+    return response.data; // TA jobs data.
   } catch (error) {
     console.error('Error fetching TA jobs with filters:', error);
-    next(error); // Pass errors to the next middleware.
+    throw error;
   }
 };
 
-/**
- * Get TA jobs by faculty ID.
- * @param req - The request object containing the faculty ID as a parameter.
- * @param res - The response object.
- * @param next - The next middleware function.
- * @returns A JSON response with TA jobs or an error.
- */
-export const getTAJobsByFacultyId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const user = await UserService.getTAJobsByFacultyId(Number(req.params.facultyId));
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
-  } catch (error) {
-    next(error);
-  }
-};
-
-
-const TaJobService = {
-  getAllTAJobs,
+// Adding TA-related functions to your AuthService export
+const AuthService = {
+  getTAJobs,
   getTAJobById,
-  getTAJobsWithFilters,
-  getTAJobsByFacultyId
+  fetchTAJobsWithFilters,
 };
 
-export default TaJobService;
-
+export default AuthService;
