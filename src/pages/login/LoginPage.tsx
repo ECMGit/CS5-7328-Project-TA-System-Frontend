@@ -100,10 +100,10 @@ const LoginPage: React.FC = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="usernam"
+              label="Username"
+              name="username"
+              autoComplete="username"
               onChange={(e) => setEmail(e.target.value)} value={email}
               autoFocus
             />
@@ -141,8 +141,7 @@ const LoginPage: React.FC = () => {
                 </Link>
               </Grid>
               <Grid item>
-                {/* Link to the "Sign Up" page for users without an account. */}
-                <Link href='/signup' variant='body2'>
+                <Link href="/signUp" variant="body2">
                   {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>

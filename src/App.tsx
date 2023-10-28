@@ -13,6 +13,7 @@ import JobInfo from './pages/JobInfo';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
+import UserDataPage from './pages/user/UserDataPage';
 import ViewApplications from './pages/ViewApplications';
 import MockResume from './pages/MockResume';
 import { TAApplicationData } from '../src/pages/ViewApplications';
@@ -23,7 +24,7 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
         <Route path="/home" element={<Home/>}/>
@@ -34,6 +35,7 @@ const App: React.FC = () => {
         <Route path="*" element={<LoginPage />} />
         <Route path="/application-form" element={<ApplicationPage />} />
         <Route path="/" element={<ViewApplications />} />
+        <Route path="/user-data" element={<UserDataPage />} />
       </Routes>
     </Router>
   );

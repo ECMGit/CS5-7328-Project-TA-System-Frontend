@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { backendURL } from '../config';
 
-const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/api/';
-const USER_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/user/';
-const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/profile/';
+const BASE_API_URL: string | undefined = backendURL+'/api/';
+const USER_API_URL: string | undefined = backendURL+'/user/';
+const PROFILE_API_URL: string | undefined = backendURL+'/profile/';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
@@ -10,15 +11,30 @@ const PROFILE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL+'/
  * @param firstName 
  * @param lastName 
  * @param email 
+ * @param username
+ * @param smuNo
  * @param password 
  * @returns 
  */
-const signUp = (firstName: string, lastName: string, email: string, password: string) => {
-  return axios.post(USER_API_URL + 'signup', {
+
+const signUp = (firstName: string, 
+  lastName: string, 
+  email: string, 
+  username:string, 
+  smuNo: string, 
+  password: string, 
+  year: string, 
+  userType: string) => {
+  console.log(USER_API_URL + 'signUp');
+  return axios.post(USER_API_URL + 'signUp', {
     firstName,
     lastName,
     email,
+    username,
+    smuNo,
     password,
+    userType,
+    year,
   });
 };
 
@@ -29,6 +45,7 @@ const signUp = (firstName: string, lastName: string, email: string, password: st
  * @returns 
  */
 const login = (username: string, password: string) => {
+  console.log(USER_API_URL + 'login');
   return axios
     .post(USER_API_URL + 'login', {
       username,
@@ -69,7 +86,6 @@ const getCurrentUser = () => {
  * @param email 
  * @returns 
  */
-
 const resetPasswordRequest = (email: string) => {
   return axios.post(BASE_API_URL + 'password-reset-link', {
     email,
@@ -161,7 +177,9 @@ const fakeAuthProvider = {
     setTimeout(callback, 100);
   },
 };
-
+/**
+ * This represents some generic auth provider API, like Firebase.
+ */
 const getUserById = (id: number) => {
   // It seems odd to use 'put' for getting data, usually 'put' is used for updating.
   // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
@@ -170,6 +188,18 @@ const getUserById = (id: number) => {
     return res; // Same here, we return the response
   });
 };
+
+/**
+ * For get user info from backend 
+ * @returns response with user data
+ */
+const getUserData =() => {
+  return axios.get(USER_API_URL + '/').then((res) => {
+    console.log(res);
+    return res; // Same here, we return the response
+  });
+};
+
 
 
 const AuthService = {
@@ -185,6 +215,7 @@ const AuthService = {
   getTaApplication,
   getTaJob, 
   getUser
+  getUserData,
 };
 
 export default AuthService;
