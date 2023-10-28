@@ -47,19 +47,14 @@ const Home: React.FC = () => {
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
         <Paper style={{ padding: '20px'}}>
           <Typography variant="body1">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis eleifend est, eget bibendum lectus. Aenean non ullamcorper nisi.
-          Phasellus vel lectus sit amet metus semper congue. Quisque ut odio quis metus bibendum euismod in sed nulla.
+          Welcome to CS5/7328 TA Job Site! 
+          This site is for SMU Lyle School of Engineering students to find TA jobs.
           </Typography>
         </Paper>
-
+        {/* TODO: hide this Component when user not login */}
         <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-          {user ? (
-            <Typography variant='h1'>Welcome back, {user.username}!</Typography>
-          ) : (
-            <Typography variant='h1'>Please log in.</Typography>
-          )}
           <TAJobDisplayComponent></TAJobDisplayComponent>
-    </Container>
+        </Container>
       </div>
     </div>
   );

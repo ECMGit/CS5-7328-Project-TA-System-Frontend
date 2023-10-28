@@ -33,6 +33,7 @@ const getTAJobById = (id: number): Promise<AxiosResponse> => {
  * @param filters - An object containing filter criteria.
  * @returns A promise that resolves to the filtered TA jobs data.
  */
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fetchTAJobsWithFilters = async (filters: Record<string, any>): Promise<any> => {
   try {
     // Convert the 'filters' object into a query string.
@@ -48,10 +49,10 @@ const fetchTAJobsWithFilters = async (filters: Record<string, any>): Promise<any
 };
 
 // Adding TA-related functions to your AuthService export
-const AuthService = {
+const TAJobService = {
   getTAJobs,
   getTAJobById,
   fetchTAJobsWithFilters,
 };
 
-export default AuthService;
+export default TAJobService;

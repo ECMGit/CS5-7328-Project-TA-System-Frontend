@@ -3,7 +3,7 @@
 // Import React, which is required for creating React components.
 import React from 'react';
 // Import the TAApplicationData type from the 'ViewApplications' module.
-import { TAApplicationData } from '../pages/ViewApplications';
+import { TAApplicationData } from './application/ViewApplications';
 // Import several styled components from the 'styledComponents' module.  
 import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledComponents';
 

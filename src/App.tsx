@@ -15,9 +15,9 @@ import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
 import UserDataPage from './pages/user/UserDataPage';
-import ViewApplications from './pages/ViewApplications';
+import ViewApplications from './pages/application/ViewApplications';
 import MockResume from './pages/MockResume';
-import { TAApplicationData } from '../src/pages/ViewApplications';
+import { TAApplicationData } from './pages/application/ViewApplications';
 // import { fakeAuthProvider } from "./auth";
 
 const App: React.FC = () => {
@@ -35,10 +35,10 @@ const App: React.FC = () => {
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/jobs" element={<ViewJobs />} />
         <Route path="/faculty-profile" element={<FacultyProfile />} />
-        <Route path="*" element={<Home />} />
         <Route path="/application-form" element={<ApplicationPage />} />
-        <Route path="/" element={<ViewApplications />} />
+        <Route path="/view-applications" element={<ViewApplications />} />
         <Route path="/user-data" element={<UserDataPage />} />
+        <Route path="*" element={<Home />} />
       </Routes>
     </Router>
   );

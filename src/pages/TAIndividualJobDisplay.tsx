@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AuthService from '../services/TAJobService'; // Update with your actual service for TA jobs
+import AuthService from '../services/tajob'; // Update with your actual service for TA jobs
 import TAJobComponent from '../components/TAJobComponent';
 import { title } from 'process';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -19,11 +19,11 @@ interface TAJobs {
   facultyId: number;
 }
 
-
 const TAJobDisplayComponent = () => {
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
-  const [jobData, setJobData] = useState<TAJobs | null>(null); // jobData is a single TAJobs object or null  
-  // Not used for now for testing purposes 
+  // jobData is a single TAJobs object or null
+  const [jobData, setJobData] = useState<TAJobs | null>(null);
+  // Not used for now for testing purposes
   const { id } = useParams(); // Get the job ID from the route parameter
   const navigate = useNavigate();
 
@@ -44,29 +44,49 @@ const TAJobDisplayComponent = () => {
   }, [id]);
 
   return (
-    
     <div>
-      {jobData && (<h1><strong>Title:</strong> {jobData.title}</h1>)}
+      {jobData && (
+        <h1>
+          <strong>Title:</strong> {jobData.title}
+        </h1>
+      )}
       {/* Section to input an ID and fetch a specific job */}
       <div>
         {jobData && (
           <div>
             <h3>Job Details:</h3>
             {/* Displaying structured information about the selected job */}
-            <p><strong>Course Schedule:</strong> {jobData.courseSchedule}</p>
-            <p><strong>Hours per Week:</strong> {jobData.totalHoursPerWeek}</p>
-            <p><strong>Required Courses:</strong> {jobData.requiredCourses}</p>
-            <p><strong>Skills:</strong> {jobData.requiredSkills}</p>
-            <p><strong>Notes:</strong> {jobData.notes}</p>
-            <p><strong>Deadline to Apply:</strong> {new Date(jobData.deadlineToApply).toDateString()}</p>
+            <p>
+              <strong>Course Schedule:</strong> {jobData.courseSchedule}
+            </p>
+            <p>
+              <strong>Hours per Week:</strong> {jobData.totalHoursPerWeek}
+            </p>
+            <p>
+              <strong>Required Courses:</strong> {jobData.requiredCourses}
+            </p>
+            <p>
+              <strong>Skills:</strong> {jobData.requiredSkills}
+            </p>
+            <p>
+              <strong>Notes:</strong> {jobData.notes}
+            </p>
+            <p>
+              <strong>Deadline to Apply:</strong> {new Date(jobData.deadlineToApply).toDateString()}
+            </p>
             {/* Add other fields of the job that you want to display */}
           </div>
         )}
-        <button onClick={() => {navigate('/apply');/* window.location.reload();*/}}>Apply to Job</button>
+        <button
+          onClick={() => {
+            navigate('/apply'); /* window.location.reload();*/
+          }}
+        >
+          Apply to Job
+        </button>
       </div>
     </div>
   );
 };
 
 export default TAJobDisplayComponent;
-

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AuthService from '../services/TAJobService'; // Update with your actual service for TA jobs
+import TAJobService from '../services/tajob'; // Update with your actual service for TA jobs
 import TAJobComponent from '../components/TAJobComponent';
 
 interface TAJobs {
@@ -25,7 +25,7 @@ const TAJobDisplayComponent = () => {
 
   useEffect(() => {
     // Fetch all TA jobs on component mount
-    AuthService.getTAJobs()
+    TAJobService.getTAJobs()
       .then(res => {
         // Assuming the data you need is located in `res.data`
         if (res.data) {
@@ -48,7 +48,7 @@ const TAJobDisplayComponent = () => {
         courseId: 1,
       };
 
-      const filteredJobs = await AuthService.fetchTAJobsWithFilters(filters);
+      const filteredJobs = await TAJobService.fetchTAJobsWithFilters(filters);
 
       // Now 'filteredJobs' will contain the TA jobs that match the criteria.
       // You can set this to state or do whatever is needed in your application.
@@ -79,48 +79,6 @@ const TAJobDisplayComponent = () => {
           <p>No job openings available.</p>
         )}
       </div>
-
-      {/*}
-      code to handle filtering functions
-          <Box sx={{ display: "flex", marginTop: "1rem" }} >
-            {screenWidth > 450 ? <Box sx={{ marginLeft: "2rem" }}>
-                <Button variant="contained" sx={{ width: "100%", marginBottom: "1rem" }} onClick={handlePostClick}>Post</Button>
-                <Typography sx={{ color: "black", fontSize: 24, fontWeight: "bold", textAlign: "left" }}>
-                  Filter:
-                </Typography>
-                <FormGroup>
-                  {categories.map((category, index) => <FormControlLabel control={<Checkbox disabled={updatingFilter} onChange={() => handleCheckboxChange(category)} checked={checked[category.name]} />} label={`${category.name} (${category.num_posts})`} />)}
-                </FormGroup>
-              </Box> : null}
-            <Box sx={{ display: "block", width: "100%" }}>
-              {
-                taJobs.filter((p) => p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
-              }
-              {
-                taJobs.filter((p) => !p.is_pinned).map((post, index) => <Post key={index} post={post} user={props.user} />)
-              }
-            </Box>
-            </Box>
-            </>*/}
-      {/*<DataGrid
-          initialState={{
-            filter: {
-              filterModel: {
-                items: [{ field: 'rating', operator: '>', value: '2.5' }],
-              },
-            },
-          }}
-        />*/}
-
-      {/*<h2>Get Jobs by Filters:</h2>
-        <input
-          type="text"
-          value={selectedID}
-          onChange={(e) => setSelectedId(e.target.value)}
-          placeholder="Enter filter value"
-        />
-        <button onClick={handleFetchTAJobsWithFilters}>Get Job Details</button>
-        */}
     </div>
   );
 };

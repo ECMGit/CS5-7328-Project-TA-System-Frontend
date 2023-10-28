@@ -1,30 +1,32 @@
 import axios from 'axios';
 import { backendURL } from '../config';
 
-const BASE_API_URL: string | undefined = backendURL+'/api/';
-const USER_API_URL: string | undefined = backendURL+'/user/';
-const PROFILE_API_URL: string | undefined = backendURL+'/profile/';
+const BASE_API_URL: string | undefined = backendURL + '/api/';
+const USER_API_URL: string | undefined = backendURL + '/user/';
+const PROFILE_API_URL: string | undefined = backendURL + '/profile/';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
  * For Handling User Signup request
- * @param firstName 
- * @param lastName 
- * @param email 
+ * @param firstName
+ * @param lastName
+ * @param email
  * @param username
  * @param smuNo
- * @param password 
- * @returns 
+ * @param password
+ * @returns
  */
 
-const signUp = (firstName: string, 
-  lastName: string, 
-  email: string, 
-  username:string, 
-  smuNo: string, 
-  password: string, 
-  year: string, 
-  userType: string) => {
+const signUp = (
+  firstName: string,
+  lastName: string,
+  email: string,
+  username: string,
+  smuNo: string,
+  password: string,
+  year: string,
+  userType: string
+) => {
   console.log(USER_API_URL + 'signUp');
   return axios.post(USER_API_URL + 'signUp', {
     firstName,
@@ -41,8 +43,8 @@ const signUp = (firstName: string,
 /**
  * For Handling User Login request
  * @param username
- * @param password 
- * @returns 
+ * @param password
+ * @returns
  */
 const login = (username: string, password: string) => {
   console.log(USER_API_URL + 'login');
@@ -62,7 +64,7 @@ const login = (username: string, password: string) => {
 
 /**
  * For Handling User Logout request
- * @returns 
+ * @returns
  */
 const logout = () => {
   localStorage.removeItem('user');
@@ -83,30 +85,33 @@ const getCurrentUser = () => {
 
 /**
  * For Handling User Reset Password request
- * @param email 
- * @returns 
+ * @param email
+ * @returns
  */
 const resetPasswordRequest = (email: string) => {
-  return axios.post(BASE_API_URL + 'password-reset-link', {
-    email,
-  }).then(response => {
-    // Handle success - maybe show a success message to the user
-    console.log(response.data);
-  }).catch(error => {
-    // Handle error - show an error message to the user
-    console.error('Error sending reset email:', error);
-  });
+  return axios
+    .post(BASE_API_URL + 'password-reset-link', {
+      email,
+    })
+    .then((response) => {
+      // Handle success - maybe show a success message to the user
+      console.log(response.data);
+    })
+    .catch((error) => {
+      // Handle error - show an error message to the user
+      console.error('Error sending reset email:', error);
+    });
 };
 
 /**
  * For Handling User Reset Password request
- * @param token 
- * @param password 
- * @returns 
+ * @param token
+ * @param password
+ * @returns
  */
 const resetPassword = async (token: string, password: string) => {
   try {
-    const response = await axios.post(BASE_API_URL+'password-reset/confirm', { token, password });
+    const response = await axios.post(BASE_API_URL + 'password-reset/confirm', { token, password });
     return response.data.message;
   } catch (error) {
     console.error(error);
@@ -114,54 +119,59 @@ const resetPassword = async (token: string, password: string) => {
   }
 };
 
-// Fetch data from API regarding the TA Application. 
+// Fetch data from API regarding the TA Application.
 const getTaApplication = async () => {
   try {
     const response = await axios.get('http://localhost:9000/taApplication');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
-    throw error; 
+    throw error;
   }
 };
 
-// Fetch data from API regarding the TAJob. 
+// Fetch data from API regarding the TAJob.
 const getTaJob = async () => {
   try {
     const response = await axios.get('http://localhost:9000/taJob');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
-    throw error; 
+    throw error;
   }
 };
 
-// Fetch data from API regarding the user. 
+// Fetch data from API regarding the user.
 const getUser = async () => {
   try {
     const response = await axios.get('http://localhost:9000/user');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
-    throw error; 
+    throw error;
   }
 };
 
 // For Handling saveProfile feature
-const saveProfile = async (name: string, profileImage: string, graduationYear: string, major: string, resumeFile: string) =>{
+const saveProfile = async (
+  name: string,
+  profileImage: string,
+  graduationYear: string,
+  major: string,
+  resumeFile: string
+) => {
   try {
-    return axios.post(PROFILE_API_URL + 'save',{
+    return axios.post(PROFILE_API_URL + 'save', {
       name,
       profileImage,
       graduationYear,
       major,
       resumeFile,
     });
-  } catch (error){
+  } catch (error) {
     console.error(error);
-    throw new Error ('Error saving profile. Please try again');
+    throw new Error('Error saving profile. Please try again');
   }
-  
 };
 /**
  * This represents some generic auth provider API, like Firebase.
@@ -190,7 +200,7 @@ const getUserById = (id: number) => {
 };
 
 /**
- * For get user info from backend 
+ * For get user info from backend
  * @returns response with user data
  */
 const getUserData = () => {
@@ -199,8 +209,6 @@ const getUserData = () => {
     return res; // Same here, we return the response
   });
 };
-
-
 
 const AuthService = {
   signUp,
@@ -213,7 +221,7 @@ const AuthService = {
   fakeAuthProvider,
   saveProfile,
   getTaApplication,
-  getTaJob, 
+  getTaJob,
   getUser,
   getUserData,
 };
