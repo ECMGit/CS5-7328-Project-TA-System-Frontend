@@ -105,3 +105,13 @@ export const getTAJobsByFacultyId = async (
   }
 };
 
+
+const TaJobService = {
+  getAllTAJobs,
+  getTAJobById,
+  getTAJobsWithFilters,
+  getTAJobsByFacultyId
+};
+
+export default TaJobService;
+
