@@ -193,7 +193,7 @@ const getUserById = (id: number) => {
  * For get user info from backend 
  * @returns response with user data
  */
-const getUserData =() => {
+const getUserData = () => {
   return axios.get(USER_API_URL + '/').then((res) => {
     console.log(res);
     return res; // Same here, we return the response
@@ -214,7 +214,7 @@ const AuthService = {
   saveProfile,
   getTaApplication,
   getTaJob, 
-  getUser
+  getUser,
   getUserData,
 };
 
