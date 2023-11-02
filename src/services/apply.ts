@@ -17,8 +17,42 @@ const apply = (dataJson: JSON, Resume: File): Promise<AxiosResponse> => {
   return axios.post(APPLICATION_API_URL, formData);
 };
 
+// Function to update an application
+export const updateApplication = async (id: string, GPA:number, 
+  hoursCanWorkPerWeek:string, requiredCourses:string, requiredSkills:string) => {
+  return axios.post(`http://localhost:9000/ta-application/${id}`, { GPA, hoursCanWorkPerWeek, requiredCourses, requiredSkills }, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    // Handle success - maybe show a success message to the user
+    console.log(response.data);
+  }).catch((error) => {
+    // Handle error - show an error message to the user
+    console.error('Error updating application:', error);
+  });
+};
+
+// Function to delete an application
+export const deleteApplication = async (id: string) => {
+  return axios.delete(`http://localhost:9000/ta-application/${id}`);
+};
+
+export const fetchApplication = async (id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching application data', error);
+    throw error; // Rethrow the error for handling in the component
+  }
+};
+
 const ApplyService = {
   apply,
+  updateApplication,
+  deleteApplication,
+  fetchApplication,
 };
 
 export default ApplyService;

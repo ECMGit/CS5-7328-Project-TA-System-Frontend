@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography } from '@mui/material';
-import AuthService from '../../services/auth';
+import ApplyService from '../../services/apply';
 
 const EditApplication = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +24,7 @@ const EditApplication = () => {
           console.error('No application ID provided');
           return;
         }
-        const data = await AuthService.fetchApplication(id);
+        const data = await ApplyService.fetchApplication(id);
         console.log(data);
         setApplication(data);
       } catch (error) {
@@ -67,7 +67,7 @@ const EditApplication = () => {
 
     try {
       if (id) {
-        await AuthService.updateApplication(id, Number(application.GPA), application.hoursCanWorkPerWeek, 
+        await ApplyService.updateApplication(id, Number(application.GPA), application.hoursCanWorkPerWeek, 
           application.requiredCourses, application.requiredSkills);
         navigate('/view-applications');
       }
@@ -81,7 +81,7 @@ const EditApplication = () => {
     if (window.confirm('Are you sure you want to delete this application?')) {
       try {
         if (id) {
-          await AuthService.deleteApplication(id);
+          await ApplyService.deleteApplication(id);
         }
         navigate('/view-applications');
       } catch (error) {
