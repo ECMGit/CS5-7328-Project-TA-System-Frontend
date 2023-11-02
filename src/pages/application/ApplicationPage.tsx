@@ -262,6 +262,26 @@ function ApplicationPage() {
                 />
               </Grid>
 
+
+
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Typography component="h2" variant="h6" justifyContent="center">
+                  Student ID
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  required
+                  fullWidth
+                  id="studentId"
+                  label="Student ID"
+                  name="studentId"
+                  onChange={(e) => setStudentId(parseInt(e.target.value))}
+                  variant="standard"
+                  type="number"
+                />
+              </Grid>
+
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <Typography component="h2" variant="h6" justifyContent="center">
                   Course Name
@@ -278,6 +298,43 @@ function ApplicationPage() {
                   onChange={(e) => setCourseName(e.target.value)}
                   value={courseName}
                   variant="standard"
+                />
+              </Grid>
+
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Typography component="h2" variant="h6" justifyContent="center">
+                  Course ID
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  required
+                  fullWidth
+                  id="courseId"
+                  label="Course ID"
+                  name="courseId"
+                  onChange={(e) => setCourseId(parseInt(e.target.value))}
+                  variant="standard"
+                  type="number"
+                />
+              </Grid>
+
+
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Typography component="h2" variant="h6" justifyContent="center">
+                  TA Job ID
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  required
+                  fullWidth
+                  id="taJobId"
+                  label="TA Job ID"
+                  name="taJobId"
+                  onChange={(e) => setTaJobId(parseInt(e.target.value))}
+                  variant="standard"
+                  type="number"
                 />
               </Grid>
 

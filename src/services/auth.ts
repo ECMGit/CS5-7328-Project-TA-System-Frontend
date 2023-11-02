@@ -122,7 +122,7 @@ const resetPassword = async (token: string, password: string) => {
 // Fetch data from API regarding the TA Application.
 const getTaApplication = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/taApplication');
+    const response = await axios.get('http://localhost:9000/ta-application');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -133,11 +133,43 @@ const getTaApplication = async () => {
 // Fetch data from API regarding the TAJob.
 const getTaJob = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/taJob');
+    const response = await axios.get('http://localhost:9000/jobs');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
     throw error;
+  }
+};
+
+// Function to update an application
+// string and dictionary
+export const updateApplication = async (id: string, GPA:number, 
+  hoursCanWorkPerWeek:string, requiredCourses:string, requiredSkills:string) => {
+  return axios.post(`http://localhost:9000/ta-application/${id}`, { GPA, hoursCanWorkPerWeek, requiredCourses, requiredSkills }, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    // Handle success - maybe show a success message to the user
+    console.log(response.data);
+  }).catch((error) => {
+    // Handle error - show an error message to the user
+    console.error('Error updating application:', error);
+  });
+};
+
+// Function to delete an application
+export const deleteApplication = async (id: string) => {
+  return axios.delete(`http://localhost:9000/ta-application/${id}`);
+};
+
+export const fetchApplication = async (id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching application data', error);
+    throw error; // Rethrow the error for handling in the component
   }
 };
 
@@ -222,6 +254,9 @@ const AuthService = {
   saveProfile,
   getTaApplication,
   getTaJob,
+  updateApplication,
+  deleteApplication,
+  fetchApplication,
   getUser,
   getUserData,
 };
