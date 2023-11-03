@@ -122,7 +122,7 @@ const resetPassword = async (token: string, password: string) => {
 // Fetch data from API regarding the TA Application.
 const getTaApplication = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/taApplication');
+    const response = await axios.get('http://localhost:9000/ta-application');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -133,7 +133,7 @@ const getTaApplication = async () => {
 // Fetch data from API regarding the TAJob.
 const getTaJob = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/taJob');
+    const response = await axios.get('http://localhost:9000/jobs');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
