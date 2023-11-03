@@ -9,7 +9,7 @@ import api from '../../services/faculty-job';
 
 
 const PostJob: React.FC = () => {
-
+  // State hooks for form fields and validation errors
   const [title, setTitle] = useState('');
   const [courseId, setCourseId] = useState('');
   const [courseSchedule, setCourseSchedule] = useState('');
@@ -26,6 +26,7 @@ const PostJob: React.FC = () => {
 
   const [courseIdError, setCourseIdError] = useState('');
   const [requiredCoursesError, setRequiredCoursesError] = useState('');
+  
   const checkAlphanumeric = (input: string): boolean => {
     // Check each character of the input
     for (let i = 0; i < input.length; i++) {
@@ -38,7 +39,7 @@ const PostJob: React.FC = () => {
     }
     return true; // only alphanumeric characters
   };
-
+// Handler for changes in the Course ID field
   const handleCourseIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     if (checkAlphanumeric(input)) {
@@ -48,7 +49,7 @@ const PostJob: React.FC = () => {
       setCourseIdError('Course ID must only contain letters and numbers.');
     }
   };
-
+// Handler for changes in the Required Courses field
   const handleRequiredCoursesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     if (checkAlphanumeric(input)) {
@@ -91,6 +92,7 @@ const PostJob: React.FC = () => {
       });
   };
 
+  // JSX for rendering the form
   return (
     <Container maxWidth="sm">
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8, }} >
