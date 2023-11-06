@@ -30,7 +30,6 @@ const App: React.FC = () => {
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-        
         <Route path="/student-profile" element={<StudentProfile />} />
         <Route path="/jobs/details/:id" element={<JobInfo/>}/>
         <Route path="/post-job" element={<PostJob />} />
