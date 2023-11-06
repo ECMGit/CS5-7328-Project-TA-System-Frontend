@@ -49,11 +49,11 @@ const ViewJobs: React.FC = () => {
 
   // Add a function to handle the input change for the edited job
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target; // name and value from the event target
     if (editedJob) {
       setEditedJob({
-        ...editedJob,
-        [name]: value
+        ...editedJob, // Spread the edited job data
+        [name]: value // Update the property with the input name to the input value
       });
     }
   };
@@ -63,7 +63,7 @@ const ViewJobs: React.FC = () => {
   const handleSaveClick = () => {
     if (editedJob) {
 
-      api.updateJob(editedJob.id, {
+      api.updateJob(editedJob.id, { // Update the job with the edited job data in the database
         title: editedJob.title, 
         courseId: Number(editedJob.courseId), 
         courseSchedule: editedJob.courseSchedule, 
@@ -78,10 +78,10 @@ const ViewJobs: React.FC = () => {
       }).then(res => {
         if (res !== undefined) {
           // Update the jobs state with the edited job data
-          setJobs(jobs.map(job => job.id === editedJob.id ? editedJob : job));
+          setJobs(jobs.map(job => job.id === editedJob.id ? editedJob : job)); // Update jobs state with edited data 
           // Reset the editing and edited job states
-          setEditing(null);
-          setEditedJob(null);
+          setEditing(null); // Reset the editing state
+          setEditedJob(null); // Reset the edited job state
         }
       });
     }
