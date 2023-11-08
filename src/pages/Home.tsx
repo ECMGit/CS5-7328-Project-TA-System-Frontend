@@ -1,19 +1,23 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
 import React, { useState, useEffect } from 'react';
 // Import components (Typography and Container) from the Material-UI library.
-import { Typography, Container, Button, Paper } from '@mui/material';
+import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
+import { maxHeight } from '@mui/system';
 
 // Define an interface 'User' to specify the structure of a user object.
 interface User {
   username: string;
+  avatarUrl: string;
 }
 
 // Define a functional component called 'Home' using the React.FC (Functional Component) type.
 const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {
@@ -23,18 +27,60 @@ const Home: React.FC = () => {
     setUser(currentUser);
   }, []);
 
+
   return (
     // Render the component within a container with a maximum width of 'sm'.
     <div>
       {/* Blue banner with "Login" button */}
-      <div style={{ backgroundColor: '#1976D2', padding: '16px', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ backgroundColor: '#1976D2', padding: '16px', display: 'flex', justifyContent: 'space-between',alignItems: 'center' }}>
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        {/* "Login" button */}
-        <Button component={Link} to="/login" variant="contained" color="secondary">
-          Login
-        </Button>
+        <div style={{ marginLeft: 'auto' }}>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar alt="User Avatar" src={user.avatarUrl} style={{ marginRight: '10px' }} />
+              <Button component={Link} to="/post-job" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+                Publish
+              </Button>
+              <Button component={Link} to="/jobs" variant="contained" color="secondary">
+                Display
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button component={Link} to="/login" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+              Login
+              </Button>
+              <Button component={Link} to="/post-job" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+              Publish
+              </Button>
+              <Button component={Link} to="/jobs" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+              Display
+              </Button>
+            </>
+            
+          )}
+        </div>
+        {/* <div style={{ marginLeft: 'auto' }}>
+          {user ? (
+            <Avatar alt="User Avatar" src={user.avatarUrl} />
+          ) : (
+            <>
+              <Button component={Link} to="/login" 
+              variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+                Login
+              </Button>
+            </>
+          )}
+          <Button component={Link} to="/post-job" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
+                Publish
+          </Button>
+          <Button component={Link} to="/jobs" variant="contained" color="secondary">
+                Display
+          </Button>
+        </div> */}
+        
       </div>
       <div>
         {/* Large image at the top */}
