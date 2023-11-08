@@ -39,7 +39,7 @@ const PostJob: React.FC = () => {
     }
     return true; // only alphanumeric characters
   };
-// Handler for changes in the Course ID field
+  // Handler for changes in the Course ID field
   const handleCourseIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     if (checkAlphanumeric(input)) {
@@ -49,7 +49,7 @@ const PostJob: React.FC = () => {
       setCourseIdError('Course ID must only contain letters and numbers.');
     }
   };
-// Handler for changes in the Required Courses field
+  // Handler for changes in the Required Courses field
   const handleRequiredCoursesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     if (checkAlphanumeric(input)) {
@@ -112,7 +112,7 @@ const PostJob: React.FC = () => {
             error={!!courseIdError}
             helperText={courseIdError}
             autoFocus
-          />// only 0-9 a-Z
+          />
           <TextField label="Course Schedule" margin="normal" required fullWidth onChange={(e) => { setCourseSchedule(e.target.value); }} />
           <TextField
             label="Total Hour"
@@ -122,9 +122,9 @@ const PostJob: React.FC = () => {
             type="number"
             inputProps={{ min: 0 }}
             error={!totalHour || isNaN(Number(totalHour))}
-            helperText={!totalHour || isNaN(Number(totalHour)) ? "Total Hour must be a number" : ""}
+            helperText={!totalHour || isNaN(Number(totalHour)) ? 'Total Hour must be a number' : ''}
             onChange={(e) => { setTotalHour(e.target.value); }}
-          /> // only 0-9
+          />
           <TextField
             label="Max TA Count"
             margin="normal"
@@ -133,9 +133,9 @@ const PostJob: React.FC = () => {
             type="number"
             inputProps={{ min: 0 }}
             error={!maxTaCount || isNaN(Number(maxTaCount))}
-            helperText={!maxTaCount || isNaN(Number(maxTaCount)) ? "Max TA Count must be a number" : ""}
+            helperText={!maxTaCount || isNaN(Number(maxTaCount)) ? 'Max TA Count must be a number' : ''}
             onChange={(e) => { setMaxTaCount(e.target.value); }}
-          />// only 0-9
+          />
           <TextField
             label="Required Course"
             margin="normal"
@@ -146,7 +146,7 @@ const PostJob: React.FC = () => {
             onChange={handleRequiredCoursesChange}
             error={!!requiredCoursesError}
             helperText={requiredCoursesError}
-          /> // only 0-9 a-Z
+          />
           <TextField label="Required Skills" margin="normal" required fullWidth onChange={(e) => { setRequiredSkills(e.target.value); }} />
           <TextField label="TA Stats" margin="normal" required fullWidth onChange={(e) => { setTaStats(e.target.value); }} />
           <TextField label="Notes" margin="normal" fullWidth onChange={(e) => { setNotes(e.target.value); }} />
