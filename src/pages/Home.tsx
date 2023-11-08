@@ -52,34 +52,10 @@ const Home: React.FC = () => {
               <Button component={Link} to="/login" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
               Login
               </Button>
-              <Button component={Link} to="/post-job" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
-              Publish
-              </Button>
-              <Button component={Link} to="/jobs" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
-              Display
-              </Button>
             </>
             
           )}
         </div>
-        {/* <div style={{ marginLeft: 'auto' }}>
-          {user ? (
-            <Avatar alt="User Avatar" src={user.avatarUrl} />
-          ) : (
-            <>
-              <Button component={Link} to="/login" 
-              variant="contained" color="secondary" style={{ marginRight: '10px' }}>
-                Login
-              </Button>
-            </>
-          )}
-          <Button component={Link} to="/post-job" variant="contained" color="secondary" style={{ marginRight: '10px' }}>
-                Publish
-          </Button>
-          <Button component={Link} to="/jobs" variant="contained" color="secondary">
-                Display
-          </Button>
-        </div> */}
         
       </div>
       <div>
