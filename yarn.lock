@@ -2019,12 +2019,12 @@
     csstype "^3.1.2"
     prop-types "^15.8.1"
 
-"@mui/types@^7.2.5", "@mui/types@^7.2.6", "@mui/types@^7.2.7":
+"@mui/types@^7.2.6", "@mui/types@^7.2.7":
   version "7.2.7"
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.2.7.tgz"
   integrity sha512-sofpWmcBqOlTzRbr1cLQuUDKaUYVZTw8ENQrtL39TECRNENEzwgnNPh6WMfqMZlMvf1Aj9DLg74XPjnLr0izUQ==
 
-"@mui/utils@^5.14.12", "@mui/utils@^5.14.13", "@mui/utils@^5.14.14", "@mui/utils@^5.14.15", "@mui/utils@^5.14.3":
+"@mui/utils@^5.14.13", "@mui/utils@^5.14.14", "@mui/utils@^5.14.15", "@mui/utils@^5.14.3":
   version "5.14.15"
   resolved "https://registry.npmjs.org/@mui/utils/-/utils-5.14.15.tgz"
   integrity sha512-QBfHovAvTa0J1jXuYDaXGk+Yyp7+Fm8GSqx6nK2JbezGqzCFfirNdop/+bL9Flh/OQ/64PeXcW4HGDdOge+n3A==
