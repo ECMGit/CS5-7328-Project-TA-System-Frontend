@@ -66,7 +66,6 @@ const RegistrationPage: React.FC = () => {
       },
       (error: AxiosError | Error) => {
         let resMessage;
-        console.log(smuNo, isNaN(+smuNo));
         if (isNaN(+smuNo)){
           resMessage = 'Invalid SMU ID. Please enter a number.';
         }
