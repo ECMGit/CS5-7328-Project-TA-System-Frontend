@@ -1,5 +1,6 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // Import components (Typography and Container) from the Material-UI library.
 import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link for navigation
@@ -23,10 +24,28 @@ const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // React hooks
+  const navigate = useNavigate();
+
+  /**
+   * Log out the user, delete user from localStorage
+   */
   const handleLogout = function() {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
+  };
+
+  /**
+   * Navigate to the corresponding user profile. 
+   */
+  const handleProfile = function() {
+    // Guard clause.
+    if (!user) { return; }
+    
+    // Navigate to student/faculty profile.
+    if (user.role === 'student') { navigate('/student-profile'); }
+    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -59,19 +78,13 @@ const Home: React.FC = () => {
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              {/* <Avatar
-                alt="User Avatar"
-                src={user.avatarUrl}
-                style={{ marginRight: '10px' }}
-              /> */}
-              <AvatarWrapper user={user} onLogout={handleLogout} />
               {user.role === 'faculty' ? (
                 <Button
                   component={Link}
                   to="/post-job"
                   variant="contained"
                   color="secondary"
-                  style={{ marginRight: '10px' }}
+                  style={{ marginLeft: '10px' }}
                 >
                   Publish
                 </Button>
@@ -81,12 +94,14 @@ const Home: React.FC = () => {
                   to="/jobs"
                   variant="contained"
                   color="secondary"
+                  style={{ marginLeft: '5px', marginRight: '10px' }}
                 >
                   Display
                 </Button>
               ) : (
                 ''
               )}
+              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile}/>
             </div>
           ) : (
             <>
