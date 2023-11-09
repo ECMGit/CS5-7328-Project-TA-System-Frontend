@@ -49,6 +49,8 @@ const RegistrationPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const validEmail: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
   // Use 'useNavigate' for programmatic navigation.
   const navigate = useNavigate();
 
@@ -64,8 +66,12 @@ const RegistrationPage: React.FC = () => {
       },
       (error: AxiosError | Error) => {
         let resMessage;
-        if (typeof(smuNo) != 'number'){
-          resMessage = 'Invalid SMU ID. Please enter a number';
+        console.log(smuNo, isNaN(+smuNo));
+        if (isNaN(+smuNo)){
+          resMessage = 'Invalid SMU ID. Please enter a number.';
+        }
+        else if (!validEmail.test(email)){
+          resMessage = 'Invalid email. Please enter a valid email address.';
         }
         else if (error instanceof AxiosError) {
           resMessage =
