@@ -56,6 +56,7 @@ const RegistrationPage: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // Add your registration logic here
+    
     AuthService.signUp(firstName, lastName, email, username, smuNo, password, year, userType).then(
       () => {
         navigate('/login'); // Navigate to the login page on successful registration.
@@ -63,7 +64,10 @@ const RegistrationPage: React.FC = () => {
       },
       (error: AxiosError | Error) => {
         let resMessage;
-        if (error instanceof AxiosError) {
+        if (typeof(smuNo) != 'number'){
+          resMessage = 'Invalid SMU ID. Please enter a number';
+        }
+        else if (error instanceof AxiosError) {
           resMessage =
             (error.response &&
               error.response.data &&
