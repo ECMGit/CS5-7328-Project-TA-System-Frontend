@@ -49,6 +49,7 @@ const RegistrationPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  // Use Regular Expressions to validate the email address
   const validEmail: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
   // Use 'useNavigate' for programmatic navigation.
@@ -65,10 +66,12 @@ const RegistrationPage: React.FC = () => {
         window.location.reload(); // Reload the page to clear any state.
       },
       (error: AxiosError | Error) => {
+        // Trying to make sure that these messages are useful to the user, if applicable
         let resMessage;
+        // Validate to make sure smuNo is a valid number
         if (isNaN(+smuNo)){
           resMessage = 'Invalid SMU ID. Please enter a number.';
-        }
+        } // Run the validEmail to see if the user entered a valid email address
         else if (!validEmail.test(email)){
           resMessage = 'Invalid email. Please enter a valid email address.';
         }
