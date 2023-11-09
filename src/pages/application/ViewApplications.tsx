@@ -134,6 +134,12 @@ const ViewApplications: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleContinueWithApplicant = (studentId: number) => {
+    // This is where you would handle the logic for continuing with the applicant.
+    // For now, we will just log the studentId to the console.
+    console.log(studentId);
+  };
+
   /**
    * The following logic sorts the applications based on the field and direction specified in the sortConfig.
    * If the field is 'studentName', it finds the associated user and sorts by their name. 
@@ -370,6 +376,13 @@ const ViewApplications: React.FC = () => {
                     View
                   </a>
                 </TableCell>
+                <TableCell>
+                  <button onClick={() => handleContinueWithApplicant(application.studentId)}>
+                    Continue With Applicant
+                  </button>
+                </TableCell>
+
+
               </TableRow>
             );
           })}
