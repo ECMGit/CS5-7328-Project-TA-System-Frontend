@@ -21,6 +21,21 @@ import MockResume from './pages/MockResume';
 import { TAApplicationData } from './pages/application/ViewApplications';
 import ProviderLayout from './provider';
 // import { fakeAuthProvider } from "./auth";
+import axios from 'axios';
+
+// adds jsonwebtoken if present to each api request
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  console.log(token);
+  
+  if (token) {
+    config.headers.Authorization = `${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
 
 const App: React.FC = () => {
   return (

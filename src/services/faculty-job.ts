@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
+const token = localStorage.getItem('token');
 
 const getJobs = () => {
   return axios.get(JOBS_API_URL).then(res => {
