@@ -16,6 +16,7 @@ import {
   NavbarButton,
 } from '../user/styledComponents';
 import AuthService from '../../services/auth';
+import ApplyService from '../../services/apply';
 // Define the data structure for a TA Application entry that we will get from database
 export type TAApplicationData = {
   //id is the primary key for the table
@@ -99,6 +100,9 @@ const ViewApplications: React.FC = () => {
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
 
+  //Sprint 2: application status
+  const [status, setStatus] = useState('');
+
   //Fetching the data from the API
   useEffect(() => {
     // Fetch data from API regarding the TA Application.
@@ -134,10 +138,12 @@ const ViewApplications: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
+  //handle update application status
   const handleContinueWithApplicant = (studentId: number) => {
     // This is where you would handle the logic for continuing with the applicant.
     // For now, we will just log the studentId to the console.
-    console.log(studentId);
+    //console.log(studentId);
+    ApplyService.updateApplicationStatus(studentId, status).then().catch;
   };
 
   /**
