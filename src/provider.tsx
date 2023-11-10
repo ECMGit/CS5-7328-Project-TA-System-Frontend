@@ -29,7 +29,7 @@ interface ProviderLayoutProps {
 
 const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [userRole, setUserRole] = useState<string | undefined>(undefined);
+  const [userType, setUserType] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
       AuthService.getUserRole(JSON.parse(storedUser).id) // Replace 'userId' with the actual property name
         .then((role: string) => {
           console.log(role);
-          setUserRole(role);
+          setUserType(role);
         });
         
     } else {
@@ -53,14 +53,14 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   }, [navigate]);
 
   // If user or userRole is still being determined, render nothing or a loading component
-  if (user === undefined || userRole === undefined) {
+  if (user === undefined || userType === undefined) {
     return null; 
   }
 
   // Include userRole in the context
   const userWithContext: User = {
     ...user,
-    userType: userRole,
+    userType
   };
 
   return (
