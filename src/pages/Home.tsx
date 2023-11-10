@@ -42,8 +42,8 @@ const Home: React.FC = () => {
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        <LoadingButton onClick={navigateToStudentProfile}>Student Profile</LoadingButton>
-        <LoadingButton onClick={navigateToFacultyProfile}>Faculty Profile</LoadingButton>
+        <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
+        <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         <Button component={Link} to="/login" variant="contained" color="secondary">
           Login
         </Button>
