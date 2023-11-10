@@ -38,10 +38,10 @@ const Home: React.FC = () => {
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        {role == "Student" && (
+        {role === 'Student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
         )};
-        {role == "Faculty" && (
+        {role === 'Faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         )};
 
