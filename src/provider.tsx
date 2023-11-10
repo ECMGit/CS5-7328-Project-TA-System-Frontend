@@ -1,3 +1,4 @@
+import { log } from 'console';
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
@@ -32,6 +33,8 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   useEffect(() => {
     // Retrieve user from local storage
     const storedUser = localStorage.getItem('user');
+    console.log(storedUser);
+    
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {

@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 // Import components (Typography and Container) from the Material-UI library.
 import { Typography, Container, Button, Paper } from '@mui/material';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
+import { LoadingButton } from '@mui/lab';
 
 // Define an interface 'User' to specify the structure of a user object.
 interface User {
@@ -15,6 +16,8 @@ const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
   const [user, setUser] = useState<User | null>(null);
 
+  const navigate = useNavigate();
+
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {
     // Retrieve the 'user' data from local storage, parsing it from JSON, or default to 'null'.
@@ -22,6 +25,14 @@ const Home: React.FC = () => {
     // Set the 'user' state with the retrieved user data.
     setUser(currentUser);
   }, []);
+
+  const navigateToStudentProfile = () => {
+    navigate('/student-profile');
+  };
+
+  const navigateToFacultyProfile = () => {
+    navigate('/faculty-profile');
+  };
 
   return (
     // Render the component within a container with a maximum width of 'sm'.
@@ -31,7 +42,8 @@ const Home: React.FC = () => {
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        {/* "Login" button */}
+        <LoadingButton onClick={navigateToStudentProfile}>Student Profile</LoadingButton>
+        <LoadingButton onClick={navigateToFacultyProfile}>Faculty Profile</LoadingButton>
         <Button component={Link} to="/login" variant="contained" color="secondary">
           Login
         </Button>
