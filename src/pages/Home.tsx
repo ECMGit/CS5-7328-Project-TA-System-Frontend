@@ -40,10 +40,10 @@ const Home: React.FC = () => {
         </Typography>
         {role === 'Student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-        )};
+        )}
         {role === 'Faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-        )};
+        )}
 
         <Button component={Link} to="/login" variant="contained" color="secondary">
           Login
@@ -65,9 +65,12 @@ const Home: React.FC = () => {
           </Typography>
         </Paper>
         {/* TODO: hide this Component when user not login */}
-        <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-          <TAJobDisplayComponent></TAJobDisplayComponent>
-        </Container>
+
+        {role === 'Student' && (
+          <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <TAJobDisplayComponent></TAJobDisplayComponent>
+          </Container>
+        )}
       </div>
     </div>
   );
