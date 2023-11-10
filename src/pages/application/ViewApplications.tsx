@@ -31,6 +31,7 @@ export type TAApplicationData = {
   resumeFile: string;
   taJobId: number;
   TAStats: string;
+  status: string;
 };
 // Define the data structure for a TA Job entry that we will get from database
 type TAJobData = {
@@ -69,10 +70,13 @@ type SortField =
   | 'hoursCanWorkPerWeek'
   | 'GPA'
   | 'studentName'
-  | 'TAStats'; // <-- Added 'TAStats'
+  | 'TAStats'
+  | 'status';
 
 //these are the directions that can be sorted
 type SortDirection = 'asc' | 'desc';
+
+const possible_statuses = ['Pending', 'Reject', 'Interview', 'Accept'];
 
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
@@ -99,9 +103,6 @@ const ViewApplications: React.FC = () => {
   //The below stores the current selected applications
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
-
-  //Sprint 2: application status
-  const [status, setStatus] = useState('');
 
   //Fetching the data from the API
   useEffect(() => {
@@ -139,11 +140,23 @@ const ViewApplications: React.FC = () => {
   };
 
   //handle update application status
-  const handleContinueWithApplicant = (studentId: number) => {
-    // This is where you would handle the logic for continuing with the applicant.
-    // For now, we will just log the studentId to the console.
-    //console.log(studentId);
-    ApplyService.updateApplicationStatus(studentId, status).then().catch;
+  const handleContinueWithApplicant = (taApplicationId: number, status: string) => {
+    if (status === '') {
+      return;
+    }
+    ApplyService.updateApplicationStatus(taApplicationId, status).then((response) => {
+      console.log(response.data);
+      // Update application with the data in the response
+      const updated_applications = applications.filter((application) => application.id != taApplicationId);
+      console.log(updated_applications);
+      updated_applications.push(response.data);
+      console.log(updated_applications);
+      setApplications(updated_applications);
+      console.log(applications);
+    }).catch((error) => {
+      console.error('Error updating application status:', error);
+      alert(`Error updating application status: ${error}`);
+    });
   };
 
   /**
@@ -170,10 +183,10 @@ const ViewApplications: React.FC = () => {
       sorted = sorted.sort((a, b) => {
         if (sortConfig.field === 'studentName') {
           //Search for users with matching id values from the list users
-          const userA = users.find((u) => u.id === a.studentId); 
+          const userA = users.find((u) => u.id === a.studentId);
           const userB = users.find((u) => u.id === b.studentId);
           //create full names of the found students (default empty string)
-          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : ''; 
+          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
           const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
           if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
           if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
@@ -343,20 +356,31 @@ const ViewApplications: React.FC = () => {
             <TableHeader onClick={() => requestSort('TAStats')}>
               {' '}
               {/* <-- Updated this line */}
-              Status
+              TA Statistics
               {sortConfig?.field === 'TAStats' && (sortConfig.direction === 'asc' ? '▲' : '▼')}{' '}
               {/* <-- Updated this line */}
             </TableHeader>
+
             <TableHeader onClick={() => requestSort('hoursCanWorkPerWeek')}>
               Hours/Week
               {sortConfig?.field === 'hoursCanWorkPerWeek' &&
                 (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
+
             <TableHeader onClick={() => requestSort('GPA')}>
               GPA
               {sortConfig?.field === 'GPA' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
+
             <TableHeader>More Application Details</TableHeader>
+
+            <TableHeader onClick={() => requestSort('TAStats')}>
+              {' '}
+              {/* <-- Updated this line */}
+              Status
+              {sortConfig?.field === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}{' '}
+              {/* <-- Updated this line */}
+            </TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -382,10 +406,18 @@ const ViewApplications: React.FC = () => {
                     View
                   </a>
                 </TableCell>
+
                 <TableCell>
-                  <button onClick={() => handleContinueWithApplicant(application.studentId)}>
-                    Continue With Applicant
-                  </button>
+                  {application.status}
+                  <br></br>
+                  <select value={selectedStatus || ''} onChange={(e) => handleContinueWithApplicant(application.id, e.target.value)}>
+                    <option value="">Update Status</option>
+                    {possible_statuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
                 </TableCell>
 
 
