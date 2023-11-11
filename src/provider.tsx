@@ -10,7 +10,7 @@ interface User {
   email: string;
   username: string;
   smuNo: string;
-  userType: string;
+  role: string;
   year: string;
 }
 
@@ -40,7 +40,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       // Get user role when the user is available
-      AuthService.getUserRole(JSON.parse(storedUser).id) // Replace 'userId' with the actual property name
+      AuthService.getUserRole(JSON.parse(storedUser).id) 
         .then((role: string) => {
           console.log(role);
           setUserType(role);
@@ -60,7 +60,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   // Include userRole in the context
   const userWithContext: User = {
     ...user,
-    userType
+    role: userType
   };
 
   return (

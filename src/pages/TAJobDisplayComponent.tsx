@@ -72,7 +72,20 @@ const TAJobDisplayComponent = () => {
     }
   };
 
-  const user = useContext(UserContext);
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
+  
   return (
     <div>
       <h1>TA Job Openings</h1>
@@ -80,7 +93,7 @@ const TAJobDisplayComponent = () => {
       {/* Section to display all TA jobs */}
       <div>
         <h2>All Jobs:</h2>
-        {taJobs.length > 0 && user && user.user?.userType === 'student' ? (
+        {taJobs.length > 0 && user && role === 'student' ? (
           taJobs.map((job, index) => (
             <div key={index}>
               {/* Displaying some key information about each job using the TAJobComponent */}

@@ -7,18 +7,24 @@ import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { LoadingButton } from '@mui/lab';
 import { UserContext } from '../provider';
 
-// Define an interface 'User' to specify the structure of a user object.
-interface User {
-  username: string;
-}
-
 // Define a functional component called 'Home' using the React.FC (Functional Component) type.
 const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
-  const userContext = useContext(UserContext);
-  const user = userContext?.user;
-  const role = user?.userType.role;
   
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
+
   const navigate = useNavigate();
 
 
@@ -40,11 +46,11 @@ const Home: React.FC = () => {
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
-        {role === 'Student' && (
+        {role === 'student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
         )}
         {/* show falcuty if the user log in as faculty */}
-        {role === 'Faculty' && (
+        {role === 'faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         )}
 
@@ -70,7 +76,7 @@ const Home: React.FC = () => {
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
-        {role === 'Student' && (
+        {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>

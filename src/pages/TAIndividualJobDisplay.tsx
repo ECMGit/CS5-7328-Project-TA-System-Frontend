@@ -27,7 +27,19 @@ interface User {
 }
 
 const TAJobDisplayComponent = () => {
-  const user = useContext(UserContext);
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
   // jobData is a single TAJobs object or null
   const [jobData, setJobData] = useState<TAJobs | null>(null);
@@ -53,7 +65,7 @@ const TAJobDisplayComponent = () => {
 
   return (
     <div>
-      {jobData && user && user.user?.userType === 'student' && (
+      {jobData && user && role === 'student' && (
         <h1>
           <strong>Title:</strong> {jobData.title}
         </h1>
