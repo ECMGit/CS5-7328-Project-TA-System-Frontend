@@ -39,10 +39,12 @@ const Home: React.FC = () => {
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        {role === 'student' && (
+        {/* show student Profile if the user log in as student  */}
+        {role === 'Student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
         )}
-        {role === 'faculty' && (
+        {/* show falcuty if the user log in as faculty */}
+        {role === 'Faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         )}
 
@@ -67,7 +69,8 @@ const Home: React.FC = () => {
         </Paper>
         {/* TODO: hide this Component when user not login */}
 
-        {role === 'student' && (
+        {/* show the TAjob listing if the user is student */}
+        {role === 'Student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>
