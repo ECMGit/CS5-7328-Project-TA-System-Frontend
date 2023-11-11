@@ -17,7 +17,8 @@ const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
   const userContext = useContext(UserContext);
   const user = userContext?.user;
-  const role = user?.userType;
+  const role = user?.userType.role;
+  
   const navigate = useNavigate();
 
 
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    // Render the component within a container with a maximum width of 'sm'.
+  // Render the component within a container with a maximum width of 'sm'.
 
     <div>
       {/* Blue banner with "Login" button */}
@@ -38,10 +39,10 @@ const Home: React.FC = () => {
         <Typography variant='h6' style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
-        {role === 'Student' && (
+        {role === 'student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
         )}
-        {role === 'Faculty' && (
+        {role === 'faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         )}
 
@@ -66,7 +67,7 @@ const Home: React.FC = () => {
         </Paper>
         {/* TODO: hide this Component when user not login */}
 
-        {role === 'Student' && (
+        {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>

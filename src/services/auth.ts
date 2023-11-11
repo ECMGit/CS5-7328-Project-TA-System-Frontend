@@ -91,6 +91,8 @@ const getUserRole = (userId: number) => {
   // Pass the userId as a query parameter
   return axios.get(`${USER_API_URL}role/${userId}`)
     .then((response) => {
+      console.log(response);
+      
       return response.data;
     })
     .catch((error) => {
