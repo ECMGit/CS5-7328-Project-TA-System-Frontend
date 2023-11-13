@@ -1,45 +1,44 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 // Import components (Typography and Container) from the Material-UI library.
 import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
-import { LoadingButton } from '@mui/lab';
 import { UserContext } from '../provider';
-import { maxHeight } from '@mui/system';
 import AvatarWrapper from '../components/AvatarWrapper';
 
 
 // Define an interface 'User' to specify the structure of a user object.
-interface User {
-  username: string;
-  avatarUrl: string;
-  role: string;
-  firstName: string;
-  smuNo: number;
-}
+// interface User {
+//   username: string;
+//   avatarUrl: string;
+//   role: string;
+//   firstName: string;
+//   smuNo: number;
+// }
 
 // Define a functional component called 'Home' using the React.FC (Functional Component) type.
 const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
-  
   const userContext = useContext(UserContext);
-
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
-  const { user, setUser } = userContext;
+  const {user, setUser} = userContext;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // React hooks
+  const navigate = useNavigate();
+
+
+
 
   if (!user) {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
   const { role } = user;
-
-  const navigate = useNavigate();
-
 
   const navigateToStudentProfile = () => {
     navigate('/student-profile');
@@ -48,11 +47,6 @@ const Home: React.FC = () => {
   const navigateToFacultyProfile = () => {
     navigate('/faculty-profile');
   };
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // React hooks
-  const navigate = useNavigate();
 
   /**
    * Log out the user, delete user from localStorage
@@ -62,6 +56,8 @@ const Home: React.FC = () => {
     setUser(null);
     setIsLoggedIn(false);
   };
+
+
 
   /**
    * Navigate to the corresponding user profile. 

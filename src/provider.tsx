@@ -10,25 +10,26 @@ interface User {
   email: string;
   username: string;
   smuNo: string;
-  role: string;
   year: string;
+  avatarUrl: string;
+  role: string;
 }
 
 // Context type
 interface UserContextType {
-  user: User | undefined;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  user: User | undefined | null;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined | null>>;
 }
 
 // Creating the context
-export const UserContext = createContext<UserContextType | null>(null);
+export const UserContext = createContext<UserContextType | undefined | null>(null);
 
 interface ProviderLayoutProps {
   children?: React.ReactNode;
 }
 
 const ProviderLayout = ({ children }: ProviderLayoutProps) => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined | null>(undefined);
   const [userType, setUserType] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
@@ -53,7 +54,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   }, [navigate]);
 
   // If user or userRole is still being determined, render nothing or a loading component
-  if (user === undefined || userType === undefined) {
+  if (user === undefined || userType === undefined || user === null) {
     return null; 
   }
 

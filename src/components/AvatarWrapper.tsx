@@ -4,10 +4,13 @@ import { Avatar, Menu, MenuItem, Typography, ListItem, Divider } from '@mui/mate
 // User interface type
 interface User {
   firstName: string;
+  lastName: string;
+  email: string;
   username: string;
+  smuNo?: string;
+  year: string;
   avatarUrl: string;
   role: string;
-  smuNo?: number;
 }
 
 // AvatarWrapperProps interface type
