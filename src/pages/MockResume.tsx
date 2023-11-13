@@ -6,6 +6,8 @@ import React from 'react';
 import { TAApplicationData } from './application/ViewApplications';
 // Import several styled components from the 'styledComponents' module.  
 import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledComponents';
+// Used for buttons
+import { Button } from '@mui/material';
 
 // Define the 'Props' type, specifying that it should contain an 'application' property of type 'TAApplicationData'.
 type Props = {
@@ -24,6 +26,14 @@ const MockResume: React.FC<Props> = ({ application }) => {return (
     <ApplicantInfo>Required Skills: {application.requiredSkills}</ApplicantInfo>
     <ApplicantInfo>Resume File: {application.resumeFile}</ApplicantInfo>
     <ApplicantInfo>TA Job ID: {application.taJobId}</ApplicantInfo>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => (window.location.href = '/edit-application/' + application.id)}
+    >
+      {' '}
+      Edit Application{' '}
+    </Button>
   </Container>
 );
 };
