@@ -16,6 +16,7 @@ import {
   NavbarButton,
 } from '../user/styledComponents';
 import AuthService from '../../services/auth';
+import ApplyService from '../../services/apply';
 // Define the data structure for a TA Application entry that we will get from database
 export type TAApplicationData = {
   //id is the primary key for the table
@@ -30,6 +31,7 @@ export type TAApplicationData = {
   resumeFile: string;
   taJobId: number;
   TAStats: string;
+  status: string;
 };
 // Define the data structure for a TA Job entry that we will get from database
 type TAJobData = {
@@ -68,10 +70,13 @@ type SortField =
   | 'hoursCanWorkPerWeek'
   | 'GPA'
   | 'studentName'
-  | 'TAStats'; // <-- Added 'TAStats'
+  | 'TAStats'
+  | 'status';
 
 //these are the directions that can be sorted
 type SortDirection = 'asc' | 'desc';
+
+const possible_statuses = ['Pending', 'Reject', 'Interview', 'Accept'];
 
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
@@ -134,6 +139,26 @@ const ViewApplications: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
+  //handle update application status
+  const handleContinueWithApplicant = (taApplicationId: number, status: string) => {
+    if (status === '') {
+      return;
+    }
+    ApplyService.updateApplicationStatus(taApplicationId, status).then((response) => {
+      console.log(response.data);
+      // Update application with the data in the response
+      const updated_applications = applications.filter((application) => application.id != taApplicationId);
+      console.log(updated_applications);
+      updated_applications.push(response.data);
+      console.log(updated_applications);
+      setApplications(updated_applications);
+      console.log(applications);
+    }).catch((error) => {
+      console.error('Error updating application status:', error);
+      alert(`Error updating application status: ${error}`);
+    });
+  };
+
   /**
    * The following logic sorts the applications based on the field and direction specified in the sortConfig.
    * If the field is 'studentName', it finds the associated user and sorts by their name. 
@@ -158,10 +183,10 @@ const ViewApplications: React.FC = () => {
       sorted = sorted.sort((a, b) => {
         if (sortConfig.field === 'studentName') {
           //Search for users with matching id values from the list users
-          const userA = users.find((u) => u.id === a.studentId); 
+          const userA = users.find((u) => u.id === a.studentId);
           const userB = users.find((u) => u.id === b.studentId);
           //create full names of the found students (default empty string)
-          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : ''; 
+          const nameA = userA ? `${userA.firstName} ${userA.lastName}` : '';
           const nameB = userB ? `${userB.firstName} ${userB.lastName}` : '';
           if (nameA < nameB) return sortConfig.direction === 'asc' ? -1 : 1;
           if (nameA > nameB) return sortConfig.direction === 'asc' ? 1 : -1;
@@ -331,20 +356,31 @@ const ViewApplications: React.FC = () => {
             <TableHeader onClick={() => requestSort('TAStats')}>
               {' '}
               {/* <-- Updated this line */}
-              Status
+              TA Statistics
               {sortConfig?.field === 'TAStats' && (sortConfig.direction === 'asc' ? '▲' : '▼')}{' '}
               {/* <-- Updated this line */}
             </TableHeader>
+
             <TableHeader onClick={() => requestSort('hoursCanWorkPerWeek')}>
               Hours/Week
               {sortConfig?.field === 'hoursCanWorkPerWeek' &&
                 (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
+
             <TableHeader onClick={() => requestSort('GPA')}>
               GPA
               {sortConfig?.field === 'GPA' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </TableHeader>
+
             <TableHeader>More Application Details</TableHeader>
+
+            <TableHeader onClick={() => requestSort('TAStats')}>
+              {' '}
+              {/* <-- Updated this line */}
+              Status
+              {sortConfig?.field === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}{' '}
+              {/* <-- Updated this line */}
+            </TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -370,6 +406,21 @@ const ViewApplications: React.FC = () => {
                     View
                   </a>
                 </TableCell>
+
+                <TableCell>
+                  {application.status}
+                  <br></br>
+                  <select value={selectedStatus || ''} onChange={(e) => handleContinueWithApplicant(application.id, e.target.value)}>
+                    <option value="">Update Status</option>
+                    {possible_statuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                </TableCell>
+
+
               </TableRow>
             );
           })}

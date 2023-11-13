@@ -48,11 +48,21 @@ export const fetchApplication = async (id: string) => {
   }
 };
 
+//Sprint2: update application status
+export const updateApplicationStatus =async (id: number, status: string) => {
+  return axios.post(`http://localhost:9000/ta-application/${id}`, { status }, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 const ApplyService = {
   apply,
   updateApplication,
   deleteApplication,
   fetchApplication,
+  updateApplicationStatus,
 };
 
 export default ApplyService;
