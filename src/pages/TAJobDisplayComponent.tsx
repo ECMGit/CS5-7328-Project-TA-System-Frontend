@@ -25,7 +25,6 @@ interface TAJobs {
   deadlineToApply: string; // or Date, if it's already a Date object
   facultyId: number;
 }
-
 interface User {
   username: string;
   userType: string; // Assuming userType is a string
@@ -33,7 +32,7 @@ interface User {
 
 const TAJobDisplayComponent = () => {
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
-  const [jobData, setJobData] = useState<TAJobs | null>(null); // jobData is a single TAJobs object or null   
+  const [jobData, setJobData] = useState<TAJobs| null>(null); // jobData is a single TAJobs object or null   
   const [selectedId, setSelectedId] = useState('');
   
   useEffect(() => {
@@ -86,16 +85,137 @@ const TAJobDisplayComponent = () => {
 
   const { role } = user;
   
+  //functions to sort the job listings by options in dropdown menu
+  const sortJobsByTitle = (taJobs: TAJobs[]) => {
+    const sortedJobs = [...taJobs];
+  
+    sortedJobs.sort((jobA, jobB) => {
+      const titleA = jobA.title.toUpperCase(); 
+      const titleB = jobB.title.toUpperCase();
+  
+      if (titleA < titleB) {
+        return -1;
+      } else if (titleA > titleB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedJobs;
+  };
+  const sortJobsByCourseID = (taJobs: TAJobs[]) => {
+    const sortedJobs = [...taJobs];
+  
+    sortedJobs.sort((jobA, jobB) => {
+      const titleA = jobA.courseId;
+      const titleB = jobB.courseId;
+
+      if (titleA < titleB) {
+        return -1;
+      } else if (titleA > titleB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedJobs;
+  };
+  const sortJobsByProf = (taJobs: TAJobs[]) => {
+    const sortedJobs = [...taJobs];
+  
+    sortedJobs.sort((jobA, jobB) => {
+      const titleA = jobA.facultyId; 
+      const titleB = jobB.facultyId;
+  
+      if (titleA < titleB) {
+        return -1;
+      } else if (titleA > titleB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedJobs;
+  };
+  const sortJobsBySchedule = (taJobs: TAJobs[]) => {
+    const sortedJobs = [...taJobs];
+  
+    sortedJobs.sort((jobA, jobB) => {
+      const titleA = jobA.courseSchedule; 
+      const titleB = jobB.courseSchedule;
+  
+      if (titleA < titleB) {
+        return -1;
+      } else if (titleA > titleB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedJobs;
+  };
+  
+
+  const [selectedOption, setSelectedOption] = useState('');
+  
+  // Function to handle the dropdown change
+  const handleDropdownChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSelectedOption(event.target.value);
+  };
+  
+  // Function to handle the form submission for selecting which option to sort by
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+
+    //sort the courses based on selection
+    
+    let sortedJobs: TAJobs[] = [];
+
+    switch (selectedOption) {
+    case 'Course ID':
+      sortedJobs = sortJobsByCourseID(taJobs);
+      break;
+    case 'Professor':
+      sortedJobs = sortJobsByProf(taJobs);
+      break;
+    case 'Schedule':
+      sortedJobs = sortJobsBySchedule(taJobs);
+      break;
+    case 'Title':
+      sortedJobs = sortJobsByTitle(taJobs);
+      break;
+    default:
+      break;
+    }
+    setTAJobs(sortedJobs);
+  };
+
   return (
     <div>
       <h1>TA Job Openings</h1>
 
       {/* Section to display all TA jobs */}
       <div>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <label>
+            Sort By:
+              <select value={selectedOption} onChange={handleDropdownChange}>
+                <option value="">Sort By</option>
+                <option value="Course ID">Course ID</option>
+                <option value="Professor">Professor</option>
+                <option value="Schedule">Schedule</option>
+                <option value="Title">Title</option>
+              </select>
+            </label>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
         <h2>All Jobs:</h2>
         {taJobs.length > 0 && user && role === 'student' ? (
           taJobs.map((job, index) => (
             <div key={index}>
+              
               {/* Displaying some key information about each job using the TAJobComponent */}
               <TAJobComponent tajob={job}/>
               {/* <span><strong>Title:</strong> {job.title} ({job.id})</span><br />
