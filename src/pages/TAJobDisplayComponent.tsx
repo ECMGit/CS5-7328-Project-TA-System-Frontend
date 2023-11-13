@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import TAJobService from '../services/tajob'; // Update with your actual service for TA jobs
 import TAJobComponent from '../components/TAJobComponent';
+import { Typography, Container, Button, Paper } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../provider'; // update user context
+
+// Update User interface to include userType
+interface User {
+  username: string;
+  userType: string; // Assuming userType is a string
+}
 
 interface TAJobs {
   id: number;
@@ -17,12 +26,16 @@ interface TAJobs {
   facultyId: number;
 }
 
+interface User {
+  username: string;
+  userType: string; // Assuming userType is a string
+}
 
 const TAJobDisplayComponent = () => {
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
   const [jobData, setJobData] = useState<TAJobs | null>(null); // jobData is a single TAJobs object or null   
   const [selectedId, setSelectedId] = useState('');
-
+  
   useEffect(() => {
     // Fetch all TA jobs on component mount
     TAJobService.getTAJobs()
@@ -59,6 +72,20 @@ const TAJobDisplayComponent = () => {
     }
   };
 
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
+  
   return (
     <div>
       <h1>TA Job Openings</h1>
@@ -66,7 +93,7 @@ const TAJobDisplayComponent = () => {
       {/* Section to display all TA jobs */}
       <div>
         <h2>All Jobs:</h2>
-        {taJobs.length > 0 ? (
+        {taJobs.length > 0 && user && role === 'student' ? (
           taJobs.map((job, index) => (
             <div key={index}>
               {/* Displaying some key information about each job using the TAJobComponent */}

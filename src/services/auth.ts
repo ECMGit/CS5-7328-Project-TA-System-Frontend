@@ -56,7 +56,11 @@ const login = (username: string, password: string) => {
     .then((response) => {
       // alert(JSON.stringify(response.data)); // for debugging purposes
       if (response.data.user) {
+        console.log(response.data.token);
+        
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        // jsonwebtoken saved to storage for auth at login :)
+        localStorage.setItem('token', response.data.token);
       }
       return response.data;
     });
@@ -82,6 +86,19 @@ const getCurrentUser = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 };
+
+const getUserRole = (userId: number) => {
+  // Pass the userId as a query parameter
+  return axios.get(`${USER_API_URL}role/${userId}`)
+    .then((response) => {
+      return response.data.role;
+    })
+    .catch((error) => {
+      console.error('Error fetching user role:', error);
+      throw error; // You can handle or propagate the error as needed
+    });
+};
+
 
 /**
  * For Handling User Reset Password request
@@ -214,6 +231,7 @@ const AuthService = {
   signUp,
   login,
   logout,
+  getUserRole,
   getCurrentUser,
   resetPassword,
   resetPasswordRequest,

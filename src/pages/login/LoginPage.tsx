@@ -73,14 +73,6 @@ const LoginPage: React.FC = () => {
     );
   };
 
-  const navigateToStudentProfile = () => {
-    navigate('/student-profile');
-  };
-
-  const navigateToFacultyProfile = () => {
-    navigate('/faculty-profile');
-  };
-
   return (
     // Render the component within a container with a maximum width of 'xs'.
     <ThemeProvider theme={defaultTheme}>
@@ -152,12 +144,6 @@ const LoginPage: React.FC = () => {
                   {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>
-            </Grid>
-            <Grid item>
-              {/* Button to navigate to /student-profile */}
-              <LoadingButton onClick={navigateToStudentProfile}>Student Profile</LoadingButton>
-              {/* Button to navigate to /faculty-profile */}
-              <LoadingButton onClick={navigateToFacultyProfile}>Faculty Profile</LoadingButton>
             </Grid>
             {/* Display an error message if 'message' is not null. */}
             <FormHelperText>{message}</FormHelperText>

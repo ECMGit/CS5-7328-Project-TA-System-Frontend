@@ -1,10 +1,12 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Import components (Typography and Container) from the Material-UI library.
 import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
+import { LoadingButton } from '@mui/lab';
+import { UserContext } from '../provider';
 import { maxHeight } from '@mui/system';
 import AvatarWrapper from '../components/AvatarWrapper';
 
@@ -21,6 +23,31 @@ interface User {
 // Define a functional component called 'Home' using the React.FC (Functional Component) type.
 const Home: React.FC = () => {
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
+  
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
+
+  const navigate = useNavigate();
+
+
+  const navigateToStudentProfile = () => {
+    navigate('/student-profile');
+  };
+
+  const navigateToFacultyProfile = () => {
+    navigate('/faculty-profile');
+  };
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -60,7 +87,8 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    // Render the component within a container with a maximum width of 'sm'.
+  // Render the component within a container with a maximum width of 'sm'.
+
     <div>
       {/* Blue banner with "Login" button */}
       <div
@@ -75,6 +103,18 @@ const Home: React.FC = () => {
         <Typography variant="h6" style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
+        {/* show student Profile if the user log in as student  */}
+        {role === 'student' && (
+          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
+        )}
+        {/* show falcuty if the user log in as faculty */}
+        {role === 'faculty' && (
+          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
+        )}
+
+        <Button component={Link} to="/login" variant="contained" color="secondary">
+          Login
+        </Button>
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -135,9 +175,13 @@ const Home: React.FC = () => {
           </Typography>
         </Paper>
         {/* TODO: hide this Component when user not login */}
-        <Container maxWidth="sm" style={{ marginTop: '20px' }}>
-          <TAJobDisplayComponent></TAJobDisplayComponent>
-        </Container>
+
+        {/* show the TAjob listing if the user is student */}
+        {role === 'student' && (
+          <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <TAJobDisplayComponent></TAJobDisplayComponent>
+          </Container>
+        )}
       </div>
     </div>
   );
