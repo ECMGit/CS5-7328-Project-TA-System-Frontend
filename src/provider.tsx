@@ -1,4 +1,3 @@
-import { log } from 'console';
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AuthService from './services/auth';
@@ -36,14 +35,14 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
   useEffect(() => {
     // Retrieve user from local storage
     const storedUser = localStorage.getItem('user');
-    console.log(storedUser);
+    // console.log(storedUser); // debugging purposes
     
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       // Get user role when the user is available
       AuthService.getUserRole(JSON.parse(storedUser).id) 
         .then((role: string) => {
-          console.log(role);
+          console.log('current:',role);
           setUserType(role);
         });
         

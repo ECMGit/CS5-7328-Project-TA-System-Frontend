@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   // React hooks
   const navigate = useNavigate();
 
-
+  console.log('home:', user);
 
 
   if (!user) {
@@ -175,7 +175,7 @@ const Home: React.FC = () => {
         {/* show the TAjob listing if the user is student */}
         {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-            <TAJobDisplayComponent></TAJobDisplayComponent>
+            {/* <TAJobDisplayComponent></TAJobDisplayComponent> */}
           </Container>
         )}
       </div>

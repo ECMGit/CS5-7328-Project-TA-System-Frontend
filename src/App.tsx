@@ -20,13 +20,12 @@ import EditApplication from './pages/application/EditApplication';
 import MockResume from './pages/MockResume';
 import { TAApplicationData } from './pages/application/ViewApplications';
 import ProviderLayout from './provider';
-// import { fakeAuthProvider } from "./auth";
 import axios from 'axios';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
-  console.log(token);
+  // console.log(token); // debugging purposes
   
   if (token) {
     config.headers.Authorization = `${token}`;
@@ -47,7 +46,7 @@ const App: React.FC = () => {
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
 
         <Route path="/" element={<ProviderLayout />} >
-          {/* These routes are nested wit huser auth :D */}
+          {/* These routes are nested with user auth :D */}
           <Route path="/home" element={<Home/>} />
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>

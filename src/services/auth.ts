@@ -56,8 +56,7 @@ const login = (username: string, password: string) => {
     .then((response) => {
       // alert(JSON.stringify(response.data)); // for debugging purposes
       if (response.data.user) {
-        console.log(response.data.token);
-        
+        // console.log(response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         // jsonwebtoken saved to storage for auth at login :)
         localStorage.setItem('token', response.data.token);
