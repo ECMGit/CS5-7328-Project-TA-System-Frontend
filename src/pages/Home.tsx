@@ -108,8 +108,8 @@ const Home: React.FC = () => {
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
         )}
 
-        <Button component={Link} to="/login" variant="contained" color="secondary">
-          Login
+        <Button component={Link} to="/view-applications" variant="contained" color="secondary">
+          View Applications
         </Button>
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
@@ -175,7 +175,7 @@ const Home: React.FC = () => {
         {/* show the TAjob listing if the user is student */}
         {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-            {/* <TAJobDisplayComponent></TAJobDisplayComponent> */}
+            <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>
         )}
       </div>
