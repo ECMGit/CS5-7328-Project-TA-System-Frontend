@@ -18,7 +18,6 @@ import UserDataPage from './pages/user/UserDataPage';
 import ViewApplications from './pages/application/ViewApplications';
 import EditApplication from './pages/application/EditApplication';
 import MockResume from './pages/MockResume';
-import { TAApplicationData } from './pages/application/ViewApplications';
 import ProviderLayout from './provider';
 import axios from 'axios';
 
