@@ -5,7 +5,6 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import {
-  getNativeSelectUtilityClasses,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -42,7 +41,6 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
   const [facName, setFacName] = useState('');
 
   useEffect(() => {
-    console.log('test');
     // Fetch all TA jobs on component mount
     if (tajob) {
       AuthService.getUserById(tajob.facultyId)
@@ -50,7 +48,6 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
           // Assuming the data you need is located in `res.data`
           if (res.data) {
             setFacName(res.data.firstName + ' ' + res.data.lastName);
-            console.log(res.data);
           }
         })
         .catch((err) => {

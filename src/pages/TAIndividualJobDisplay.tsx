@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AuthService from '../services/tajob'; // Update with your actual service for TA jobs
 import TAJobComponent from '../components/TAJobComponent';
 import { title } from 'process';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Typography, Container, Button, Paper } from '@mui/material';
+import { UserContext } from '../provider'; // Adjust the path accordingly
+// Update User interface to include userType
 
 interface TAJobs {
   id: number;
@@ -18,8 +21,25 @@ interface TAJobs {
   deadlineToApply: string; // or Date, if it's already a Date object
   facultyId: number;
 }
+interface User {
+  username: string;
+  userType: string; // Assuming userType is a string
+}
 
 const TAJobDisplayComponent = () => {
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+
+  if (!user) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { role } = user;
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
   // jobData is a single TAJobs object or null
   const [jobData, setJobData] = useState<TAJobs | null>(null);
@@ -45,7 +65,7 @@ const TAJobDisplayComponent = () => {
 
   return (
     <div>
-      {jobData && (
+      {jobData && user && role === 'student' && (
         <h1>
           <strong>Title:</strong> {jobData.title}
         </h1>
