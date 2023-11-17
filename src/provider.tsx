@@ -48,7 +48,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
         
     } else {
       // Redirect to login if no user is found
-      navigate('/login');
+      navigate('/home-default');
     }
   }, [navigate]);
 

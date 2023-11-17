@@ -19,6 +19,7 @@ import ViewApplications from './pages/application/ViewApplications';
 import EditApplication from './pages/application/EditApplication';
 import MockResume from './pages/MockResume';
 import ProviderLayout from './provider';
+import HomeDefault from './pages/HomeDefault';
 import axios from 'axios';
 
 // adds jsonwebtoken if present to each api request
@@ -39,6 +40,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path='/home-default' element={<HomeDefault/>}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
