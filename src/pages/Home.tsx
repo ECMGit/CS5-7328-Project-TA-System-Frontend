@@ -100,17 +100,17 @@ const Home: React.FC = () => {
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
-        {role === 'student' && (
+        {/* {role === 'student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-        )}
+        )} */}
         {/* show falcuty if the user log in as faculty */}
-        {role === 'faculty' && (
+        {/* {role === 'faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-        )}
+        )} */}
 
-        <Button component={Link} to="/view-applications" variant="contained" color="secondary">
+        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
           View Applications
-        </Button>
+        </Button> */}
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
