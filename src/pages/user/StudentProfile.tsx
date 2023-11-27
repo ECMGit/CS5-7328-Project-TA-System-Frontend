@@ -10,6 +10,7 @@ import {
   Paper,
   Grid,
   IconButton,
+  Tooltip,
 } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 
@@ -46,9 +47,11 @@ const StudentProfile: React.FC = () => {
       >
         {/* Add an image that, when clicked, redirects to the first page */}
         My Student Dashboard
-        <IconButton color="inherit">
-          <MailIcon />
-        </IconButton>
+        <Tooltip title="View Inbox">
+          <IconButton color="inherit">
+            <MailIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
