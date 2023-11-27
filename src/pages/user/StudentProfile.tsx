@@ -9,7 +9,9 @@ import {
   TextField,
   Paper,
   Grid,
+  IconButton,
 } from '@mui/material';
+import MailIcon from '@mui/icons-material/Mail';
 
 const StudentProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -44,10 +46,19 @@ const StudentProfile: React.FC = () => {
       >
         {/* Add an image that, when clicked, redirects to the first page */}
         My Student Dashboard
+        <IconButton color="inherit">
+          <MailIcon />
+        </IconButton>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <Typography component="h1" variant="h5">
               Student Profile
             </Typography>
@@ -59,13 +70,30 @@ const StudentProfile: React.FC = () => {
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={handleUploadClick}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={handleUploadClick}
+                  >
                     Upload Profile
                   </Button>
-                  <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input
+                    type="file"
+                    id="profileUpload"
+                    sx={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={() => document.getElementById('resumeUpload')?.click()}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={() =>
+                      document.getElementById('resumeUpload')?.click()
+                    }
+                  >
                     Upload Resume
                   </Button>
                 </Grid>
@@ -97,16 +125,26 @@ const StudentProfile: React.FC = () => {
                   onChange={(e) => setMajor(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
+                <Input
+                  type="file"
+                  id="resumeUpload"
+                  sx={{ display: 'none' }}
+                  onChange={handleResumeChange}
+                />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
-              View Resume
+                    View Resume
                   </a>
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
-            Save
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                  onClick={handleSave}
+                >
+                  Save
                 </Button>
               </Box>
             </Box>
@@ -125,22 +163,35 @@ const StudentProfile: React.FC = () => {
         <Grid item xs={6}>
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
-          <Box sx={{ mt: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              mt: '50px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             {/* This <Box> component contains a set of job-related information */}
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+            <Paper
+              elevation={3}
+              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+            >
               <Typography variant="h6">Job Title 1</Typography>
               <Typography>Description of Job 1</Typography>
               <Typography>Date Submitted: 2023-10-15</Typography>
               <Button variant="contained" color="primary">
-      Check Application Status
+                Check Application Status
               </Button>
             </Paper>
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+            <Paper
+              elevation={3}
+              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+            >
               <Typography variant="h6">Job Title 2</Typography>
               <Typography>Description of Job 2</Typography>
               <Typography>Date Submitted: 2023-10-16</Typography>
               <Button variant="contained" color="primary">
-      Check Application Status
+                Check Application Status
               </Button>
             </Paper>
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
@@ -148,11 +199,10 @@ const StudentProfile: React.FC = () => {
               <Typography>Description of Job 3</Typography>
               <Typography>Date Submitted: 2023-10-17</Typography>
               <Button variant="contained" color="primary">
-      Check Application Status
+                Check Application Status
               </Button>
             </Paper>
           </Box>
-
         </Grid>
       </Grid>
     </Container>
