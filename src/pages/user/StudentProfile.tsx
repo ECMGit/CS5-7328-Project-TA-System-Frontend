@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
+import { useNavigate } from 'react-router-dom';
 
 const StudentProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -20,6 +21,8 @@ const StudentProfile: React.FC = () => {
   const [graduationYear, setGraduationYear] = useState<string>('');
   const [major, setMajor] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
@@ -32,6 +35,10 @@ const StudentProfile: React.FC = () => {
   function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
     // Handle resume file upload
   }
+
+  const navigateToInbox = () => {
+    navigate('/inbox'); // replace 'inbox' with the actual path to the inbox page once it's created
+  };
 
   return (
     <Container>
@@ -48,7 +55,7 @@ const StudentProfile: React.FC = () => {
         {/* Add an image that, when clicked, redirects to the first page */}
         My Student Dashboard
         <Tooltip title="View Inbox">
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={navigateToInbox}>
             <MailIcon />
           </IconButton>
         </Tooltip>
