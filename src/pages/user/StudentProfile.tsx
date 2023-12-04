@@ -37,7 +37,7 @@ const StudentProfile: React.FC = () => {
   }
 
   const navigateToInbox = () => {
-    navigate('/inbox'); // replace 'inbox' with the actual path to the inbox page once it's created
+    navigate('/inbox'); 
   };
 
   return (

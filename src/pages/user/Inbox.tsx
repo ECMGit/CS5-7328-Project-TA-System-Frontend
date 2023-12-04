@@ -3,7 +3,19 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+import {
+  Container,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Input,
+  TextField,
+  Paper,
+  Grid,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 
 interface User {
   id: number;
@@ -28,7 +40,7 @@ interface UserMessage {
   course: Course;
 }
 
-// TODO: Should be replaced by real content
+// TODO: Should be replaced by real content 
 const messages: UserMessage[] = [
   {
     id: 1,
@@ -56,9 +68,9 @@ const messages: UserMessage[] = [
   }
 ];
 
-function MessageItem({ message }: { message: UserMessage }) {
+const MessageItem = ({ message }: { message: UserMessage }) => {
   return (
-    <>
+    <Container>
       <ListItem alignItems="flex-start">
         <ListItemText
           primary={`${message.taJob.title} - ${message.course.title}`}
@@ -81,16 +93,37 @@ function MessageItem({ message }: { message: UserMessage }) {
         </Typography>
       </ListItem>
       <Divider variant="inset" component="li" />
-    </>
+    </Container>
   );
-}
+};
 
-export default function MessagesList() {
+const MessagesList = () => {
   return (
-    <List sx={{ width: '100%' }}>
-      {messages.map((message) => (
-        <MessageItem key={message.id} message={message} />
-      ))}
-    </List>
+    <Container>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          textAlign: 'center',
+          backgroundColor: '#1976D2', // Blue color
+          color: '#FFF', // White color
+          padding: '16px', // Adjust the padding as needed
+        }}
+      >
+        Inbox
+      </Box>
+      <List sx={{ width: '100%' }}>
+
+        {messages.map((message) => (
+          <MessageItem key={message.id} message={message} />
+        ))}
+      </List>
+
+    </Container>
+
   );
-}
+};
+
+export default MessagesList;
