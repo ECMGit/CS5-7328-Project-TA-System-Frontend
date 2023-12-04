@@ -11,8 +11,12 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@mui/material';
-import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
 import { useNavigate } from 'react-router-dom';
 
 const StudentProfile: React.FC = () => {
@@ -21,24 +25,36 @@ const StudentProfile: React.FC = () => {
   const [graduationYear, setGraduationYear] = useState<string>('');
   const [major, setMajor] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigateToInbox = () => {
+    navigate('/inbox');
+    handleClose();
+  };
 
   const navigate = useNavigate();
 
-  function handleUploadClick() {
+  const handleUploadClick = () => {
     document.getElementById('profileUpload')?.click();
-  }
-
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // Handle image file upload
-  }
-
-  function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // Handle resume file upload
-  }
-
-  const navigateToInbox = () => {
-    navigate('/inbox'); 
   };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle image file upload
+  };
+
+  const handleResumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle resume file upload
+  };
+
 
   return (
     <Container>
@@ -52,13 +68,32 @@ const StudentProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-        {/* Add an image that, when clicked, redirects to the first page */}
+
         My Student Dashboard
-        <Tooltip title="View Inbox">
-          <IconButton color="inherit" onClick={navigateToInbox}>
-            <MailIcon />
+        <Tooltip title="Menu">
+          <IconButton
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
           </IconButton>
         </Tooltip>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={navigateToInbox}>
+            <ListItemIcon>
+              <MailIcon fontSize="small" />
+            </ListItemIcon>
+            Inbox
+          </MenuItem>
+        </Menu>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
