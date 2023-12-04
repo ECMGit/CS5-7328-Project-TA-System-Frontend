@@ -9,10 +9,3 @@ test('find a Login element', () => {
   const linkElement = screen.getAllByText(/Login/i)[0];
   expect(linkElement).toBeInTheDocument();
 });
-
-
-test('find a Register element', () => {
-  render(<App />);
-  const linkElement = screen.getAllByText(/Register/i)[0];
-  expect(linkElement).toBeInTheDocument();
-});

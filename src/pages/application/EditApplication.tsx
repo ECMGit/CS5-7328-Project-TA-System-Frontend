@@ -119,7 +119,7 @@ const EditApplication = () => {
             margin="normal"
             required
             fullWidth
-            name="gpa"
+            name="GPA"
             label="GPA"
             type="number"
             value={application.GPA}
@@ -130,7 +130,7 @@ const EditApplication = () => {
             margin="normal"
             required
             fullWidth
-            name="hours"
+            name="hoursCanWorkPerWeek"
             label="Hours per Week"
             type="text"
             value={application.hoursCanWorkPerWeek}
