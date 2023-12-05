@@ -106,7 +106,7 @@ const getUserRole = (userId: number) => {
  */
 const resetPasswordRequest = (email: string) => {
   return axios
-    .post(BASE_API_URL + 'password-reset-link', {
+    .post(USER_API_URL + 'password-reset-link', {
       email,
     })
     .then((response) => {
@@ -127,7 +127,7 @@ const resetPasswordRequest = (email: string) => {
  */
 const resetPassword = async (token: string, password: string) => {
   try {
-    const response = await axios.post(BASE_API_URL + 'password-reset/confirm', { token, password });
+    const response = await axios.post(USER_API_URL + 'password-reset/confirm', { token, password });
     return response.data.message;
   } catch (error) {
     console.error(error);
