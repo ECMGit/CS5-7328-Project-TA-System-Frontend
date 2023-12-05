@@ -21,6 +21,7 @@ import MockResume from './pages/MockResume';
 import HomeDefault from './pages/HomeDefault';
 import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
+import Inbox from './pages/user/Inbox';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
@@ -68,7 +69,10 @@ const App: React.FC = () => {
         <Route path="/" element={<ProviderLayout />} >
           {/* These routes are nested with user auth :D */}
           <Route path="/home" element={<Home/>} />
+
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
+          <Route path="/inbox" element={<Inbox />} />
+
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<ViewJobs />} />
