@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect, FormEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
 
 import api from '../../services/faculty-job';
+import { UserContext } from '../../provider';
 
 
 const ViewJobs: React.FC = () => {
@@ -26,7 +27,11 @@ const ViewJobs: React.FC = () => {
     deadlineToApply: string;
     facultyId: number;
   };
-
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+  const {user} = userContext;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
@@ -212,7 +217,10 @@ const ViewJobs: React.FC = () => {
           ))
         }
       </Box>
-      <Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>
+      {user?.role === 'faculty' ?
+        (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
+        : ''
+      }
     </Container>
   );
 
