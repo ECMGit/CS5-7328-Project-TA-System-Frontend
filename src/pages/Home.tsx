@@ -55,6 +55,7 @@ const Home: React.FC = () => {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
+    navigate('/home-default');
   };
 
 

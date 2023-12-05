@@ -4,7 +4,13 @@ const JOBS_API_URL = 'http://localhost:9000/jobs';
 const token = localStorage.getItem('token');
 
 const getJobs = () => {
-  return axios.get(JOBS_API_URL).then(res => {
+  console.log(token);
+  return axios.get(JOBS_API_URL, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  
+  }).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
@@ -13,7 +19,11 @@ const getJobs = () => {
 };
 //get one job from id passed as parameter
 const getOneJob = (id: number) => {
-  return axios.get(JOBS_API_URL + '/' + id).then(res => {
+  return axios.get(JOBS_API_URL + '/' + id,{
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
