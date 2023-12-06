@@ -16,6 +16,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import axios from 'axios';
 
 interface User {
   id: number;
@@ -73,8 +74,24 @@ const messages: UserMessage[] = [
 ];
 
 const MessageItem = ({ message }: { message: UserMessage }) => {
+  // Initial color state
+  const [color, setColor] = React.useState(message.isRead ? 'transparent' : '#FFD700'); 
+
+  // Function to change color
+  const onRead = async (messageId: number) => {
+    if (color != 'transparent') {
+      setColor('transparent');
+      try {
+        await axios.post(`http://localhost:9000/message/mark-read/${messageId}`);
+      }
+      catch(error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
-    <Container>
+    <Container onClick={() => onRead(message.id)} style={{backgroundColor: color}}>
       <ListItem alignItems="flex-start">
         <ListItemText
           primary={`${message.taJob.title} - ${message.course.title}`}
