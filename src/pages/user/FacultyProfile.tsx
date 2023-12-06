@@ -1,11 +1,28 @@
 import React, { useState } from 'react';
-import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Container, 
+  Typography, 
+  Button, 
+  Avatar, 
+  Box, Input, TextField, Paper, Grid, IconButton,
+
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon } from '@mui/material';
+
+import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail';
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+
+  const open = Boolean(anchorEl);
+
 
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
@@ -38,6 +55,25 @@ const FacultyProfile: React.FC = () => {
     }
   }
 
+  const navigate = useNavigate();
+
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigateToInbox = () => {
+    navigate('/inbox');
+    handleClose();
+  };
+
+
+
+
   return (
     <Container>
       <Box
@@ -51,10 +87,35 @@ const FacultyProfile: React.FC = () => {
         }}
       >
         My Faculty Dashboard
+
+        <Tooltip title="Menu">
+          <IconButton
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={navigateToInbox}>
+            <ListItemIcon>
+              <MailIcon fontSize="small" />
+            </ListItemIcon>
+            Inbox
+          </MenuItem>
+        </Menu>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography component="h1" variant="h5">
               Faculty Profile
             </Typography>
@@ -66,13 +127,13 @@ const FacultyProfile: React.FC = () => {
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={handleUploadClick}>
+                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleUploadClick}>
                     Upload Profile
                   </Button>
                   <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={() => document.getElementById('resumeUpload')?.click()}>
+                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={() => document.getElementById('resumeUpload')?.click()}>
                     Upload Resume
                   </Button>
                 </Grid>
@@ -128,10 +189,10 @@ const FacultyProfile: React.FC = () => {
               <Typography>Description of Class 1</Typography>
               <Typography>Date Submitted: 2023-10-15</Typography>
               <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
+                Check Applicants
               </Button>
               <Button variant="contained" color="secondary">
-      Edit Posting
+                Edit Posting
               </Button>
             </Paper>
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
@@ -139,10 +200,10 @@ const FacultyProfile: React.FC = () => {
               <Typography>Description of Class 2</Typography>
               <Typography>Date Submitted: 2023-10-16</Typography>
               <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
+                Check Applicants
               </Button>
               <Button variant="contained" color="secondary">
-      Edit Posting
+                Edit Posting
               </Button>
             </Paper>
             <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
@@ -150,10 +211,10 @@ const FacultyProfile: React.FC = () => {
               <Typography>Description of Class 3</Typography>
               <Typography>Date Submitted: 2023-10-17</Typography>
               <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
+                Check Applicants
               </Button>
               <Button variant="contained" color="secondary">
-      Edit Posting
+                Edit Posting
               </Button>
             </Paper>
           </Box>
