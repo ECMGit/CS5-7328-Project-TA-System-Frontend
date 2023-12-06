@@ -38,6 +38,7 @@ interface UserMessage {
   sender: User;
   taJob: TAJob;
   course: Course;
+  isRead: boolean;
 }
 
 // TODO: Should be replaced by real content 
@@ -48,7 +49,8 @@ const messages: UserMessage[] = [
     createdAt: new Date('2023-12-01T10:20:30Z'),
     sender: { id: 1, firstName: 'John', lastName: 'Doe' },
     taJob: { title: 'TA for Computer Science' },
-    course: { title: 'Introduction to Programming' }
+    course: { title: 'Introduction to Programming' },
+    isRead: false
   },
   {
     id: 2,
@@ -56,7 +58,8 @@ const messages: UserMessage[] = [
     createdAt: new Date('2023-12-02T15:45:00Z'),
     sender: { id: 2, firstName: 'Alice', lastName: 'Smith' },
     taJob: { title: 'TA for Data Structures' },
-    course: { title: 'Advanced Algorithms' }
+    course: { title: 'Advanced Algorithms' },
+    isRead: true
   },
   {
     id: 3,
@@ -64,7 +67,8 @@ const messages: UserMessage[] = [
     createdAt: new Date('2023-12-03T09:30:00Z'),
     sender: { id: 3, firstName: 'Bob', lastName: 'Johnson' },
     taJob: { title: 'TA for Artificial Intelligence' },
-    course: { title: 'Machine Learning Basics' }
+    course: { title: 'Machine Learning Basics' },
+    isRead: true
   }
 ];
 
