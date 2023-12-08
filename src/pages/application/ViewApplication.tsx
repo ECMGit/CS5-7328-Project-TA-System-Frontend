@@ -101,12 +101,23 @@ function ApplicationPage() {
   }, [id]);
 
   const handleSendMessage = async () => {
-    // Placeholder function for sending a message
-    // This function will need to be implemented to make a POST request to the backend
-    console.log('Message to send:', newMessage);
+    if (!newMessage.trim()) return; // Prevent sending empty messages
 
-    // Reset the message input after sending
-    setNewMessage('');
+    try {
+      // Replace with your API endpoint and adjust the payload as necessary
+      const response = await axios.post('http://localhost:9000/message', {
+        senderId: 1, // Replace with the logged in user's ID
+        receiverId: 2, // Replace with the recipient's ID
+        content: newMessage,
+        applicationId: Number(id),
+      });
+
+      // Update the messages array to include the new message
+      setMessages(prevMessages => [...prevMessages, response.data]);
+      setNewMessage(''); // Reset the input field
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   const [application, setApplication] = useState({
@@ -149,6 +160,7 @@ function ApplicationPage() {
 
     loadData();
   }, [id]);
+  
 
 
 
