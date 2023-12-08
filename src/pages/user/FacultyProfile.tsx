@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
 import FacultyJobService from '../../services/faculty-job';
+import { Link } from 'react-router-dom';
 interface Job {
     id: number;
     title: string;
@@ -15,7 +16,6 @@ interface Job {
     deadlineToApply: string;
     facultyId: number;
 }
-
 
 
 const FacultyProfile: React.FC = () => {
@@ -131,11 +131,17 @@ const FacultyProfile: React.FC = () => {
                   </a>
                 )}
               </form>
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+              <Box sx={{ mt: 2, display: 'column', justifyContent: 'center' }}>
                 <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
                   Save
                 </Button>
-                <Button variant="contained" color="primary" sx={{width:'100%'}}     onClick={() => (window.location.href = 'http://localhost:3000/jobs')}>
+                <Button
+                  component={Link}
+                  to="/jobs"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginTop: '8px', width: '100%', textAlign: 'center' }}
+                >
                   View All Jobs
                 </Button>
               </Box>
