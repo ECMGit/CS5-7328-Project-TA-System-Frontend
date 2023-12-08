@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
+import FacultyJobService from '../../services/faculty-job';
+interface Job {
+    id: number;
+    title: string;
+    courseId: number;
+    courseSchedule: string;
+    totalHoursPerWeek: number;
+    maxNumberOfTAs: number;
+    requiredCourses: string;
+    requiredSkills: string;
+    TAStats: string;
+    notes: string;
+    deadlineToApply: string;
+    facultyId: number;
+}
+
+
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
-
+  const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
+  useEffect(()=>{
+    FacultyJobService.getJobs()
+      .then((data) => {
+        console.log('Jobs data:', data);
+        setJobs(data.slice(0,3));
+      })
+      .catch((error) => {
+        console.error('Error fetching jobs:', error);
+      });
+  },[]);
+  
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
@@ -107,6 +135,9 @@ const FacultyProfile: React.FC = () => {
                 <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
                   Save
                 </Button>
+                <Button variant="contained" color="primary" sx={{width:'100%'}}     onClick={() => (window.location.href = 'http://localhost:3000/jobs')}>
+                  View All Jobs
+                </Button>
               </Box>
             </Box>
             {name && department && (
@@ -118,47 +149,62 @@ const FacultyProfile: React.FC = () => {
             )}
           </Box>
         </Grid>
+
+
+
+
+
+
+
         <Grid item xs={6}>
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
           <Box sx={{ mt: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* This <Box> component contains a set of job-related information */}
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
-              <Typography variant="h6">Class 1</Typography>
-              <Typography>Description of Class 1</Typography>
-              <Typography>Date Submitted: 2023-10-15</Typography>
-              <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
-              </Button>
-              <Button variant="contained" color="secondary">
-      Edit Posting
-              </Button>
-            </Paper>
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
-              <Typography variant="h6">Class 2</Typography>
-              <Typography>Description of Class 2</Typography>
-              <Typography>Date Submitted: 2023-10-16</Typography>
-              <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
-              </Button>
-              <Button variant="contained" color="secondary">
-      Edit Posting
-              </Button>
-            </Paper>
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
-              <Typography variant="h6">Class 3</Typography>
-              <Typography>Description of Class 3</Typography>
-              <Typography>Date Submitted: 2023-10-17</Typography>
-              <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-      Check Applicants
-              </Button>
-              <Button variant="contained" color="secondary">
-      Edit Posting
-              </Button>
-            </Paper>
+            {jobs.map((job) => (
+              <Paper key={job.id} elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+                <Typography variant="h6">{job.title}</Typography>
+                <Typography>{job.notes}</Typography>
+                <Typography>Date Submitted: {job.deadlineToApply}</Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: '10px' }}
+                  onClick={() => handleCheckApplicants(job.id)}
+                >
+                  Check Applicants
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleEditPosting(job.id)}
+                >
+                  Edit Posting
+                </Button>
+              </Paper>
+            ))}
           </Box>
 
         </Grid>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
       </Grid>
     </Container>
   );
@@ -166,6 +212,17 @@ const FacultyProfile: React.FC = () => {
   function handleSave() {
     // Handle saving the user's information
   }
+
+  function handleCheckApplicants(jobId: number) {
+    // Handle checking applicants for the specified job ID
+    console.log(`Checking applicants for job ${jobId}`);
+  }
+
+  function handleEditPosting(jobId: number) {
+    // Handle editing the posting for the specified job ID
+    console.log(`Editing posting for job ${jobId}`);
+  }
+
 };
 
 export default FacultyProfile;
