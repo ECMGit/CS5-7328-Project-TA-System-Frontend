@@ -68,6 +68,8 @@ interface UserMessage {
   senderId: number;
   receiverId: number;
   applicationId: number;
+  sender: { username: string }; // Assuming 'name' is the field you have
+  receiver: { username: string }; // Adjust according to your data structure
   // Include other fields if necessary
 }
 
@@ -87,6 +89,7 @@ function ApplicationPage() {
           return;
         }
         const data = await ApplyService.fetchMessages(id);
+        console.log(data);
         if (Array.isArray(data)) { // Make sure the received data is an array
           setMessages(data);
         } else {
@@ -208,26 +211,13 @@ function ApplicationPage() {
         }}
       >
         {/* Message List */}
-        <Box
-          sx={{
-            overflowY: 'auto',
-            p: 2,
-            flexGrow: 1,
-          }}
-        >
+        <Box sx={{ overflowY: 'auto', p: 2, flexGrow: 1 }}>
           {messages.map((message, index) => (
-            <Paper
-              key={index}
-              sx={{
-                p: '10px',
-                mb: '10px',
-                maxWidth: '70%',
-                backgroundColor: '#fff',
-              }}
-            >
+            <Paper key={index} sx={{ p: '10px', mb: '10px', maxWidth: '70%', backgroundColor: '#fff' }}>
               <Typography variant="body1">{message.content}</Typography>
               <Typography variant="caption" display="block" gutterBottom>
-                Sent on {new Date(message.createdAt).toLocaleString()}
+                Sent by {message.sender.username} to {message.receiver.username} on 
+                {new Date(message.createdAt).toLocaleString()}
               </Typography>
             </Paper>
           ))}
