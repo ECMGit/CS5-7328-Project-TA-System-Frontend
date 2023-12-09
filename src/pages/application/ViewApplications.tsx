@@ -78,7 +78,10 @@ const ViewApplications: React.FC = () => {
     taJobId: app.taJobId,
     TAStats: app.TAStats,
     status: app.status,
-  }));
+  })).filter((app) => {
+    return app.studentId == 1; // Makes sure that the applications for only one student are shown
+    // Change later to base on currently logged in student
+  });
   const [searchText, setSearchText] = useState('');
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
