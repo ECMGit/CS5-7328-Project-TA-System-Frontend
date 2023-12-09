@@ -47,9 +47,11 @@ const StudentProfile: React.FC = () => {
     string | null
   >(null);
 
+  // Navigation hook
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch logged in student data from local storage.
     const userJson = localStorage.getItem('user');
     const user = userJson ? JSON.parse(userJson) : null;
     const studentId = user ? user.id : null;
@@ -72,6 +74,10 @@ const StudentProfile: React.FC = () => {
     fetchAndSetApplications();
   }, []);
 
+  /**
+   * Second useEffect hook to update the 
+   * jobs array state associate to the student's application 
+   */
   useEffect(() => {
     if (applications.length <= 0) {
       return;
@@ -96,6 +102,13 @@ const StudentProfile: React.FC = () => {
     fetchAndSetJobs();
   }, [applications]);
 
+  /**
+   * Combine the jobs array state and application array state with 
+   * customized JSON used as elements in the array. 
+   * @param jobs the jobs to be combined
+   * @param applications the applications to be combined
+   * @returns an array of customized information being stored in JSON
+   */
   const createCustomArray = (jobs: Job[], applications: Application[]) => {
     return applications
       .map((application) => {
@@ -114,14 +127,18 @@ const StudentProfile: React.FC = () => {
       .filter((item) => item !== null);
   };
 
+  // Create customArray and only use the first 3 elements.
   const customArray = createCustomArray(jobs, applications);
   const topTaApplications = customArray.slice(0, 3);
-  console.log(topTaApplications);
 
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
 
+  /**
+   * Handle image file upload
+   * @param event Detect DOM being changed from HTML
+   */
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     // Handle image file upload
     const file = event.target.files?.[0];
@@ -135,8 +152,8 @@ const StudentProfile: React.FC = () => {
     }
   }
 
+  // Handle resume file upload
   function handleResumeChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // Handle resume file upload
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -148,6 +165,10 @@ const StudentProfile: React.FC = () => {
     }
   }
 
+  /**
+   * Check the application status based on the input application ID.
+   * @param applicationId The application ID to be checked with
+   */
   function handleCheckStatus(applicationId: string) {
     const application = applications.find((app) => app.id === applicationId);
 
@@ -349,7 +370,7 @@ const StudentProfile: React.FC = () => {
             </Typography>
             <Button
               component={Link}
-              to="/view-applications"
+              to="/home"
               color="primary"
               variant="contained"
             >
