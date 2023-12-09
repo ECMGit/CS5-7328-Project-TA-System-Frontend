@@ -67,7 +67,7 @@ const ViewJobsStudent: React.FC = () => {
                   {new Date(job.deadlineToApply).toLocaleDateString()}</Typography>
                 <Button
                   variant="contained"
-                  onClick={() => navigate('/application-form/?id='+ job.id + '&title=' + job.courseId)}
+                  onClick={() => navigate('/application-form/?jobId='+ job.id + '&courseId=' + job.courseId + '&title=' + job.title)}
                 >
                   Apply
                 </Button>
