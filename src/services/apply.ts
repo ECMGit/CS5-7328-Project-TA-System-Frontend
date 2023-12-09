@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AxiosResponse } from 'axios';
 
 const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;
-const APPLICATION_API_URL: string | undefined = BASE_API_URL + '/ta-application/';
+const APPLICATION_API_URL = 'http://localhost:9000' + '/ta-application/'; //: string | undefined = BASE_API_URL +
 
 /**
  * @param dataJson
