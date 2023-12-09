@@ -116,35 +116,77 @@ const Home: React.FC = () => {
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {user.role === 'faculty' ? (
-                <Button
-                  component={Link}
-                  to="/post-job"
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: '10px' }}
-                >
-                  Publish
-                </Button>
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    See Jobs
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/post-job"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px' }}
+                  >
+                    Publish
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
               ) : user.role === 'student' ? (
-                <Button
-                  component={Link}
-                  to="/jobs"
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: '5px', marginRight: '10px' }}
-                >
-                  Display
-                </Button>
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Display
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
               ) : user.role === 'faculty' ? (
-                <Button
-                  component={Link}
-                  to="/jobs/faculty/:facultyId"
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: '5px', marginRight: '5px' }}
-                >
-                  See Jobs
-                </Button>
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    See Jobs
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
               ) : (
                 ''
               )}

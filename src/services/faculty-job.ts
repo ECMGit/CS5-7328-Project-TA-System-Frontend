@@ -51,6 +51,20 @@ const postJob = (job: {
     alert(err);
   });
 };
+const getFacultyJobs = (id: number) => {
+  console.log(token);
+  return axios.get(JOBS_API_URL + '/faculty/' + id,{
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  
+  }).then(res => {
+    console.log(res);
+    return res.data;
+  }).catch(err => {
+    console.log(err);
+  });
+};
 //update job from id passed as parameter
 const updateJob = (id: number, job: {
     title: string;
@@ -78,6 +92,7 @@ const FacultyJobService = {
   getJobs,
   getOneJob,
   postJob,
+  getFacultyJobs,
   updateJob
 };
 

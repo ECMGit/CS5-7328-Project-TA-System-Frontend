@@ -78,7 +78,7 @@ const App: React.FC = () => {
           <Route path="/jobs" element={<ViewJobs />} />
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"><FacultyProfile /></PrivateRoute>} />
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"><ViewApplications /></PrivateRoute>} />
+          <Route path="/view-applications" element={<ViewApplications />} />
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"><EditApplication /></PrivateRoute>} />
           <Route path="/user-data" element={<UserDataPage />} />
           <Route path="*" element={<Home />} />
