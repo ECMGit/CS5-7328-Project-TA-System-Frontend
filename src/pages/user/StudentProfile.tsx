@@ -10,6 +10,8 @@ import {
   Paper,
   Grid,
 } from '@mui/material';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
@@ -46,9 +48,18 @@ const StudentProfile: React.FC = () => {
   const [selectedApplicationId, setSelectedApplicationId] = useState<
     string | null
   >(null);
+  const [showFullList, setShowFullList] = useState<boolean>(false);
 
-  // Navigation hook
-  const navigate = useNavigate();
+  // CSS style for hiding items
+  const hiddenStyle = {
+    maxHeight: '0',
+    overflow: 'hidden',
+    transition: 'max-height 0.5s ease-out',
+  };
+  const visibleStyle = {
+    maxHeight: '1000px', 
+    transition: 'max-height 0.5s ease-in',
+  };
 
   useEffect(() => {
     // Fetch logged in student data from local storage.
@@ -75,8 +86,8 @@ const StudentProfile: React.FC = () => {
   }, []);
 
   /**
-   * Second useEffect hook to update the 
-   * jobs array state associate to the student's application 
+   * Second useEffect hook to update the
+   * jobs array state associate to the student's application
    */
   useEffect(() => {
     if (applications.length <= 0) {
@@ -103,8 +114,8 @@ const StudentProfile: React.FC = () => {
   }, [applications]);
 
   /**
-   * Combine the jobs array state and application array state with 
-   * customized JSON used as elements in the array. 
+   * Combine the jobs array state and application array state with
+   * customized JSON used as elements in the array.
    * @param jobs the jobs to be combined
    * @param applications the applications to be combined
    * @returns an array of customized information being stored in JSON
@@ -129,10 +140,16 @@ const StudentProfile: React.FC = () => {
 
   // Create customArray and only use the first 3 elements.
   const customArray = createCustomArray(jobs, applications);
-  const topTaApplications = customArray.slice(0, 3);
 
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
+  }
+
+  /**
+   * Change if the full list was to be shown.
+   */
+  function toggleFullList() {
+    setShowFullList(!showFullList);
   }
 
   /**
@@ -316,45 +333,53 @@ const StudentProfile: React.FC = () => {
               alignItems: 'center',
             }}
           >
-            {topTaApplications.length > 0 ? (
-              topTaApplications.map((application, index) =>
+            {customArray.length > 0 ? (
+              customArray.map((application, index) =>
                 application ? (
-                  <Paper
+                  <div
                     key={index}
-                    elevation={3}
-                    sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+                    style={
+                      index >= 3 && !showFullList ? hiddenStyle : visibleStyle
+                    }
                   >
-                    <Typography variant="h6">
-                      Application title: {application.title}
-                    </Typography>
-                    <Typography>Course: {application.courseCode}</Typography>
-                    <Typography>
-                      Application ID: {application.applicationId}
-                    </Typography>
-                    <Box
-                      sx={{
-                        mt: '5px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'start',
-                      }}
+                    <Paper
+                      key={index}
+                      elevation={3}
+                      sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                     >
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() =>
-                          handleCheckStatus(application.applicationId)
-                        }
+                      <Typography variant="h6">
+                        Application title: {application.title}
+                      </Typography>
+                      <Typography>Course: {application.courseCode}</Typography>
+                      <Typography>
+                        Application ID: {application.applicationId}
+                      </Typography>
+                      <Box
+                        sx={{
+                          mt: '5px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'start',
+                        }}
                       >
-                        Check Application Status
-                      </Button>
-                      {selectedApplicationId === application.applicationId && (
-                        <Typography sx={{ marginLeft: 2 }}>
-                          {selectedApplicationStatus}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Paper>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() =>
+                            handleCheckStatus(application.applicationId)
+                          }
+                        >
+                          Check Application Status
+                        </Button>
+                        {selectedApplicationId ===
+                          application.applicationId && (
+                          <Typography sx={{ marginLeft: 2 }}>
+                            {selectedApplicationStatus}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Paper>
+                  </div>
                 ) : null
               )
             ) : (
@@ -365,17 +390,29 @@ const StudentProfile: React.FC = () => {
                 <Typography variant="h6">Start applying now!</Typography>
               </Paper>
             )}
-            <Typography variant="h6">
-              Only the most recent 3 applications are displayed!
-            </Typography>
             <Button
+              onClick={toggleFullList}
+              color="primary"
+              variant="contained"
+            >
+              {showFullList ? (
+                <>
+                  <ArrowUpwardIcon /> Show Less
+                </>
+              ) : (
+                <>
+                  <ArrowDownwardIcon /> Show More
+                </>
+              )}
+            </Button>
+            {/* <Button
               component={Link}
               to="/home"
               color="primary"
               variant="contained"
             >
               Click here to see full list!
-            </Button>
+            </Button> */}
           </Box>
         </Grid>
       </Grid>
