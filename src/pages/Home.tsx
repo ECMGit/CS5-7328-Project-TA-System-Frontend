@@ -135,6 +135,16 @@ const Home: React.FC = () => {
                 >
                   Display
                 </Button>
+              ) : user.role === 'faculty' ? (
+                <Button
+                  component={Link}
+                  to="/jobs/faculty/:facultyId"
+                  variant="contained"
+                  color="secondary"
+                  style={{ marginLeft: '5px', marginRight: '5px' }}
+                >
+                  See Jobs
+                </Button>
               ) : (
                 ''
               )}
