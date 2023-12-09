@@ -1,3 +1,4 @@
+import { responsiveFontSizes } from '@mui/material';
 import axios from 'axios';
 import { AxiosResponse } from 'axios';
 
@@ -57,12 +58,28 @@ export const updateApplicationStatus =async (id: number, status: string) => {
   });
 };
 
+export const getTaApplicationsByStudentId = async (id: number) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/student/${id}`);
+
+    if (!response) {
+      throw new Error('Failed to get with the ID provided!');
+    }
+
+    const applications = await response.data;
+    return applications; 
+  } catch (error) {
+    console.error('Error fetching applications: ', error);
+  }
+};
+
 const ApplyService = {
   apply,
   updateApplication,
   deleteApplication,
   fetchApplication,
   updateApplicationStatus,
+  getTaApplicationsByStudentId,
 };
 
 export default ApplyService;
