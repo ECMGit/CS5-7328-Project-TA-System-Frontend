@@ -1,3 +1,4 @@
+//impoting statements
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -27,13 +28,17 @@ const ViewJobsStudent: React.FC = () => {
     deadlineToApply: string;
     facultyId: number;
   };
+  //define user context
   const userContext = useContext(UserContext);
+  //if user context is undefined then return loading
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
+  //get user from user context
   const {user} = userContext;
+  //define jobs and set jobs
   const [jobs, setJobs] = useState<Job[]>([]);
-
+  //define editing and set editing
   useEffect(() => {
     api.getJobs().then(res => {
       if (res !== undefined) {
@@ -41,9 +46,9 @@ const ViewJobsStudent: React.FC = () => {
       }
     });
   }, []);
-
+  //define navigate
   const navigate = useNavigate();
-
+  //return the following
   return (
     <Container>
       <Box sx={{ my: 4 }}>

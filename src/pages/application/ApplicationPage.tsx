@@ -89,7 +89,9 @@ function ApplicationPage() {
   const [fileStatus, setFileStatus] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>('');
   const [fileEntity, setFileEntity] = useState<File | undefined>(new File([], ''));
+  //define the state for the course id and course name from the url
   useEffect(() => {
+    //if the url has params, set the state to the params
     if (jobId) {
       setTaJobId(parseInt(jobId));
     }
@@ -152,7 +154,7 @@ function ApplicationPage() {
     if(resume){
       ApplyService.apply(jsonData,resume).then(
         () => {
-          navigate('/login');
+          navigate('/jobs');
           window.location.reload();
         },
         (error: AxiosError | Error) => {
