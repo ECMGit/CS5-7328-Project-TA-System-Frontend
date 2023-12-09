@@ -57,7 +57,7 @@ const StudentProfile: React.FC = () => {
     transition: 'max-height 0.5s ease-out',
   };
   const visibleStyle = {
-    maxHeight: '1000px', 
+    maxHeight: '1000px',
     transition: 'max-height 0.5s ease-in',
   };
 
@@ -307,6 +307,17 @@ const StudentProfile: React.FC = () => {
                   onClick={handleSave}
                 >
                   Save
+                </Button>
+              </Box>
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  component={Link}
+                  to="/view-applications"
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                >
+                  View Applications
                 </Button>
               </Box>
             </Box>
