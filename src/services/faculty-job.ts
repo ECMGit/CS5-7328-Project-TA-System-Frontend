@@ -9,10 +9,11 @@ const getJobs = () => {
   // string was empty.
   const userString = localStorage.getItem('user') ?? '';
   const user = JSON.parse(userString);
-  return axios.get(QUERY_JOBS_API_URL+'/'+user.id).then(res => {
+  return axios.get(QUERY_JOBS_API_URL+'/'+user.id, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
+  }).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
