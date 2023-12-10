@@ -257,7 +257,7 @@ const RegistrationPage: React.FC = () => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               {/* Link to the login page for users who already have an account. */}
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

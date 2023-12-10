@@ -4,6 +4,7 @@ import AuthService from './services/auth';
 
 // User interface as per the object structure
 interface User {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -48,7 +49,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
         
     } else {
       // Redirect to login if no user is found
-      navigate('/login');
+      navigate('/home-default');
     }
   }, [navigate]);
 

@@ -55,6 +55,7 @@ const Home: React.FC = () => {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
+    navigate('/home-default');
   };
 
 
@@ -100,40 +101,92 @@ const Home: React.FC = () => {
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
-        {role === 'student' && (
+        {/* {role === 'student' && (
           <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-        )}
+        )} */}
         {/* show falcuty if the user log in as faculty */}
-        {role === 'faculty' && (
+        {/* {role === 'faculty' && (
           <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-        )}
+        )} */}
 
-        <Button component={Link} to="/view-applications" variant="contained" color="secondary">
+        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
           View Applications
-        </Button>
+        </Button> */}
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {user.role === 'faculty' ? (
-                <Button
-                  component={Link}
-                  to="/post-job"
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: '10px' }}
-                >
-                  Publish
-                </Button>
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    See Jobs
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/post-job"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px' }}
+                  >
+                    Publish
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
               ) : user.role === 'student' ? (
-                <Button
-                  component={Link}
-                  to="/jobs"
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: '5px', marginRight: '10px' }}
-                >
-                  Display
-                </Button>
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Display
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
+              ) : user.role === 'faculty' ? (
+                <>
+                  <Button
+                    component={Link}
+                    to="/jobs"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    See Jobs
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Applications
+                  </Button>
+                </>
               ) : (
                 ''
               )}

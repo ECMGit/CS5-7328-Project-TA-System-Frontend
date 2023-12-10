@@ -27,9 +27,11 @@ const ViewJobs: React.FC = () => {
     deadlineToApply: string;
     facultyId: number;
   };
-
   const userContext = useContext(UserContext);
-
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+  const {user} = userContext;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
@@ -219,7 +221,10 @@ const ViewJobs: React.FC = () => {
           ))
         }
       </Box>
-      <Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>
+      {user?.role === 'faculty' ?
+        (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
+        : ''
+      }
     </Container>
   );
 
