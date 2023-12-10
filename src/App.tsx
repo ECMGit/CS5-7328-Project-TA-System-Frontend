@@ -14,6 +14,7 @@ import JobInfo from './pages/JobInfo';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
+import ViewJobsStudent from './pages/faculty-jobs/StudentApplyJobPage';
 import UserDataPage from './pages/user/UserDataPage';
 import ViewApplications from './pages/application/ViewApplications';
 import EditApplication from './pages/application/EditApplication';
@@ -55,6 +56,24 @@ function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
   } else {
     return <Navigate to="/unauthorized" />;
   }
+
+}
+//make an if statement to check if the user is a student or faculty and then render the correct page for jobs
+function PrivateRouteJob() {
+  const userContext = useContext(UserContext);
+
+  if (!userContext?.user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (userContext.user.role === 'student') {
+    return <ViewJobsStudent/>;
+  } else if (userContext.user.role === 'faculty') {
+    return <ViewJobs/>;
+  } else {
+    return <Navigate to="/unauthorized" />;
+  }
+
 }
 
 const App: React.FC = () => {
@@ -76,7 +95,7 @@ const App: React.FC = () => {
 
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
-          <Route path="/jobs" element={<ViewJobs />} />
+          <Route path="/jobs" element={<PrivateRouteJob />} />
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"><FacultyProfile /></PrivateRoute>} />
           <Route path="/application-form" element={<ApplicationPage />} />
           <Route path="/view-applications" element={<PrivateRoute role="faculty"><ViewApplications /></PrivateRoute>} />

@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box,
   Container,
@@ -57,10 +57,17 @@ const skills = [
 
 /* Component for the application page */
 function ApplicationPage() {
+  //check if url has params. the url will look like this http://localhost:9000/application-form/?jobId='job.id'&courseId='job.courseId'
+  const urlParams = new URLSearchParams(window.location.search);
+  const jobId = urlParams.get('jobId');
+  const courseIdUrl = urlParams.get('courseId');
+  const titleUrl = urlParams.get('title'); 
   /* State Field */
   // Basic Information
   // TODO: these ids need to come from previous endpoinds in the future
+
   const [studentId, setStudentId] = useState<number>(1);
+  //set the course id to the course id from the url
   const [courseId, setCourseId] = useState<number>(1);
   const [taJobId, setTaJobId] = useState<number>(1);
   const [firstName, setFirstName] = useState('');
@@ -82,7 +89,19 @@ function ApplicationPage() {
   const [fileStatus, setFileStatus] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>('');
   const [fileEntity, setFileEntity] = useState<File | undefined>(new File([], ''));
-
+  //define the state for the course id and course name from the url
+  useEffect(() => {
+    //if the url has params, set the state to the params
+    if (jobId) {
+      setTaJobId(parseInt(jobId));
+    }
+    if (courseIdUrl) {
+      setCourseId(parseInt(courseIdUrl));
+    }
+    if (titleUrl) {
+      setCourseName(titleUrl);
+    }
+  }, [jobId, courseIdUrl, titleUrl]);
   /* Helper Functions */
   /**
    * Format {courseId <Number>, gpa <Float>, selectedCourse <String>, selectedSkills <String>}
@@ -90,6 +109,7 @@ function ApplicationPage() {
    * result as values.
    */
   const formatFormData = () => {
+
     // Convert data
     const formatGpa = parseFloat(GPA);
     const formatSelectedCourse = selectedCourses.join(',');
@@ -134,7 +154,7 @@ function ApplicationPage() {
     if(resume){
       ApplyService.apply(jsonData,resume).then(
         () => {
-          navigate('/login');
+          navigate('/jobs');
           window.location.reload();
         },
         (error: AxiosError | Error) => {
@@ -295,9 +315,10 @@ function ApplicationPage() {
                   label="Course Name"
                   name="courseName"
                   autoComplete="family-name"
-                  onChange={(e) => setCourseName(e.target.value)}
+                  onChange={(e) => titleUrl ? null : setCourseName(e.target.value)}
                   value={courseName}
                   variant="standard"
+                  disabled={!!titleUrl}
                 />
               </Grid>
 
@@ -313,9 +334,11 @@ function ApplicationPage() {
                   id="courseId"
                   label="Course ID"
                   name="courseId"
-                  onChange={(e) => setCourseId(parseInt(e.target.value))}
+                  onChange={(e) => courseIdUrl ? null : setCourseId(parseInt(e.target.value))}
+                  value={courseId}
                   variant="standard"
                   type="number"
+                  disabled={!!courseIdUrl}
                 />
               </Grid>
 
@@ -332,9 +355,11 @@ function ApplicationPage() {
                   id="taJobId"
                   label="TA Job ID"
                   name="taJobId"
-                  onChange={(e) => setTaJobId(parseInt(e.target.value))}
+                  onChange={(e) => jobId ? null : setTaJobId(parseInt(e.target.value))}
+                  value={taJobId}
                   variant="standard"
                   type="number"
+                  disabled={!!jobId}
                 />
               </Grid>
 
