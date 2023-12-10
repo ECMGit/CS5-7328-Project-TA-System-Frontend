@@ -1,7 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Container, 
+  Typography, 
+  Button, 
+  Avatar, 
+  Box, Input, TextField, Paper, Grid, IconButton,
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail';
 interface Job {
     id: number;
     title: string;
@@ -16,6 +28,7 @@ interface Job {
     deadlineToApply: string;
     facultyId: number;
 }
+
 
 
 const FacultyProfile: React.FC = () => {
@@ -35,6 +48,12 @@ const FacultyProfile: React.FC = () => {
       });
   },[]);
   
+
+  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+
+  const open = Boolean(anchorEl);
+
+
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
@@ -66,6 +85,25 @@ const FacultyProfile: React.FC = () => {
     }
   }
 
+  const navigate = useNavigate();
+
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigateToInbox = () => {
+    navigate('/inbox');
+    handleClose();
+  };
+
+
+
+
   return (
     <Container>
       <Box
@@ -79,10 +117,35 @@ const FacultyProfile: React.FC = () => {
         }}
       >
         My Faculty Dashboard
+
+        <Tooltip title="Menu">
+          <IconButton
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={navigateToInbox}>
+            <ListItemIcon>
+              <MailIcon fontSize="small" />
+            </ListItemIcon>
+            Inbox
+          </MenuItem>
+        </Menu>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography component="h1" variant="h5">
               Faculty Profile
             </Typography>
@@ -94,13 +157,13 @@ const FacultyProfile: React.FC = () => {
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={handleUploadClick}>
+                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleUploadClick}>
                     Upload Profile
                   </Button>
                   <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%'}} onClick={() => document.getElementById('resumeUpload')?.click()}>
+                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={() => document.getElementById('resumeUpload')?.click()}>
                     Upload Resume
                   </Button>
                 </Grid>
@@ -155,13 +218,6 @@ const FacultyProfile: React.FC = () => {
             )}
           </Box>
         </Grid>
-
-
-
-
-
-
-
         <Grid item xs={6}>
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
@@ -189,7 +245,6 @@ const FacultyProfile: React.FC = () => {
               </Paper>
             ))}
           </Box>
-
         </Grid>
 
         
