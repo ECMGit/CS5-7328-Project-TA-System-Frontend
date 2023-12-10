@@ -48,19 +48,35 @@ const StudentProfile: React.FC = () => {
     document.getElementById('profileUpload')?.click();
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Handle image file upload
-  };
+// Method to handle image file change
+const handleFileChange = (event: { target: { files: any[]; }; }) => {
+  const file = event.target.files[0]; // Get the selected file from input
+  // Handle image file upload logic here
+  console.log('Selected image file:', file);
+};
 
-  const handleResumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Handle resume file upload
-  };
+// Method to handle resume file change
+const handleResumeChange = (event: { target: { files: any[]; }; }) => {
+  const file = event.target.files[0]; // Get the selected file from input
+  // Handle resume file upload logic here
+  console.log('Selected resume file:', file);
+};
 
-  const fetchMessages = () => {
-    // TODO: Implement fetch logic here
+  // Method to fetch messages (placeholder for the actual fetch logic)
+const fetchMessages = () => {
+  // TODO: Implement actual fetch logic here
+  fetch('https://api.example.com/messages')
+    .then(response => response.json())
+    .then(data => {
+      // Handle fetched messages
+      console.log('Fetched messages:', data);
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching messages:', error);
+    });
+};
 
-    
-  };
 
   return (
     <Container>
@@ -285,5 +301,7 @@ const StudentProfile: React.FC = () => {
     // Handle saving the user's information
   }
 };
+
+
 
 export default StudentProfile;
