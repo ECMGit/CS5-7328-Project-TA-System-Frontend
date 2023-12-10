@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect, FormEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
 
 import api from '../../services/faculty-job';
+import { UserContext } from '../../provider';
 
 
 const ViewJobs: React.FC = () => {
@@ -27,12 +28,18 @@ const ViewJobs: React.FC = () => {
     facultyId: number;
   };
 
+  const userContext = useContext(UserContext);
+
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
 
+  const storedUser = localStorage.getItem('user');
+
   useEffect(() => {
-    api.getJobs().then(res => {
+    const userId = JSON.parse(storedUser!).id;
+    console.log('Finding jobs for: ' + userId);
+    api.getJobsByFacultyID(userId).then(res => {
       if (res !== undefined) {
         setJobs(res);
       }
@@ -59,20 +66,20 @@ const ViewJobs: React.FC = () => {
   };
 
   // Add a function to handle the save button click
-  
+
   const handleSaveClick = () => {
     if (editedJob) {
 
       api.updateJob(editedJob.id, { // Update the job with the edited job data in the database
-        title: editedJob.title, 
-        courseId: Number(editedJob.courseId), 
-        courseSchedule: editedJob.courseSchedule, 
-        totalHoursPerWeek: Number(editedJob.totalHoursPerWeek), 
-        maxNumberOfTAs: Number(editedJob.maxNumberOfTAs), 
-        requiredCourses: editedJob.requiredCourses, 
-        requiredSkills: editedJob.requiredSkills, 
+        title: editedJob.title,
+        courseId: Number(editedJob.courseId),
+        courseSchedule: editedJob.courseSchedule,
+        totalHoursPerWeek: Number(editedJob.totalHoursPerWeek),
+        maxNumberOfTAs: Number(editedJob.maxNumberOfTAs),
+        requiredCourses: editedJob.requiredCourses,
+        requiredSkills: editedJob.requiredSkills,
         TAStats: editedJob.TAStats,
-        notes: editedJob.notes, 
+        notes: editedJob.notes,
         deadlineToApply: new Date(editedJob.deadlineToApply),
         facultyId: Number(editedJob.facultyId)
       }).then(res => {
@@ -86,7 +93,7 @@ const ViewJobs: React.FC = () => {
       });
     }
   };
-  
+
 
   return (
     <Container>
@@ -101,7 +108,7 @@ const ViewJobs: React.FC = () => {
                 {
                   // Check if the job is being edited
                   editing === job.id ?
-                  // If yes, render the input fields for editing
+                    // If yes, render the input fields for editing
                     <>
                       <TextField
                         label="Title"
@@ -189,7 +196,7 @@ const ViewJobs: React.FC = () => {
                     </>
 
                     :
-                  // If no, render the normal text fields
+                    // If no, render the normal text fields
                     <>
                       <Typography variant="h6">{job.title}</Typography>
                       <Typography><strong>Course ID:</strong> {job.courseId}</Typography>
@@ -200,7 +207,7 @@ const ViewJobs: React.FC = () => {
                       <Typography><strong>Required Skills:</strong> {job.requiredSkills}</Typography>
                       <Typography><strong>TA Stats:</strong> {job.TAStats}</Typography>
                       <Typography><strong>Notes:</strong> {job.notes}</Typography>
-                      <Typography><strong>Apply By: </strong> 
+                      <Typography><strong>Apply By: </strong>
                         {new Date(job.deadlineToApply).toLocaleDateString()}</Typography>
                       <IconButton onClick={() => handleEditClick(job)}>
                         <EditIcon />
