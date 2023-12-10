@@ -58,6 +58,8 @@ const StudentProfile: React.FC = () => {
 
   const fetchMessages = () => {
     // TODO: Implement fetch logic here
+
+    
   };
 
   return (
@@ -117,7 +119,7 @@ const StudentProfile: React.FC = () => {
                   {message.content}
                 </MenuItem>
               ))}
-        </Menu>
+            </Menu>
           </MenuItem>
         </Menu>
       </Box>

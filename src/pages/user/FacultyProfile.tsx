@@ -1,16 +1,45 @@
 import React, { useState } from 'react';
-import { Container, Typography, Button, Avatar, Box, Input, TextField, Paper, Grid } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Input,
+  TextField,
+  Paper,
+  Grid,
+  IconButton,
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
+import { useNavigate } from 'react-router-dom';
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+  const open = Boolean(anchorEl);
+  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
 
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // Function to handle the change of the profile image file
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -38,6 +67,19 @@ const FacultyProfile: React.FC = () => {
     }
   }
 
+  const fetchMessages = () => {
+    // TODO: Implement fetch logic here
+
+    
+  };
+
+  const navigateToInbox = () => {
+    navigate('/inbox');
+    handleClose();
+  };
+
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Box
@@ -51,6 +93,52 @@ const FacultyProfile: React.FC = () => {
         }}
       >
         My Faculty Dashboard
+        <Tooltip title="Menu">
+          <IconButton
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={navigateToInbox}>
+            <Tooltip title="Inbox">
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  // Fetch messages when the inbox is opened (future implementation)
+                  fetchMessages();
+                }}
+              >
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+            {/* Add an inbox UI element */}
+            <Menu
+              id="inbox-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+            >
+              {/* Map through messages and display them */}
+              {messages.map(message => (
+                <MenuItem key={message.id}>
+                  {message.content}
+                </MenuItem>
+              ))}
+            </Menu>
+          </MenuItem>
+        </Menu>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
