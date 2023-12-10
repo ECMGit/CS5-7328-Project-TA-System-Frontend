@@ -90,7 +90,7 @@ const StudentProfile: React.FC = () => {
    * jobs array state associate to the student's application
    */
   useEffect(() => {
-    if (applications.length <= 0) {
+    if (!applications || applications.length <= 0) {
       return;
     }
     /**
@@ -121,6 +121,9 @@ const StudentProfile: React.FC = () => {
    * @returns an array of customized information being stored in JSON
    */
   const createCustomArray = (jobs: Job[], applications: Application[]) => {
+    if (!applications) {
+      return [];
+    }
     return applications
       .map((application) => {
         const job = jobs.find((job) => job.id === application.taJobId);
