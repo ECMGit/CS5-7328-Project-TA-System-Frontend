@@ -49,6 +49,16 @@ export const fetchApplication = async (id: string) => {
   }
 };
 
+export const fetchMessages = async (id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/message/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching application data', error);
+    throw error; // Rethrow the error for handling in the component
+  }
+};
+
 //Sprint2: update application status
 export const updateApplicationStatus =async (id: number, status: string) => {
   return axios.post(`http://localhost:9000/ta-application/${id}`, { status }, {
@@ -78,6 +88,7 @@ const ApplyService = {
   updateApplication,
   deleteApplication,
   fetchApplication,
+  fetchMessages,
   updateApplicationStatus,
   getTaApplicationsByStudentId,
 };
