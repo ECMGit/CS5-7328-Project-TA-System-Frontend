@@ -26,7 +26,7 @@ const PostJob: React.FC = () => {
 
   const [courseIdError, setCourseIdError] = useState('');
   const [requiredCoursesError, setRequiredCoursesError] = useState('');
-  
+
   const checkAlphanumeric = (input: string): boolean => {
     // Check each character of the input
     for (let i = 0; i < input.length; i++) {
@@ -62,7 +62,11 @@ const PostJob: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const storedUser = localStorage.getItem('user');
+
+
   const handleSubmit = () => {
+    const userId = JSON.parse(storedUser!).id;
     api.postJob({
       title: title,
       courseId: parseInt(courseId),
@@ -74,7 +78,7 @@ const PostJob: React.FC = () => {
       TAStats: TaStats,
       notes: notes,
       deadlineToApply: new Date(deadline),
-      facultyId: 1, // TODO: Make this read the logged in user's ID
+      facultyId: userId
     }).then(
       () => {
         navigate('/jobs');
