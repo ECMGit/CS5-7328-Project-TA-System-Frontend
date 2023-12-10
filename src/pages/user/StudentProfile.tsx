@@ -153,6 +153,9 @@ const StudentProfile: React.FC = () => {
   // Create customArray and only use the first 3 elements.
   const customArray = createCustomArray(jobs, applications);
 
+  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
+
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -171,6 +174,7 @@ const StudentProfile: React.FC = () => {
   const handleUploadClick = () => {
     document.getElementById('profileUpload')?.click();
   };
+
 
   /**
    * Change if the full list was to be shown.
@@ -208,6 +212,22 @@ const StudentProfile: React.FC = () => {
       reader.readAsDataURL(file);
     }
   }
+
+  // Method to fetch messages (placeholder for the actual fetch logic)
+const fetchMessages = () => {
+  // TODO: Implement actual fetch logic here
+  fetch('https://api.example.com/messages')
+    .then(response => response.json())
+    .then(data => {
+      // Handle fetched messages
+      console.log('Fetched messages:', data);
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching messages:', error);
+    });
+};
+
 
   /**
    * Check the application status based on the input application ID.
@@ -256,10 +276,32 @@ const StudentProfile: React.FC = () => {
           onClose={handleClose}
         >
           <MenuItem onClick={navigateToInbox}>
-            <ListItemIcon>
-              <MailIcon fontSize="small" />
-            </ListItemIcon>
-            Inbox
+            <Tooltip title="Inbox">
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  // Fetch messages when the inbox is opened (future implementation)
+                  fetchMessages();
+                }}
+              >
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+            {/* Add an inbox UI element */}
+            <Menu
+              id="inbox-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+            >
+              {/* Map through messages and display them */}
+              {messages.map(message => (
+                <MenuItem key={message.id}>
+                  {message.content}
+                </MenuItem>
+              ))}
+            </Menu>
           </MenuItem>
         </Menu>
       </Box>
@@ -517,5 +559,7 @@ const StudentProfile: React.FC = () => {
     // Handle saving the user's information
   }
 };
+
+
 
 export default StudentProfile;

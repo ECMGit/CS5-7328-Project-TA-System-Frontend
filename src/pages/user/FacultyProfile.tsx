@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
@@ -53,11 +52,13 @@ const FacultyProfile: React.FC = () => {
 
   const open = Boolean(anchorEl);
 
+  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
 
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
+
 
   // Function to handle the change of the profile image file
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -96,6 +97,12 @@ const FacultyProfile: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const fetchMessages = () => {
+    // TODO: Implement fetch logic here
+
+    
+  };
+
   const navigateToInbox = () => {
     navigate('/inbox');
     handleClose();
@@ -117,7 +124,6 @@ const FacultyProfile: React.FC = () => {
         }}
       >
         My Faculty Dashboard
-
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
@@ -140,6 +146,32 @@ const FacultyProfile: React.FC = () => {
               <MailIcon fontSize="small" />
             </ListItemIcon>
             Inbox
+            <Tooltip title="Inbox">
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  // Fetch messages when the inbox is opened (future implementation)
+                  fetchMessages();
+                }}
+              >
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+            {/* Add an inbox UI element */}
+            <Menu
+              id="inbox-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+            >
+              {/* Map through messages and display them */}
+              {messages.map(message => (
+                <MenuItem key={message.id}>
+                  {message.content}
+                </MenuItem>
+              ))}
+            </Menu>
           </MenuItem>
         </Menu>
       </Box>
@@ -246,26 +278,6 @@ const FacultyProfile: React.FC = () => {
             ))}
           </Box>
         </Grid>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
       </Grid>
     </Container>
   );
