@@ -27,6 +27,7 @@ const StudentProfile: React.FC = () => {
   const [resume, setResume] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
   const open = Boolean(anchorEl);
+  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -55,6 +56,9 @@ const StudentProfile: React.FC = () => {
     // Handle resume file upload
   };
 
+  const fetchMessages = () => {
+    // TODO: Implement fetch logic here
+  };
 
   return (
     <Container>
@@ -88,10 +92,32 @@ const StudentProfile: React.FC = () => {
           onClose={handleClose}
         >
           <MenuItem onClick={navigateToInbox}>
-            <ListItemIcon>
-              <MailIcon fontSize="small" />
-            </ListItemIcon>
-            Inbox
+            <Tooltip title="Inbox">
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  // Fetch messages when the inbox is opened (future implementation)
+                  fetchMessages();
+                }}
+              >
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+            {/* Add an inbox UI element */}
+            <Menu
+              id="inbox-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+            >
+              {/* Map through messages and display them */}
+              {messages.map(message => (
+                <MenuItem key={message.id}>
+                  {message.content}
+                </MenuItem>
+              ))}
+        </Menu>
           </MenuItem>
         </Menu>
       </Box>
