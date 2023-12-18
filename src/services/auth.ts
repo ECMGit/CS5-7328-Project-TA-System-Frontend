@@ -209,7 +209,7 @@ const fakeAuthProvider = {
 const getUserById = (id: number) => {
   // It seems odd to use 'put' for getting data, usually 'put' is used for updating.
   // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
-  return axios.get(USER_API_URL + `/${id}`).then((res) => {
+  return axios.get(USER_API_URL + `${id}`).then((res) => {
     console.log(res);
     return res; // Same here, we return the response
   });

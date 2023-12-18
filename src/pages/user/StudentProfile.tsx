@@ -52,11 +52,8 @@ const StudentProfile: React.FC = () => {
   const open = Boolean(anchorEl);
   const [applications, setApplications] = useState<Application[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [selectedApplicationStatus, setSelectedApplicationStatus] =
-    useState<string>('');
-  const [selectedApplicationId, setSelectedApplicationId] = useState<
-    string | null
-  >(null);
+  const [selectedApplicationStatus, setSelectedApplicationStatus] = useState<string>('');
+  const [selectedApplicationId, setSelectedApplicationId] = useState<string | null>(null);
   const [showFullList, setShowFullList] = useState<boolean>(false);
 
   // CSS style for hiding items
@@ -82,8 +79,7 @@ const StudentProfile: React.FC = () => {
     const fetchAndSetApplications = async () => {
       if (studentId) {
         try {
-          const tempApplications =
-            await ApplyService.getTaApplicationsByStudentId(studentId);
+          const tempApplications = await ApplyService.getTaApplicationsByStudentId(studentId);
           setApplications(tempApplications);
         } catch (error) {
           console.error('Error fetching applications:', error);
@@ -155,7 +151,6 @@ const StudentProfile: React.FC = () => {
 
   const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
 
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -174,7 +169,6 @@ const StudentProfile: React.FC = () => {
   const handleUploadClick = () => {
     document.getElementById('profileUpload')?.click();
   };
-
 
   /**
    * Change if the full list was to be shown.
@@ -214,20 +208,19 @@ const StudentProfile: React.FC = () => {
   }
 
   // Method to fetch messages (placeholder for the actual fetch logic)
-const fetchMessages = () => {
-  // TODO: Implement actual fetch logic here
-  fetch('https://api.example.com/messages')
-    .then(response => response.json())
-    .then(data => {
-      // Handle fetched messages
-      console.log('Fetched messages:', data);
-    })
-    .catch(error => {
-      // Handle errors
-      console.error('Error fetching messages:', error);
-    });
-};
-
+  const fetchMessages = () => {
+    // TODO: Implement actual fetch logic here
+    fetch('https://api.example.com/messages')
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle fetched messages
+        console.log('Fetched messages:', data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error('Error fetching messages:', error);
+      });
+  };
 
   /**
    * Check the application status based on the input application ID.
@@ -256,25 +249,13 @@ const fetchMessages = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-
         My Student Dashboard
         <Tooltip title="Menu">
-          <IconButton
-            color="inherit"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
+          <IconButton color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
             <MenuIcon />
           </IconButton>
         </Tooltip>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={open}
-          onClose={handleClose}
-        >
+        <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
           <MenuItem onClick={navigateToInbox}>
             <Tooltip title="Inbox">
               <IconButton
@@ -287,22 +268,11 @@ const fetchMessages = () => {
                 <MailIcon />
               </IconButton>
             </Tooltip>
-            {/* Add an inbox UI element */}
-            <Menu
-              id="inbox-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={open}
-              onClose={handleClose}
-            >
-              {/* Map through messages and display them */}
-              {messages.map(message => (
-                <MenuItem key={message.id}>
-                  {message.content}
-                </MenuItem>
-              ))}
-            </Menu>
           </MenuItem>
+          {messages.map((message) => (
+            <MenuItem key={message.id}>{message.content}</MenuItem>
+          ))}
+          {/* Add an inbox UI element */}
         </Menu>
       </Box>
       <Grid container spacing={4}>
@@ -317,11 +287,7 @@ const fetchMessages = () => {
             <Typography component="h1" variant="h5">
               Student Profile
             </Typography>
-            <Avatar
-              sx={{ width: 200, height: 200, mt: 3 }}
-              alt="User Profile"
-              src={profileImage || undefined}
-            />
+            <Avatar sx={{ width: 200, height: 200, mt: 3 }} alt="User Profile" src={profileImage || undefined} />
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -333,21 +299,14 @@ const fetchMessages = () => {
                   >
                     Upload Profile
                   </Button>
-                  <Input
-                    type="file"
-                    id="profileUpload"
-                    sx={{ display: 'none' }}
-                    onChange={handleFileChange}
-                  />
+                  <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
                 </Grid>
                 <Grid item xs={6}>
                   <Button
                     variant="contained"
                     color="primary"
                     sx={{ width: '100%', height: '50px' }}
-                    onClick={() =>
-                      document.getElementById('resumeUpload')?.click()
-                    }
+                    onClick={() => document.getElementById('resumeUpload')?.click()}
                   >
                     Upload Resume
                   </Button>
@@ -380,12 +339,7 @@ const fetchMessages = () => {
                   onChange={(e) => setMajor(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Input
-                  type="file"
-                  id="resumeUpload"
-                  sx={{ display: 'none' }}
-                  onChange={handleResumeChange}
-                />
+                <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
                     View Resume
@@ -393,12 +347,7 @@ const fetchMessages = () => {
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ width: '100%' }}
-                  onClick={handleSave}
-                >
+                <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
                   Save
                 </Button>
               </Box>
@@ -439,10 +388,7 @@ const fetchMessages = () => {
             }}
           >
             {/* This <Box> component contains a set of job-related information */}
-            <Paper
-              elevation={3}
-              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-            >
+            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
               <Typography variant="h6">Job Title 1</Typography>
               <Typography>Description of Job 1</Typography>
               <Typography>Date Submitted: 2023-10-15</Typography>
@@ -450,10 +396,7 @@ const fetchMessages = () => {
                 Check Application Status
               </Button>
             </Paper>
-            <Paper
-              elevation={3}
-              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-            >
+            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
               <Typography variant="h6">Job Title 2</Typography>
               <Typography>Description of Job 2</Typography>
               <Typography>Date Submitted: 2023-10-16</Typography>
@@ -472,24 +415,11 @@ const fetchMessages = () => {
             {customArray.length > 0 ? (
               customArray.map((application, index) =>
                 application ? (
-                  <div
-                    key={index}
-                    style={
-                      index >= 3 && !showFullList ? hiddenStyle : visibleStyle
-                    }
-                  >
-                    <Paper
-                      key={index}
-                      elevation={3}
-                      sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-                    >
-                      <Typography variant="h6">
-                        Application title: {application.title}
-                      </Typography>
+                  <div key={index} style={index >= 3 && !showFullList ? hiddenStyle : visibleStyle}>
+                    <Paper key={index} elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+                      <Typography variant="h6">Application title: {application.title}</Typography>
                       <Typography>Course: {application.courseCode}</Typography>
-                      <Typography>
-                        Application ID: {application.applicationId}
-                      </Typography>
+                      <Typography>Application ID: {application.applicationId}</Typography>
                       <Box
                         sx={{
                           mt: '5px',
@@ -501,17 +431,12 @@ const fetchMessages = () => {
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() =>
-                            handleCheckStatus(application.applicationId)
-                          }
+                          onClick={() => handleCheckStatus(application.applicationId)}
                         >
                           Check Application Status
                         </Button>
-                        {selectedApplicationId ===
-                          application.applicationId && (
-                          <Typography sx={{ marginLeft: 2 }}>
-                            {selectedApplicationStatus}
-                          </Typography>
+                        {selectedApplicationId === application.applicationId && (
+                          <Typography sx={{ marginLeft: 2 }}>{selectedApplicationStatus}</Typography>
                         )}
                       </Box>
                     </Paper>
@@ -519,18 +444,11 @@ const fetchMessages = () => {
                 ) : null
               )
             ) : (
-              <Paper
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, width: '100%' }}
-              >
+              <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
                 <Typography variant="h6">Start applying now!</Typography>
               </Paper>
             )}
-            <Button
-              onClick={toggleFullList}
-              color="primary"
-              variant="contained"
-            >
+            <Button onClick={toggleFullList} color="primary" variant="contained">
               {showFullList ? (
                 <>
                   <ArrowUpwardIcon /> Show Less
@@ -559,7 +477,5 @@ const fetchMessages = () => {
     // Handle saving the user's information
   }
 };
-
-
 
 export default StudentProfile;

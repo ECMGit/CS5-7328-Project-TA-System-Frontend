@@ -32,7 +32,6 @@ interface User {
 
 const TAJobDisplayComponent = () => {
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
-  const [jobData, setJobData] = useState<TAJobs| null>(null); // jobData is a single TAJobs object or null   
   const [selectedId, setSelectedId] = useState('');
   
   useEffect(() => {

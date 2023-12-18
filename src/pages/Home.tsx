@@ -156,7 +156,7 @@ const Home: React.FC = () => {
                   >
                     Display
                   </Button>
-                  <Button
+                  {/* <Button
                     component={Link}
                     to="/view-applications"
                     variant="contained"
@@ -164,7 +164,7 @@ const Home: React.FC = () => {
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
                     View Applications
-                  </Button>
+                  </Button> */}
                 </>
               ) : user.role === 'faculty' ? (
                 <>
@@ -193,17 +193,15 @@ const Home: React.FC = () => {
               <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile}/>
             </div>
           ) : (
-            <>
-              <Button
-                component={Link}
-                to="/login"
-                variant="contained"
-                color="secondary"
-                style={{ marginRight: '10px' }}
-              >
-                Login
-              </Button>
-            </>
+            <Button
+              component={Link}
+              to="/login"
+              variant="contained"
+              color="secondary"
+              style={{ marginRight: '10px' }}
+            >
+              Login
+            </Button>
           )}
         </div>
       </div>

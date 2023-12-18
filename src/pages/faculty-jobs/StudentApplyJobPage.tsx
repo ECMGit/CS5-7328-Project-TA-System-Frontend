@@ -7,7 +7,7 @@ import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, B
 import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
 
-import api from '../../services/faculty-job';
+import api from '../../services/tajob';
 import { UserContext } from '../../provider';
 
 
@@ -40,9 +40,9 @@ const ViewJobsStudent: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   //define editing and set editing
   useEffect(() => {
-    api.getJobs().then(res => {
+    api.getTAJobs().then(res => {
       if (res !== undefined) {
-        setJobs(res);
+        setJobs(res.data);
       }
     });
   }, []);

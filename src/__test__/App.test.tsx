@@ -38,7 +38,7 @@ describe('App Component Tests', () => {
   });
 
   it('should simulate image file change', () => {
-    const handleFileChange = (event) => {
+    const handleFileChange = (event: any) => {
       // Simulate image file change logic here
     };
 
@@ -50,7 +50,7 @@ describe('App Component Tests', () => {
   });
 
   it('should simulate resume file change', () => {
-    const handleResumeChange = (event) => {
+    const handleResumeChange = (event: any) => {
       // Simulate resume file change logic here
     };
 

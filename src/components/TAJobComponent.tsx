@@ -3,16 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import {
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Chip,
-} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import { color, SxProps } from '@mui/system';
-import { config } from 'dotenv';
 import AuthService from '../services/auth';
 
 // define the interface for a TAJob object so that its attributes can be used in the component
@@ -64,6 +56,7 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
       </div>
     );
   }
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -121,11 +114,9 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
         <Button
           style={{ marginLeft: '1rem' }}
           variant="contained"
-          color="primary"
-          onClick={() => (window.location.href = '/jobs/taapplication/' + tajob.id)}
+          onClick={() => navigate('/application-form/?jobId='+ tajob.id + '&courseId=' + tajob.courseId + '&title=' + tajob.title)}
         >
-          {' '}
-          Apply{' '}
+          Apply
         </Button>
       </Typography>
     </Box>

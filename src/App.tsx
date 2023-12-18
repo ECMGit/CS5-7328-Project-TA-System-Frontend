@@ -88,11 +88,11 @@ const App: React.FC = () => {
 
         <Route path="/" element={<ProviderLayout />} >
           {/* These routes are nested with user auth :D */}
+          <Route index element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home/>} />
 
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
-
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRouteJob />} />

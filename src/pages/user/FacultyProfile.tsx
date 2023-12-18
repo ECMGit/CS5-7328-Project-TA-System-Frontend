@@ -142,10 +142,10 @@ const FacultyProfile: React.FC = () => {
           onClose={handleClose}
         >
           <MenuItem onClick={navigateToInbox}>
-            <ListItemIcon>
+            {/* <ListItemIcon>
               <MailIcon fontSize="small" />
             </ListItemIcon>
-            Inbox
+            Inbox */}
             <Tooltip title="Inbox">
               <IconButton
                 color="inherit"
