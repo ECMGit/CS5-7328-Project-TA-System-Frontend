@@ -1,6 +1,9 @@
 import axios from 'axios';
-const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
-const QUERY_JOBS_API_URL = 'http://localhost:9000/jobs/faculty';
+import { backendURL } from '../config';
+
+const BASE_API_URL: string | undefined = backendURL;
+const JOBS_API_URL: string | undefined = backendURL+'/faculty-jobs';
+const QUERY_JOBS_API_URL: string | undefined = backendURL + '/jobs/faculty';
 const token = localStorage.getItem('token');
 
 const getJobs = () => {
@@ -22,7 +25,7 @@ const getJobs = () => {
 };
 
 const getJobsByFacultyID = (facultyId: number) => {
-  const JOBS_API_BY_FACULTY = 'http://localhost:9000/jobs/faculty/' + facultyId;
+  const JOBS_API_BY_FACULTY = QUERY_JOBS_API_URL + `/${facultyId}`;
 
   return axios.get(JOBS_API_BY_FACULTY).then(res => {
     console.log(res);
@@ -34,7 +37,7 @@ const getJobsByFacultyID = (facultyId: number) => {
 
 //get one job from id passed as parameter
 const getOneJob = (id: number) => {
-  return axios.get(JOBS_API_URL + '/' + id,{
+  return axios.get(JOBS_API_URL + `/${id}`,{
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -58,7 +61,7 @@ const postJob = (job: {
   deadlineToApply: Date;
   facultyId: number;
 }) => {
-  const CREATE_JOB_API = 'http://localhost:9000/jobs';
+  const CREATE_JOB_API = backendURL+'/jobs';
   return axios.post(CREATE_JOB_API, job).then(res => {
     console.log(res);
     return res.data;

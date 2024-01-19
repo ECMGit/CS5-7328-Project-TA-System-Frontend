@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
+import { backendURL } from '../config';
 
-const TA_API_URL = 'http://localhost:9000/jobs';
+const TA_API_URL: string | undefined = backendURL + '/jobs';
 
 /**
  * Fetches all TA jobs.

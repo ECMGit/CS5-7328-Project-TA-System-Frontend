@@ -1,9 +1,10 @@
 import { responsiveFontSizes } from '@mui/material';
 import axios from 'axios';
 import { AxiosResponse } from 'axios';
+import { backendURL } from '../config';
 
 const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;
-const APPLICATION_API_URL = 'http://localhost:9000' + '/ta-application/'; //: string | undefined = BASE_API_URL +
+const APPLICATION_API_URL: string | undefined = backendURL + '/ta-application'; //: string | undefined = BASE_API_URL +
 
 /**
  * @param dataJson
@@ -21,7 +22,7 @@ const apply = (dataJson: JSON, Resume: File): Promise<AxiosResponse> => {
 // Function to update an application
 export const updateApplication = async (id: string, GPA:number, 
   hoursCanWorkPerWeek:string, requiredCourses:string, requiredSkills:string) => {
-  return axios.post(`http://localhost:9000/ta-application/${id}`, { GPA, hoursCanWorkPerWeek, requiredCourses, requiredSkills }, {
+  return axios.post(APPLICATION_API_URL+`/${id}`, { GPA, hoursCanWorkPerWeek, requiredCourses, requiredSkills }, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -36,12 +37,12 @@ export const updateApplication = async (id: string, GPA:number,
 
 // Function to delete an application
 export const deleteApplication = async (id: string) => {
-  return axios.delete(`http://localhost:9000/ta-application/${id}`);
+  return axios.delete(APPLICATION_API_URL+`/${id}`);
 };
 
 export const fetchApplication = async (id: string) => {
   try {
-    const response = await axios.get(`http://localhost:9000/ta-application/${id}`);
+    const response = await axios.get(APPLICATION_API_URL+`/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching application data', error);
@@ -51,7 +52,7 @@ export const fetchApplication = async (id: string) => {
 
 export const fetchMessages = async (id: string) => {
   try {
-    const response = await axios.get(`http://localhost:9000/message/${id}`);
+    const response = await axios.get(BASE_API_URL+`/message/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching application data', error);
@@ -61,7 +62,7 @@ export const fetchMessages = async (id: string) => {
 
 //Sprint2: update application status
 export const updateApplicationStatus =async (id: number, status: string) => {
-  return axios.post(`http://localhost:9000/ta-application/${id}`, { status }, {
+  return axios.post(APPLICATION_API_URL+`/${id}`, { status }, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -70,7 +71,7 @@ export const updateApplicationStatus =async (id: number, status: string) => {
 
 export const getTaApplicationsByStudentId = async (id: number) => {
   try {
-    const response = await axios.get(`http://localhost:9000/ta-application/student/${id}`);
+    const response = await axios.get(APPLICATION_API_URL+`/student/${id}`);
 
     if (!response) {
       throw new Error('Failed to get with the ID provided!');

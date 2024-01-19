@@ -1,5 +1,5 @@
 const backendURL =
   process.env.NODE_ENV === 'production'
-    ? 'https://your-production-backend-url.com'
+    ? process.env.REACT_APP_BACKEND_URL
     : 'http://localhost:9000';
 export { backendURL };

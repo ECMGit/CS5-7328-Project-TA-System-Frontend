@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { backendURL } from '../config';
 
-const BASE_API_URL: string | undefined = backendURL + '/api/';
-const USER_API_URL: string | undefined = backendURL + '/user/';
-const PROFILE_API_URL: string | undefined = backendURL + '/profile/';
+const BASE_API_URL: string | undefined = backendURL;
+const JOBS_API_URL: string | undefined = backendURL + '/jobs';
+const APPLICATION_API_URL: string | undefined = backendURL + '/ta-application';
+const USER_API_URL: string | undefined = backendURL + '/user';
+const PROFILE_API_URL: string | undefined = backendURL + '/profile';
 // const USER_API_URL = "https://9429d5b9-a4ce-43d8-bf6b-637cc223febe.mock.pstmn.io/";
 
 /**
@@ -27,8 +29,8 @@ const signUp = (
   year: string,
   userType: string
 ) => {
-  console.log(USER_API_URL + 'signUp');
-  return axios.post(USER_API_URL + 'signUp', {
+  console.log(USER_API_URL + '/signUp');
+  return axios.post(USER_API_URL + '/signUp', {
     firstName,
     lastName,
     email,
@@ -47,9 +49,9 @@ const signUp = (
  * @returns
  */
 const login = (username: string, password: string) => {
-  console.log(USER_API_URL + 'login');
+  console.log(USER_API_URL + '/login');
   return axios
-    .post(USER_API_URL + 'login', {
+    .post(USER_API_URL + '/login', {
       username,
       password,
     })
@@ -71,7 +73,7 @@ const login = (username: string, password: string) => {
  */
 const logout = () => {
   localStorage.removeItem('user');
-  return axios.post(USER_API_URL + 'logout').then((response) => {
+  return axios.post(USER_API_URL + '/logout').then((response) => {
     return response.data;
   });
 };
@@ -88,7 +90,7 @@ const getCurrentUser = () => {
 
 const getUserRole = (userId: number) => {
   // Pass the userId as a query parameter
-  return axios.get(`${USER_API_URL}role/${userId}`)
+  return axios.get(`${USER_API_URL}/role/${userId}`)
     .then((response) => {
       return response.data.role;
     })
@@ -106,7 +108,7 @@ const getUserRole = (userId: number) => {
  */
 const resetPasswordRequest = (email: string) => {
   return axios
-    .post(USER_API_URL + 'password-reset-link', {
+    .post(USER_API_URL + '/password-reset-link', {
       email,
     })
     .then((response) => {
@@ -127,7 +129,7 @@ const resetPasswordRequest = (email: string) => {
  */
 const resetPassword = async (token: string, password: string) => {
   try {
-    const response = await axios.post(USER_API_URL + 'password-reset/confirm', { token, password });
+    const response = await axios.post(USER_API_URL + '/password-reset/confirm', { token, password });
     return response.data.message;
   } catch (error) {
     console.error(error);
@@ -138,7 +140,7 @@ const resetPassword = async (token: string, password: string) => {
 // Fetch data from API regarding the TA Application.
 const getTaApplication = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/ta-application');
+    const response = await axios.get(APPLICATION_API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -149,7 +151,7 @@ const getTaApplication = async () => {
 // Fetch data from API regarding the TAJob.
 const getTaJob = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/jobs');
+    const response = await axios.get(JOBS_API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -160,7 +162,7 @@ const getTaJob = async () => {
 // Fetch data from API regarding the user.
 const getUser = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/user');
+    const response = await axios.get(USER_API_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -177,7 +179,7 @@ const saveProfile = async (
   resumeFile: string
 ) => {
   try {
-    return axios.post(PROFILE_API_URL + 'save', {
+    return axios.post(PROFILE_API_URL + '/save', {
       name,
       profileImage,
       graduationYear,
@@ -209,7 +211,7 @@ const fakeAuthProvider = {
 const getUserById = (id: number) => {
   // It seems odd to use 'put' for getting data, usually 'put' is used for updating.
   // Ensure this is the intended method. If you're just retrieving data, 'get' might be more appropriate.
-  return axios.get(USER_API_URL + `${id}`).then((res) => {
+  return axios.get(USER_API_URL + `/${id}`).then((res) => {
     console.log(res);
     return res; // Same here, we return the response
   });
