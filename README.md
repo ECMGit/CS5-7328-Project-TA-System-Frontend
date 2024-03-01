@@ -1,5 +1,4 @@
-# React frontend template
-# React frontend template
+# CS5/7328 TA-system project
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
@@ -43,32 +42,44 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Project Structure
 ```
 ├── jest.config.js
+├── LICENSE
 ├── LICENSE.txt
 ├── package.json
 ├── package-lock.json
+├── Procfile
 ├── public                                  # Public folder, put your static files under this folder
 ├── README.md
-├── src                                     # Source files, write your code under this folder
+├── src
 │   ├── App.tsx
+│   ├── components
 │   ├── config.ts
 │   ├── index.tsx
-│   ├── pages
+│   ├── pages                               # add your pages here
+│   │   ├── application
+│   │   ├── faculty-jobs
+│   │   ├── HomeDefault.tsx
 │   │   ├── Home.tsx
+│   │   ├── JobInfo.tsx
 │   │   ├── login
-│   │   │   ├── LoginPage.tsx
-│   │   │   └── RegistrationPage.tsx
-│   │   └── userProfile
+│   │   ├── MockResume.tsx
+│   │   ├── TAIndividualJobDisplay.tsx
+│   │   ├── TAJobDisplayComponent.tsx
+│   │   └── user
+│   ├── provider.tsx
 │   ├── react-app-env.d.ts
 │   ├── reportWebVitals.ts
-│   ├── services                            # Services folder, write your services under this folder
-│   │   └── auth.ts
+│   ├── services                            # Services folder, write function to handle communication between frontend and backend
+│   │   ├── apply.ts
+│   │   ├── auth.ts
+│   │   ├── faculty-job.ts
+│   │   └── tajob.ts
 │   ├── setupTests.ts
-│   ├── stylesheets
-│   │   ├── App.css
-│   │   └── index.css
-│   └── __test__                            # Test folder, write your test case under this folder
-│       └── App.test.tsx
-└── tsconfig.json
+│   ├── stylesheets             
+│   └── __test__
+│       ├── App.test.tsx
+│       └── LoginPage.test.tsx
+├── tsconfig.json
+└── yarn.lock
 ```
 
 
