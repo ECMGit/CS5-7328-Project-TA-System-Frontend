@@ -8,7 +8,7 @@ const ADMIN_API_URL = 'http://localhost:9000/admin';
  */
 const getStudent = async () => {
   try {
-    const response = await axios.get(ADMIN_API_URL+'/students');
+    const response = await axios.get(ADMIN_API_URL + '/students');
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -34,6 +34,7 @@ const getCourse = async () => {
  * @returns display faculty
  */
 const getFaculty = async () => {
+
   try {
     const response = await axios.get(ADMIN_API_URL + '/faculty');
     return response.data;
@@ -41,6 +42,7 @@ const getFaculty = async () => {
     console.error('Error fetching data: ', error);
     throw error;
   }
+
 };
 
 const AdminService = {
