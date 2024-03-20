@@ -1,5 +1,10 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
 import LoginPage from './pages/login/LoginPage';
@@ -9,7 +14,6 @@ import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
-
 
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
@@ -26,25 +30,28 @@ import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
-
+import ViewCourses from './pages/Admin/ViewCourses';
 
 // adds jsonwebtoken if present to each api request
-axios.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  // console.log(token); // debugging purposes
-  
-  if (token) {
-    config.headers.Authorization = `${token}`;
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    // console.log(token); // debugging purposes
+
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+);
 
 interface PrivateRouteProps {
-    role: string;
-    userId?: number;
-    children: React.ReactNode;
+  role: string;
+  userId?: number;
+  children: React.ReactNode;
 }
 
 function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
@@ -54,12 +61,14 @@ function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
     return <Navigate to="/login" />;
   }
 
-  if (userContext.user.role === role && (!userId || userContext.user.id === userId)) {
+  if (
+    userContext.user.role === role &&
+    (!userId || userContext.user.id === userId)
+  ) {
     return <>{children}</>;
   } else {
     return <Navigate to="/unauthorized" />;
   }
-
 }
 //make an if statement to check if the user is a student or faculty and then render the correct page for jobs
 function PrivateRouteJob() {
@@ -70,42 +79,105 @@ function PrivateRouteJob() {
   }
 
   if (userContext.user.role === 'student') {
-    return <ViewJobsStudent/>;
+    return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
-    return <ViewJobs/>;
+    return <ViewJobs />;
   } else {
     return <Navigate to="/unauthorized" />;
   }
-
 }
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/home-default' element={<HomeDefault/>}/>
+        <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
 
-        <Route path="/" element={<ProviderLayout />} >
+        <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home/>} />
+          <Route path="/home" element={<Home />} />
 
-          <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
+          <Route
+            path="/student-profile"
+            element={
+              <PrivateRoute role="student">
+                <StudentProfile />
+              </PrivateRoute>
+            }
+          />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/jobs/details/:id" element={<JobInfo/>}/>
-          <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
+          <Route path="/jobs/details/:id" element={<JobInfo />} />
+          <Route
+            path="/post-job"
+            element={
+              <PrivateRoute role="faculty">
+                <PostJob />
+              </PrivateRoute>
+            }
+          />
           <Route path="/jobs" element={<PrivateRouteJob />} />
-          <Route path="/faculty-profile" element={<PrivateRoute role="faculty"><FacultyProfile /></PrivateRoute>} />
+          <Route
+            path="/faculty-profile"
+            element={
+              <PrivateRoute role="faculty">
+                <FacultyProfile />
+              </PrivateRoute>
+            }
+          />
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/students" element={<PrivateRoute role="admin"><ViewStudents /></PrivateRoute>} />
-          <Route path="/faculties" element={<PrivateRoute role="admin"><ViewFaculties /></PrivateRoute>} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"><ViewApplications /></PrivateRoute>} />
-          <Route path="/view-application/:id" element={<PrivateRoute role="faculty"><ViewApplication /></PrivateRoute>} />
-          <Route path="/edit-application/:id" element={<PrivateRoute role="student"><EditApplication /></PrivateRoute>} />
+          <Route
+            path="/students"
+            element={
+              <PrivateRoute role="admin">
+                <ViewStudents />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/faculties"
+            element={
+              <PrivateRoute role="admin">
+                <ViewFaculties />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <PrivateRoute role="admin">
+                <ViewCourses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-applications"
+            element={
+              <PrivateRoute role="faculty">
+                <ViewApplications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-application/:id"
+            element={
+              <PrivateRoute role="faculty">
+                <ViewApplication />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-application/:id"
+            element={
+              <PrivateRoute role="student">
+                <EditApplication />
+              </PrivateRoute>
+            }
+          />
           <Route path="/user-data" element={<UserDataPage />} />
           <Route path="*" element={<Home />} />
         </Route>
