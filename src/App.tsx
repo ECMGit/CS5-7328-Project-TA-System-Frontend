@@ -95,19 +95,19 @@ function PrivateRoutePerformanceReview({
   children,
 }: PrivateRoutePerformanceReviewProps) {
   const userContext = useContext(UserContext);
-  const { id } = useParams<{ id: string }>(); // 获取路由参数
+  const { id } = useParams<{ id: string }>(); // get parameters from routes
 
-  // 重定向至登录页，如果在上下文中没有找到用户
+  // If there is no uer, jump to login
   if (!userContext?.user) {
     return <Navigate to="/login" />;
   }
 
-  // faculty角色无条件访问
+  // faculty have all the access to the page
   if (userContext.user.role === 'faculty') {
     return <>{children}</>;
   }
 
-  // student角色，且id与URL中的id匹配时访问
+  // student only have the access to the page when it's his performance
   if (
     userContext.user.role === 'student' &&
     userContext.user.id.toString() === id
@@ -115,7 +115,7 @@ function PrivateRoutePerformanceReview({
     return <>{children}</>;
   }
 
-  // 如果用户不符合以上任一条件，则重定向至未授权页面
+  // if none of the condition is fulfilled, to unauthoried
   return <Navigate to="/unauthorized" />;
 }
 
