@@ -82,18 +82,17 @@ const CreateTask: React.FC = () => {
       () => {
         navigate('/tasks');
         window.location.reload();
-      });
-    // }, (error) => {
-    //   const resMessage =
-    //               (error.response &&
-    //                   error.response.data &&
-    //                   error.response.data.message) ||
-    //               error.message ||
-    //               error.toString();
+      }, (error) => {
+        const resMessage =
+                  (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                  error.message ||
+                  error.toString();
 
-    //   setLoading(false);
-    //   setMessage(resMessage);
-    // });
+        setLoading(false);
+        setMessage(resMessage);
+      });
   };
     // JSX for rendering the form
   return (
