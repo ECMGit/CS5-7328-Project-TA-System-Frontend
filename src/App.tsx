@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useParams,
 } from 'react-router-dom';
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
@@ -86,6 +87,38 @@ function PrivateRouteJob() {
   }
 }
 
+type PrivateRoutePerformanceReviewProps = {
+  children: React.ReactNode;
+};
+
+function PrivateRoutePerformanceReview({
+  children,
+}: PrivateRoutePerformanceReviewProps) {
+  const userContext = useContext(UserContext);
+  const { id } = useParams<{ id: string }>(); // 获取路由参数
+
+  // 重定向至登录页，如果在上下文中没有找到用户
+  if (!userContext?.user) {
+    return <Navigate to="/login" />;
+  }
+
+  // faculty角色无条件访问
+  if (userContext.user.role === 'faculty') {
+    return <>{children}</>;
+  }
+
+  // student角色，且id与URL中的id匹配时访问
+  if (
+    userContext.user.role === 'student' &&
+    userContext.user.id.toString() === id
+  ) {
+    return <>{children}</>;
+  }
+
+  // 如果用户不符合以上任一条件，则重定向至未授权页面
+  return <Navigate to="/unauthorized" />;
+}
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -162,7 +195,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/performance-result"
+            path="/performance-result/:id"
             element={
               <PrivateRoute role="faculty">
                 <PerformanceResult />
