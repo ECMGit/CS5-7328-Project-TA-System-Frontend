@@ -101,14 +101,22 @@ const App: React.FC = () => {
           <Route index element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />} />
 
-          <Route
+          {/* <Route
             path="/student-profile"
             element={
               <PrivateRoute role="student">
                 <StudentProfile />
               </PrivateRoute>
             }
+          /> */}
+
+          <Route
+            path="/student-profile"
+            element={
+              <StudentProfile />
+            }
           />
+
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route
