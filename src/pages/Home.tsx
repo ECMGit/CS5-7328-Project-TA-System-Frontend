@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigat
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
+import { link } from 'fs';
 
 
 // Define an interface 'User' to specify the structure of a user object.
@@ -144,6 +145,17 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/create-task"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Create Task
+                  </Button>
+
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -165,6 +177,7 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button> */}
+                 
                 </>
               ) : user.role === 'faculty' ? (
                 <>
