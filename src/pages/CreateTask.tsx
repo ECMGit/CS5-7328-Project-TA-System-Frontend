@@ -5,16 +5,16 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
-// import api from '../../services/tasks';
+import api from '../services/taskform';
 
 
-const AssignTask: React.FC = () => {
+const CreateTask: React.FC = () => {
   // State hooks for form fields and validation errors
   //   const [faculty_id, setFaculty_id] = useState(''); // COmes from later check
   const [student_id, setStudent_id] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [urgency, setUrgency] = useState('');
+  // const [urgency, setUrgency] = useState('');
   // TODO: Add Deadline as date value??
 
   const [message, setMessage] = useState('');
@@ -22,6 +22,8 @@ const AssignTask: React.FC = () => {
 
   //Errors
   const [Student_idError, setStudent_idError] = useState('');
+  // const [Title_Error , setTitle_Error] = useState('');
+
 
   const checkAlphanumeric = (input: string): boolean => {
     // Check each character of the input
@@ -44,13 +46,7 @@ const AssignTask: React.FC = () => {
     }
     return true; // only numeric characters
   };
-  
 
-  //Handler for Title:
-
-  //Handler for description:
-
-  //Handler for Urgency:
 
 
   //Handler for Student Id:
@@ -74,30 +70,30 @@ const AssignTask: React.FC = () => {
 
   const handleSubmit = () => {
     const userId = JSON.parse(storedUser!).id; 
-    // api.assignTask({
-    //   facultyId: userId,
-    //   studentId: student_id,
-    //   title: title,
-    //   description: description,
-    //   urgency: urgency,
-    //   completed: false,
-    //   verified: false
-    // }).then(
-    //   () => {
-    //     navigate('/tasks');
-    //     window.location.reload();
-    //   });
-    //   // }, (error) => {
-    //   //   const resMessage =
-    //   //               (error.response &&
-    //   //                   error.response.data &&
-    //   //                   error.response.data.message) ||
-    //   //               error.message ||
-    //   //               error.toString();
+    api.CreateTask({
+      facultyId: userId,
+      studentId: student_id,
+      title: title,
+      description: description,
+      // urgency: urgency,
+      completed: false,
+      // verified: false
+    }).then(
+      () => {
+        navigate('/tasks');
+        window.location.reload();
+      });
+    // }, (error) => {
+    //   const resMessage =
+    //               (error.response &&
+    //                   error.response.data &&
+    //                   error.response.data.message) ||
+    //               error.message ||
+    //               error.toString();
 
-    //   //   setLoading(false);
-    //   //   setMessage(resMessage);
-    //   // });
+    //   setLoading(false);
+    //   setMessage(resMessage);
+    // });
   };
     // JSX for rendering the form
   return (
@@ -139,7 +135,7 @@ const AssignTask: React.FC = () => {
           />
           {/* Task Urgency 
           May convert to High , Medium, Low*/}
-          <TextField
+          {/* <TextField
             label="Urgency (Number 1-5  "
             margin="normal"
             required
@@ -149,7 +145,7 @@ const AssignTask: React.FC = () => {
             error={!urgency || isNaN(Number(urgency))}
             helperText={!urgency || isNaN(Number(urgency)) ? 'Urgency must be a number' : ''}
             onChange={(e) => { setUrgency(e.target.value); }}
-          />
+          /> */}
           <LoadingButton 
             type="submit" 
             variant="contained" 
@@ -173,4 +169,4 @@ const AssignTask: React.FC = () => {
   );
 };
 
-export default AssignTask;
+export default CreateTask;
