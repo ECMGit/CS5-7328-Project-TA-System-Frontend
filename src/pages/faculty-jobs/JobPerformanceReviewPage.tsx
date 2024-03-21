@@ -33,13 +33,47 @@ const PerformanceReview: React.FC = () => {
     Time: '2024	Spring',
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // 这里可以添加提交评价的逻辑
-    console.log('Teaching Skill:', teachingSkill);
-    console.log('Mentoring Skill:', mentoringSkill);
-    console.log('Effective Communication:', effectiveCommunication);
-    console.log('Comments:', comments);
+
+    // get a  taUserId 和 facultyUserId
+    const taUserId = 8; // hardcode from database user table for testing
+    const facultyUserId = 9; // hardcode from database user table for testing
+    const courseId = 1;
+
+    const evaluationData = {
+      taUserId,
+      facultyUserId,
+      courseId,
+      teachingSkill,
+      mentoringSkill,
+      effectiveCommunication,
+      comments,
+    };
+
+    // 发送 POST 请求到后端
+    try {
+      const response = await fetch('http://localhost:9000/api/ta-performance/ta-evaluation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(evaluationData),
+      });
+
+
+      if (response.ok) {
+        alert('Evaluation submitted successfully');
+      } else {
+        const resJson = await response.json();
+        alert('Failed to submit evaluation: ' + resJson.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit evaluation');
+    }
   };
 
   return (
