@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -11,67 +11,70 @@ import {
 } from '@mui/material';
 
 type PerformanceResult = {
-  year: number;
-  semester: string;
-  courseName: string;
-  professorName: string;
-  teachingSkills: number;
+  id: number;
+  taUserId: number;
+  facultyUserId: number;
+  courseId: number;
+  teachingSkill: number;
+  mentoringSkill: number;
   effectiveCommunication: number;
-  mentoringSkills: number;
-  comment: string;
-  timestamp: string;
+  comments: string;
+  createdAt: string;
+  taUser: {
+    username: string;
+  };
+  facultyUser: {
+    username: string;
+  };
+  course: {
+    title: string;
+  };
 };
 
-// 示例数据
-const mockResults: PerformanceResult[] = [
-  {
-    year: 2023,
-    semester: 'Fall',
-    courseName: 'Advanced Algorithms',
-    professorName: 'Dr. Smith',
-    teachingSkills: 10,
-    effectiveCommunication: 8,
-    mentoringSkills: 9,
-    comment: 'Excellent TA, very helpful and knowledgeable.',
-    timestamp: '2023-12-01T15:00:00Z',
-  },
-  {
-    year: 2023,
-    semester: 'Spring',
-    courseName: 'Introduction to Programming',
-    professorName: 'Prof. Johnson',
-    teachingSkills: 8,
-    effectiveCommunication: 9,
-    mentoringSkills: 7,
-    comment: 'Good performance but needs to improve responsiveness.',
-    timestamp: '2023-05-15T15:00:00Z',
-  },
-];
 
 const ratingToPercentage = (rating: number) => (rating / 10) * 100;
 
 const PerformanceResultPage: React.FC = () => {
+  const [results, setResults] = useState<PerformanceResult[]>([]);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const response = await fetch('http://localhost:9000/api/ta-performance/performance-results');
+        if (!response.ok) {
+          throw new Error('Data fetch failed');
+        }
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchResults();
+  }, []);
+
   return (
     <Container maxWidth="md">
       <Box my={4}>
         <Typography variant="h4" gutterBottom component="div" style={{ textAlign: 'center' }}>
           TA Performance Results
         </Typography>
-        {mockResults.map((result, index) => (
-          <Card variant="outlined" key={index} style={{ marginBottom: '20px' }}>
+        {results.map((result) => (
+          <Card variant="outlined" key={result.id} style={{ marginBottom: '20px' }}>
             <CardContent>
-              <Typography variant="h6">{result.courseName} ({result.year} {result.semester})</Typography>
-              <Typography color="textSecondary">Professor: {result.professorName}</Typography>
+              <Typography variant="h6">{result.course.title}</Typography>
+              <Typography color="textSecondary">Professor: {result.facultyUser.username}</Typography>
 
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
                   <Typography>Teaching Skills:</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <LinearProgress variant="determinate" value={ratingToPercentage(result.teachingSkills)} />
+                  <LinearProgress variant="determinate" value={ratingToPercentage(result.teachingSkill)} />
                 </Grid>
                 <Grid item xs={1}>
-                  <Typography>{result.teachingSkills}/10</Typography>
+                  <Typography>{result.teachingSkill}/10</Typography>
                 </Grid>
               </Grid>
 
@@ -80,10 +83,10 @@ const PerformanceResultPage: React.FC = () => {
                   <Typography>Mentoring Skills:</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <LinearProgress variant="determinate" value={ratingToPercentage(result.mentoringSkills)} />
+                  <LinearProgress variant="determinate" value={ratingToPercentage(result.mentoringSkill)} />
                 </Grid>
                 <Grid item xs={1}>
-                  <Typography>{result.mentoringSkills}/10</Typography>
+                  <Typography>{result.mentoringSkill}/10</Typography>
                 </Grid>
               </Grid>
 
@@ -99,8 +102,8 @@ const PerformanceResultPage: React.FC = () => {
                 </Grid>
               </Grid>
 
-              <Typography variant="body1">Comment: {result.comment}</Typography>
-              <Typography color="textSecondary">Reviewed on: {new Date(result.timestamp).toLocaleDateString()}</Typography>
+              <Typography variant="body1">Comment: {result.comments}</Typography>
+              <Typography color="textSecondary">Reviewed on: {new Date(result.createdAt).toLocaleDateString()}</Typography>
             </CardContent>
           </Card>
         ))}
