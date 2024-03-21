@@ -73,7 +73,9 @@ const ViewApplications: React.FC = () => {
   //The below stores the current selected applications
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
-  
+  const handleViewPerformanceClick = (applicationId: number) => {
+    navigate('/performance-result');
+  };
 
 
 
@@ -207,7 +209,7 @@ const ViewApplications: React.FC = () => {
                 <Button
                   variant="contained"
                   style={{ backgroundColor: '#708090', color: '#fff' }}
-                  onClick={() => console.log('Clicked button for row', row.id)}
+                  onClick={() => handleViewPerformanceClick(row.id)}
                 >
                   View Performance
                 </Button>
