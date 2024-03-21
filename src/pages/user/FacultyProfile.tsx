@@ -277,6 +277,17 @@ const FacultyProfile: React.FC = () => {
               </Paper>
             ))}
           </Box>
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+            <Button
+              component={Link}
+              to="/evaluate-performance"
+              variant="contained"
+              color="primary"
+              sx={{ width: '31%', ml: '-70%' }}
+            >
+              Evaluate TA
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </Container>
