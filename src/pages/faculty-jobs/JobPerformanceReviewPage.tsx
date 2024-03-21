@@ -25,7 +25,7 @@ const PerformanceReview: React.FC = () => {
     useState<number>(5);
   const [comments, setComments] = useState<string>('');
 
-  // 示例数据，你可以根据需要从props或state中获取这些信息
+  //Just example, real data get from the database
   const taInfo = {
     Name: 'John Doe',
     SMUid: 'TA01',
@@ -35,7 +35,7 @@ const PerformanceReview: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // 这里可以添加提交评价的逻辑
+    // evalutaing logic here
     console.log('Teaching Skill:', teachingSkill);
     console.log('Mentoring Skill:', mentoringSkill);
     console.log('Effective Communication:', effectiveCommunication);
@@ -162,7 +162,7 @@ const PerformanceReview: React.FC = () => {
         </Box>
       </form>
 
-      {/* TA信息部分 */}
+      {/* TA information box here */}
       <Box
         sx={{
           position: 'absolute',
