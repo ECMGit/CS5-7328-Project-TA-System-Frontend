@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useParams,
 } from 'react-router-dom';
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
@@ -84,6 +85,38 @@ function PrivateRouteJob() {
   } else {
     return <Navigate to="/unauthorized" />;
   }
+}
+
+type PrivateRoutePerformanceReviewProps = {
+  children: React.ReactNode;
+};
+
+function PrivateRoutePerformanceReview({
+  children,
+}: PrivateRoutePerformanceReviewProps) {
+  const userContext = useContext(UserContext);
+  const { id } = useParams<{ id: string }>(); // get parameters from routes
+
+  // If there is no uer, jump to login
+  if (!userContext?.user) {
+    return <Navigate to="/login" />;
+  }
+
+  // faculty have all the access to the page
+  if (userContext.user.role === 'faculty') {
+    return <>{children}</>;
+  }
+
+  // student only have the access to the page when it's his performance
+  if (
+    userContext.user.role === 'student' &&
+    userContext.user.id.toString() === id
+  ) {
+    return <>{children}</>;
+  }
+
+  // if none of the condition is fulfilled, to unauthoried
+  return <Navigate to="/unauthorized" />;
 }
 
 const App: React.FC = () => {
@@ -170,7 +203,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/performance-result"
+            path="/performance-result/:id"
             element={
               <PrivateRoute role="faculty">
                 <PerformanceResult />

@@ -25,7 +25,7 @@ const PerformanceReview: React.FC = () => {
     useState<number>(5);
   const [comments, setComments] = useState<string>('');
 
-  // 示例数据，你可以根据需要从props或state中获取这些信息
+  //Just example, real data get from the database
   const taInfo = {
     Name: 'John Doe',
     SMUid: 'TA01',
@@ -74,6 +74,7 @@ const PerformanceReview: React.FC = () => {
       console.error('Error:', error);
       alert('Failed to submit evaluation');
     }
+
   };
 
   return (
@@ -196,7 +197,7 @@ const PerformanceReview: React.FC = () => {
         </Box>
       </form>
 
-      {/* TA信息部分 */}
+      {/* TA information box here */}
       <Box
         sx={{
           position: 'absolute',
