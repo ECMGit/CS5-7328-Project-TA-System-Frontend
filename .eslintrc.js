@@ -28,25 +28,5 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
-    indent: ['error', 2],
-    // 'linebreak-style': [
-    //     'error',
-    //     'unix'
-    // ],
-    'linebreak-style': 'off',
-    quotes: ['error', 'single'],
-    semi: ['error', 'always'],
-    'max-len': [
-      'error',
-      {
-        code: 120,
-        tabWidth: 4,
-        comments: 120,
-        ignoreUrls: true,
-        ignoreStrings: true,
-        ignoreTemplateLiterals: true,
-        ignoreRegExpLiterals: true,
-      },
-    ],
   },
 };
