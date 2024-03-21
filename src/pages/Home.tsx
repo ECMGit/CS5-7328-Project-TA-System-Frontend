@@ -25,13 +25,13 @@ const Home: React.FC = () => {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
-  const {user, setUser} = userContext;
+  const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // React hooks
   const navigate = useNavigate();
 
-  console.log('home:', user);
+  //console.log('home:', user);
 
 
   if (!user) {
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
   /**
    * Log out the user, delete user from localStorage
    */
-  const handleLogout = function() {
+  const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
@@ -63,10 +63,10 @@ const Home: React.FC = () => {
   /**
    * Navigate to the corresponding user profile. 
    */
-  const handleProfile = function() {
+  const handleProfile = function () {
     // Guard clause.
     if (!user) { return; }
-    
+
     // Navigate to student/faculty profile.
     if (user.role === 'student') { navigate('/student-profile'); }
     else if (user.role === 'faculty') { navigate('/faculty-profile'); }
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-  // Render the component within a container with a maximum width of 'sm'.
+    // Render the component within a container with a maximum width of 'sm'.
 
     <div>
       {/* Blue banner with "Login" button */}
@@ -115,8 +115,18 @@ const Home: React.FC = () => {
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
+
               {user.role === 'faculty' ? (
                 <>
+                  <Button
+                    component={Link}
+                    to="/view-courses"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View Courses
+                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
@@ -190,7 +200,7 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile}/>
+              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
             </div>
           ) : (
             <Button

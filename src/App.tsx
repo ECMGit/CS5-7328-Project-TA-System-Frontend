@@ -24,27 +24,31 @@ import HomeDefault from './pages/HomeDefault';
 import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
+import ViewAllCourses from './pages/courses/ViewAllCourses';
+import AddCourse from './pages/courses/AddCourse';
+import ViewCourse from './pages/courses/ViewCourse';
+import EditCourse from './pages/courses/EditCourse';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
-  // console.log(token); // debugging purposes
-  
   if (token) {
-    config.headers.Authorization = `${token}`;
+    // 确保使用Bearer令牌正确设置Authorization头部
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 }, error => {
   return Promise.reject(error);
 });
 
+
 interface PrivateRouteProps {
-    role: string;
-    userId?: number;
-    children: React.ReactNode;
+  role: string;
+  userId?: number;
+  children: React.ReactNode;
 }
 
-function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
+const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
   const userContext = useContext(UserContext);
 
   if (!userContext?.user) {
@@ -56,10 +60,9 @@ function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
   } else {
     return <Navigate to="/unauthorized" />;
   }
+};
 
-}
-//make an if statement to check if the user is a student or faculty and then render the correct page for jobs
-function PrivateRouteJob() {
+const PrivateRouteJob = () => {
   const userContext = useContext(UserContext);
 
   if (!userContext?.user) {
@@ -67,33 +70,34 @@ function PrivateRouteJob() {
   }
 
   if (userContext.user.role === 'student') {
-    return <ViewJobsStudent/>;
+    return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
-    return <ViewJobs/>;
+    return <ViewJobs />;
   } else {
     return <Navigate to="/unauthorized" />;
   }
-
-}
+};
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/home-default' element={<HomeDefault/>}/>
+        <Route path='/home-default' element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
 
         <Route path="/" element={<ProviderLayout />} >
-          {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home/>} />
-
+          <Route path="/home" element={<Home />} />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/jobs/details/:id" element={<JobInfo/>}/>
+          <Route path="/view-courses" element={<ViewAllCourses />} />
+          <Route path="/view-course/:id" element={<ViewCourse />} />
+          <Route path="/add-course" element={<AddCourse />} />
+          <Route path="/edit-course/:id" element={<EditCourse />} />
+          <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRouteJob />} />
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"><FacultyProfile /></PrivateRoute>} />
@@ -108,4 +112,5 @@ const App: React.FC = () => {
     </Router>
   );
 };
+
 export default App;
