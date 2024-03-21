@@ -70,15 +70,15 @@ const CreateTask: React.FC = () => {
 
   const handleSubmit = () => {
     const userId = JSON.parse(storedUser!).id; 
-    api.CreateTask({
-      facultyId: userId,
-      studentId: student_id,
-      title: title,
-      description: description,
+    api.createTask(
+      userId,
+      +student_id, // convert to number
+      title,
+      description,
       // urgency: urgency,
-      completed: false,
+      // completed: false,
       // verified: false
-    }).then(
+    ).then(
       () => {
         navigate('/tasks');
         window.location.reload();
