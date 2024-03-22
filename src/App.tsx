@@ -91,6 +91,7 @@ type PrivateRoutePerformanceReviewProps = {
   children: React.ReactNode;
 };
 
+//Only faculty and student himself have access to the performanceReview page
 function PrivateRoutePerformanceReview({
   children,
 }: PrivateRoutePerformanceReviewProps) {
