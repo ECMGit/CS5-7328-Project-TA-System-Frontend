@@ -22,7 +22,7 @@ export const StudentFeatureRequestPage = () => {
 
     const data = await response.json();
     console.log(data);
-    setFeedbacks((prevFeedbacks) => [...prevFeedbacks, data.content]);
+    setFeedbacks((prevFeedbacks) => [...prevFeedbacks, content]);
     setContent(''); // Clear the textarea
   };
 
