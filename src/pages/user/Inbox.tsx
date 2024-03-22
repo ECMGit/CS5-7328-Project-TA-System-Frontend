@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 interface User {
   id: number;
@@ -44,7 +45,7 @@ interface UserMessage {
 }
 
 // TODO: Should be replaced by real content
-const messages: UserMessage[] = [
+const userMessages: UserMessage[] = [
   {
     id: 1,
     content: 'Hello, your application has been received.',
@@ -128,12 +129,64 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
     </Container>
   );
 };
+
 const MessagesList = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
+  const [messages, setMessages] = React.useState<UserMessage[]>(userMessages);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
+
+  const handleReceiverIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setReceiverIdQuery(event.target.value);
+  };
+
+  const fetchMessagesByReceiverId = async (receiverId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/receiver/${receiverId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMessagesBySenderId = async (senderId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/sender/${senderId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMessagesByApplationId = async (applicationId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/application/${applicationId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (receiverIdQuery) {
+      fetchMessagesByReceiverId(receiverIdQuery);
+    } else {
+      // Fetch all messages if receiver ID is not provided
+      // Replace this with your logic to fetch all messages
+      setMessages(messages);
+    }
+  }, [receiverIdQuery]);
 
   const filteredMessages = messages.filter((message) => {
     const { title: jobTitle } = message.taJob;
@@ -172,6 +225,30 @@ const MessagesList = () => {
         value={searchQuery}
         onChange={handleSearchChange}
       />
+      <TextField
+        label="Search by Receiver ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={receiverIdQuery}
+        onChange={handleReceiverIdChange}
+      />
+      <TextField
+        label="Search by Sender ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={receiverIdQuery}
+        onChange={handleReceiverIdChange}
+      />
+      <TextField
+        label="Search by Application ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={receiverIdQuery}
+        onChange={handleReceiverIdChange}
+      />
       <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
         <Button
           component={Link}
@@ -182,6 +259,7 @@ const MessagesList = () => {
           New Message
         </Button>
       </Box>
+
       <List sx={{ width: '100%' }}>
         {filteredMessages.map((message) => (
           <MessageItem key={message.id} message={message} />
