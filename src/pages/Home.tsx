@@ -155,6 +155,17 @@ const Home: React.FC = () => {
                   >
                     Create Task
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Tasks
+                  </Button>
+                 
                  
 
                 </>
