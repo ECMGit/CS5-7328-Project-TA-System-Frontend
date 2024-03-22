@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/taskform';
+import { formToJSON } from 'axios';
 
 interface Task {
   id: number;
@@ -23,15 +24,13 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
         if (storedUser) {
 
           const userId= JSON.parse(storedUser!).id;
+          console.log('hello userId:' +userId);
+          console.log(storedUser);
   
           // Now you can access the user data as an array
           // console.log(userArray);
 
-          // for(let key in userObject){
-          //   console.log(key, userObject[key]);
-
-          // }
-
+         
           // Object.entries(userObject).forEach(([key,value])=>{
           //   console.log(key, value);
           // })
@@ -40,15 +39,30 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
           // console.log("hello" + studentId);
           // console.log(storedUser);
           const responseObj = await api.viewCurrent(userId );
+          for(const key in responseObj){
+            console.log(key, responseObj[key]);
+
+          }
+
+          
           console.log('Hello' + responseObj);
+          
 
           const temp = JSON.stringify(responseObj);
-          const response = JSON.parse(temp);
+          // const response = temp;
+          // const response = JSON.parse(temp);
+          const tempParse =JSON.parse(temp);
+          const firstObj = tempParse[0];
 
-          setTasks(response);
-          const taskId= JSON.parse(response!).id;
-          const taskTitle= JSON.parse(response!).title;
-          const taskDescription= JSON.parse(response!).description;
+          //arguments that can be accessed, title, TaskId, facultId, studentId
+
+          setTasks(tempParse);
+          const taskId= userId;
+          console.log('this is task id: ' + taskId);
+          const taskTitle= firstObj.title;
+          console.log('this is taskTitle: ' + taskTitle);
+
+          const taskDescription= firstObj.description;
 
           setDescription(taskDescription);
           setTitle(taskTitle);
