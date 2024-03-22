@@ -58,7 +58,6 @@ const StudentTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
   return (
     <div>
       <h2>Current Tasks</h2>
-      <Button component = {Link} to="/home">Home</Button>
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ backgroundColor: '#f2f2f2' }}>
@@ -77,10 +76,13 @@ const StudentTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
           ))}
         </tbody>
       </table>
+      <Button component = {Link} to="/home" variant ="contained" color = "secondary">Home</Button>
+
     </div>
   );
 };
 
+//not used remove later
 const FacultyTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
   return (
     <div>

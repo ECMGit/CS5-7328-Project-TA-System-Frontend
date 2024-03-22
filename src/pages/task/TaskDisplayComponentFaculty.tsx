@@ -44,7 +44,6 @@ const ViewAssignedTasks: React.FC = () => {
   return (
     <div>
       <h2>Tasks Assigned</h2> 
-      <Button component = {Link} to="/home">Home</Button>
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ backgroundColor: '#f2f2f2' }}>
@@ -63,6 +62,7 @@ const ViewAssignedTasks: React.FC = () => {
           ))}
         </tbody>
       </table>
+      <Button component = {Link} to="/home">Home</Button>
 
       
     </div>
