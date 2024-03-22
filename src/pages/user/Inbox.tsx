@@ -16,6 +16,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 interface User {
@@ -42,7 +43,7 @@ interface UserMessage {
   isRead: boolean;
 }
 
-// TODO: Should be replaced by real content 
+// TODO: Should be replaced by real content
 const messages: UserMessage[] = [
   {
     id: 1,
@@ -51,7 +52,7 @@ const messages: UserMessage[] = [
     sender: { id: 1, firstName: 'John', lastName: 'Doe' },
     taJob: { title: 'TA for Computer Science' },
     course: { title: 'Introduction to Programming' },
-    isRead: false
+    isRead: false,
   },
   {
     id: 2,
@@ -60,7 +61,7 @@ const messages: UserMessage[] = [
     sender: { id: 2, firstName: 'Alice', lastName: 'Smith' },
     taJob: { title: 'TA for Data Structures' },
     course: { title: 'Advanced Algorithms' },
-    isRead: true
+    isRead: true,
   },
   {
     id: 3,
@@ -69,29 +70,39 @@ const messages: UserMessage[] = [
     sender: { id: 3, firstName: 'Bob', lastName: 'Johnson' },
     taJob: { title: 'TA for Artificial Intelligence' },
     course: { title: 'Machine Learning Basics' },
-    isRead: true
-  }
+    isRead: true,
+  },
 ];
 
 const MessageItem = ({ message }: { message: UserMessage }) => {
   // Initial color state
-  const [color, setColor] = React.useState(message.isRead ? 'transparent' : '#FFD700'); 
+  const [color, setColor] = React.useState(
+    message.isRead ? 'transparent' : '#FFD700'
+  );
 
   // Function to change color
   const onRead = async (messageId: number) => {
     if (color != 'transparent') {
       setColor('transparent');
       try {
-        await axios.post(`http://localhost:9000/message/mark-read/${messageId}`);
-      }
-      catch(error) {
+        const response = await axios.post(
+          `http://localhost:9000/message/mark-read/${messageId}`
+        );
+
+        const data = response.data;
+
+        console.log(data);
+      } catch (error) {
         console.log(error);
       }
     }
   };
 
   return (
-    <Container onClick={() => onRead(message.id)} style={{backgroundColor: color}}>
+    <Container
+      onClick={() => onRead(message.id)}
+      style={{ backgroundColor: color }}
+    >
       <ListItem alignItems="flex-start">
         <ListItemText
           primary={`${message.taJob.title} - ${message.course.title}`}
@@ -117,33 +128,66 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
     </Container>
   );
 };
-
 const MessagesList = () => {
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredMessages = messages.filter((message) => {
+    const { title: jobTitle } = message.taJob;
+    const { title: courseTitle } = message.course;
+    const { content } = message;
+
+    const searchValue = searchQuery.toLowerCase();
+
+    return (
+      jobTitle.toLowerCase().includes(searchValue) ||
+      courseTitle.toLowerCase().includes(searchValue) ||
+      content.toLowerCase().includes(searchValue)
+    );
+  });
+
   return (
     <Container>
-
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           textAlign: 'center',
-          backgroundColor: '#1976D2', // Blue color
-          color: '#FFF', // White color
-          padding: '16px', // Adjust the padding as needed
+          backgroundColor: '#1976D2',
+          color: '#FFF',
+          padding: '16px',
         }}
       >
         Inbox
       </Box>
+      <TextField
+        label="Search"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+      <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
+        <Button
+          component={Link}
+          to="/inbox/new"
+          variant="contained"
+          color="primary"
+        >
+          New Message
+        </Button>
+      </Box>
       <List sx={{ width: '100%' }}>
-
-        {messages.map((message) => (
+        {filteredMessages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
       </List>
-
     </Container>
-
   );
 };
 
