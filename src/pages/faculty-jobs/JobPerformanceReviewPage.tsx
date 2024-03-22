@@ -38,7 +38,7 @@ const PerformanceReview: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // get a  taUserId 和 facultyUserId
+    // get a  taUserId and facultyUserId
     const taUserId = 8; // hardcode from database user table for testing
     const facultyUserId = 9; // hardcode from database user table for testing
     const courseId = 1;
@@ -53,7 +53,7 @@ const PerformanceReview: React.FC = () => {
       comments,
     };
 
-    // 发送 POST 请求到后端
+    // POSt to the backend and fetch data
     try {
       const response = await fetch('http://localhost:9000/api/ta-performance/ta-evaluation', {
         method: 'POST',
