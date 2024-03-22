@@ -197,11 +197,12 @@ const App: React.FC = () => {
           <Route
             path="/performance-result/:id"
             element={
-              <PrivateRoute role="faculty">
+              <PrivateRoutePerformanceReview>
                 <PerformanceResult />
-              </PrivateRoute>
+              </PrivateRoutePerformanceReview>
             }
           />
+
           <Route path="/user-data" element={<UserDataPage />} />
           <Route path="*" element={<Home />} />
         </Route>
