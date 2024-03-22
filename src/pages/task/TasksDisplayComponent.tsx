@@ -3,11 +3,14 @@ import api from '../../services/taskform';
 import { formToJSON } from 'axios';
 
 interface Task {
-  id: number;
+  facultyId: number;
+  studentId: number;
   title: string;
-  description: string;
-  // Define other properties of a task as needed
+  description: string | null; // Assuming description can be null
+  TaskId: number; // Assuming the property name for task ID is 'TaskId'
+  completed: boolean;
 }
+
 
 const ViewCurrentTasks: React.FC = (): JSX.Element => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -39,37 +42,36 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
           // console.log("hello" + studentId);
           // console.log(storedUser);
           const responseObj = await api.viewCurrent(userId );
-          for(const key in responseObj){
-            console.log(key, responseObj[key]);
+          setTasks(responseObj);
+          // for(const key in responseObj){
+          //   console.log(key, responseObj[key]);
 
-          }
-
-          
-          console.log('Hello' + responseObj);
+          // }
           
 
-          const temp = JSON.stringify(responseObj);
-          // const response = temp;
-          // const response = JSON.parse(temp);
-          const tempParse =JSON.parse(temp);
-          const firstObj = tempParse[0];
+          // const temp = JSON.stringify(responseObj);
+          // console.log(temp);
+          // // const response = temp;
+          // // const response = JSON.parse(temp);
+          // const tempParse =JSON.parse(temp);
+          // const firstObj = tempParse[0];
 
-          //arguments that can be accessed, title, TaskId, facultId, studentId
+          // //arguments that can be accessed, title, TaskId, facultId, studentId
 
-          setTasks(tempParse);
-          const taskId= userId;
-          console.log('this is task id: ' + taskId);
-          const taskTitle= firstObj.title;
-          console.log('this is taskTitle: ' + taskTitle);
+          // setTasks(tempParse);
+          // const taskId= userId;
+          // console.log('this is task id: ' + taskId);
+          // const taskTitle= firstObj.title;
+          // console.log('this is taskTitle: ' + taskTitle);
 
-          const taskDescription= firstObj.description;
+          // const taskDescription= firstObj.description;
 
-          setDescription(taskDescription);
-          setTitle(taskTitle);
-          setId(taskId);
+          // setDescription(taskDescription);
+          // setTitle(taskTitle);
+          // setId(taskId);
 
-          console.log('Hello task id:' + taskId);
-          // console.log(response);
+          // console.log('Hello task id:' + taskId);
+          // // console.log(response);
         }
       } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -78,6 +80,8 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
 
     fetchTasks();
   }, [storedUser]);
+
+  console.log('Tasks:', tasks);
 
   if (!tasks.length) {
     return <div>No Tasks Available</div>;
@@ -88,28 +92,29 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Current Tasks</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#f9f9f9', border: '1px solid #ddd' }}>
+    <div>
+      <h2>Current Tasks</h2>
+      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>ID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Name</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Description</th>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>ID</th>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
           </tr>
         </thead>
         <tbody>
           {tasks.map(task => (
-            <tr key={task.id} style={{ backgroundColor: 'white' }}>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>{id}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>{title}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>{description}</td>
+            <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
+  
 };
 
 export default ViewCurrentTasks;
