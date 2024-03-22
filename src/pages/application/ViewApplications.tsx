@@ -10,6 +10,26 @@ import {
 } from '../user/styledComponents';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
+
+//MENU STUFF START
+
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+
+
+//MENU STUFF START
+
+const options = [
+  'Course 1',
+  'Course 2',
+  'Course 3',
+];
+
+//MENU STUFF END
+
 // Define the data structure for a TA Application entry that we will get from database
 export type TAApplicationData = {
   //id is the primary key for the table
@@ -59,6 +79,29 @@ const ViewApplications: React.FC = () => {
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
+
+
+  //MENU STUFF
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const open = Boolean(anchorEl);
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number,
+  ) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
 
 
 
@@ -240,6 +283,51 @@ const ViewApplications: React.FC = () => {
         {/*The below displays additional application details for the selected application */}
         {currentApplication && <MockResume application={currentApplication} />}
       </div>
+
+
+      <div>
+        <List
+          component="nav"
+          aria-label="Device settings"
+          sx={{ bgcolor: 'background.paper' }}
+        >
+          <ListItemButton
+            id="lock-button"
+            aria-haspopup="listbox"
+            aria-controls="lock-menu"
+            aria-label="when device is locked"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClickListItem}
+          >
+            <ListItemText
+              // primary="When device is locked"
+              secondary={options[selectedIndex]}
+            />
+          </ListItemButton>
+        </List>
+        <Menu
+          id="lock-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'lock-button',
+            role: 'listbox',
+          }}
+        >
+          {options.map((option, index) => (
+            <MenuItem
+              key={option}
+              selected={index === selectedIndex}
+              onClick={(event) => handleMenuItemClick(event, index)}
+            >
+              {option}
+            </MenuItem>
+          ))}
+        </Menu>
+      </div>
+
+
     </Container>
   );
 };
