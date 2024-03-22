@@ -158,7 +158,7 @@ const Home: React.FC = () => {
 
                   <Button
                     component={Link}
-                    to="/tasks"
+                    to="/tasks/faculty"
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
 
                   <Button
                     component={Link}
-                    to="/tasks"
+                    to="/tasks/student"
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}

@@ -10,7 +10,7 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 
-import CreateTask from './pages/task/CreateTask';
+import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
@@ -24,7 +24,9 @@ import HomeDefault from './pages/HomeDefault';
 import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
+import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
+import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
@@ -92,8 +94,8 @@ const App: React.FC = () => {
           <Route index element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home/>} />
           <Route path= "/create-task" element = {<CreateTask/>}/>
-          <Route path="/tasks" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
-          <Route path="/tasks" element={<PrivateRoute role="faculty"><ViewCurrentTasks/></PrivateRoute>  } />
+          <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
+          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks/></PrivateRoute>  } />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
@@ -106,7 +108,6 @@ const App: React.FC = () => {
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"><EditApplication /></PrivateRoute>} />
           <Route path="/user-data" element={<UserDataPage />} />
           <Route path="*" element={<Home />} />
-          
         </Route>
       </Routes>
     </Router>
