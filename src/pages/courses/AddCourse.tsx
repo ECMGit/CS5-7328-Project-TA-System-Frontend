@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Container, Typography, Button, Box, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CourseService from '../../services/course';
-import { courseData } from './courseData';
+// 确保 courseData 类型正确导入，这里假设你已经正确地从后端类型定义中导入
+import { courseData } from '../../../../CS5-7328-Project-TA-System-Backend-main/src/modules/course/course.types';
 
 const AddCourse: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -20,7 +21,7 @@ const AddCourse: React.FC = () => {
             const newCourse: Omit<courseData, 'id'> = { // 假设id由后端生成，所以在这里省略id字段
                 title,
                 courseCode,
-                description
+                description// 确保字段名称与后端模型一致
             };
             await CourseService.addCourse(newCourse);
             setMessage('Course added successfully.');

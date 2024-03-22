@@ -68,8 +68,10 @@ const PrivateRouteJob = () => {
   if (!userContext?.user) {
     return <Navigate to="/login" />;
   }
-
-  if (userContext.user.role === 'student') {
+  if (userContext.user.role === 'admin') {
+    return <ViewJobs />;
+  }
+  else if (userContext.user.role === 'student') {
     return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
     return <ViewJobs />;

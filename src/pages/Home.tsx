@@ -116,7 +116,7 @@ const Home: React.FC = () => {
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
 
-              {user.role === 'faculty' ? (
+              {user.role === 'admin' ? (
                 <>
                   <Button
                     component={Link}

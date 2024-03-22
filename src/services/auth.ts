@@ -97,7 +97,7 @@ const getUserRole = (userId: number) => {
       throw error; // You can handle or propagate the error as needed
     });
 };
-
+//console.log(getUserRole);
 
 /**
  * For Handling User Reset Password request
