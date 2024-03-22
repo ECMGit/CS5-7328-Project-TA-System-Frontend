@@ -8,13 +8,13 @@ interface Task {
   // Define other properties of a task as needed
 }
 
-const ViewCurrentTasks: React.FC<{ studentId: number }> = ({ studentId }) => {
+const ViewCurrentTasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const storedUser = localStorage.getItem('user');
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await api.viewCurrent(studentId);
+        const response = await api.viewCurrent(storedUser);
         setTasks(response);
       } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -22,7 +22,7 @@ const ViewCurrentTasks: React.FC<{ studentId: number }> = ({ studentId }) => {
     };
 
     fetchTasks();
-  }, [studentId]);
+  }, [storedUser]);
 
   return (
     <div>
