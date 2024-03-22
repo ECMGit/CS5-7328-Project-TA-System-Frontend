@@ -95,10 +95,10 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/view-courses" element={<ViewAllCourses />} />
-          <Route path="/view-course/:id" element={<ViewCourse />} />
-          <Route path="/add-course" element={<AddCourse />} />
-          <Route path="/edit-course/:id" element={<EditCourse />} />
+          <Route path="/view-courses" element={<PrivateRoute role="admin"><ViewAllCourses /></PrivateRoute>} />
+          <Route path="/view-course/:id" element={<PrivateRoute role="admin"><ViewCourse /></PrivateRoute>} />
+          <Route path="/add-course" element={<PrivateRoute role="admin"><AddCourse /></PrivateRoute>} />
+          <Route path="/edit-course/:id" element={<PrivateRoute role="admin"><EditCourse /></PrivateRoute>} />
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRouteJob />} />
