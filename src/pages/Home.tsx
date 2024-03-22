@@ -155,15 +155,7 @@ const Home: React.FC = () => {
                   >
                     Create Task
                   </Button>
-                  <Button
-                    component={Link}
-                    to="/tasks"
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginLeft: '5px', marginRight: '5px' }}
-                  >
-                    View Tasks
-                  </Button>
+                 
 
                 </>
               ) : user.role === 'student' ? (
@@ -176,6 +168,16 @@ const Home: React.FC = () => {
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
                     Display
+                  </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View Tasks
                   </Button>
                   {/* <Button
                     component={Link}
