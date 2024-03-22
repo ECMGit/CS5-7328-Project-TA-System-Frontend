@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { courseData } from './../../../CS5-7328-Project-TA-System-Backend-main/src/modules/course/course.types';
-
+import { courseData } from '../pages/courses/courseData';
 
 
 const BASE_API_URL: string | undefined = process.env.REACT_APP_BACKEND_URL;

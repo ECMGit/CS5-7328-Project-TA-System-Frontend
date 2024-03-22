@@ -3,7 +3,7 @@ import { Container, Typography, Button, Box, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CourseService from '../../services/course';
 // 确保 courseData 类型正确导入，这里假设你已经正确地从后端类型定义中导入
-import { courseData } from '../../../../CS5-7328-Project-TA-System-Backend-main/src/modules/course/course.types';
+import { courseData } from './courseData';
 
 const AddCourse: React.FC = () => {
     const [title, setTitle] = useState('');

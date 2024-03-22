@@ -4,8 +4,7 @@ import { Container, Typography, Box, Paper, Button } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import CourseService from '../../services/course';
 
-import { courseData } from '../../../../CS5-7328-Project-TA-System-Backend-main/src/modules/course/course.types';
-
+import { courseData } from './courseData';
 
 const ViewCourse: React.FC = () => {
     const { id } = useParams<{ id: string }>();

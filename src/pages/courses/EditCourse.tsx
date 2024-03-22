@@ -3,8 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Typography, Button, Box, TextField } from '@mui/material';
 
 import CourseService from '../../services/course';
-import { courseData } from '../../../../CS5-7328-Project-TA-System-Backend-main/src/modules/course/course.types';
-
+import { courseData } from './courseData';
 
 const EditCourse: React.FC = () => {
     const [course, setCourse] = useState<courseData>({ id: 0, title: '', courseCode: '', description: '' });
