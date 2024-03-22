@@ -25,6 +25,7 @@ import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 import FeedbackPage from './pages/feedback/Feedback';
+import BugReportPage from './pages/bug-report/bug-report';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
@@ -104,6 +105,7 @@ const App: React.FC = () => {
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"><EditApplication /></PrivateRoute>} />
           <Route path="/user-data" element={<UserDataPage />} />
           <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/bug-report" element={<BugReportPage />} />
           <Route path="*" element={<Home />} />
         </Route>
       </Routes>

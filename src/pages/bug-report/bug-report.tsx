@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../provider';
-import { StudentFeatureRequestPage } from './StudentFeatureRequestpage';
+import { StudentBugReportPage } from './StudentBugReportpage';
 
-export default function FeedbackPage() {
+export default function BugReportPage() {
   const user = useContext(UserContext);
   if (user?.user?.role === 'student') {
-    return <StudentFeatureRequestPage></StudentFeatureRequestPage>;
+    return <StudentBugReportPage></StudentBugReportPage>;
   }
   return (
     <div style={{ padding: '80px' }}>
-      <div>FEEDBACK PAGE</div>
+      <div>BUG REPORT PAGE</div>
       <div>
-        Welcome to the feedback page where all your hopes and dreams come true!
+        Welcome to the bug report page where you can report any problems you encounter!
       </div>
       <div>
-        On this page you are welcome to add any feedback you like and our
+        Please use this page to report any bugs you encounter and our
         wonderful admins will be sure to take a look!
       </div>
       <button style={{ marginTop: '20px' }}>Add feedback</button>

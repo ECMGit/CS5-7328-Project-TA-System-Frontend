@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../provider';
 
-export const StudentFeedbackPage = () => {
+export const StudentBugReportPage = () => {
   const user = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState<string[]>([]);
   const [content, setContent] = useState('');
@@ -9,6 +9,7 @@ export const StudentFeedbackPage = () => {
   // Function to submit feedback
   const submit = async (content: string) => {
     // Explicitly type the parameter
+
     const response = await fetch('http://localhost:9000/feedback', {
       method: 'POST',
       headers: {
@@ -25,7 +26,6 @@ export const StudentFeedbackPage = () => {
     setFeedbacks((prevFeedbacks) => [...prevFeedbacks, data.content]);
     setContent(''); // Clear the textarea
   };
-
   return (
     <div
       style={{
@@ -35,13 +35,13 @@ export const StudentFeedbackPage = () => {
         padding: '30px',
       }}
     >
-      <h1>Student Feedback Page</h1>
+      <h1>Student Bug Report Page</h1>
       <textarea
         style={{ width: '100%' }}
         value={content}
         rows={8}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Enter feedback here"
+        placeholder="Describe the bug you encountered here"
       ></textarea>
       <button onClick={() => submit(content)}>SUBMIT</button>
       <div style={{ marginTop: '80px' }}>
