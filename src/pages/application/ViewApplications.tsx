@@ -37,7 +37,19 @@ const SearchInput = styled.input`
   font-size: 16px; // Adjust font size as needed
   // Add more styling here to match your NavbarButton
 `;
-
+//styled button for making TA
+const MakeTaButton = styled.button`
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #45a049;
+  }
+`;
 
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
@@ -46,6 +58,7 @@ const ViewApplications: React.FC = () => {
   //The below stores the current selected applications
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  const [selectionModel, setSelectionModel] = useState<number[]>([]);
 
 
 
@@ -66,7 +79,7 @@ const ViewApplications: React.FC = () => {
   ];
   // This is the data that will be displayed in the XGrid
   const rows = applications.map((app) => ({
-    id: app.studentId,
+    id: app.id,
     studentId: app.studentId,
     courseId: app.courseId,
     hoursCanWorkPerWeek: app.hoursCanWorkPerWeek,
@@ -79,14 +92,18 @@ const ViewApplications: React.FC = () => {
     TAStats: app.TAStats,
     status: app.status,
   })).filter((app) => {
-    return app.studentId == 1; // Makes sure that the applications for only one student are shown
+    return app.courseId == 3; // Makes sure that the applications for only one student are shown
     // Change later to base on currently logged in student
   });
   const [searchText, setSearchText] = useState('');
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
 
-
+  const onRowsSelectionHandler = (ids: (number | string)[]) => {
+    // Select Student from row
+    setSelectionModel(ids.map(Number));
+  };
+  
 
 
 
@@ -103,7 +120,41 @@ const ViewApplications: React.FC = () => {
     fetchApplications();
   }, []);
 
-
+  const makeTA = async () => {
+    if (selectionModel.length > 0) {
+      //get first selected if more than 1 is selected
+      const selectedApplicationId = selectionModel[0];
+      //get application from grid
+      const selectedApplication = rows.find(row => row.id === selectedApplicationId);
+      console.log(selectedApplication);
+      if (selectedApplication) {
+        try {
+          // api endpoint
+          const endpoint = `/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
+  
+          //POST to backend
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          if (!response.ok) throw new Error('Error');
+          alert('Student has been made a TA successfully!');
+        } catch (error) {
+          console.error('Error making student a TA:', error);
+          alert('Failed to make the student a TA. Please try again.');
+        }
+      } else {
+        alert('Selected application not found.');
+      }
+    } else {
+      alert('Please select a student first.');
+    }
+  };
+  
+  
 
 
   // Fuzzy search function
@@ -177,7 +228,12 @@ const ViewApplications: React.FC = () => {
         }}
         onFilterModelChange={(model) => setFilterModel(model)}
         checkboxSelection
+        //onSelection go to handler
+        onRowSelectionModelChange={onRowsSelectionHandler} 
+        rowSelectionModel={selectionModel}
       />
+      {/* Button to make student TA*/}
+      <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
       
       <div>
