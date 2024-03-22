@@ -133,6 +133,8 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
 const MessagesList = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
+  const [senderIdQuery, setSenderIdQuery] = React.useState('');
+  const [applicationIdQuery, setApplicationIdQuery] = React.useState('');
   const [messages, setMessages] = React.useState<UserMessage[]>(userMessages);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,6 +146,17 @@ const MessagesList = () => {
   ) => {
     setReceiverIdQuery(event.target.value);
   };
+
+  const handleSenderIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSenderIdQuery(event.target.value);
+  };
+
+  const handleApplicationIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setApplicationIdQuery(event.target.value);
+  };
+
 
   const fetchMessagesByReceiverId = async (receiverId: string) => {
     try {
@@ -238,16 +251,16 @@ const MessagesList = () => {
         variant="outlined"
         fullWidth
         margin="normal"
-        value={receiverIdQuery}
-        onChange={handleReceiverIdChange}
+        value={senderIdQuery}
+        onChange={handleSenderIdChange}
       />
       <TextField
         label="Search by Application ID"
         variant="outlined"
         fullWidth
         margin="normal"
-        value={receiverIdQuery}
-        onChange={handleReceiverIdChange}
+        value={applicationIdQuery}
+        onChange={ handleApplicationIdChange}
       />
       <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
         <Button
