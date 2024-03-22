@@ -10,7 +10,7 @@ export const StudentBugReportPage = () => {
   const submit = async (content: string) => {
     // Explicitly type the parameter
 
-    const response = await fetch('http://localhost:9000/feedback', {
+    const response = await fetch('http://localhost:9000/bug-report', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
