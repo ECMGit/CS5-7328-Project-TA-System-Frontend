@@ -10,7 +10,7 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 
-
+import CreateTask from './pages/CreateTask';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
@@ -90,7 +90,7 @@ const App: React.FC = () => {
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home/>} />
-
+          <Route path= "/create-task" element = {<CreateTask/>}/>
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
