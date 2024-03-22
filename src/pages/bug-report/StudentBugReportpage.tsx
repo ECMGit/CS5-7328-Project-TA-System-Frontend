@@ -3,14 +3,14 @@ import { UserContext } from '../../provider';
 
 export const StudentBugReportPage = () => {
   const user = useContext(UserContext);
-  const [feedbacks, setFeedbacks] = useState<string[]>([]);
+  const [BugReports, setBugReports] = useState<string[]>([]);
   const [content, setContent] = useState('');
 
-  // Function to submit feedback
+  // Function to submit BugReport
   const submit = async (content: string) => {
     // Explicitly type the parameter
 
-    const response = await fetch('http://localhost:9000/bug-report', {
+    const response = await fetch('http://localhost:9000/Feedback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export const StudentBugReportPage = () => {
 
     const data = await response.json();
     console.log(data);
-    setFeedbacks((prevFeedbacks) => [...prevFeedbacks, content]);
+    setBugReports((prevBugReports) => [...prevBugReports, content]);
     setContent(''); // Clear the textarea
   };
   return (
@@ -45,9 +45,9 @@ export const StudentBugReportPage = () => {
       ></textarea>
       <button onClick={() => submit(content)}>SUBMIT</button>
       <div style={{ marginTop: '80px' }}>
-        {feedbacks.map((feedback, index) => (
+        {BugReports.map((BugReport, index) => (
           <div key={index}>
-            <p>{feedback}</p>
+            <p>{BugReport}</p>
           </div>
         ))}
       </div>
