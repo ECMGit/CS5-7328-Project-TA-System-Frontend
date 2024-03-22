@@ -9,8 +9,6 @@ export const StudentFeedbackPage = () => {
   // Function to submit feedback
   const submit = async (content: string) => {
     // Explicitly type the parameter
-    setFeedbacks((prevFeedbacks) => [...prevFeedbacks, content]);
-    setContent('');
     const response = await fetch('http://localhost:9000/feedback', {
       method: 'POST',
       headers: {
