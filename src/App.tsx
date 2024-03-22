@@ -93,6 +93,7 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home/>} />
           <Route path= "/create-task" element = {<CreateTask/>}/>
           <Route path="/tasks" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
+          <Route path="/tasks" element={<PrivateRoute role="faculty"><ViewCurrentTasks/></PrivateRoute>  } />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/jobs/details/:id" element={<JobInfo/>}/>
