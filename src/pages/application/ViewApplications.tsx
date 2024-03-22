@@ -130,8 +130,8 @@ const ViewApplications: React.FC = () => {
       if (selectedApplication) {
         try {
           // api endpoint
-          const endpoint = `/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
-  
+          const endpoint = `http://localhost:9000/ta-application/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
+
           //POST to backend
           const response = await fetch(endpoint, {
             method: 'POST',
