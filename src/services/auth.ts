@@ -86,7 +86,7 @@ const getCurrentUser = () => {
   return user ? JSON.parse(user) : null;
 };
 
-const getUserRole = (userId: number) => {
+const getUserRoleFromBackEnd = (userId: number) => {
   // Pass the userId as a query parameter
   return axios.get(`${USER_API_URL}role/${userId}`)
     .then((response) => {
@@ -97,8 +97,21 @@ const getUserRole = (userId: number) => {
       throw error; // You can handle or propagate the error as needed
     });
 };
-
-
+/**
+ * For Handling User Role identification from local storage or backend
+ * @param userId
+ * @returns
+ * */
+const getUserRole = async (userId: number) => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    const userObject = JSON.parse(user);
+    return userObject.role;
+    // Use myObject as needed
+  }else{
+    return getUserRoleFromBackEnd(userId);
+  }
+};
 /**
  * For Handling User Reset Password request
  * @param email
