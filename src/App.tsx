@@ -87,7 +87,7 @@ const App: React.FC = () => {
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-
+        <Route path="/unauthorized" element={<LoginPage/>}/>
         <Route path="/" element={<ProviderLayout />} >
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />

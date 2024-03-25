@@ -224,11 +224,11 @@ const Home: React.FC = () => {
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
-        {role === 'student' && (
+        {/* {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>
-        )}
+        )} */}
       </div>
     </div>
   );
