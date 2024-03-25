@@ -41,7 +41,7 @@ const ProviderLayout = ({ children }: ProviderLayoutProps) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       // Get user role when the user is available
-      AuthService.getUserRole(JSON.parse(storedUser).id) 
+      AuthService.getUserRole(JSON.parse(storedUser).id)
         .then((role: string) => {
           console.log('current:',role);
           setUserType(role);
