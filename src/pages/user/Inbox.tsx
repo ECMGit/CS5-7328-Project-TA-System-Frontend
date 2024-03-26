@@ -16,7 +16,9 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 interface User {
   id: number;
@@ -42,8 +44,8 @@ interface UserMessage {
   isRead: boolean;
 }
 
-// TODO: Should be replaced by real content 
-const messages: UserMessage[] = [
+// TODO: Should be replaced by real content
+const userMessages: UserMessage[] = [
   {
     id: 1,
     content: 'Hello, your application has been received.',
@@ -51,7 +53,7 @@ const messages: UserMessage[] = [
     sender: { id: 1, firstName: 'John', lastName: 'Doe' },
     taJob: { title: 'TA for Computer Science' },
     course: { title: 'Introduction to Programming' },
-    isRead: false
+    isRead: false,
   },
   {
     id: 2,
@@ -60,7 +62,7 @@ const messages: UserMessage[] = [
     sender: { id: 2, firstName: 'Alice', lastName: 'Smith' },
     taJob: { title: 'TA for Data Structures' },
     course: { title: 'Advanced Algorithms' },
-    isRead: true
+    isRead: true,
   },
   {
     id: 3,
@@ -69,29 +71,39 @@ const messages: UserMessage[] = [
     sender: { id: 3, firstName: 'Bob', lastName: 'Johnson' },
     taJob: { title: 'TA for Artificial Intelligence' },
     course: { title: 'Machine Learning Basics' },
-    isRead: true
-  }
+    isRead: true,
+  },
 ];
 
 const MessageItem = ({ message }: { message: UserMessage }) => {
   // Initial color state
-  const [color, setColor] = React.useState(message.isRead ? 'transparent' : '#FFD700'); 
+  const [color, setColor] = React.useState(
+    message.isRead ? 'transparent' : '#FFD700'
+  );
 
   // Function to change color
   const onRead = async (messageId: number) => {
     if (color != 'transparent') {
       setColor('transparent');
       try {
-        await axios.post(`http://localhost:9000/message/mark-read/${messageId}`);
-      }
-      catch(error) {
+        const response = await axios.post(
+          `http://localhost:9000/message/mark-read/${messageId}`
+        );
+
+        const data = response.data;
+
+        console.log(data);
+      } catch (error) {
         console.log(error);
       }
     }
   };
 
   return (
-    <Container onClick={() => onRead(message.id)} style={{backgroundColor: color}}>
+    <Container
+      onClick={() => onRead(message.id)}
+      style={{ backgroundColor: color }}
+    >
       <ListItem alignItems="flex-start">
         <ListItemText
           primary={`${message.taJob.title} - ${message.course.title}`}
@@ -119,31 +131,154 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
 };
 
 const MessagesList = () => {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
+  const [senderIdQuery, setSenderIdQuery] = React.useState('');
+  const [applicationIdQuery, setApplicationIdQuery] = React.useState('');
+  const [messages, setMessages] = React.useState<UserMessage[]>(userMessages);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleReceiverIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setReceiverIdQuery(event.target.value);
+  };
+
+  const handleSenderIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSenderIdQuery(event.target.value);
+  };
+
+  const handleApplicationIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setApplicationIdQuery(event.target.value);
+  };
+
+
+  const fetchMessagesByReceiverId = async (receiverId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/receiver/${receiverId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMessagesBySenderId = async (senderId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/sender/${senderId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMessagesByApplationId = async (applicationId: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/message/application/${applicationId}`
+      );
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (receiverIdQuery) {
+      fetchMessagesByReceiverId(receiverIdQuery);
+    } else {
+      // Fetch all messages if receiver ID is not provided
+      // Replace this with your logic to fetch all messages
+      setMessages(messages);
+    }
+  }, [receiverIdQuery]);
+
+  const filteredMessages = messages.filter((message) => {
+    const { title: jobTitle } = message.taJob;
+    const { title: courseTitle } = message.course;
+    const { content } = message;
+
+    const searchValue = searchQuery.toLowerCase();
+
+    return (
+      jobTitle.toLowerCase().includes(searchValue) ||
+      courseTitle.toLowerCase().includes(searchValue) ||
+      content.toLowerCase().includes(searchValue)
+    );
+  });
+
   return (
     <Container>
-
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           textAlign: 'center',
-          backgroundColor: '#1976D2', // Blue color
-          color: '#FFF', // White color
-          padding: '16px', // Adjust the padding as needed
+          backgroundColor: '#1976D2',
+          color: '#FFF',
+          padding: '16px',
         }}
       >
         Inbox
       </Box>
-      <List sx={{ width: '100%' }}>
+      <TextField
+        label="Search"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+      <TextField
+        label="Search by Receiver ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={receiverIdQuery}
+        onChange={handleReceiverIdChange}
+      />
+      <TextField
+        label="Search by Sender ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={senderIdQuery}
+        onChange={handleSenderIdChange}
+      />
+      <TextField
+        label="Search by Application ID"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={applicationIdQuery}
+        onChange={ handleApplicationIdChange}
+      />
+      <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
+        <Button
+          component={Link}
+          to="/inbox/new"
+          variant="contained"
+          color="primary"
+        >
+          New Message
+        </Button>
+      </Box>
 
-        {messages.map((message) => (
+      <List sx={{ width: '100%' }}>
+        {filteredMessages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
       </List>
-
     </Container>
-
   );
 };
 

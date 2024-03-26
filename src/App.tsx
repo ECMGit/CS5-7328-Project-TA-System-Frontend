@@ -36,7 +36,7 @@ import BugReportPage from './pages/bug-report/bug-report';
 import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
-
+import CreateMessage from './pages/user/CreateMessage';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -91,6 +91,7 @@ function PrivateRouteJob() {
   } else {
     return <Navigate to="/unauthorized" />;
   }
+
 }
 
 type PrivateRoutePerformanceReviewProps = {
@@ -160,8 +161,8 @@ const App: React.FC = () => {
           {/* Student Performance Review Module */}
           <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>}/>
           <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>}/>
-
           <Route path="/user-data" element={<UserDataPage />} />
+          
           {/* FeedBack and Bug Report Module */}
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/bug-report" element={<BugReportPage />} />
