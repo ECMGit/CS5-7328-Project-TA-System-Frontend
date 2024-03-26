@@ -33,6 +33,10 @@ import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 import FeedbackPage from './pages/feedback/Feedback';
 import BugReportPage from './pages/bug-report/bug-report';
+import ViewStudents from './pages/Admin/ViewStudents';
+import ViewFaculties from './pages/Admin/ViewFaculties';
+import ViewCourses from './pages/Admin/ViewCourses';
+
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -161,7 +165,11 @@ const App: React.FC = () => {
         {/* FeedBack and Bug Report Module */}
         <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/bug-report" element={<BugReportPage />} />
-        <Route path="*" element={<Home />} />
+        
+        {/* admin resources */}
+        <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
+        <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
+        <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
         </Route>
       </Routes>
     </Router>

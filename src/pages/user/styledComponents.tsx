@@ -122,3 +122,20 @@ export const NavbarButton = styled.button`
   }
 `;
 
+export const Input = styled.input`
+  padding: 10px; // Adjust padding as needed
+  margin-bottom: 10px; // Adjust margin as needed
+  border: 1px solid #ccc; // Adjust border as needed
+  border-radius: 4px; // Adjust for rounded corners
+  font-size: 16px; // Adjust font size as needed
+  // Add more styling here to match your NavbarButton
+`;
+
+export const Titles = styled.h1`
+  margin-bottom: 30px;
+  font-size: 26px;
+  color: #333;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  text-align: center;
+`;
+
