@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const ADMIN_API_URL = 'http://localhost:9000/admin';
+const ADMIN_API_URL = 'http://localhost:9000/user/admin';
 
 /**
  * display student
