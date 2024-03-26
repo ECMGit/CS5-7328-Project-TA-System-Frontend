@@ -38,6 +38,13 @@ import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
 import CreateMessage from './pages/user/CreateMessage';
 
+
+// TODO: Merge following page with above viewAllCourses page, we only need one page for viewing courses
+import ViewAllCourses from './pages/courses/ViewAllCourses';
+import AddCourse from './pages/courses/AddCourse';
+import ViewCourse from './pages/courses/ViewCourse';
+import EditCourse from './pages/courses/EditCourse';
+
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
   (config) => {
@@ -54,13 +61,14 @@ axios.interceptors.request.use(
   }
 );
 
+
 interface PrivateRouteProps {
   role: string;
   userId?: number;
   children: React.ReactNode;
 }
 
-function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
+const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
   const userContext = useContext(UserContext);
 
   if (!userContext?.user) {
@@ -75,6 +83,7 @@ function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
   } else {
     return <Navigate to="/unauthorized" />;
   }
+
 }
 //make an if statement to check if the user is a student or faculty and then render the correct page for jobs
 function PrivateRouteJob() {
@@ -83,16 +92,17 @@ function PrivateRouteJob() {
   if (!userContext?.user) {
     return <Navigate to="/login" />;
   }
-
-  if (userContext.user.role === 'student') {
+  if (userContext.user.role === 'admin') {
+    return <ViewJobs />;
+  }
+  else if (userContext.user.role === 'student') {
     return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
     return <ViewJobs />;
   } else {
     return <Navigate to="/unauthorized" />;
   }
-
-}
+};
 
 type PrivateRoutePerformanceReviewProps = {
   children: React.ReactNode;
@@ -131,7 +141,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/home-default" element={<HomeDefault />} />
+        <Route path='/home-default' element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
@@ -148,6 +158,14 @@ const App: React.FC = () => {
           
           {/* Job Module */}
           <Route path="/inbox" element={<Inbox />} />
+
+          <Route index element={<Navigate to="/home" />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/view-courses" element={<PrivateRoute role="admin"><ViewAllCourses /></PrivateRoute>} />
+          <Route path="/view-course/:id" element={<PrivateRoute role="admin"><ViewCourse /></PrivateRoute>} />
+          <Route path="/add-course" element={<PrivateRoute role="admin"><AddCourse /></PrivateRoute>} />
+          <Route path="/edit-course/:id" element={<PrivateRoute role="admin"><EditCourse /></PrivateRoute>} />
+
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRouteJob />} />
@@ -176,4 +194,5 @@ const App: React.FC = () => {
     </Router>
   );
 };
+
 export default App;

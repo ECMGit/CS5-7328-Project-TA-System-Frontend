@@ -97,6 +97,7 @@ const getUserRoleFromBackEnd = (userId: number) => {
       throw error; // You can handle or propagate the error as needed
     });
 };
+
 /**
  * For Handling User Role identification from local storage or backend
  * @param userId
