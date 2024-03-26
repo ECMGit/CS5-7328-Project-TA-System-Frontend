@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState, FormEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
+import { backendURL } from '../../config';
 import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Select, InputLabel, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -38,12 +38,10 @@ const PostJob: React.FC = () => {
     async function fetchAvailableCourses() {
       try {
         const token = localStorage.getItem('token');
-
         const headers = {
           Authorization:  `Bearer ${token}`
         };
-
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/course`, {
+        const response = await fetch(`${backendURL}/course`, {
           headers: headers
         });
 
