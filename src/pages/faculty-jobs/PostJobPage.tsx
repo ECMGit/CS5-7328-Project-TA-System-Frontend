@@ -41,7 +41,7 @@ const PostJob: React.FC = () => {
         const headers = {
           Authorization:  `Bearer ${token}`
         };
-        const response = await fetch(`${backendURL}/course`, {
+        const response = await fetch(`${backendURL}/course/nodetails`, {
           headers: headers
         });
 
