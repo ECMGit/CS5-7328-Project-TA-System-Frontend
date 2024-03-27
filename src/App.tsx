@@ -83,8 +83,7 @@ const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
   } else {
     return <Navigate to="/unauthorized" />;
   }
-
-}
+};
 //make an if statement to check if the user is a student or faculty and then render the correct page for jobs
 function PrivateRouteJob() {
   const userContext = useContext(UserContext);
@@ -102,7 +101,7 @@ function PrivateRouteJob() {
   } else {
     return <Navigate to="/unauthorized" />;
   }
-};
+}
 
 type PrivateRoutePerformanceReviewProps = {
   children: React.ReactNode;
