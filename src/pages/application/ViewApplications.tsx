@@ -134,10 +134,8 @@ const ViewApplications: React.FC = () => {
     taJobId: app.taJobId,
     TAStats: app.TAStats,
     status: app.status,
-  })).filter((app) => {
-    return app.courseId == 3; // Makes sure that the applications for only one student are shown
-    // Change later to base on currently logged in student
-  });
+  }));
+
   const [searchText, setSearchText] = useState('');
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
@@ -156,7 +154,9 @@ const ViewApplications: React.FC = () => {
     // This function will be called when the component mounts for the first time
     const fetchApplications = async () => {
       const taApplications = await AuthService.getTaApplication();
+      console.log(taApplications);
       setApplications(taApplications);
+      console.log(applications);
       setOriginalApplications(taApplications); // Set the original applications
     };
   
