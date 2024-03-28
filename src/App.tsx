@@ -16,6 +16,10 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 
+<<<<<<< HEAD
+=======
+import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
+>>>>>>> team7
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
@@ -31,6 +35,7 @@ import HomeDefault from './pages/HomeDefault';
 import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
+
 import FeedbackPage from './pages/feedback/Feedback';
 import BugReportPage from './pages/bug-report/bug-report';
 import ViewStudents from './pages/Admin/ViewStudents';
@@ -44,6 +49,10 @@ import ViewAllCourses from './pages/courses/ViewAllCourses';
 import AddCourse from './pages/courses/AddCourse';
 import ViewCourse from './pages/courses/ViewCourse';
 import EditCourse from './pages/courses/EditCourse';
+
+import CreateTask from './pages/task/CreateTask';
+import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
+import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -84,7 +93,6 @@ const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
     return <Navigate to="/unauthorized" />;
   }
 };
-
 //make an if statement to check if the user is a student or faculty and then render the correct page for jobs
 function PrivateRouteJob() {
   const userContext = useContext(UserContext);
@@ -150,6 +158,7 @@ const App: React.FC = () => {
         <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
+
           <Route path="/home" element={<Home />} />
           {/* Profile module */}
 
@@ -157,6 +166,12 @@ const App: React.FC = () => {
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"> <FacultyProfile /> </PrivateRoute>} />
           
           {/* Job Module */}
+
+          <Route path= "/create-task" element = {<CreateTask/>}/>
+          <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
+          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks/></PrivateRoute>  } />
+          <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
+
           <Route path="/inbox" element={<Inbox />} />
 
           <Route index element={<Navigate to="/home" />} />
