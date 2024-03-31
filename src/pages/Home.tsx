@@ -1,7 +1,7 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
 import React, { useState, useEffect, useContext } from 'react';
 // Import components (Typography and Container) from the Material-UI library.
-import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
+import { Typography, Container, Button, Paper, Avatar ,Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
@@ -292,12 +292,26 @@ const Home: React.FC = () => {
         {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+        <Box
+        sx={{
+          py: 2,
+          px: 3,
+          mt: 'auto',
+          color: 'white',
+          textAlign: 'center',
+          position: 'fixed',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+        }}
+      >
         <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
         </Paper>
+        </Box>
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
