@@ -71,8 +71,8 @@ const CreateTask: React.FC = () => {
   const handleSubmit = () => {
     const userId = JSON.parse(storedUser!).id; 
     api.createTask(
-      userId,
-      +student_id, // convert to number
+      userId.toString(),
+      student_id, // convert to number
       title,
       description,
       // urgency: urgency,

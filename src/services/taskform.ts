@@ -3,9 +3,9 @@ const BASE_URL = 'http://localhost:9000';
 const token = localStorage.getItem('token');
 
 
-const createTask = (facultyId: number, studentId: number,  title: string, description: string ) => {
+const createTask = (facultyId: string, studentId: string,  title: string, description: string ) => {
   const CREATE_TASK_API = `${BASE_URL}/tasks`;
-  return axios.post(CREATE_TASK_API, { facultyId,studentId, title, description}, {
+  return axios.post(CREATE_TASK_API, { facultyId, studentId, title, description}, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
