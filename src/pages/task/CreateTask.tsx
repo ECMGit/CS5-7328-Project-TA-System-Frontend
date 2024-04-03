@@ -12,6 +12,7 @@ const CreateTask: React.FC = () => {
   // State hooks for form fields and validation errors
   //   const [faculty_id, setFaculty_id] = useState(''); // COmes from later check
   const [student_id, setStudent_id] = useState('');
+  const [courseId, setCourseId ] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   // const [urgency, setUrgency] = useState('');
@@ -22,6 +23,7 @@ const CreateTask: React.FC = () => {
 
   //Errors
   const [Student_idError, setStudent_idError] = useState('');
+  const [courseIdError, setCourseIdError] = useState('');
   // const [Title_Error , setTitle_Error] = useState('');
 
 
@@ -63,6 +65,21 @@ const CreateTask: React.FC = () => {
     }
   };
 
+  const handleCourseIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+    // IF NUMERIC AND IN DATABASE 
+    if(checkNumeric(input))
+    {
+      
+      setCourseId(input); 
+      setCourseIdError(''); 
+    }
+    else {
+      setCourseIdError('Task Id invalid input');
+    }
+  };
+
+
 
   const navigate = useNavigate();
 
@@ -75,6 +92,7 @@ const CreateTask: React.FC = () => {
       student_id, // convert to number
       title,
       description,
+      courseId,
       // urgency: urgency,
       // completed: false,
       // verified: false
@@ -124,6 +142,21 @@ const CreateTask: React.FC = () => {
             helperText={Student_idError}
             autoFocus
           />
+          {/* Task ID */}
+          <TextField
+            label="Course ID (Optional)"
+            margin="normal"
+            required
+            fullWidth
+            autoComplete="off"
+            value={courseId}
+            onChange={handleCourseIdChange}
+            error={!!courseIdError}
+            helperText={courseIdError}
+            autoFocus
+          />
+
+          
           {/* Task Description */}
           <TextField 
             label="Description" 
