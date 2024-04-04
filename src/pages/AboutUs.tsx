@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Footer from '../components/Footer';
 export default function AboutUs() {
     return (
         <div className="px-4 md:px-6 w-full flex items-center justify-center flex-col pb-20">
@@ -96,6 +97,7 @@ export default function AboutUs() {
             <button className='px-5 py-2 text-xl bg-black transition-all text-white hover:text-black hover:bg-white hover:border-black hover:border-2 rounded-md'>Home</button>
             </a>
           </div>
+          <Footer/>
         </div>
     );
   }
