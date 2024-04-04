@@ -16,10 +16,7 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 
-<<<<<<< HEAD
-=======
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
->>>>>>> team7
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
@@ -56,7 +53,7 @@ import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const token = localStorage.getItem('token');
     // console.log(token); // debugging purposes
 
@@ -65,7 +62,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );
