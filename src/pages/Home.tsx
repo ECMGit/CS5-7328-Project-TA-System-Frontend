@@ -99,14 +99,14 @@ const Home: React.FC = () => {
           minHeight: '80vh'
         }}>
           {/* Large image at the top */}
-          {/* <img
+          <img
             src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
             alt="SMU Dallas Hall"
-            style={{ width: '100%', height: 'auto' }}
-          /> */}
+            style={{ width: '100%', height: 'auto', paddingTop: '50px' }}
+          />
           {/* Text box that spans the page */}
           {user && (
-                    <div className='w-full p-5 border-2 shadow-lg text-xl border-gray-300 bg-white h-fit m-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
+                    <div className='w-full p-5 border-2 shadow-lg text-xl border-gray-300 bg-white h-fit my-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
           )}
 
 {user.role === 'admin' ? (

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function Footer() {
     return (
-        <footer className="bg-white py-8">
+        <footer className="bg-white pt-52 pb-8">
             <h3 className='text-xl text-center'>Have feedback? See <a href="/feedback" className="text-blue-500">
   Give Feedback
 </a>
