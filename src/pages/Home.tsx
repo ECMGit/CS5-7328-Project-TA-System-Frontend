@@ -96,6 +96,7 @@ const Home: React.FC = () => {
         <Container style={{
           paddingLeft: '10px',
           paddingRight: '10px',
+          minHeight: '80vh'
         }}>
           {/* Large image at the top */}
           {/* <img
@@ -105,59 +106,10 @@ const Home: React.FC = () => {
           /> */}
           {/* Text box that spans the page */}
           {user && (
-            <div>
-              <Typography variant="body1">
-                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-                Engineering students to find TA jobs.
-              </Typography>
-              </div>
+                    <div className='w-full p-5 border-2 shadow-lg text-xl border-gray-300 bg-white h-fit m-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
           )}
-  
-          {/* If the user is a student, display their work list */}
-          {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-              <TAJobDisplayComponent />
-            </Container>
-          )}
-        </Container> 
-      );
-    }
-  };
-  
-  return (
-    // Render the component within a container with a maximum width of 'sm'.
 
-    <div>
-      {/* Blue banner with "Login" button */}
-      <div
-        style={{
-          backgroundColor: '#1976D2',
-          padding: '16px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h6" style={{ color: '#FFF' }}>
-          SMU Lyle School of Engineering Job Site
-        </Typography>
-        {/* show student Profile if the user log in as student  */}
-        {/* {role === 'student' && (
-          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-        )} */}
-        {/* show falcuty if the user log in as faculty */}
-        {/* {role === 'faculty' && (
-          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-        )} */}
-
-        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
-          View Applications
-        </Button> */}
-        <div style={{ marginLeft: 'auto' }}>
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-
-              {user.role === 'admin' ? (
+{user.role === 'admin' ? (
                 <>
                   <Button
                     component={Link}
@@ -275,6 +227,50 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
+  
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </Container> 
+      );
+    }
+  };
+  
+  return (
+    // Render the component within a container with a maximum width of 'sm'.
+
+    <div>
+      {/* Blue banner with "Login" button */}
+      <div
+        style={{
+          backgroundColor: '#1976D2',
+          padding: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6" style={{ color: '#FFF' }}>
+          SMU Lyle School of Engineering Job Site
+        </Typography>
+        {/* show student Profile if the user log in as student  */}
+        {/* {role === 'student' && (
+          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
+        )} */}
+        {/* show falcuty if the user log in as faculty */}
+        {/* {role === 'faculty' && (
+          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
+        )} */}
+
+        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
+          View Applications
+        </Button> */}
+        <div style={{ marginLeft: 'auto' }}>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
             </div>
           ) : (
@@ -294,14 +290,6 @@ const Home: React.FC = () => {
       <div>
         {/* Call renderContent to display corresponding content based on user roles */}
         {renderContent()}
-
-        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        {/* <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper> */}
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}

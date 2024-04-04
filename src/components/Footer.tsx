@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 export default function Footer() {
     return (
         <footer className="bg-white py-8">
-            {/* <div className='w-5/6 bg-gray-200 h-1 mb-10 mx-auto rounded-full'/> */}
+            <h3 className='text-xl text-center'>Have feedback? See <a href="/feedback" className="text-blue-500">
+  Give Feedback
+</a>
+    </h3>
+
             <div className="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between"/>
             {/* <div className="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between"> */}
 
@@ -28,44 +32,34 @@ export default function Footer() {
                     <div>
                         <h5 className="text-lg font-semibold mb-4">AUDIENCE LINKS</h5>
                         <ul className="space-y-2">
-                            <li>Undergraduate Students</li>
-                            <li>Graduate Students</li>
-                            <li>Alumni</li>
-                            <li>Faculty & Staff</li>
-                            <li>Media</li>
-                            <li>Parents</li>
+                            <li>Audience Link 1</li>
+                            <li>Audience Link 2</li>
+                            <li>Audience Link 3</li>
+                            <li>Audience Link 4</li>
+                            <li>Audience Link 5</li>
+                            <li>Audience Link 6</li>
                         </ul>
                     </div>
                     <div>
                         <h5 className="text-lg font-semibold mb-4">QUICK LINKS</h5>
                         <ul className="space-y-2">
-                            <li>SMU Ignited: Boldly Shaping Tomorrow</li>
-                            <li>Corporate and Foundation Relations</li>
-                            <li>Diversity and Inclusion</li>
-                            <li>COVID-19 Information (Mustang Strong)</li>
-                            <li>Bush Center</li>
-                            <li>SMU Store</li>
-                            <li>Academic Calendar</li>
-                            <li>Academic Ceremonies</li>
-                            <li>Events Calendar</li>
-                            <li>Employment</li>
-                            <li>Giving to SMU</li>
-                            <li>Virtual Tour</li>
-                            <li>SMU Stories</li>
+                        <li>Quick Link 1</li>
+                            <li>Quick Link 2</li>
+                            <li>Quick Link 3</li>
+                            <li>Quick Link 4</li>
+                            <li>Quick Link 5</li>
+                            <li>Quick Link 6</li>
                         </ul>
                     </div>
                     <div>
-                        <h5 className="text-lg font-semibold mb-4">GET IN TOUCH</h5>
+                        <h5 className="text-lg font-semibold mb-4">GET IN TOUCH (Click to see)</h5>
                         <ul className="space-y-2">
-                            <li>Contact Us</li>
-                            <li>Maps Directions</li>
-                            <li>Compliance</li>
-                            <li>Legal Disclosures</li>
-                            <li>Privacy Policy Statement</li>
-                            <li>Report Sexual Harassment</li>
-                            <li>Reporting a bias Incident</li>
-                            <li>HEERF Reporting</li>
-                            <li>Emergency Preparedness</li>
+                            <li><a href="/feedback" className="text-blue-500">
+Feedback
+</a></li>
+                            <li><a href="/about-us" className="text-blue-500">
+  About Us
+</a></li>
                         </ul>
                     </div>
                 </div>

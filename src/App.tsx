@@ -50,6 +50,7 @@ import EditCourse from './pages/courses/EditCourse';
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+import AboutUs from './pages/AboutUs';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -151,7 +152,7 @@ const App: React.FC = () => {
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-
+        <Route path="/about-us" element={<AboutUs/>}/>
         <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
