@@ -27,8 +27,9 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
+    'indent': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    indent: ['error', 2],
+    // indent: ['error', 2],
     // 'linebreak-style': [
     //     'error',
     //     'unix'

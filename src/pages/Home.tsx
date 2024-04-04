@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigat
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
+import Footer from '../components/Footer';
+import ActionCard from '../components/cards/ActionCard';
 
 
 // Define an interface 'User' to specify the structure of a user object.
@@ -208,19 +210,26 @@ const Home: React.FC = () => {
 
       <div>
         {/* Large image at the top */}
-        <img
+        {/* <img
           src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
           alt="SMU Dallas Hall"
           style={{ width: '100%', height: 'auto' }}
-        />
+        /> */}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper>
+        <div className='flex min-h-screen w-screen flex-col'>
+        <div className='w-full p-5 border-2 shadow-lg border-gray-300 bg-white h-fit m-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
+        {role === 'faculty' && (
+  <div className='flex flex-row w-full space-x-5 px-5'>
+    <ActionCard title='test' description='test description' actionText='action'/>
+    <ActionCard title='test' description='test description' actionText='action'/>
+    <ActionCard title='test' description='test description' actionText='action'/>
+    </div>
+)}
+</div>
+
+
+        <Footer />
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
