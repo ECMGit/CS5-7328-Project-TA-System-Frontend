@@ -53,7 +53,7 @@ import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
-  (config: any) => {
+  (config) => {
     const token = localStorage.getItem('token');
     // console.log(token); // debugging purposes
 
@@ -62,7 +62,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error: any) => {
+  (error) => {
     return Promise.reject(error);
   }
 );

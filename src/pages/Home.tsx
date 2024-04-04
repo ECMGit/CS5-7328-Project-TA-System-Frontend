@@ -8,6 +8,7 @@ import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
 import AdminDashboard from './AdminDashboard';
 import { link } from 'fs';
+import Footer from '../components/Footer';
 
 
 // Define an interface 'User' to specify the structure of a user object.
@@ -92,21 +93,24 @@ const Home: React.FC = () => {
     } else {
       // Content displayed by non administrator users
       return (
-        <> 
+        <Container style={{
+          paddingLeft: '10px',
+          paddingRight: '10px',
+        }}>
           {/* Large image at the top */}
-          <img
+          {/* <img
             src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
             alt="SMU Dallas Hall"
             style={{ width: '100%', height: 'auto' }}
-          />
+          /> */}
           {/* Text box that spans the page */}
           {user && (
-            <Paper style={{ padding: '20px' }}>
+            <div>
               <Typography variant="body1">
                 Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
                 Engineering students to find TA jobs.
               </Typography>
-            </Paper>
+              </div>
           )}
   
           {/* If the user is a student, display their work list */}
@@ -115,7 +119,7 @@ const Home: React.FC = () => {
               <TAJobDisplayComponent />
             </Container>
           )}
-        </>
+        </Container> 
       );
     }
   };
@@ -292,12 +296,12 @@ const Home: React.FC = () => {
         {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
+        {/* <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
-        </Paper>
+        </Paper> */}
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
@@ -307,6 +311,8 @@ const Home: React.FC = () => {
           </Container>
         )} */}
       </div>
+
+      <Footer />
     </div>
   );
 };
