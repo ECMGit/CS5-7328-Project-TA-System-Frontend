@@ -1,4 +1,6 @@
 import Fuse from 'fuse.js';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import MockResume from '../MockResume'; //This import is used so that we can display additional application details for a particular applicant
@@ -70,9 +72,34 @@ const MakeTaButton = styled.button`
     background-color: #45a049;
   }
 `;
+const FlexContainer = styled.div`
+  display: flex;
+  position: relative;
+`;
+
+const ButtonColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin-left: 20px;
+  margin-right: 20px;
+`;
+
+const ButtonWrapper = styled.div`
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 0;
+`;
+
+const FirstButtonWrapper = styled(ButtonWrapper)`
+  margin-top: 52px;
+`;
 
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
+  const navigate = useNavigate();
   //this is the state for the applications
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
   //The below stores the current selected applications
@@ -102,6 +129,9 @@ const ViewApplications: React.FC = () => {
   };
 
 
+  const handleViewPerformanceClick = (applicationId: number) => {
+    navigate('/performance-result');
+  };
 
 
 
@@ -134,10 +164,8 @@ const ViewApplications: React.FC = () => {
     taJobId: app.taJobId,
     TAStats: app.TAStats,
     status: app.status,
-  })).filter((app) => {
-    return app.courseId == 3; // Makes sure that the applications for only one student are shown
-    // Change later to base on currently logged in student
-  });
+  }));
+
   const [searchText, setSearchText] = useState('');
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
@@ -156,7 +184,9 @@ const ViewApplications: React.FC = () => {
     // This function will be called when the component mounts for the first time
     const fetchApplications = async () => {
       const taApplications = await AuthService.getTaApplication();
+      console.log(taApplications);
       setApplications(taApplications);
+      console.log(applications);
       setOriginalApplications(taApplications); // Set the original applications
     };
   
@@ -197,9 +227,7 @@ const ViewApplications: React.FC = () => {
     }
   };
   
-  
-
-
+    
   // Fuzzy search function
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
@@ -223,7 +251,7 @@ const ViewApplications: React.FC = () => {
 
   //This section involves the formatting and rendering of al the data and logic defined above.
   return (
-    <Container>
+    <>
       <Navbar>
         <NavbarButton
           onClick={() => {
@@ -251,8 +279,6 @@ const ViewApplications: React.FC = () => {
       </Navbar>
       <Title>View Applications for Course</Title>
 
-
-
       {/* Search Bar for Fuzzy Search */}
       <SearchInput
         type="text"
@@ -261,26 +287,45 @@ const ViewApplications: React.FC = () => {
         onChange={handleSearch}
       />
 
-      {/* DataGrid with filterModel */}
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        filterModel={{
-          items: [],
-          ...filterModel,
-        }}
-        onFilterModelChange={(model) => setFilterModel(model)}
-        checkboxSelection
-        //onSelection go to handler
+      {/* Container for DataGrid and ButtonColumn */}
+      <FlexContainer>
+        <DataGrid
+          style={{ width: '80%' }} // Adjust as necessary
+          rows={rows}
+          columns={columns}
+          filterModel={{
+            items: [],
+            ...filterModel,
+          }}
+          onFilterModelChange={(model) => setFilterModel(model)}
+          checkboxSelection
+          //onSelection go to handler
         onRowSelectionModelChange={onRowsSelectionHandler} 
         rowSelectionModel={selectionModel}
       />
-      {/* Button to make student TA*/}
+        <ButtonColumn>      {/* Button to make student TA*/}
       <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
-      
+          {rows.map((row, index) => {
+            const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
+            return (
+              <Wrapper key={row.id}>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: '#708090', color: '#fff' }}
+                  onClick={() => handleViewPerformanceClick(row.id)}
+                >
+                  View Performance
+                </Button>
+              </Wrapper>
+            );
+          })}
+        </ButtonColumn>
+
+      </FlexContainer>
+
+      {/* Displays additional application details for the selected application */}
       <div>
-        {/*The below displays additional application details for the selected application */}
         {currentApplication && <MockResume application={currentApplication} />}
       </div>
 
@@ -328,7 +373,7 @@ const ViewApplications: React.FC = () => {
       </div>
 
 
-    </Container>
+    </>
   );
 };
 

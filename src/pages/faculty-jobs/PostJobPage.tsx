@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, FormEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
-import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button } from '@mui/material';
+import { backendURL } from '../../config';
+import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Select, InputLabel, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import api from '../../services/faculty-job';
 
+interface Course {
+  courseCode: string;
+  title: string;
+}
 
 const PostJob: React.FC = () => {
   // State hooks for form fields and validation errors
@@ -26,6 +30,33 @@ const PostJob: React.FC = () => {
 
   const [courseIdError, setCourseIdError] = useState('');
   const [requiredCoursesError, setRequiredCoursesError] = useState('');
+
+  // Available courses
+  const [availableCourses, setAvailableCourses] = useState<Course[]>([]);
+
+  useEffect(() => {
+    async function fetchAvailableCourses() {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {
+          Authorization:  `Bearer ${token}`
+        };
+        const response = await fetch(`${backendURL}/course/nodetails`, {
+          headers: headers
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch available courses');
+        }
+        const courses = await response.json();
+        setAvailableCourses(courses);
+      } catch (error) {
+        console.error('Error fetching available courses:', error);
+      }
+    }
+
+    fetchAvailableCourses();
+  }, []);
 
   const checkAlphanumeric = (input: string): boolean => {
     // Check each character of the input
@@ -50,15 +81,15 @@ const PostJob: React.FC = () => {
     }
   };
   // Handler for changes in the Required Courses field
-  const handleRequiredCoursesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target.value;
-    if (checkAlphanumeric(input)) {
-      setRequiredCourse(input);
-      setRequiredCoursesError('');
-    } else {
-      setRequiredCoursesError('Required Course must only contain letters and numbers.');
-    }
-  };
+  // const handleRequiredCoursesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const input = event.target.value;
+  //   if (checkAlphanumeric(input)) {
+  //     setRequiredCourse(input);
+  //     setRequiredCoursesError('');
+  //   } else {
+  //     setRequiredCoursesError('Required Course must only contain letters and numbers.');
+  //   }
+  // };
 
   const navigate = useNavigate();
 
@@ -105,18 +136,25 @@ const PostJob: React.FC = () => {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} mt={3}>
           <TextField label="Title" margin="normal" required fullWidth autoComplete="name" onChange={(e) => { setTitle(e.target.value); }} autoFocus />
-          <TextField
-            label="Course ID"
-            margin="normal"
+          <InputLabel>Courses</InputLabel>
+          <Select
             required
             fullWidth
             autoComplete="off"
             value={courseId}
-            onChange={handleCourseIdChange}
+            onChange={(e) => {
+              setCourseId(e.target.value);
+            }}
             error={!!courseIdError}
-            helperText={courseIdError}
             autoFocus
-          />
+          >
+            {availableCourses.map((course) => {
+              return <MenuItem key={course.courseCode} value={course.courseCode}>
+                {course.courseCode} - {course.title}
+              </MenuItem>;
+            }
+            )}
+          </Select>
           <TextField label="Course Schedule" margin="normal" required fullWidth onChange={(e) => { setCourseSchedule(e.target.value); }} />
           <TextField
             label="Total Hour"
@@ -140,7 +178,7 @@ const PostJob: React.FC = () => {
             helperText={!maxTaCount || isNaN(Number(maxTaCount)) ? 'Max TA Count must be a number' : ''}
             onChange={(e) => { setMaxTaCount(e.target.value); }}
           />
-          <TextField
+          {/* <TextField
             label="Required Course"
             margin="normal"
             required
@@ -150,7 +188,26 @@ const PostJob: React.FC = () => {
             onChange={handleRequiredCoursesChange}
             error={!!requiredCoursesError}
             helperText={requiredCoursesError}
-          />
+          /> */}
+          <InputLabel>Required Course</InputLabel>
+          <Select
+            required
+            fullWidth
+            autoComplete="off"
+            value={requiredCourses}
+            onChange={(e) => {
+              setRequiredCourse(e.target.value);
+            }}
+            error={!!requiredCoursesError}
+            autoFocus
+          >
+            {availableCourses.map((course) => {
+              return <MenuItem key={course.courseCode} value={course.courseCode}>
+                {course.courseCode} - {course.title}
+              </MenuItem>;
+            }
+            )}
+          </Select>
           <TextField label="Required Skills" margin="normal" required fullWidth onChange={(e) => { setRequiredSkills(e.target.value); }} />
           <TextField label="TA Stats" margin="normal" required fullWidth onChange={(e) => { setTaStats(e.target.value); }} />
           <TextField label="Notes" margin="normal" fullWidth onChange={(e) => { setNotes(e.target.value); }} />

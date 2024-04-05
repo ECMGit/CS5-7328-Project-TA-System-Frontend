@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigat
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
+import AdminDashboard from './AdminDashboard';
+import { link } from 'fs';
 
 
 // Define an interface 'User' to specify the structure of a user object.
@@ -25,13 +27,13 @@ const Home: React.FC = () => {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
-  const {user, setUser} = userContext;
+  const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // React hooks
   const navigate = useNavigate();
 
-  console.log('home:', user);
+  //console.log('home:', user);
 
 
   if (!user) {
@@ -51,7 +53,7 @@ const Home: React.FC = () => {
   /**
    * Log out the user, delete user from localStorage
    */
-  const handleLogout = function() {
+  const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
@@ -63,13 +65,14 @@ const Home: React.FC = () => {
   /**
    * Navigate to the corresponding user profile. 
    */
-  const handleProfile = function() {
+  const handleProfile = function () {
     // Guard clause.
     if (!user) { return; }
-    
+
     // Navigate to student/faculty profile.
     if (user.role === 'student') { navigate('/student-profile'); }
     else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -82,9 +85,43 @@ const Home: React.FC = () => {
       setIsLoggedIn(true);
     }
   }, []);
-
+  const renderContent = () => {
+    // When the user is an administrator, display the AdminDashboard component
+    if (user && user.role === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      // Content displayed by non administrator users
+      return (
+        <> 
+          {/* Large image at the top */}
+          <img
+            src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
+            alt="SMU Dallas Hall"
+            style={{ width: '100%', height: 'auto' }}
+          />
+          {/* Text box that spans the page */}
+          {user && (
+            <Paper style={{ padding: '20px' }}>
+              <Typography variant="body1">
+                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+                Engineering students to find TA jobs.
+              </Typography>
+            </Paper>
+          )}
+  
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </>
+      );
+    }
+  };
+  
   return (
-  // Render the component within a container with a maximum width of 'sm'.
+    // Render the component within a container with a maximum width of 'sm'.
 
     <div>
       {/* Blue banner with "Login" button */}
@@ -115,8 +152,18 @@ const Home: React.FC = () => {
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              {user.role === 'faculty' ? (
+
+              {user.role === 'admin' ? (
                 <>
+                  <Button
+                    component={Link}
+                    to="/view-courses"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View Courses
+                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
@@ -144,6 +191,29 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/create-task"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Create Task
+                  </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks/faculty"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Tasks
+                  </Button>
+                 
+                 
+
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -156,6 +226,16 @@ const Home: React.FC = () => {
                   >
                     Display
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks/student"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View Tasks
+                  </Button>
                   {/* <Button
                     component={Link}
                     to="/view-applications"
@@ -165,6 +245,7 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button> */}
+                 
                 </>
               ) : user.role === 'faculty' ? (
                 <>
@@ -190,7 +271,7 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile}/>
+              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
             </div>
           ) : (
             <Button
@@ -207,12 +288,8 @@ const Home: React.FC = () => {
       </div>
 
       <div>
-        {/* Large image at the top */}
-        <img
-          src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
-          alt="SMU Dallas Hall"
-          style={{ width: '100%', height: 'auto' }}
-        />
+        {/* Call renderContent to display corresponding content based on user roles */}
+        {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
         <Paper style={{ padding: '20px' }}>
@@ -224,11 +301,11 @@ const Home: React.FC = () => {
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
-        {role === 'student' && (
+        {/* {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>
-        )}
+        )} */}
       </div>
     </div>
   );
