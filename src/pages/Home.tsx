@@ -7,6 +7,7 @@ import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
 import AdminDashboard from './AdminDashboard';
+import useAutoLogout from '../components/AutoLogOut';
 import { link } from 'fs';
 
 
@@ -74,6 +75,14 @@ const Home: React.FC = () => {
     else if (user.role === 'faculty') { navigate('/faculty-profile'); }
     else if (user.role === 'admin') { navigate('/admin-profile'); }
   };
+
+  const TIMEOUT_DURATION = 10 * 60 * 1000; // 0.5 minutes
+
+  const logout = () => {
+    navigate('/home-default');
+  };
+
+  useAutoLogout(TIMEOUT_DURATION, logout);
 
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {
