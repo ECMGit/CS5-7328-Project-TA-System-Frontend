@@ -100,18 +100,66 @@ const FirstButtonWrapper = styled(ButtonWrapper)`
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
   const navigate = useNavigate();
-  //this is the state for the applications
+  
+
+
+
+
+
+
+
+
+
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
   //The below stores the current selected applications
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
-
+  //logout timer
+  const logoutTimerRef = useRef<number | null>(null);
 
   //MENU STUFF
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const handleInactivity = () => {
+      // Prompt user to continue session
+      const userWantsToStay = window.confirm('Do you want to keep browsing?');
+      if (!userWantsToStay) {
+        console.log('Logging out');
+        navigate('/login'); // Navigate to login or perform any logout operation
+      } else {
+        // If user stays reset timer
+        resetInactivityTimer();
+      }
+    };
+
+    const resetInactivityTimer = () => {
+      if (logoutTimerRef.current !== null) {
+        clearTimeout(logoutTimerRef.current);
+      }
+      logoutTimerRef.current = window.setTimeout(handleInactivity, 600000); // 10 minutes timeout
+    };
+
+    // Set up event listeners for activity detection
+    const activityDetected = () => resetInactivityTimer();
+    window.addEventListener('mousemove', activityDetected);
+    window.addEventListener('keydown', activityDetected);
+
+    // Set initial inactivity timer
+    resetInactivityTimer();
+
+    return () => {
+      window.removeEventListener('mousemove', activityDetected);
+      window.removeEventListener('keydown', activityDetected);
+      if (logoutTimerRef.current !== null) {
+        clearTimeout(logoutTimerRef.current);
+      }
+    };
+  }, [navigate]);
+  
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
