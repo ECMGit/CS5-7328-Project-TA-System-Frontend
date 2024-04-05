@@ -126,21 +126,27 @@ const ViewApplications: React.FC = () => {
   useEffect(() => {
     const handleInactivity = () => {
       // Prompt user to continue session
+      //This timeout doesn't work, needs to async
+      window.setTimeout(logOutUser, 10000);
       const userWantsToStay = window.confirm('Do you want to keep browsing?');
       if (!userWantsToStay) {
-        console.log('Logging out');
-        navigate('/login'); // Navigate to login or perform any logout operation
+        logOutUser();
       } else {
         // If user stays reset timer
         resetInactivityTimer();
       }
     };
 
+    const logOutUser = () => {
+        console.log('Logging out');
+        navigate('/login'); // Navigate to login or perform any logout operation
+    };
+
     const resetInactivityTimer = () => {
       if (logoutTimerRef.current !== null) {
         clearTimeout(logoutTimerRef.current);
       }
-      logoutTimerRef.current = window.setTimeout(handleInactivity, 600000); // 10 minutes timeout
+      logoutTimerRef.current = window.setTimeout(handleInactivity, 10000); // 10 minutes timeout
     };
 
     // Set up event listeners for activity detection
