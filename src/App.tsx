@@ -157,14 +157,14 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home />} />
           {/* Profile module */}
 
-          <Route path="/student-profile" element={<PrivateRoute role="student"> <StudentProfile /> </PrivateRoute> }/>
+          <Route path="/student-profile" element={<PrivateRoute role="student"> <StudentProfile /> </PrivateRoute>} />
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"> <FacultyProfile /> </PrivateRoute>} />
-          
+
           {/* Job Module */}
 
-          <Route path= "/create-task" element = {<CreateTask/>}/>
-          <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
-          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks/></PrivateRoute>  } />
+          <Route path="/create-task" element={<CreateTask />} />
+          <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks /></PrivateRoute>} />
+          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks /></PrivateRoute>} />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
 
           <Route path="/inbox" element={<Inbox />} />
@@ -178,23 +178,23 @@ const App: React.FC = () => {
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
-          <Route path="/jobs" element={<PrivateRouteJob />} />
-          
+          <Route path="/jobs" element={<PrivateRoute role="faculty"><ViewJobs /></PrivateRoute>} />
+
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplications /> </PrivateRoute>}/>
-          <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>}/>
-          <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>}/>
+          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplications /> </PrivateRoute>} />
+          <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>} />
+          <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>} />
 
           {/* Student Performance Review Module */}
-          <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>}/>
-          <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>}/>
+          <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>} />
+          <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>} />
           <Route path="/user-data" element={<UserDataPage />} />
-          
+
           {/* FeedBack and Bug Report Module */}
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/bug-report" element={<BugReportPage />} />
-          
+
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />

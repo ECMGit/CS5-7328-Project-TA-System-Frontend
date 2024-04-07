@@ -31,21 +31,27 @@ const ViewJobs: React.FC = () => {
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
-  const {user} = userContext;
+  const { user } = userContext;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
 
   const storedUser = localStorage.getItem('user');
 
+  //faculty can see all TA jobs published
   useEffect(() => {
-    const userId = JSON.parse(storedUser!).id;
-    console.log('Finding jobs for: ' + userId);
-    api.getJobsByFacultyID(userId).then(res => {
-      if (res !== undefined) {
-        setJobs(res);
+    console.log('Finding all jobs for: ');
+    const fetchJobs = async () => {
+      try {
+        const jobs = await api.getJobs(); // get the promise object
+        if (jobs !== undefined) {
+          setJobs(jobs);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    });
+    };
+    fetchJobs();
   }, []);
 
   const navigate = useNavigate();

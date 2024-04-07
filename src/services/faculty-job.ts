@@ -1,6 +1,7 @@
 import axios from 'axios';
-const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
-const QUERY_JOBS_API_URL = 'http://localhost:9000/jobs/faculty';
+//const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
+//Use one backedn URL 
+const QUERY_JOBS_API_URL = 'http://localhost:9000/jobs';
 const token = localStorage.getItem('token');
 
 const getJobs = () => {
@@ -9,7 +10,7 @@ const getJobs = () => {
   // string was empty.
   const userString = localStorage.getItem('user') ?? '';
   const user = JSON.parse(userString);
-  return axios.get(QUERY_JOBS_API_URL+'/'+user.id, {
+  return axios.get(QUERY_JOBS_API_URL, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -34,7 +35,7 @@ const getJobsByFacultyID = (facultyId: number) => {
 
 //get one job from id passed as parameter
 const getOneJob = (id: number) => {
-  return axios.get(JOBS_API_URL + '/' + id,{
+  return axios.get(QUERY_JOBS_API_URL + '/' + id, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -69,11 +70,11 @@ const postJob = (job: {
 };
 const getFacultyJobs = (id: number) => {
   console.log(token);
-  return axios.get(JOBS_API_URL + '/faculty/' + id,{
+  return axios.get(QUERY_JOBS_API_URL + '/faculty/' + id, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
-  
+
   }).then(res => {
     console.log(res);
     return res.data;
@@ -95,7 +96,7 @@ const updateJob = (id: number, job: {
   deadlineToApply: Date;
   facultyId: number;
 }) => {
-  return axios.put(JOBS_API_URL + '/edit/' + id, job).then(res => {
+  return axios.put(QUERY_JOBS_API_URL + '/edit/' + id, job).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
