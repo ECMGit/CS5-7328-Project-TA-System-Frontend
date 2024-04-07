@@ -98,8 +98,7 @@ function PrivateRouteJob() {
   }
   if (userContext.user.role === 'admin') {
     return <ViewJobs />;
-  }
-  else if (userContext.user.role === 'student') {
+  } else if (userContext.user.role === 'student') {
     return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
     return <ViewJobs />;
