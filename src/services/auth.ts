@@ -109,7 +109,7 @@ const getUserRole = async (userId: number) => {
     const userObject = JSON.parse(user);
     return userObject.role;
     // Use myObject as needed
-  }else{
+  } else {
     return getUserRoleFromBackEnd(userId);
   }
 };
@@ -153,6 +153,17 @@ const resetPassword = async (token: string, password: string) => {
 const getTaApplication = async () => {
   try {
     const response = await axios.get('http://localhost:9000/ta-application');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error;
+  }
+};
+
+// Fetch TA applications data from API based on faculty ID.
+const getTaApplicationsByFacultyId = async (facultyId: number) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/faculty/${facultyId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -252,6 +263,7 @@ const AuthService = {
   fakeAuthProvider,
   saveProfile,
   getTaApplication,
+  getTaApplicationsByFacultyId,
   getTaJob,
   getUser,
   getUserData,

@@ -16,6 +16,7 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
+import ViewApplicationsbyFacultyID from './pages/application/ViewApplications';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
@@ -23,7 +24,7 @@ import ViewJobsStudent from './pages/faculty-jobs/StudentApplyJobPage';
 import EvaluatePerformance from './pages/faculty-jobs/JobPerformanceReviewPage';
 import PerformanceResult from './pages/user/PerformanceResultPage';
 import UserDataPage from './pages/user/UserDataPage';
-import ViewApplications from './pages/application/ViewApplications';
+
 import EditApplication from './pages/application/EditApplication';
 import ViewApplication from './pages/application/ViewApplication';
 import MockResume from './pages/MockResume';
@@ -49,6 +50,7 @@ import EditCourse from './pages/courses/EditCourse';
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -182,7 +184,7 @@ const App: React.FC = () => {
 
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplications /> </PrivateRoute>} />
+          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplicationsbyFacultyID /> </PrivateRoute>} />
           <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>} />
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>} />
 

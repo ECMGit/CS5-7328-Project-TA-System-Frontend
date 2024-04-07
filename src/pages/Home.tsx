@@ -92,7 +92,7 @@ const Home: React.FC = () => {
     } else {
       // Content displayed by non administrator users
       return (
-        <> 
+        <>
           {/* Large image at the top */}
           <img
             src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
@@ -108,7 +108,7 @@ const Home: React.FC = () => {
               </Typography>
             </Paper>
           )}
-  
+
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
             <Container maxWidth='sm' style={{ marginTop: '20px' }}>
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
       );
     }
   };
-  
+
   return (
     // Render the component within a container with a maximum width of 'sm'.
 
@@ -211,8 +211,8 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                 
-                 
+
+
 
                 </>
               ) : user.role === 'student' ? (
@@ -245,7 +245,7 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button> */}
-                 
+
                 </>
               ) : user.role === 'faculty' ? (
                 <>

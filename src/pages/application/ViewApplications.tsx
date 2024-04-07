@@ -98,7 +98,7 @@ const FirstButtonWrapper = styled(ButtonWrapper)`
 `;
 
 //this is the ViewApplications component
-const ViewApplications: React.FC = () => {
+const ViewApplicationsbyFacultyID: React.FC = () => {
   const navigate = useNavigate();
   //this is the state for the applications
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
@@ -174,13 +174,14 @@ const ViewApplications: React.FC = () => {
     // Select Student from row
     setSelectionModel(ids.map(Number));
   };
-  
+
 
 
 
 
   // Fetching the data from the API
-  useEffect(() => {
+  /** faculty can see all the applications
+   * useEffect(() => {
     // This function will be called when the component mounts for the first time
     const fetchApplications = async () => {
       const taApplications = await AuthService.getTaApplication();
@@ -192,6 +193,28 @@ const ViewApplications: React.FC = () => {
   
     fetchApplications();
   }, []);
+*/
+
+  //faculty can only see applications of their courses
+  // Fetching the data from the API based on faculty ID
+  useEffect(() => {
+    const fetchApplicationsByFacultyId = async () => {
+      try {
+        const userId = AuthService.getCurrentUser()?.id; // Assuming getCurrentUser returns user object
+        if (userId) {
+          const taApplications = await AuthService.getTaApplicationsByFacultyId(userId);
+          setApplications(taApplications);
+          setOriginalApplications(taApplications);
+        }
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetchApplicationsByFacultyId();
+  }, []);
+
+
 
   const makeTA = async () => {
     if (selectionModel.length > 0) {
@@ -212,7 +235,7 @@ const ViewApplications: React.FC = () => {
               'Content-Type': 'application/json',
             },
           });
-  
+
           if (!response.ok) throw new Error('Error');
           alert('Student has been made a TA successfully!');
         } catch (error) {
@@ -226,8 +249,8 @@ const ViewApplications: React.FC = () => {
       alert('Please select a student first.');
     }
   };
-  
-    
+
+
   // Fuzzy search function
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
@@ -300,11 +323,11 @@ const ViewApplications: React.FC = () => {
           onFilterModelChange={(model) => setFilterModel(model)}
           checkboxSelection
           //onSelection go to handler
-        onRowSelectionModelChange={onRowsSelectionHandler} 
-        rowSelectionModel={selectionModel}
-      />
+          onRowSelectionModelChange={onRowsSelectionHandler}
+          rowSelectionModel={selectionModel}
+        />
         <ButtonColumn>      {/* Button to make student TA*/}
-      <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
+          <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
           {rows.map((row, index) => {
             const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
@@ -377,4 +400,4 @@ const ViewApplications: React.FC = () => {
   );
 };
 
-export default ViewApplications;
+export default ViewApplicationsbyFacultyID;
