@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { backendURL } from '../config';
+
 //const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
 //Use one backedn URL 
-const QUERY_JOBS_API_URL = 'http://localhost:9000/jobs';
+const JOBS_API_URL = backendURL + '/jobs';
 const token = localStorage.getItem('token');
 
 const getJobs = () => {
@@ -10,7 +12,7 @@ const getJobs = () => {
   // string was empty.
   const userString = localStorage.getItem('user') ?? '';
   const user = JSON.parse(userString);
-  return axios.get(QUERY_JOBS_API_URL, {
+  return axios.get(JOBS_API_URL, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -23,8 +25,7 @@ const getJobs = () => {
 };
 
 const getJobsByFacultyID = (facultyId: number) => {
-  const JOBS_API_BY_FACULTY = 'http://localhost:9000/jobs/faculty/' + facultyId;
-
+  const JOBS_API_BY_FACULTY = backendURL + '/faculty/' + facultyId;
   return axios.get(JOBS_API_BY_FACULTY).then(res => {
     console.log(res);
     return res.data;
@@ -35,7 +36,7 @@ const getJobsByFacultyID = (facultyId: number) => {
 
 //get one job from id passed as parameter
 const getOneJob = (id: number) => {
-  return axios.get(QUERY_JOBS_API_URL + '/' + id, {
+  return axios.get(JOBS_API_URL + '/' + id, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -59,8 +60,7 @@ const postJob = (job: {
   deadlineToApply: Date;
   facultyId: number;
 }) => {
-  const CREATE_JOB_API = 'http://localhost:9000/jobs';
-  return axios.post(CREATE_JOB_API, job).then(res => {
+  return axios.post(JOBS_API_URL, job).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
@@ -70,7 +70,7 @@ const postJob = (job: {
 };
 const getFacultyJobs = (id: number) => {
   console.log(token);
-  return axios.get(QUERY_JOBS_API_URL + '/faculty/' + id, {
+  return axios.get(JOBS_API_URL + '/faculty/' + id, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -96,7 +96,7 @@ const updateJob = (id: number, job: {
   deadlineToApply: Date;
   facultyId: number;
 }) => {
-  return axios.put(QUERY_JOBS_API_URL + '/edit/' + id, job).then(res => {
+  return axios.put(JOBS_API_URL + '/edit/' + id, job).then(res => {
     console.log(res);
     return res.data;
   }).catch(err => {
