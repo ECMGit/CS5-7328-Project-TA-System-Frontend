@@ -6,6 +6,7 @@ import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, B
 import { LoadingButton } from '@mui/lab';
 
 import api from '../../services/faculty-job';
+import TopNav from '../../components/TopNav';
 
 
 const PostJob: React.FC = () => {
@@ -67,6 +68,7 @@ const PostJob: React.FC = () => {
 
   const handleSubmit = () => {
     const userId = JSON.parse(storedUser!).id;
+    console.log(new Date(deadline));
     api.postJob({
       title: title,
       courseId: parseInt(courseId),
@@ -99,6 +101,7 @@ const PostJob: React.FC = () => {
   // JSX for rendering the form
   return (
     <Container maxWidth="sm">
+      <TopNav />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8, }} >
         <Typography component="h1" variant="h5">
           Post TA Job
@@ -154,7 +157,7 @@ const PostJob: React.FC = () => {
           <TextField label="Required Skills" margin="normal" required fullWidth onChange={(e) => { setRequiredSkills(e.target.value); }} />
           <TextField label="TA Stats" margin="normal" required fullWidth onChange={(e) => { setTaStats(e.target.value); }} />
           <TextField label="Notes" margin="normal" fullWidth onChange={(e) => { setNotes(e.target.value); }} />
-          <TextField label="Deadline" margin="normal" required fullWidth onChange={(e) => { setDeadline(e.target.value); }} />
+          <TextField label="Deadline YYYY-MM-DD HH:MI:S" margin="normal" required fullWidth onChange={(e) => { setDeadline(e.target.value); }} />
           <LoadingButton type="submit" variant="contained" loading={loading} sx={{ mt: 4, mb: 3 }}>Post Job</LoadingButton>
           <Button component={RouterLink} variant="text" to='/jobs' sx={{ mt: 4, mb: 3 }} >Cancel</Button>
           <FormHelperText>{message}</FormHelperText>

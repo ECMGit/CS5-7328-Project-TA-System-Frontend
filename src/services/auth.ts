@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { backendURL } from '../config';
+import TopNav from '../components/TopNav';
 
 const BASE_API_URL: string | undefined = backendURL + '/api/';
 const USER_API_URL: string | undefined = backendURL + '/user/';
@@ -241,6 +242,7 @@ const AuthService = {
   getTaJob,
   getUser,
   getUserData,
+  
 };
 
 export default AuthService;

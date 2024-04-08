@@ -9,11 +9,6 @@ import AvatarWrapper from '../components/AvatarWrapper';
 
 const HomeDefault: React.FC = () => {
 
-
-
-
-
-
   return (
     // Render the component within a container with a maximum width of 'sm'.
     <div>

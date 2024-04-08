@@ -5,6 +5,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
+import TopNav from '../../components/TopNav';
 
 import api from '../../services/faculty-job';
 import { UserContext } from '../../provider';
@@ -99,7 +100,9 @@ const ViewJobs: React.FC = () => {
 
   return (
     <Container>
+      <TopNav />
       <Box sx={{ my: 4 }}>
+        
         <Typography variant="h4" gutterBottom>
           Jobs
         </Typography>

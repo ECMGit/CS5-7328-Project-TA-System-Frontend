@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import TopNav from '../../components/TopNav';
 
 import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -51,9 +52,10 @@ const ViewJobsStudent: React.FC = () => {
   //return the following
   return (
     <Container>
+      <TopNav />
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Jobs
+          Available TA Jobs
         </Typography>
         {
           jobs.map((job, index) => (
@@ -70,6 +72,7 @@ const ViewJobsStudent: React.FC = () => {
                 <Typography><strong>Notes:</strong> {job.notes}</Typography>
                 <Typography><strong>Apply By: </strong> 
                   {new Date(job.deadlineToApply).toLocaleDateString()}</Typography>
+                  <br/>
                 <Button
                   variant="contained"
                   onClick={() => navigate('/application-form/?jobId='+ job.id + '&courseId=' + job.courseId + '&title=' + job.title)}
