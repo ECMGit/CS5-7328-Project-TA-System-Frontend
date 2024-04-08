@@ -171,7 +171,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -256,7 +256,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -292,12 +292,13 @@ const Home: React.FC = () => {
         {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
+        {/* Duplicated */}
+        {/* <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
-        </Paper>
+        </Paper> */}
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
