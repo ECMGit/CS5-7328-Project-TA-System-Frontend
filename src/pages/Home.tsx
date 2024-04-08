@@ -180,7 +180,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '10px' }}
                   >
-                    Publish
+                    Post Job
                   </Button>
                   <Button
                     component={Link}
@@ -249,6 +249,15 @@ const Home: React.FC = () => {
                 </>
               ) : user.role === 'faculty' ? (
                 <>
+                  <Button
+                    component={Link}
+                    to="/post-job"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px', marginRight: '5px'}}
+                  >
+                    Post Job
+                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
