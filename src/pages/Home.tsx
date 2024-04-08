@@ -134,7 +134,7 @@ const Home: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6" style={{ color: '#FFF' }}>
+        <Typography variant="h5" style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
