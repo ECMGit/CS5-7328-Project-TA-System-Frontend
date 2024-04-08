@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, Menu, MenuItem, Typography, ListItem, Divider } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // User interface type
 interface User {
@@ -27,6 +28,9 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
 
   // Non-State Variable(s)
   const open = Boolean(anchorEl);
+
+
+  const navigate = useNavigate();
 
   /**
    * Handle clicking the avatar, show the menu onClick
@@ -95,6 +99,16 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
         <Divider />
         <MenuItem onClick={onProfile}>
           <Typography variant="body1">User Profile</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => {
+          navigate('/feedback');
+        }}>
+          <Typography variant="body1">Feedback</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => {
+          navigate('/bug-report');
+        }}>
+          <Typography variant="body1">Report Bug</Typography>
         </MenuItem>
         <MenuItem onClick={onLogout}>
           <Typography variant="body1">Logout</Typography>

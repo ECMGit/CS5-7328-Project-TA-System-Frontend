@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import { useState, useEffect, FormEvent } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton, AppBar, Toolbar } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TopNav from '../../components/TopNav';
 
+import AvatarWrapper from '../../components/AvatarWrapper';
 import api from '../../services/faculty-job';
 import { UserContext } from '../../provider';
+
+
 
 
 const ViewJobs: React.FC = () => {
@@ -32,21 +34,27 @@ const ViewJobs: React.FC = () => {
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
-  const {user} = userContext;
+  const { user } = userContext;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
 
   const storedUser = localStorage.getItem('user');
 
+  //faculty can see all TA jobs published
   useEffect(() => {
-    const userId = JSON.parse(storedUser!).id;
-    console.log('Finding jobs for: ' + userId);
-    api.getJobsByFacultyID(userId).then(res => {
-      if (res !== undefined) {
-        setJobs(res);
+    console.log('Finding all jobs for: ');
+    const fetchJobs = async () => {
+      try {
+        const jobs = await api.getJobs(); // get the promise object
+        if (jobs !== undefined) {
+          setJobs(jobs);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    });
+    };
+    fetchJobs();
   }, []);
 
   const navigate = useNavigate();
@@ -99,136 +107,177 @@ const ViewJobs: React.FC = () => {
 
 
   return (
-    <Container>
-      <TopNav />
-      <Box sx={{ my: 4 }}>
-        
-        <Typography variant="h4" gutterBottom>
-          Jobs
-        </Typography>
-        {
-          jobs.map((job, index) => (
-            <Card key={index} sx={{ mb: 2 }}>
-              <CardContent>
-                {
-                  // Check if the job is being edited
-                  editing === job.id ?
-                    // If yes, render the input fields for editing
-                    <>
-                      <TextField
-                        label="Title"
-                        name="title"
-                        value={editedJob?.title}
-                        onChange={handleInputChange}
-                        // Add the fullWidth prop to make the box grow to fit the text
-                        fullWidth
-                        // Add the margin prop to add some space between the boxes
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Course ID"
-                        name="courseId"
-                        value={editedJob?.courseId}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Schedule"
-                        name="courseSchedule"
-                        value={editedJob?.courseSchedule}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Total Hours/Week"
-                        name="totalHoursPerWeek"
-                        value={editedJob?.totalHoursPerWeek}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Max TAs"
-                        name="maxNumberOfTAs"
-                        value={editedJob?.maxNumberOfTAs}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Required Courses"
-                        name="requiredCourses"
-                        value={editedJob?.requiredCourses}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Required Skills"
-                        name="requiredSkills"
-                        value={editedJob?.requiredSkills}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="TA Stats"
-                        name="TAStats"
-                        value={editedJob?.TAStats}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Notes"
-                        name="notes"
-                        value={editedJob?.notes}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Apply By"
-                        name="deadlineToApply"
-                        value={editedJob?.deadlineToApply ? new Date(editedJob?.deadlineToApply).toLocaleDateString() : ''}
-                        onChange={handleInputChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <Button onClick={handleSaveClick}>Save</Button>
-                    </>
 
-                    :
-                    // If no, render the normal text fields
-                    <>
-                      <Typography variant="h6">{job.title}</Typography>
-                      <Typography><strong>Course ID:</strong> {job.courseId}</Typography>
-                      <Typography><strong>Schedule:</strong> {job.courseSchedule}</Typography>
-                      <Typography><strong>Total Hours/Week:</strong> {job.totalHoursPerWeek}</Typography>
-                      <Typography><strong>Max TAs:</strong> {job.maxNumberOfTAs}</Typography>
-                      <Typography><strong>Required Courses:</strong> {job.requiredCourses}</Typography>
-                      <Typography><strong>Required Skills:</strong> {job.requiredSkills}</Typography>
-                      <Typography><strong>TA Stats:</strong> {job.TAStats}</Typography>
-                      <Typography><strong>Notes:</strong> {job.notes}</Typography>
-                      <Typography><strong>Apply By: </strong>
-                        {new Date(job.deadlineToApply).toLocaleDateString()}</Typography>
-                      <IconButton onClick={() => handleEditClick(job)}>
-                        <EditIcon />
-                      </IconButton>
-                    </>
-                }
-              </CardContent>
-            </Card>
-          ))
+    <>
+    <TopNav />
+      {/* Add the universal navigation bar using MUI components */}
+      <AppBar position="static">
+        <Toolbar>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1 }}>
+            View TA Jobs
+          </Typography>
+          <Button
+            component={Link}
+            to="/post-job"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '10px', marginRight: '5px' }}
+          >
+            Post Job
+          </Button>
+          <Button
+            component={Link}
+            to="/view-applications"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            View TA Applications
+          </Button>
+          <Button
+            component={Link}
+            to="/home"
+            variant='contained'
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            Home
+          </Button>
+          {/* Add more navigation or action buttons as needed */}
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <Box sx={{ my: 4 }}>
+          {/* <Typography variant="h4" gutterBottom>
+          Jobs
+        </Typography> */}
+          {
+            jobs.map((job, index) => (
+              <Card key={index} sx={{ mb: 2 }}>
+                <CardContent>
+                  {
+                    // Check if the job is being edited
+                    editing === job.id ?
+                      // If yes, render the input fields for editing
+                      <>
+                        <TextField
+                          label="Title"
+                          name="title"
+                          value={editedJob?.title}
+                          onChange={handleInputChange}
+                          // Add the fullWidth prop to make the box grow to fit the text
+                          fullWidth
+                          // Add the margin prop to add some space between the boxes
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Course ID"
+                          name="courseId"
+                          value={editedJob?.courseId}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Schedule"
+                          name="courseSchedule"
+                          value={editedJob?.courseSchedule}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Total Hours/Week"
+                          name="totalHoursPerWeek"
+                          value={editedJob?.totalHoursPerWeek}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Max TAs"
+                          name="maxNumberOfTAs"
+                          value={editedJob?.maxNumberOfTAs}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Required Courses"
+                          name="requiredCourses"
+                          value={editedJob?.requiredCourses}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Required Skills"
+                          name="requiredSkills"
+                          value={editedJob?.requiredSkills}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="TA Stats"
+                          name="TAStats"
+                          value={editedJob?.TAStats}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Notes"
+                          name="notes"
+                          value={editedJob?.notes}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <TextField
+                          label="Apply By"
+                          name="deadlineToApply"
+                          value={editedJob?.deadlineToApply ? new Date(editedJob?.deadlineToApply).toLocaleDateString() : ''}
+                          onChange={handleInputChange}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <Button onClick={handleSaveClick}>Save</Button>
+                      </>
+
+                      :
+                      // If no, render the normal text fields
+                      <>
+                        <Typography variant="h6">{job.title}</Typography>
+                        <Typography><strong>Course ID:</strong> {job.courseId}</Typography>
+                        <Typography><strong>Schedule:</strong> {job.courseSchedule}</Typography>
+                        <Typography><strong>Total Hours/Week:</strong> {job.totalHoursPerWeek}</Typography>
+                        <Typography><strong>Max TAs:</strong> {job.maxNumberOfTAs}</Typography>
+                        <Typography><strong>Required Courses:</strong> {job.requiredCourses}</Typography>
+                        <Typography><strong>Required Skills:</strong> {job.requiredSkills}</Typography>
+                        <Typography><strong>TA Stats:</strong> {job.TAStats}</Typography>
+                        <Typography><strong>Notes:</strong> {job.notes}</Typography>
+                        <Typography><strong>Apply By: </strong>
+                          {new Date(job.deadlineToApply).toLocaleDateString()}</Typography>
+                        <IconButton onClick={() => handleEditClick(job)}>
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                  }
+                </CardContent>
+              </Card>
+            ))
+          }
+        </Box>
+        {user?.role === 'faculty' ?
+          (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
+          : ''
         }
-      </Box>
-      {user?.role === 'faculty' ?
-        (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
-        : ''
-      }
-    </Container>
+      </Container>
+    </>
   );
 
   function handleUploadClick() {

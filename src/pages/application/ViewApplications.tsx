@@ -1,16 +1,19 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 import Fuse from 'fuse.js';
-import { DataGrid } from '@mui/x-data-grid';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import MockResume from '../MockResume'; //This import is used so that we can display additional application details for a particular applicant
-import {
-  Container,
-  Title,
-  Navbar,
-  NavbarButton,
-} from '../user/styledComponents';
+import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box } from '@mui/material';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
-// Define the data structure for a TA Application entry that we will get from database
+import MockResume from '../MockResume';
+import { Link } from 'react-router-dom';
+
+// const options = [
+//   'Course 1',
+//   'Course 2',
+//   'Course 3',
+// ];
+
 export type TAApplicationData = {
   //id is the primary key for the table
   id: number;
@@ -27,30 +30,93 @@ export type TAApplicationData = {
   status: string;
 };
 
-
-// Create a styled component for the search input
 const SearchInput = styled.input`
-  padding: 10px; // Adjust padding as needed
-  margin-bottom: 10px; // Adjust margin as needed
-  border: 1px solid #ccc; // Adjust border as needed
-  border-radius: 4px; // Adjust for rounded corners
-  font-size: 16px; // Adjust font size as needed
-  // Add more styling here to match your NavbarButton
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 `;
 
+const MakeTaButton = styled.button`
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #45a049;
+  }
+`;
 
-//this is the ViewApplications component
-const ViewApplications: React.FC = () => {
-  //this is the state for the applications
+const FlexContainer = styled.div`
+  display: flex;
+  position: relative;
+  margin-top: 10px;
+`;
+
+const ButtonColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin-left: 20px;
+  margin-right: 20px;
+`;
+
+const ButtonWrapper = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 0;
+`;
+
+const FirstButtonWrapper = styled(ButtonWrapper)`
+  margin-top: 52px;
+`;
+
+const ViewApplicationsbyFacultyID: React.FC = () => {
+  const navigate = useNavigate();
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
-  //The below stores the current selected applications
-  const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
-  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  // Below states are not used in the current implementation
+  // const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+  // const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  const [selectionModel, setSelectionModel] = useState<number[]>([]);
+  const [searchText, setSearchText] = useState('');
+
+  //Menu related functions
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const open = Boolean(anchorEl);
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number,
+  ) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
+  const handleViewPerformanceClick = (applicationId: number) => {
+    // Navigate to the performance page or handle the click event
+    console.log('Viewing performance for application ID:', applicationId);
+    // Example navigation (adjust the path as needed)
+    navigate(`/performance/${applicationId}`); // Backend url may not be implemented yet
+  };
 
 
-  // XGrid definitions
+  // Columns configuration for MUI DataGrid
   const columns = [
     { field: 'studentId', headerName: 'Student ID', width: 150, filterable: true },
     { field: 'courseId', headerName: 'Course ID', width: 130, filterable: true },
@@ -61,12 +127,13 @@ const ViewApplications: React.FC = () => {
     { field: 'requiredSkills', headerName: 'Required Skills', width: 200, filterable: true },
     { field: 'resumeFile', headerName: 'Resume', width: 150, filterable: true },
     { field: 'taJobId', headerName: 'TA Job ID', width: 130, filterable: true },
-    { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
+    // { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
     { field: 'status', headerName: 'Status', width: 120, filterable: true },
   ];
-  // This is the data that will be displayed in the XGrid
+
+  // This is the data that will be displayed in the DataGrid
   const rows = applications.map((app) => ({
-    id: app.studentId,
+    id: app.id,
     studentId: app.studentId,
     courseId: app.courseId,
     hoursCanWorkPerWeek: app.hoursCanWorkPerWeek,
@@ -78,33 +145,66 @@ const ViewApplications: React.FC = () => {
     taJobId: app.taJobId,
     TAStats: app.TAStats,
     status: app.status,
-  })).filter((app) => {
-    return app.studentId == 1; // Makes sure that the applications for only one student are shown
-    // Change later to base on currently logged in student
-  });
-  const [searchText, setSearchText] = useState('');
+  }));
+
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
 
+  const onRowsSelectionHandler = (ids: (number | string)[]) => {
+    // Select Student from row
+    setSelectionModel(ids.map(Number));
+  };
 
-
-
-
-
-  // Fetching the data from the API
   useEffect(() => {
-    // This function will be called when the component mounts for the first time
-    const fetchApplications = async () => {
-      const taApplications = await AuthService.getTaApplication();
-      setApplications(taApplications);
-      setOriginalApplications(taApplications); // Set the original applications
+    const fetchApplicationsByFacultyId = async () => {
+      try {
+        const userId = AuthService.getCurrentUser()?.id; // Assuming getCurrentUser returns user object
+        if (userId) {
+          const taApplications = await AuthService.getTaApplicationsByFacultyId(userId);
+          setApplications(taApplications);
+          setOriginalApplications(taApplications);
+        }
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
     };
-  
-    fetchApplications();
+
+    fetchApplicationsByFacultyId();
   }, []);
 
+  const makeTA = async () => {
+    if (selectionModel.length > 0) {
+      //get first selected if more than 1 is selected
+      const selectedApplicationId = selectionModel[0];
+      //get application from grid
+      const selectedApplication = rows.find(row => row.id === selectedApplicationId);
+      console.log(selectedApplication);
+      if (selectedApplication) {
+        try {
+          // api endpoint
+          const endpoint = `http://localhost:9000/ta-application/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
 
+          //POST to backend
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
+          if (!response.ok) throw new Error('Error');
+          alert('Student has been made a TA successfully!');
+        } catch (error) {
+          console.error('Error making student a TA:', error);
+          alert('Failed to make the student a TA. Please try again.');
+        }
+      } else {
+        alert('Selected application not found.');
+      }
+    } else {
+      alert('Please select a student first.');
+    }
+  };
 
   // Fuzzy search function
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,66 +226,122 @@ const ViewApplications: React.FC = () => {
     const filteredApplications = results.map(result => result.item);
     setApplications(filteredApplications); // Update applications state with search results
   };
+  // Handlers for menu and other interactions here
 
-  //This section involves the formatting and rendering of al the data and logic defined above.
   return (
-    <Container>
-      <Navbar>
-        <NavbarButton
-          onClick={() => {
-            // You can add an onClick handler here, if you want the button to navigate or perform an action.
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1 }}>
+            TA Applications
+          </Typography>
+          <Button
+            component={Link}
+            to="/post-job"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '10px', marginRight: '5px'}}
+          >
+            Post Job
+          </Button>
+          <Button
+            component={Link}
+            to="/jobs"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            View Jobs
+          </Button>
+          <Button
+            component={Link}
+            to="/home"
+            variant='contained'
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            Home
+          </Button>
+          {/* Add more navigation or action buttons as needed */}
+        </Toolbar>
+      </AppBar>
+
+      {/* Container for DataGrid and ButtonColumn */}
+      <FlexContainer>
+        <DataGrid
+          style={{ width: '80%' }} // Adjust as necessary
+          rows={rows}
+          columns={columns}
+          filterModel={{
+            items: [],
+            ...filterModel,
           }}
-        >
-          View TA Applications
-        </NavbarButton>
-        <NavbarButton
-          onClick={() => {
-            // View Applications from Faculty 1's Point of View if he were logged in
-            setFacultyFilter(1);
-          }}
-        >
-          Faculty 1 Log In View
-        </NavbarButton>
-        <NavbarButton
-          onClick={() => {
-            // Clear the faculty filter.
-            setFacultyFilter(null);
-          }}
-        >
-          Clear Faculty Filter
-        </NavbarButton>
-      </Navbar>
-      <Title>View Applications for Course</Title>
+          onFilterModelChange={(model) => setFilterModel(model)}
+          checkboxSelection
+          //onSelection go to handler
+          onRowSelectionModelChange={onRowsSelectionHandler}
+          rowSelectionModel={selectionModel}
+        />
+        <ButtonColumn>      {/* Button to make student TA*/}
+          <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
+          {rows.map((row, index) => {
+            // const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
+            const Wrapper = ButtonWrapper;
+            return (
+              <Wrapper key={row.id}>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: '#708090', color: '#fff' }}
+                  onClick={() => handleViewPerformanceClick(row.id)}
+                >
+                  View Performance
+                </Button>
+              </Wrapper>
+            );
+          })}
+        </ButtonColumn>
 
+      </FlexContainer>
 
-      {/* Search Bar for Fuzzy Search */}
-      <SearchInput
-        type="text"
-        placeholder="Search..."
-        value={searchText}
-        onChange={handleSearch}
-      />
-
-      {/* DataGrid with filterModel */}
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        filterModel={{
-          items: [],
-          ...filterModel,
+      <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', mt: 2 }}>
+        {/* <ListItemButton
+            id="lock-button"
+            aria-haspopup="listbox"
+            aria-controls="lock-menu"
+            aria-label="when device is locked"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={(event) => setAnchorEl(event.currentTarget)}
+          >
+            <ListItemText secondary={options[selectedIndex]} />
+          </ListItemButton> */}
+      </List>
+      <Menu
+        id="lock-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'lock-button',
+          role: 'listbox',
         }}
-        onFilterModelChange={(model) => setFilterModel(model)}
-        checkboxSelection
-      />
-
-      
-      <div>
-        {/*The below displays additional application details for the selected application */}
-        {currentApplication && <MockResume application={currentApplication} />}
-      </div>
-    </Container>
+      >
+        {/* {options.map((option, index) => (
+            <MenuItem
+              key={option}
+              selected={index === selectedIndex}
+              onClick={(event) => handleMenuItemClick(event, index)}
+            >
+              {option}
+            </MenuItem>
+          ))} */}
+      </Menu>
+    </>
   );
+
 };
 
-export default ViewApplications;
+export default ViewApplicationsbyFacultyID;

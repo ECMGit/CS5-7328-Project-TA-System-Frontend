@@ -87,7 +87,7 @@ const getCurrentUser = () => {
   return user ? JSON.parse(user) : null;
 };
 
-const getUserRole = (userId: number) => {
+const getUserRoleFromBackEnd = (userId: number) => {
   // Pass the userId as a query parameter
   return axios.get(`${USER_API_URL}role/${userId}`)
     .then((response) => {
@@ -98,8 +98,22 @@ const getUserRole = (userId: number) => {
       throw error; // You can handle or propagate the error as needed
     });
 };
-//console.log(getUserRole);
 
+/**
+ * For Handling User Role identification from local storage or backend
+ * @param userId
+ * @returns
+ * */
+const getUserRole = async (userId: number) => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    const userObject = JSON.parse(user);
+    return userObject.role;
+    // Use myObject as needed
+  } else {
+    return getUserRoleFromBackEnd(userId);
+  }
+};
 /**
  * For Handling User Reset Password request
  * @param email
@@ -140,6 +154,17 @@ const resetPassword = async (token: string, password: string) => {
 const getTaApplication = async () => {
   try {
     const response = await axios.get('http://localhost:9000/ta-application');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error;
+  }
+};
+
+// Fetch TA applications data from API based on faculty ID.
+const getTaApplicationsByFacultyId = async (facultyId: number) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/faculty/${facultyId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -239,6 +264,7 @@ const AuthService = {
   fakeAuthProvider,
   saveProfile,
   getTaApplication,
+  getTaApplicationsByFacultyId,
   getTaJob,
   getUser,
   getUserData,

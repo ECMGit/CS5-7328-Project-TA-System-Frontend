@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigat
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
+import AdminDashboard from './AdminDashboard';
+import { link } from 'fs';
 
 
 // Define an interface 'User' to specify the structure of a user object.
@@ -70,6 +72,7 @@ const Home: React.FC = () => {
     // Navigate to student/faculty profile.
     if (user.role === 'student') { navigate('/student-profile'); }
     else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -82,6 +85,40 @@ const Home: React.FC = () => {
       setIsLoggedIn(true);
     }
   }, []);
+  const renderContent = () => {
+    // When the user is an administrator, display the AdminDashboard component
+    if (user && user.role === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      // Content displayed by non administrator users
+      return (
+        <>
+          {/* Large image at the top */}
+          <img
+            src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
+            alt="SMU Dallas Hall"
+            style={{ width: '100%', height: 'auto' }}
+          />
+          {/* Text box that spans the page */}
+          {user && (
+            <Paper style={{ padding: '20px' }}>
+              <Typography variant="body1">
+                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+                Engineering students to find TA jobs.
+              </Typography>
+            </Paper>
+          )}
+
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </>
+      );
+    }
+  };
 
   return (
     // Render the component within a container with a maximum width of 'sm'.
@@ -97,7 +134,7 @@ const Home: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6" style={{ color: '#FFF' }}>
+        <Typography variant="h5" style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
@@ -134,7 +171,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -143,7 +180,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '10px' }}
                   >
-                    Publish
+                    Post Job
                   </Button>
                   <Button
                     component={Link}
@@ -154,6 +191,29 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/create-task"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Create Task
+                  </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks/faculty"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Tasks
+                  </Button>
+
+
+
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -166,6 +226,16 @@ const Home: React.FC = () => {
                   >
                     Display
                   </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks/student"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View Tasks
+                  </Button>
                   {/* <Button
                     component={Link}
                     to="/view-applications"
@@ -175,9 +245,19 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button> */}
+
                 </>
               ) : user.role === 'faculty' ? (
                 <>
+                  <Button
+                    component={Link}
+                    to="/post-job"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px', marginRight: '5px'}}
+                  >
+                    Post Job
+                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
@@ -185,7 +265,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -217,28 +297,25 @@ const Home: React.FC = () => {
       </div>
 
       <div>
-        {/* Large image at the top */}
-        <img
-          src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
-          alt="SMU Dallas Hall"
-          style={{ width: '100%', height: 'auto' }}
-        />
+        {/* Call renderContent to display corresponding content based on user roles */}
+        {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
+        {/* Duplicated */}
+        {/* <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
-        </Paper>
+        </Paper> */}
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
-        {role === 'student' && (
+        {/* {role === 'student' && (
           <Container maxWidth='sm' style={{ marginTop: '20px' }}>
             <TAJobDisplayComponent></TAJobDisplayComponent>
           </Container>
-        )}
+        )} */}
       </div>
     </div>
   );
