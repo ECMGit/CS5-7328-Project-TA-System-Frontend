@@ -39,7 +39,7 @@ const PostJob: React.FC = () => {
       try {
         const token = localStorage.getItem('token');
         const headers = {
-          Authorization:  `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         };
         const response = await fetch(`${backendURL}/course/nodetails`, {
           headers: headers
@@ -112,8 +112,8 @@ const PostJob: React.FC = () => {
       facultyId: userId
     }).then(
       () => {
-        navigate('/jobs');
-        window.location.reload();
+        //navigate('/jobs');
+        //window.location.reload();
       }, (error) => {
         const resMessage =
           (error.response &&

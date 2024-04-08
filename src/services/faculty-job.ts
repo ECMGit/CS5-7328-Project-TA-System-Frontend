@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { backendURL } from '../config';
+//Simplify the code by JobData interface
+import { JobData } from "../components/jobData";
+
 
 //const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';
 //Use one backedn URL 
@@ -47,19 +50,7 @@ const getOneJob = (id: number) => {
     console.log(err);
   });
 };
-const postJob = (job: {
-  title: string;
-  courseId: number;
-  courseSchedule: string;
-  totalHoursPerWeek: number;
-  maxNumberOfTAs: number;
-  requiredCourses: string;
-  requiredSkills: string;
-  TAStats: string;
-  notes?: string;
-  deadlineToApply: Date;
-  facultyId: number;
-}) => {
+const postJob = (job: JobData) => {
   return axios.post(JOBS_API_URL, job).then(res => {
     console.log(res);
     return res.data;
@@ -83,19 +74,7 @@ const getFacultyJobs = (id: number) => {
   });
 };
 //update job from id passed as parameter
-const updateJob = (id: number, job: {
-  title: string;
-  courseId: number;
-  courseSchedule: string;
-  totalHoursPerWeek: number;
-  maxNumberOfTAs: number;
-  requiredCourses: string;
-  requiredSkills: string;
-  TAStats: string;
-  notes?: string;
-  deadlineToApply: Date;
-  facultyId: number;
-}) => {
+const updateJob = (id: number, job: JobData) => {
   return axios.put(JOBS_API_URL + '/edit/' + id, job).then(res => {
     console.log(res);
     return res.data;

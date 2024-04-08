@@ -1,5 +1,5 @@
 //simplify code of faculty-job
-interface JobData {
+export interface JobData {
     title: string;
     courseId: number;
     courseSchedule: string;
