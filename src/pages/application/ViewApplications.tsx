@@ -41,6 +41,7 @@ const SearchInput = styled.input`
 const MakeTaButton = styled.button`
   padding: 10px;
   margin-top: 10px;
+  margin-bottom: 10px;
   background-color: #4CAF50; 
   color: white;
   border: none;
@@ -54,6 +55,7 @@ const MakeTaButton = styled.button`
 const FlexContainer = styled.div`
   display: flex;
   position: relative;
+  margin-top: 10px;
 `;
 
 const ButtonColumn = styled.div`
@@ -65,7 +67,7 @@ const ButtonColumn = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  height: 52px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,20 +129,6 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
     { field: 'taJobId', headerName: 'TA Job ID', width: 130, filterable: true },
     // { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
     { field: 'status', headerName: 'Status', width: 120, filterable: true },
-    // View performance button
-    {
-      field: 'viewPerformance',
-      headerName: 'View Performance',
-      sortable: false,
-      width: 200,
-      renderCell: (params: GridCellParams) => <Button
-      variant="contained"
-      color="primary"
-      onClick={() => handleViewPerformanceClick(Number(params.id))}
-    >
-      View Performance
-    </Button>,
-    },
   ];
 
   // This is the data that will be displayed in the DataGrid
@@ -245,7 +233,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography
-            variant="h6"
+            variant="h5"
             component="div"
             sx={{ flexGrow: 1 }}>
             TA Applications
@@ -272,53 +260,43 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="xl" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        View TA Applications
-      </Typography>
-      <TextField
-        fullWidth
-        label="Search Applications"
-        variant="outlined"
-        value={searchText}
-        onChange={handleSearch}
-        sx={{ mb: 2 }}
-      />
-      <Box sx={{
-        display: 'flex',
-        position: 'relative',
-        '& .data-grid-container': {
-          height: 400,
-          width: '100%',
-          border: '1px solid #333',
-        }
-      }}>
-        <div className="data-grid-container">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            checkboxSelection
-            onRowSelectionModelChange={onRowsSelectionHandler}
-            // Additional DataGrid props
-          />
-        </div>
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          ml: 2,
-        }}>
-          {/* Button to make student TA */}
-          <Button
-            sx={{ backgroundColor: '#4CAF50', '&:hover': { backgroundColor: '#45a049' }, mb: 2 }}
-            onClick={makeTA}
-            variant="contained"
-          >
-            Make TA
-          </Button>
-          {/* Assuming you map through rows to display more buttons */}
-        </Box>
-      </Box>
-    </Container>
+      {/* Container for DataGrid and ButtonColumn */}
+      <FlexContainer>
+        <DataGrid
+          style={{ width: '80%' }} // Adjust as necessary
+          rows={rows}
+          columns={columns}
+          filterModel={{
+            items: [],
+            ...filterModel,
+          }}
+          onFilterModelChange={(model) => setFilterModel(model)}
+          checkboxSelection
+          //onSelection go to handler
+          onRowSelectionModelChange={onRowsSelectionHandler}
+          rowSelectionModel={selectionModel}
+        />
+        <ButtonColumn>      {/* Button to make student TA*/}
+          <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
+
+          {rows.map((row, index) => {
+            // const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
+            const Wrapper = ButtonWrapper;
+            return (
+              <Wrapper key={row.id}>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: '#708090', color: '#fff' }}
+                  onClick={() => handleViewPerformanceClick(row.id)}
+                >
+                  View Performance
+                </Button>
+              </Wrapper>
+            );
+          })}
+        </ButtonColumn>
+
+      </FlexContainer>
 
       <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', mt: 2 }}>
         {/* <ListItemButton

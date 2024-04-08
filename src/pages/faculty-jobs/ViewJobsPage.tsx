@@ -109,7 +109,7 @@ const ViewJobs: React.FC = () => {
     <AppBar position="static">
         <Toolbar>
           <Typography
-            variant="h6"
+            variant="h5"
             component="div"
             sx={{ flexGrow: 1 }}>
             View TA Jobs
