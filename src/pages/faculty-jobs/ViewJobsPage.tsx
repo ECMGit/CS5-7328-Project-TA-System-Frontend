@@ -117,6 +117,15 @@ const ViewJobs: React.FC = () => {
           </Typography>
           <Button
             component={Link}
+            to="/post-job"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '10px', marginRight: '5px' }}
+          >
+            Post Job
+          </Button>
+          <Button
+            component={Link}
             to="/view-applications"
             variant="contained"
             color="secondary"
