@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { useState, useEffect, FormEvent } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton } from '@mui/material';
+import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton, AppBar, Toolbar } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -104,11 +104,42 @@ const ViewJobs: React.FC = () => {
 
 
   return (
-    <Container>
+    <>
+    {/* Add the universal navigation bar using MUI components */}
+    <AppBar position="static">
+        <Toolbar>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}>
+            View TA Jobs
+          </Typography>
+          <Button
+            component={Link}
+            to="/view-applications"
+            variant="contained"
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            View TA Applications
+          </Button>
+          <Button
+            component={Link}
+            to="/home"
+            variant='contained'
+            color="secondary"
+            style={{ marginLeft: '5px', marginRight: '5px' }}
+          >
+            Home
+          </Button>
+          {/* Add more navigation or action buttons as needed */}
+        </Toolbar>
+      </AppBar>
+      <Container>
       <Box sx={{ my: 4 }}>
-        <Typography variant="h4" gutterBottom>
+        {/* <Typography variant="h4" gutterBottom>
           Jobs
-        </Typography>
+        </Typography> */}
         {
           jobs.map((job, index) => (
             <Card key={index} sx={{ mb: 2 }}>
@@ -232,6 +263,7 @@ const ViewJobs: React.FC = () => {
         : ''
       }
     </Container>
+    </>
   );
 
   function handleUploadClick() {
