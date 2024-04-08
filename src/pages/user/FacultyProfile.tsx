@@ -2,33 +2,47 @@ import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Container, 
-  Typography, 
-  Button, 
-  Avatar, 
-  Box, Input, TextField, Paper, Grid, IconButton,
+import {
+  Container,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Input,
+  TextField,
+  Paper,
+  Grid,
+  IconButton,
   Tooltip,
   Menu,
   MenuItem,
-  ListItemIcon } from '@mui/material';
+  ListItemIcon,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 interface Job {
-    id: number;
-    title: string;
-    courseId: number;
-    courseSchedule: string;
-    totalHoursPerWeek: number;
-    maxNumberOfTAs: number;
-    requiredCourses: string;
-    requiredSkills: string;
-    TAStats: string;
-    notes: string;
-    deadlineToApply: string;
-    facultyId: number;
+  id: number;
+  title: string;
+  courseId: number;
+  courseSchedule: string;
+  totalHoursPerWeek: number;
+  maxNumberOfTAs: number;
+  requiredCourses: string;
+  requiredSkills: string;
+  TAStats: string;
+  notes: string;
+  deadlineToApply: string;
+  facultyId: number;
 }
 
-
+interface TA {
+  id: number;
+  TAName: string;
+  smuID: string;
+  courseId: number;
+  facultyID: number;
+  courseName: string;
+}
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -36,29 +50,52 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-  useEffect(()=>{
+
+  const [currentTAs, setCurrentTAs] = useState<TA[]>([]);
+
+  useEffect(() => {
     FacultyJobService.getJobs()
       .then((data) => {
         console.log('Jobs data:', data);
-        setJobs(data.slice(0,3));
+        setJobs(data.slice(0, 3));
       })
       .catch((error) => {
         console.error('Error fetching jobs:', error);
       });
-  },[]);
-  
+  }, []);
+
+  useEffect(() => {
+    const fetchCurrentTAs = async () => {
+      // const data = await SomeService.getCurrentTAs();
+      // just an Example, this module has no fetch function for current TA job
+      const data: TA[] = [
+        {
+          id: 1,
+          TAName: 'Current TA',
+          smuID: 'SMU123456',
+          courseId: 101,
+          facultyID: 10,
+          courseName: 'Introduction to Computer Science',
+        },
+      ];
+      setCurrentTAs(data);
+    };
+
+    fetchCurrentTAs();
+  }, []);
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
   const open = Boolean(anchorEl);
 
-  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
+  const [messages, setMessages] = useState([
+    { id: 1, content: 'Test Message' },
+  ]);
 
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
-
 
   // Function to handle the change of the profile image file
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -88,7 +125,6 @@ const FacultyProfile: React.FC = () => {
 
   const navigate = useNavigate();
 
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -99,17 +135,12 @@ const FacultyProfile: React.FC = () => {
 
   const fetchMessages = () => {
     // TODO: Implement fetch logic here
-
-    
   };
 
   const navigateToInbox = () => {
     navigate('/inbox');
     handleClose();
   };
-
-
-
 
   return (
     <Container>
@@ -166,10 +197,8 @@ const FacultyProfile: React.FC = () => {
               onClose={handleClose}
             >
               {/* Map through messages and display them */}
-              {messages.map(message => (
-                <MenuItem key={message.id}>
-                  {message.content}
-                </MenuItem>
+              {messages.map((message) => (
+                <MenuItem key={message.id}>{message.content}</MenuItem>
               ))}
             </Menu>
           </MenuItem>
@@ -177,7 +206,13 @@ const FacultyProfile: React.FC = () => {
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <Typography component="h1" variant="h5">
               Faculty Profile
             </Typography>
@@ -189,13 +224,30 @@ const FacultyProfile: React.FC = () => {
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleUploadClick}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={handleUploadClick}
+                  >
                     Upload Profile
                   </Button>
-                  <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input
+                    type="file"
+                    id="profileUpload"
+                    sx={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={() => document.getElementById('resumeUpload')?.click()}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={() =>
+                      document.getElementById('resumeUpload')?.click()
+                    }
+                  >
                     Upload Resume
                   </Button>
                 </Grid>
@@ -219,7 +271,12 @@ const FacultyProfile: React.FC = () => {
                   onChange={(e) => setDepartment(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
+                <Input
+                  type="file"
+                  id="resumeUpload"
+                  sx={{ display: 'none' }}
+                  onChange={handleResumeChange}
+                />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
                     View Resume
@@ -227,7 +284,12 @@ const FacultyProfile: React.FC = () => {
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'column', justifyContent: 'center' }}>
-                <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                  onClick={handleSave}
+                >
                   Save
                 </Button>
                 <Button
@@ -235,7 +297,11 @@ const FacultyProfile: React.FC = () => {
                   to="/jobs"
                   variant="contained"
                   color="primary"
-                  style={{ marginTop: '8px', width: '100%', textAlign: 'center' }}
+                  style={{
+                    marginTop: '8px',
+                    width: '100%',
+                    textAlign: 'center',
+                  }}
                 >
                   View All Jobs
                 </Button>
@@ -253,9 +319,20 @@ const FacultyProfile: React.FC = () => {
         <Grid item xs={6}>
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
-          <Box sx={{ mt: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              mt: '50px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             {jobs.map((job) => (
-              <Paper key={job.id} elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+              <Paper
+                key={job.id}
+                elevation={3}
+                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+              >
                 <Typography variant="h6">{job.title}</Typography>
                 <Typography>{job.notes}</Typography>
                 <Typography>Date Submitted: {job.deadlineToApply}</Typography>
@@ -277,16 +354,38 @@ const FacultyProfile: React.FC = () => {
               </Paper>
             ))}
           </Box>
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-            <Button
-              component={Link}
-              to="/evaluate-performance"
-              variant="contained"
-              color="primary"
-              sx={{ width: '31%', ml: '-70%' }}
-            >
-              Evaluate TA
-            </Button>
+          {/* Box for current TA and evaluate performance */}
+          <Box
+            sx={{
+              mt: '50px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {currentTAs.map((ta) => (
+              <Paper
+                key={ta.id}
+                elevation={3}
+                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+              >
+                <Typography variant="h6">TA Name: {ta.TAName}</Typography>
+                <Typography>SMU ID: {ta.smuID}</Typography>
+                <Typography>Course ID: {ta.courseId}</Typography>
+                <Typography>Faculty ID: {ta.facultyID}</Typography>
+                <Typography>Course Name: {ta.courseName}</Typography>
+                {/* TA performance evaluation button */}
+                <Button
+                  component={Link}
+                  to="/evaluate-performance"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2, alignSelf: 'center' }}
+                >
+                  Evaluate TA
+                </Button>
+              </Paper>
+            ))}
           </Box>
         </Grid>
       </Grid>
@@ -306,7 +405,6 @@ const FacultyProfile: React.FC = () => {
     // Handle editing the posting for the specified job ID
     console.log(`Editing posting for job ${jobId}`);
   }
-
 };
 
 export default FacultyProfile;
