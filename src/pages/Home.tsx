@@ -9,7 +9,6 @@ import AvatarWrapper from '../components/AvatarWrapper';
 import AdminDashboard from './AdminDashboard';
 import { link } from 'fs';
 
-
 // Define an interface 'User' to specify the structure of a user object.
 // interface User {
 //   username: string;
@@ -35,7 +34,6 @@ const Home: React.FC = () => {
 
   //console.log('home:', user);
 
-
   if (!user) {
     return <div>Loading...</div>; // or any other fallback UI
   }
@@ -60,19 +58,23 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
-
-
   /**
-   * Navigate to the corresponding user profile. 
+   * Navigate to the corresponding user profile.
    */
   const handleProfile = function () {
     // Guard clause.
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
 
     // Navigate to student/faculty profile.
-    if (user.role === 'student') { navigate('/student-profile'); }
-    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
-    else if (user.role === 'admin') { navigate('/admin-profile'); }
+    if (user.role === 'student') {
+      navigate('/student-profile');
+    } else if (user.role === 'faculty') {
+      navigate('/faculty-profile');
+    } else if (user.role === 'admin') {
+      navigate('/admin-profile');
+    }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -92,7 +94,7 @@ const Home: React.FC = () => {
     } else {
       // Content displayed by non administrator users
       return (
-        <> 
+        <>
           {/* Large image at the top */}
           <img
             src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
@@ -103,15 +105,15 @@ const Home: React.FC = () => {
           {user && (
             <Paper style={{ padding: '20px' }}>
               <Typography variant="body1">
-                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-                Engineering students to find TA jobs.
+                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle
+                School of Engineering students to find TA jobs.
               </Typography>
             </Paper>
           )}
-  
+
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
               <TAJobDisplayComponent />
             </Container>
           )}
@@ -119,7 +121,7 @@ const Home: React.FC = () => {
       );
     }
   };
-  
+
   return (
     // Render the component within a container with a maximum width of 'sm'.
 
@@ -152,7 +154,6 @@ const Home: React.FC = () => {
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-
               {user.role === 'admin' ? (
                 <>
                   <Button
@@ -211,9 +212,6 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                 
-                 
-
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -236,6 +234,16 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
+                  {/* Add a view performance button in the hone page, just for student */}
+                  <Button
+                    component={Link}
+                    to="/performance-result"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View My Performance
+                  </Button>
                   {/* <Button
                     component={Link}
                     to="/view-applications"
@@ -245,7 +253,6 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button> */}
-                 
                 </>
               ) : user.role === 'faculty' ? (
                 <>
@@ -271,7 +278,11 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
+              <AvatarWrapper
+                user={user}
+                onLogout={handleLogout}
+                onProfile={handleProfile}
+              />
             </div>
           ) : (
             <Button
