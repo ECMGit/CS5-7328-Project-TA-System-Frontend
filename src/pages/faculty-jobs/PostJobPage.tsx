@@ -8,6 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import api from '../../services/faculty-job';
 
 interface Course {
+  courseID: number;
   courseCode: string;
   title: string;
 }
@@ -71,15 +72,6 @@ const PostJob: React.FC = () => {
     return true; // only alphanumeric characters
   };
   // Handler for changes in the Course ID field
-  const handleCourseIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target.value;
-    if (checkAlphanumeric(input)) {
-      setCourseId(input);
-      setCourseIdError('');
-    } else {
-      setCourseIdError('Course ID must only contain letters and numbers.');
-    }
-  };
   // Handler for changes in the Required Courses field
   // const handleRequiredCoursesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   const input = event.target.value;
@@ -97,6 +89,7 @@ const PostJob: React.FC = () => {
 
 
   const handleSubmit = () => {
+
     const userId = JSON.parse(storedUser!).id;
     api.postJob({
       title: title,
@@ -143,18 +136,20 @@ const PostJob: React.FC = () => {
             autoComplete="off"
             value={courseId}
             onChange={(e) => {
-              setCourseId(e.target.value);
+              const selectedCourseId = e.target.value;
+              console.log('Selected Course ID:', selectedCourseId);
+              setCourseId(selectedCourseId);
             }}
             error={!!courseIdError}
             autoFocus
           >
-            {availableCourses.map((course) => {
-              return <MenuItem key={course.courseCode} value={course.courseCode}>
-                {course.courseCode} - {course.title}
-              </MenuItem>;
-            }
-            )}
+            {availableCourses.map((course) => (
+              <MenuItem key={course.courseID} value={course.courseID}>
+                {course.courseID} - {course.courseCode} - {course.title}
+              </MenuItem>
+            ))}
           </Select>
+
           <TextField label="Course Schedule" margin="normal" required fullWidth onChange={(e) => { setCourseSchedule(e.target.value); }} />
           <TextField
             label="Total Hour"
