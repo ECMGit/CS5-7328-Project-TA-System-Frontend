@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { backendURL } from '../config';
 //Simplify the code by JobData interface
-import { JobData } from "../components/jobData";
+import { JobData } from '../components/jobData';
 
 
 //const JOBS_API_URL = 'http://localhost:9000/faculty-jobs';

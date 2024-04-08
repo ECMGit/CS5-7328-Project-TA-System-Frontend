@@ -109,7 +109,7 @@ const ViewJobs: React.FC = () => {
   return (
 
     <>
-    <TopNav />
+    {/* <TopNav /> */}
       {/* Add the universal navigation bar using MUI components */}
       <AppBar position="static">
         <Toolbar>
