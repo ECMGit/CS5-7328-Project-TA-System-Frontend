@@ -50,15 +50,18 @@ const getOneJob = (id: number) => {
     console.log(err);
   });
 };
-const postJob = (job: JobData) => {
-  return axios.post(JOBS_API_URL, job).then(res => {
-    console.log(res);
-    return res.data;
-  }).catch(err => {
-    console.log(err);
-    alert(err);
-  });
+
+//update the postJob function
+const postJob = async (job: JobData) => {
+  try {
+    const response = await axios.post(JOBS_API_URL, job);
+    console.log(response);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
 };
+
 const getFacultyJobs = (id: number) => {
   console.log(token);
   return axios.get(JOBS_API_URL + '/faculty/' + id, {
@@ -74,14 +77,15 @@ const getFacultyJobs = (id: number) => {
   });
 };
 //update job from id passed as parameter
-const updateJob = (id: number, job: JobData) => {
-  return axios.put(JOBS_API_URL + '/edit/' + id, job).then(res => {
-    console.log(res);
-    return res.data;
-  }).catch(err => {
-    console.log(err);
-    alert(err);
-  });
+//update the updatJob function
+const updateJob = async (id: number, job: JobData) => {
+  try {
+    const response = await axios.put(`${JOBS_API_URL}/edit/${id}`, job);
+    console.log(response);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const FacultyJobService = {
