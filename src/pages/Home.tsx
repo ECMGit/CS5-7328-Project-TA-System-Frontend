@@ -60,8 +60,6 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
-
-
   /**
    * Navigate to the corresponding user profile. 
    */
@@ -85,6 +83,7 @@ const Home: React.FC = () => {
       setIsLoggedIn(true);
     }
   }, []);
+
   const renderContent = () => {
     // When the user is an administrator, display the AdminDashboard component
     if (user && user.role === 'admin') {
@@ -100,14 +99,15 @@ const Home: React.FC = () => {
             style={{ width: '100%', height: 'auto' }}
           />
           {/* Text box that spans the page */}
-          {user && (
+          {/* Duplicate page spanning text */}
+          {/* {user && (
             <Paper style={{ padding: '20px' }}>
               <Typography variant="body1">
                 Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
                 Engineering students to find TA jobs.
               </Typography>
             </Paper>
-          )}
+          )} */}
 
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
@@ -211,9 +211,6 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-
-
-
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -224,9 +221,8 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    Display
+                    View Available Jobs
                   </Button>
-
                   <Button
                     component={Link}
                     to="/tasks/student"
@@ -236,15 +232,15 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                  {/* <Button
+                  <Button
                     component={Link}
-                    to="/view-applications"
+                    to="/view-applications"  // Should be navigate to view my applications page (Student only)
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    View Applications
-                  </Button> */}
+                    View My Applications
+                  </Button>
 
                 </>
               ) : user.role === 'faculty' ? (
@@ -254,7 +250,7 @@ const Home: React.FC = () => {
                     to="/post-job"
                     variant="contained"
                     color="secondary"
-                    style={{ marginLeft: '10px', marginRight: '5px'}}
+                    style={{ marginLeft: '10px', marginRight: '5px' }}
                   >
                     Post Job
                   </Button>
@@ -301,13 +297,12 @@ const Home: React.FC = () => {
         {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        {/* Duplicated */}
-        {/* <Paper style={{ padding: '20px' }}>
+        <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
-        </Paper> */}
+        </Paper>
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}

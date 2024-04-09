@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 import Fuse from 'fuse.js';
-import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box, Paper } from '@mui/material';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
 import MockResume from '../MockResume';
 import { Link } from 'react-router-dom';
+import AvatarWrapper from '../../components/AvatarWrapper';
+import { UserContext } from '../../provider';
+import AdminDashboard from '../AdminDashboard';
+import TAJobDisplayComponent from '../TAJobDisplayComponent';
 
 // const options = [
 //   'Course 1',
@@ -91,6 +95,15 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const open = Boolean(anchorEl);
+
+  // User context
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -107,6 +120,47 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
     setAnchorEl(null);
   };
 
+  /**
+ * Log out the user, delete user from localStorage
+ */
+  const handleLogout = function () {
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsLoggedIn(false);
+    navigate('/home-default');
+  };
+
+  /**
+   * Navigate to the corresponding user profile. 
+   */
+  const handleProfile = function () {
+    // Guard clause.
+    if (!user) { return; }
+
+    // Navigate to student/faculty profile.
+    if (user.role === 'student') { navigate('/student-profile'); }
+    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
+  };
+
+  const renderContent = () => {
+    // When the user is an administrator, display the AdminDashboard component
+    if (user && user.role === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      // Content displayed by non administrator users
+      return (
+        <>
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </>
+      );
+    }
+  };
 
   const handleViewPerformanceClick = (applicationId: number) => {
     // Navigate to the performance page or handle the click event
@@ -226,48 +280,181 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
     const filteredApplications = results.map(result => result.item);
     setApplications(filteredApplications); // Update applications state with search results
   };
-  // Handlers for menu and other interactions here
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{ flexGrow: 1 }}>
+      {/* Navigation Bar division */}
+      <div>
+        {/* Blue banner with "Login" button */}
+        <div
+          style={{
+            backgroundColor: '#1976D2',
+            padding: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h5" style={{ color: '#FFF' }}>
             TA Applications
           </Typography>
-          <Button
-            component={Link}
-            to="/post-job"
-            variant="contained"
-            color="secondary"
-            style={{ marginLeft: '10px', marginRight: '5px'}}
-          >
-            Post Job
-          </Button>
-          <Button
-            component={Link}
-            to="/jobs"
-            variant="contained"
-            color="secondary"
-            style={{ marginLeft: '5px', marginRight: '5px' }}
-          >
-            View Jobs
-          </Button>
-          <Button
-            component={Link}
-            to="/home"
-            variant='contained'
-            color="secondary"
-            style={{ marginLeft: '5px', marginRight: '5px' }}
-          >
-            Home
-          </Button>
-          {/* Add more navigation or action buttons as needed */}
-        </Toolbar>
-      </AppBar>
+          <div style={{ marginLeft: 'auto' }}>
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                {user.role === 'admin' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/view-courses"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '10px', marginRight: '5px' }}
+                    >
+                      View Courses
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/jobs"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Jobs
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/post-job"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      Post Job
+                    </Button>
+
+                    <Button
+                      component={Link}
+                      to="/create-task"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      Create Task
+                    </Button>
+
+                    <Button
+                      component={Link}
+                      to="/tasks/faculty"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Tasks
+                    </Button>
+                  </>
+                ) : user.role === 'student' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/jobs"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '10px' }}
+                    >
+                      View Available Jobs
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/tasks/student"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Tasks
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/view-applications"  // Should be navigate to view my applications page (Student only)
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View My Applications
+                    </Button>
+
+                  </>
+                ) : user.role === 'faculty' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/post-job"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '10px', marginRight: '5px' }}
+                    >
+                      Post Job
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/jobs"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Jobs
+                    </Button>
+                  </>
+                ) : (
+                  ''
+                )}
+                <Button
+                  component={Link}
+                  to="/home"
+                  variant='contained'
+                  color="secondary"
+                  style={{ marginLeft: '5px', marginRight: '15px' }}
+                >
+                  Home
+                </Button>
+                <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
+              </div>
+            ) : (
+              <Button
+                component={Link}
+                to="/login"
+                variant="contained"
+                color="secondary"
+                style={{ marginRight: '10px' }}
+              >
+                Login
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div>
+          {/* Call renderContent to display corresponding content based on user roles */}
+          {renderContent()}
+
+          {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+          {/* Duplicated */}
+          {/* <Paper style={{ padding: '20px' }}>
+          <Typography variant="body1">
+            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+            Engineering students to find TA jobs.
+          </Typography>
+        </Paper> */}
+          {/* TODO: hide this Component when user not login */}
+
+          {/* show the TAjob listing if the user is student */}
+          {/* {role === 'student' && (
+          <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <TAJobDisplayComponent></TAJobDisplayComponent>
+          </Container>
+        )} */}
+        </div>
+      </div>
+
 
       {/* Container for DataGrid and ButtonColumn */}
       <FlexContainer>
@@ -339,6 +526,15 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
             </MenuItem>
           ))} */}
       </Menu>
+      <div>
+        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+        <Paper style={{ padding: '20px' }}>
+          <Typography variant="body1">
+            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+            Engineering students to find TA jobs.
+          </Typography>
+        </Paper>
+      </div>
     </>
   );
 
