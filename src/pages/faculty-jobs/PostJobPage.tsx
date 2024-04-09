@@ -5,6 +5,8 @@ import { backendURL } from '../../config';
 import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Select, InputLabel, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
+
+
 import api from '../../services/faculty-job';
 
 interface Course {
@@ -31,6 +33,7 @@ const PostJob: React.FC = () => {
 
   const [courseIdError, setCourseIdError] = useState('');
   const [requiredCoursesError, setRequiredCoursesError] = useState('');
+ 
 
   // Available courses
   const [availableCourses, setAvailableCourses] = useState<Course[]>([]);
@@ -88,7 +91,9 @@ const PostJob: React.FC = () => {
   const storedUser = localStorage.getItem('user');
 
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // 阻止默认提交
+    setLoading(true);
 
     const userId = JSON.parse(storedUser!).id;
     api.postJob({
@@ -105,7 +110,7 @@ const PostJob: React.FC = () => {
       facultyId: userId
     }).then(
       () => {
-        //navigate('/jobs');
+        navigate('/job-success');
         //window.location.reload();
       }, (error) => {
         const resMessage =
@@ -120,6 +125,7 @@ const PostJob: React.FC = () => {
       });
   };
 
+ 
   // JSX for rendering the form
   return (
     <Container maxWidth="sm">

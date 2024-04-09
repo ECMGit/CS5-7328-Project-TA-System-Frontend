@@ -25,6 +25,7 @@ import EvaluatePerformance from './pages/faculty-jobs/JobPerformanceReviewPage';
 import PerformanceResult from './pages/user/PerformanceResultPage';
 import UserDataPage from './pages/user/UserDataPage';
 
+
 import EditApplication from './pages/application/EditApplication';
 import ViewApplication from './pages/application/ViewApplication';
 import MockResume from './pages/MockResume';
@@ -47,9 +48,11 @@ import AddCourse from './pages/courses/AddCourse';
 import ViewCourse from './pages/courses/ViewCourse';
 import EditCourse from './pages/courses/EditCourse';
 
+
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+import PostJobSuccessPage from './pages/faculty-jobs/PostJobSuccessPage';
 
 
 // adds jsonwebtoken if present to each api request
@@ -181,6 +184,7 @@ const App: React.FC = () => {
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRoute role="faculty"><ViewJobs /></PrivateRoute>} />
+          <Route path="/job-success" element={<PrivateRoute role="faculty"><PostJobSuccessPage /></PrivateRoute>} />
 
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
