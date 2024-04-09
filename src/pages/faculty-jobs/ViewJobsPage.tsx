@@ -44,8 +44,8 @@ const ViewJobs: React.FC = () => {
   const storedUser = localStorage.getItem('user');
 
   /**
-* Log out the user, delete user from localStorage
-*/
+  * Log out the user, delete user from localStorage
+  */
   const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
@@ -165,7 +165,7 @@ const ViewJobs: React.FC = () => {
           }}
         >
           <Typography variant="h5" style={{ color: '#FFF' }}>
-            TA Applications
+            Jobs
           </Typography>
           <div style={{ marginLeft: 'auto' }}>
             {user ? (
@@ -301,6 +301,7 @@ const ViewJobs: React.FC = () => {
           </div>
         </div>
       </div>
+      
       <Container>
         <Box sx={{ my: 4 }}>
           {/* <Typography variant="h4" gutterBottom>
@@ -429,15 +430,6 @@ const ViewJobs: React.FC = () => {
           : ''
         }
       </Container>
-      <div>
-        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper>
-      </div>
     </>
   );
 
