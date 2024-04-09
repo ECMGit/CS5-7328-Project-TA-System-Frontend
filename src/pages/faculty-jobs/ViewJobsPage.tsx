@@ -193,16 +193,6 @@ const ViewJobs: React.FC = () => {
                     </Button>
                     <Button
                       component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-
-                    <Button
-                      component={Link}
                       to="/create-task"
                       variant="contained"
                       color="secondary"
@@ -256,15 +246,6 @@ const ViewJobs: React.FC = () => {
                   <>
                     <Button
                       component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '10px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-                    <Button
-                      component={Link}
                       to="/view-applications"
                       variant="contained"
                       color="secondary"
@@ -301,7 +282,7 @@ const ViewJobs: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       <Container>
         <Box sx={{ my: 4 }}>
           {/* <Typography variant="h4" gutterBottom>
@@ -425,10 +406,6 @@ const ViewJobs: React.FC = () => {
             ))
           }
         </Box>
-        {user?.role === 'faculty' ?
-          (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
-          : ''
-        }
       </Container>
     </>
   );
