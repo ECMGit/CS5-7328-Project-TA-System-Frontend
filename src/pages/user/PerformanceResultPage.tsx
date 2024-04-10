@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getAllTaEvaluations } from '../../services/evaluate';
 import {
   Box,
   Card,
@@ -11,7 +12,6 @@ import {
 } from '@mui/material';
 
 type PerformanceResult = {
-  id: number;
   taUserId: number;
   facultyUserId: number;
   courseId: number;
@@ -19,16 +19,6 @@ type PerformanceResult = {
   mentoringSkill: number;
   effectiveCommunication: number;
   comments: string;
-  createdAt: string;
-  taUser: {
-    username: string;
-  };
-  facultyUser: {
-    username: string;
-  };
-  course: {
-    title: string;
-  };
 };
 
 
@@ -40,14 +30,18 @@ const PerformanceResultPage: React.FC = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch('http://localhost:9000/api/ta-performance/performance-results');
-        if (!response.ok) {
-          throw new Error('Data fetch failed');
-        }
-        const data = await response.json();
+        const data = await getAllTaEvaluations();
         setResults(data);
       } catch (error) {
-        console.error('Error:', error);
+        // Check if error is an instance of Error
+        if (error instanceof Error) {
+          console.error('Error:', error.message);
+          alert('Failed to fetch performance results: ' + error.message);
+        } else {
+          // Handle cases where the error is not an instance of Error
+          console.error('An unexpected error occurred:', error);
+          alert('An unexpected error occurred while fetching performance results');
+        }
       }
     };
 
@@ -61,10 +55,10 @@ const PerformanceResultPage: React.FC = () => {
           TA Performance Results
         </Typography>
         {results.map((result) => (
-          <Card variant="outlined" key={result.id} style={{ marginBottom: '20px' }}>
+          <Card variant="outlined" key={result.courseId} style={{ marginBottom: '20px' }}>
             <CardContent>
-              <Typography variant="h6">{result.course.title}</Typography>
-              <Typography color="textSecondary">Professor: {result.facultyUser.username}</Typography>
+              <Typography variant="h6">{result.taUserId}</Typography>
+              <Typography color="textSecondary">Professor: {result.facultyUserId}</Typography>
 
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
@@ -103,7 +97,6 @@ const PerformanceResultPage: React.FC = () => {
               </Grid>
 
               <Typography variant="body1">Comment: {result.comments}</Typography>
-              <Typography color="textSecondary">Reviewed on: {new Date(result.createdAt).toLocaleDateString()}</Typography>
             </CardContent>
           </Card>
         ))}

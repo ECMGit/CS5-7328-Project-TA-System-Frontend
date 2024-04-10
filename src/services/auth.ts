@@ -240,6 +240,16 @@ const getUserData = () => {
   });
 };
 
+// Function use for getting the userId for current user.
+export const getCurrentUserId = () => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    const userObject = JSON.parse(user);
+    return userObject.id;
+  }
+  return null; 
+};
+
 const AuthService = {
   signUp,
   login,

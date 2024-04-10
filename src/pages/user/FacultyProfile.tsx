@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { getFacultyCoursesWithTAs } from '../../services/evaluate';
+import { getCurrentUserId } from '../../services/auth';
 import {
   Container,
   Typography,
@@ -35,14 +37,16 @@ interface Job {
   facultyId: number;
 }
 
-interface TA {
-  id: number;
-  TAName: string;
-  smuID: string;
+
+
+export interface FacultyCourseTAInfo {
   courseId: number;
-  facultyID: number;
-  courseName: string;
+  courseCode: string;
+  title: string;
+  username: string; // TA's name
+  smuNo: number; // TA's SMU ID
 }
+
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -51,7 +55,7 @@ const FacultyProfile: React.FC = () => {
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
 
-  const [currentTAs, setCurrentTAs] = useState<TA[]>([]);
+  const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
 
   useEffect(() => {
     FacultyJobService.getJobs()
@@ -66,23 +70,20 @@ const FacultyProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchCurrentTAs = async () => {
-      // const data = await SomeService.getCurrentTAs();
-      // just an Example, this module has no fetch function for current TA job
-      const data: TA[] = [
-        {
-          id: 1,
-          TAName: 'Current TA',
-          smuID: 'SMU123456',
-          courseId: 101,
-          facultyID: 10,
-          courseName: 'Introduction to Computer Science',
-        },
-      ];
-      setCurrentTAs(data);
+      try {
+        const facultyId = getCurrentUserId();
+        if (facultyId) {
+          const coursesTAs: FacultyCourseTAInfo[] = await getFacultyCoursesWithTAs(facultyId);
+          setCurrentTAs(coursesTAs);
+        }
+      } catch (error) {
+        console.error('Error fetching TAs:', error);
+      }
     };
-
     fetchCurrentTAs();
   }, []);
+
+
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
@@ -124,6 +125,11 @@ const FacultyProfile: React.FC = () => {
   }
 
   const navigate = useNavigate();
+
+
+  const handleEvaluateTA = (taInfo: FacultyCourseTAInfo) => {
+    navigate('/evaluate-performance', { state: { taInfo } });
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -365,17 +371,18 @@ const FacultyProfile: React.FC = () => {
           >
             {currentTAs.map((ta) => (
               <Paper
-                key={ta.id}
+                key={ta.courseId}
                 elevation={3}
                 sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
               >
-                <Typography variant="h6">TA Name: {ta.TAName}</Typography>
-                <Typography>SMU ID: {ta.smuID}</Typography>
+                <Typography variant="h6">TA Name: {ta.username}</Typography>
+                <Typography>SMU ID: {ta.smuNo}</Typography>
                 <Typography>Course ID: {ta.courseId}</Typography>
-                <Typography>Faculty ID: {ta.facultyID}</Typography>
-                <Typography>Course Name: {ta.courseName}</Typography>
+                <Typography>course Code: {ta.courseCode}</Typography>
+                <Typography>Course Name: {ta.title}</Typography>
                 {/* TA performance evaluation button */}
                 <Button
+                  onClick={() => handleEvaluateTA(ta)}
                   component={Link}
                   to="/evaluate-performance"
                   variant="contained"
