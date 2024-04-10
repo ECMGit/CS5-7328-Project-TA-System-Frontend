@@ -33,7 +33,6 @@ import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 
-import FeedbackPage from './pages/feedback/Feedback';
 import BugReportPage from './pages/bug-report/bug-report';
 import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
@@ -50,6 +49,7 @@ import EditCourse from './pages/courses/EditCourse';
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+import { StudentFeatureRequestPage } from './pages/feedback/StudentFeatureRequestpage';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -194,7 +194,7 @@ const App: React.FC = () => {
           <Route path="/user-data" element={<UserDataPage />} />
           
           {/* FeedBack and Bug Report Module */}
-          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/feedback" element={<StudentFeatureRequestPage />} />
           <Route path="/bug-report" element={<BugReportPage />} />
           
           {/* admin resources */}
