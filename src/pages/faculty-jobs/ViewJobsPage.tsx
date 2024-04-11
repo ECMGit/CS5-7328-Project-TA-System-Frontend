@@ -265,16 +265,6 @@ const ViewJobs: React.FC = () => {
                     </Button>
                     <Button
                       component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-
-                    <Button
-                      component={Link}
                       to="/create-task"
                       variant="contained"
                       color="secondary"
@@ -328,15 +318,6 @@ const ViewJobs: React.FC = () => {
                   <>
                     <Button
                       component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '10px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-                    <Button
-                      component={Link}
                       to="/view-applications"
                       variant="contained"
                       color="secondary"
@@ -373,37 +354,42 @@ const ViewJobs: React.FC = () => {
           </div>
         </div>
       </div>
-      <FlexContainer>
-        <DataGrid
-          style={{ flexGrow: 1 }}
-          rowHeight={50}
-          rows={jobs}
-          columns={[
-            { field: 'courseId', headerName: 'Course ID', width: 130 },
-            { field: 'title', headerName: 'Title', width: 150 },
-            { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
-            { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
-            { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
-            { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
-            { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
-            { field: 'TAStats', headerName: 'TA Stats', width: 150 },
-            { field: 'notes', headerName: 'Notes', width: 200 },
-            { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
-            { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
-            // other columns...
-          ]}
+<<<<<<< HEAD
+  <FlexContainer>
+    <DataGrid
+      style={{ flexGrow: 1 }}
+      rowHeight={50}
+      rows={jobs}
+      columns={[
+        { field: 'courseId', headerName: 'Course ID', width: 130 },
+        { field: 'title', headerName: 'Title', width: 150 },
+        { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
+        { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
+        { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
+        { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
+        { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
+        { field: 'TAStats', headerName: 'TA Stats', width: 150 },
+        { field: 'notes', headerName: 'Notes', width: 200 },
+        { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
+        { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
+        // other columns...
+      ]}
 
-        />
-        <ButtonColumn>
-          <Placeholder />
-          {jobs.map(job => canEdit(job) && (
-            <EditButton key={job.id} onClick={() => navigate(`/edit-job/${job.id}`)}>
-              Edit
-            </EditButton>
-          ))}
-        </ButtonColumn>
-      </FlexContainer>
-      {/* <Container>
+    />
+    <ButtonColumn>
+      <Placeholder />
+      {jobs.map(job => canEdit(job) && (
+        <EditButton key={job.id} onClick={() => navigate(`/edit-job/${job.id}`)}>
+          Edit
+        </EditButton>
+      ))}
+    </ButtonColumn>
+  </FlexContainer>
+  {/* <Container>
+=======
+
+      <Container>
+>>>>>>> fa818015baf060f36349cefd2200bc25c513ee35
         <Box sx={{ my: 4 }}>
           {/* <Typography variant="h4" gutterBottom>
           Jobs
@@ -527,24 +513,28 @@ const ViewJobs: React.FC = () => {
             ))
           }
         </Box>
+<<<<<<< HEAD
         {user?.role === 'faculty' ?
           (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
           : ''
         }
       </Container> */}
+=======
+      </Container>
+>>>>>>> fa818015baf060f36349cefd2200bc25c513ee35
     </>
   );
 
-  function handleUploadClick() {
-    document.getElementById('profileUpload')?.click();
-  }
+function handleUploadClick() {
+  document.getElementById('profileUpload')?.click();
+}
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Handle the file upload here
-    }
+function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const file = event.target.files?.[0];
+  if (file) {
+    // Handle the file upload here
   }
+}
 };
 
 export default ViewJobs;
