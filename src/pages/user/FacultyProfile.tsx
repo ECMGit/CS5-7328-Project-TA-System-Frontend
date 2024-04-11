@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { getFacultyCoursesWithTAs } from '../../services/evaluate';
+import { getCurrentUserId } from '../../services/auth';
 import {
   Container,
   Typography,
@@ -134,6 +136,10 @@ const FacultyProfile: React.FC = () => {
   }
 
   const navigate = useNavigate();
+
+  const handleEvaluateTA = (taInfo: FacultyCourseTAInfo) => {
+    navigate('/evaluate-performance', { state: { taInfo } });
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -369,13 +375,14 @@ const FacultyProfile: React.FC = () => {
                 elevation={3}
                 sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
               >
-                <Typography variant="h6">TA Name: {ta.TAName}</Typography>
-                <Typography>SMU ID: {ta.smuID}</Typography>
+                <Typography variant="h6">TA Name: {ta.username}</Typography>
+                <Typography>SMU ID: {ta.smuNo}</Typography>
                 <Typography>Course ID: {ta.courseId}</Typography>
-                <Typography>Faculty ID: {ta.facultyID}</Typography>
-                <Typography>Course Name: {ta.courseName}</Typography>
+                <Typography>course Code: {ta.courseCode}</Typography>
+                <Typography>Course Name: {ta.title}</Typography>
                 {/* TA performance evaluation button */}
                 <Button
+                  onClick={() => handleEvaluateTA(ta)}
                   component={Link}
                   to="/evaluate-performance"
                   variant="contained"
