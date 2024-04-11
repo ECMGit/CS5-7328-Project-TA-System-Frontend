@@ -22,6 +22,7 @@ type PerformanceResult = {
 };
 
 
+
 const ratingToPercentage = (rating: number) => (rating / 10) * 100;
 
 const PerformanceResultPage: React.FC = () => {
@@ -33,12 +34,10 @@ const PerformanceResultPage: React.FC = () => {
         const data = await getAllTaEvaluations();
         setResults(data);
       } catch (error) {
-        // Check if error is an instance of Error
         if (error instanceof Error) {
           console.error('Error:', error.message);
           alert('Failed to fetch performance results: ' + error.message);
         } else {
-          // Handle cases where the error is not an instance of Error
           console.error('An unexpected error occurred:', error);
           alert('An unexpected error occurred while fetching performance results');
         }
@@ -55,10 +54,11 @@ const PerformanceResultPage: React.FC = () => {
           TA Performance Results
         </Typography>
         {results.map((result) => (
-          <Card variant="outlined" key={result.courseId} style={{ marginBottom: '20px' }}>
-            <CardContent>
-              <Typography variant="h6">{result.taUserId}</Typography>
-              <Typography color="textSecondary">Professor: {result.facultyUserId}</Typography>
+            <Card variant="outlined" key={result.courseId} sx={{ marginBottom: 2 }}>
+              <CardContent>
+                <Typography variant="h6">TA: {result.taUserId}</Typography>
+                <Typography color="textSecondary">Professor: {result.facultyUserId}</Typography>
+                <Typography color="textSecondary" mb={2}>Course: {result.courseId}</Typography>
 
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>

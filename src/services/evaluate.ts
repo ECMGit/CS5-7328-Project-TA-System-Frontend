@@ -1,7 +1,6 @@
-import { FacultyCourseTAInfo } from '../../src/pages/user/FacultyProfile';
-// evaluate.ts
-//const API_URL = 'http://localhost:9000/api/ta-performance'; // Adjust the URL based on your environment
-const API_URL = 'http://localhost:9000/api'; // Adjust the base URL based on your environment
+
+const API_URL = 'http://localhost:9000/api/ta-performance'; // Adjust the URL based on your environment
+//const API_URL = 'http://localhost:9000/api'; // Adjust the base URL based on your environment
 
 export type EvaluationData = {
     taUserId: number;
@@ -21,6 +20,16 @@ export interface TAEvaluationData {
     mentoringSkill: number;
     effectiveCommunication: number;
     comments: string;
+}
+
+export interface FacultyCourseTAInfo {
+    courseId: number;
+    courseCode: string;
+    title: string;
+    username: string;
+    smuNo: number;
+    userId?: number;
+    facultyUserId?: number;
 }
 
 

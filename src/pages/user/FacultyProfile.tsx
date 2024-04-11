@@ -3,6 +3,7 @@ import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getFacultyCoursesWithTAs } from '../../services/evaluate';
+import { FacultyCourseTAInfo } from '../../services/evaluate';
 import { getCurrentUserId } from '../../services/auth';
 import {
   Container,
@@ -38,14 +39,6 @@ interface Job {
 }
 
 
-
-export interface FacultyCourseTAInfo {
-  courseId: number;
-  courseCode: string;
-  title: string;
-  username: string; // TA's name
-  smuNo: number; // TA's SMU ID
-}
 
 
 const FacultyProfile: React.FC = () => {

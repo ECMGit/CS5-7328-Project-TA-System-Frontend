@@ -36,14 +36,15 @@ const PerformanceReview: React.FC = () => {
 
       if (taInfo) {
         const evaluationData = {
-          taUserId: taInfo.userId, // Assuming taInfo has userId
-          facultyUserId: taInfo.facultyId, // Assuming taInfo has facultyId
+          taUserId: taInfo.userId,
+          facultyUserId: taInfo.facultyUserId,
           courseId: taInfo.courseId,
           teachingSkill,
           mentoringSkill,
           effectiveCommunication,
           comments,
         };
+        console.log('Evaluation data:', evaluationData);  // try to catch what happen here
 
         try {
           await createTaEvaluation(evaluationData);
@@ -192,7 +193,7 @@ const PerformanceReview: React.FC = () => {
                 </Typography>
                 <Typography variant="subtitle1"><span style={{fontWeight: 'bold'}}>SMU ID:</span> {taInfo.smuNo}
                 </Typography>
-                <Typography variant="subtitle1"><span style={{fontWeight: 'bold'}}>Course:</span> {taInfo.courseName}
+                <Typography variant="subtitle1"><span style={{fontWeight: 'bold'}}>Course:</span> {taInfo.title}
                 </Typography>
                 <Typography variant="subtitle1"><span style={{fontWeight: 'bold'}}>Course ID:</span> {taInfo.courseId}
                 </Typography>
