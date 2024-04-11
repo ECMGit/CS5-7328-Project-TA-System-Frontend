@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
+
 interface Job {
   id: number;
   title: string;
@@ -50,8 +51,17 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-
   const [currentTAs, setCurrentTAs] = useState<TA[]>([]);
+  const storedUserInfo = localStorage.getItem('user');
+
+  useEffect(() => {
+    // 尝试从localStorage获取用户信息
+    if (storedUserInfo) {
+      const userInfo = JSON.parse(storedUserInfo);
+      setName(`${userInfo.firstName} ${userInfo.lastName}`); // 更新姓名状态
+      setDepartment(userInfo.faculty.department); // 更新部门状态
+    }
+  }, []);
 
   useEffect(() => {
     FacultyJobService.getJobs()
@@ -221,6 +231,12 @@ const FacultyProfile: React.FC = () => {
               alt="User Profile"
               src={profileImage || undefined}
             />
+            <Typography component="h2" variant="h5">
+              Name: {name}
+            </Typography>
+            <Typography component="h2" variant="h5">
+              Department: {department}
+            </Typography>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -255,22 +271,6 @@ const FacultyProfile: React.FC = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <form>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  label="Department"
-                  variant="outlined"
-                  fullWidth
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
                 <Input
                   type="file"
                   id="resumeUpload"
@@ -307,13 +307,13 @@ const FacultyProfile: React.FC = () => {
                 </Button>
               </Box>
             </Box>
-            {name && department && (
+            {/* {name && department && (
               <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
                 <Typography variant="h6">User Information</Typography>
                 <Typography>Name: {name}</Typography>
                 <Typography>Department: {department}</Typography>
               </Paper>
-            )}
+            )} */}
           </Box>
         </Grid>
         <Grid item xs={6}>
@@ -408,3 +408,6 @@ const FacultyProfile: React.FC = () => {
 };
 
 export default FacultyProfile;
+function getUserById(userId: string) {
+  throw new Error('Function not implemented.');
+}

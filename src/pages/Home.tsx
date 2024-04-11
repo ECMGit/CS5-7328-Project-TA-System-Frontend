@@ -66,7 +66,6 @@ const Home: React.FC = () => {
     if (!user) {
       return;
     }
-
     // Navigate to student/faculty profile.
     if (user.role === 'student') {
       navigate('/student-profile');
@@ -87,6 +86,7 @@ const Home: React.FC = () => {
       setIsLoggedIn(true);
     }
   }, []);
+
   const renderContent = () => {
     // When the user is an administrator, display the AdminDashboard component
     if (user && user.role === 'admin') {
@@ -234,7 +234,7 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                  {/* Add a view performance button in the hone page, just for student */}
+                  {/* Add a view performance button in the home page, just for student */}
                   <Button
                     component={Link}
                     to="/performance-result"
