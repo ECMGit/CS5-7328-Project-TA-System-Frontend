@@ -16,23 +16,6 @@ export const StudentFeatureRequestPage = () => {
   const [loading, setLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  const hardcodedFeedback = [
-    {
-      type: 'Feature Request',
-      content: 'I would like to have a new dashboard feature...',
-      userId: 1,
-    },
-  ];
-
- // const handleShowRequests = async () => {
-  //  setLoading(true);
-    // Simulate fetching data by just setting the hardcoded feedback after a delay
-  //  setTimeout(() => {
-  //    setFeedbackList(hardcodedFeedback);
-  //    setLoading(false);
-  //    setShowFeedback(true); // Show the feedback list
-   // }, 500); // Simulated delay
-  //};
   const handleShowRequests = async () => {
     setLoading(true);
     try {
