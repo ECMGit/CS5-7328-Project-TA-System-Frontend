@@ -41,6 +41,8 @@ interface Job {
 
 
 
+
+
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
@@ -49,6 +51,17 @@ const FacultyProfile: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
 
   const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
+
+  const storedUserInfo = localStorage.getItem('user');
+
+  useEffect(() => {
+    // localStorage to get the user information
+    if (storedUserInfo) {
+      const userInfo = JSON.parse(storedUserInfo);
+      setName(`${userInfo.firstName} ${userInfo.lastName}`);
+      setDepartment(userInfo.faculty.department);
+    }
+  }, []);
 
   useEffect(() => {
     FacultyJobService.getJobs()
@@ -66,7 +79,8 @@ const FacultyProfile: React.FC = () => {
       try {
         const facultyId = getCurrentUserId();
         if (facultyId) {
-          const coursesTAs: FacultyCourseTAInfo[] = await getFacultyCoursesWithTAs(facultyId);
+          const coursesTAs: FacultyCourseTAInfo[] =
+            await getFacultyCoursesWithTAs(facultyId);
           setCurrentTAs(coursesTAs);
         }
       } catch (error) {
@@ -75,8 +89,6 @@ const FacultyProfile: React.FC = () => {
     };
     fetchCurrentTAs();
   }, []);
-
-
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
@@ -118,7 +130,6 @@ const FacultyProfile: React.FC = () => {
   }
 
   const navigate = useNavigate();
-
 
   const handleEvaluateTA = (taInfo: FacultyCourseTAInfo) => {
     navigate('/evaluate-performance', { state: { taInfo } });
@@ -220,6 +231,8 @@ const FacultyProfile: React.FC = () => {
               alt="User Profile"
               src={profileImage || undefined}
             />
+            <Typography>Name: {name}</Typography>
+            <Typography>Department: {department}</Typography>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -254,7 +267,7 @@ const FacultyProfile: React.FC = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <form>
-                <TextField
+                {/* <TextField
                   label="Name"
                   variant="outlined"
                   fullWidth
@@ -269,7 +282,7 @@ const FacultyProfile: React.FC = () => {
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   sx={{ mb: 2 }}
-                />
+                /> */}
                 <Input
                   type="file"
                   id="resumeUpload"
@@ -306,13 +319,13 @@ const FacultyProfile: React.FC = () => {
                 </Button>
               </Box>
             </Box>
-            {name && department && (
+            {/* {name && department && (
               <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
                 <Typography variant="h6">User Information</Typography>
                 <Typography>Name: {name}</Typography>
                 <Typography>Department: {department}</Typography>
               </Paper>
-            )}
+            )} */}
           </Box>
         </Grid>
         <Grid item xs={6}>
