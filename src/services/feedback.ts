@@ -8,7 +8,7 @@ export type FeedbackItem = {
   content: string;
   complete: boolean;
   timeSubmitted: Date;
-  type: string;
+  type: 'bug' | 'feedback';
 };
 
 const submitFeedback = async (content: string, type: string) => {

@@ -1,15 +1,26 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Paper, Stack, Tooltip, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm';
-import FeedbackService from '../../services/feedback';
+import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import { BugReport, Checklist } from '@mui/icons-material';
 
-interface FeedbackItem {
-  type: string;
-  content: string;
-  userId?: number;
-}
+export const FeedbackTypeIcon = ({ type }: { type: 'bug' | 'feedback' }) => {
+  if (type === 'bug') {
+    return (
+      <Tooltip title="Bug Report">
+        <BugReport />
+      </Tooltip>
+    );
+  } else {
+    return (
+      <Tooltip title="Feature Request">
+        <Checklist />
+      </Tooltip>
+    );
+  }
+};
 
 export const StudentFeatureRequestPage = () => {
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
@@ -49,10 +60,15 @@ export const StudentFeatureRequestPage = () => {
         <Box>
           <Button variant="outlined" onClick={handleHideFeedback}>Hide Feedback</Button>
           {feedbackList.map((feedback, index) => (
-            <Box key={index} sx={{ margin: '10px', padding: '10px', border: '1px solid gray' }}>
-              <Typography variant="subtitle1">Type: {feedback.type}</Typography>
-              <Typography variant="body1">Content: {feedback.content}</Typography>
-            </Box>
+            <Stack
+              direction={'row'}
+              gap={1}
+              key={index}
+              sx={{ padding: '10px', border: '1px solid gray' }}
+            >
+              <FeedbackTypeIcon type={feedback.type} />
+              <Typography variant="body1">{feedback.content}</Typography>
+            </Stack>
           ))}
         </Box>
       )}
