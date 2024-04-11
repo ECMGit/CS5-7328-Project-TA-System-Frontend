@@ -22,7 +22,6 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
-
 interface Job {
   id: number;
   title: string;
@@ -38,13 +37,12 @@ interface Job {
   facultyId: number;
 }
 
-interface TA {
-  id: number;
-  TAName: string;
-  smuID: string;
+export interface FacultyCourseTAInfo {
   courseId: number;
-  facultyID: number;
-  courseName: string;
+  courseCode: string;
+  title: string;
+  username: string; // TA's name
+  smuNo: number; // TA's SMU ID
 }
 
 const FacultyProfile: React.FC = () => {
@@ -53,15 +51,17 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-  const [currentTAs, setCurrentTAs] = useState<TA[]>([]);
+
+  const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
+
   const storedUserInfo = localStorage.getItem('user');
 
   useEffect(() => {
-    // 尝试从localStorage获取用户信息
+    // localStorage to get the user information
     if (storedUserInfo) {
       const userInfo = JSON.parse(storedUserInfo);
-      setName(`${userInfo.firstName} ${userInfo.lastName}`); // 更新姓名状态
-      setDepartment(userInfo.faculty.department); // 更新部门状态
+      setName(`${userInfo.firstName} ${userInfo.lastName}`);
+      setDepartment(userInfo.faculty.department);
     }
   }, []);
 
@@ -78,21 +78,17 @@ const FacultyProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchCurrentTAs = async () => {
-      // const data = await SomeService.getCurrentTAs();
-      // just an Example, this module has no fetch function for current TA job
-      const data: TA[] = [
-        {
-          id: 1,
-          TAName: 'Current TA',
-          smuID: 'SMU123456',
-          courseId: 101,
-          facultyID: 10,
-          courseName: 'Introduction to Computer Science',
-        },
-      ];
-      setCurrentTAs(data);
+      try {
+        const facultyId = getCurrentUserId();
+        if (facultyId) {
+          const coursesTAs: FacultyCourseTAInfo[] =
+            await getFacultyCoursesWithTAs(facultyId);
+          setCurrentTAs(coursesTAs);
+        }
+      } catch (error) {
+        console.error('Error fetching TAs:', error);
+      }
     };
-
     fetchCurrentTAs();
   }, []);
 
@@ -237,12 +233,8 @@ const FacultyProfile: React.FC = () => {
               alt="User Profile"
               src={profileImage || undefined}
             />
-            <Typography component="h2" variant="h5">
-              Name: {name}
-            </Typography>
-            <Typography component="h2" variant="h5">
-              Department: {department}
-            </Typography>
+            <Typography>Name: {name}</Typography>
+            <Typography>Department: {department}</Typography>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -277,6 +269,22 @@ const FacultyProfile: React.FC = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <form>
+                {/* <TextField
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  label="Department"
+                  variant="outlined"
+                  fullWidth
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  sx={{ mb: 2 }}
+                /> */}
                 <Input
                   type="file"
                   id="resumeUpload"
@@ -371,7 +379,7 @@ const FacultyProfile: React.FC = () => {
           >
             {currentTAs.map((ta) => (
               <Paper
-                key={ta.id}
+                key={ta.courseId}
                 elevation={3}
                 sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
               >
@@ -415,6 +423,3 @@ const FacultyProfile: React.FC = () => {
 };
 
 export default FacultyProfile;
-function getUserById(userId: string) {
-  throw new Error('Function not implemented.');
-}

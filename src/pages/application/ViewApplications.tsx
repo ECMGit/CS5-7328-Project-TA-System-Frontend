@@ -268,6 +268,8 @@ const ViewApplications: React.FC = () => {
               console.log('Error parsing error response:', e);
             }
             throw new Error(errorMessage);
+          } else {
+            alert('Make TA seccessfully!');
           }
         } catch (error) {
           console.error('Error making student a TA:', error);
