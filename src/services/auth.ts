@@ -56,7 +56,7 @@ const login = (username: string, password: string) => {
     .then((response) => {
       // alert(JSON.stringify(response.data)); // for debugging purposes
       if (response.data.user) {
-        // console.log(response.data.token);
+        // console.log(response.data.token); put the user data into
         localStorage.setItem('user', JSON.stringify(response.data.user));
         // jsonwebtoken saved to storage for auth at login :)
         localStorage.setItem('token', response.data.token);
@@ -88,7 +88,8 @@ const getCurrentUser = () => {
 
 const getUserRoleFromBackEnd = (userId: number) => {
   // Pass the userId as a query parameter
-  return axios.get(`${USER_API_URL}role/${userId}`)
+  return axios
+    .get(`${USER_API_URL}role/${userId}`)
     .then((response) => {
       return response.data.role;
     })
@@ -109,7 +110,7 @@ const getUserRole = async (userId: number) => {
     const userObject = JSON.parse(user);
     return userObject.role;
     // Use myObject as needed
-  }else{
+  } else {
     return getUserRoleFromBackEnd(userId);
   }
 };
@@ -141,7 +142,10 @@ const resetPasswordRequest = (email: string) => {
  */
 const resetPassword = async (token: string, password: string) => {
   try {
-    const response = await axios.post(USER_API_URL + 'password-reset/confirm', { token, password });
+    const response = await axios.post(USER_API_URL + 'password-reset/confirm', {
+      token,
+      password,
+    });
     return response.data.message;
   } catch (error) {
     console.error(error);
@@ -238,6 +242,16 @@ const getUserData = () => {
     console.log(res);
     return res; // Same here, we return the response
   });
+};
+
+// Function use for getting the userId for current user.
+export const getCurrentUserId = () => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    const userObject = JSON.parse(user);
+    return userObject.id;
+  }
+  return null; 
 };
 
 const AuthService = {

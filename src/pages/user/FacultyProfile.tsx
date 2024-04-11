@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { getFacultyCoursesWithTAs } from '../../services/evaluate';
+import { FacultyCourseTAInfo } from '../../services/evaluate';
+import { getCurrentUserId } from '../../services/auth';
 import {
   Container,
   Typography,
@@ -35,14 +38,10 @@ interface Job {
   facultyId: number;
 }
 
-interface TA {
-  id: number;
-  TAName: string;
-  smuID: string;
-  courseId: number;
-  facultyID: number;
-  courseName: string;
-}
+
+
+
+
 
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -51,7 +50,18 @@ const FacultyProfile: React.FC = () => {
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
 
-  const [currentTAs, setCurrentTAs] = useState<TA[]>([]);
+  const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
+
+  const storedUserInfo = localStorage.getItem('user');
+
+  useEffect(() => {
+    // localStorage to get the user information
+    if (storedUserInfo) {
+      const userInfo = JSON.parse(storedUserInfo);
+      setName(`${userInfo.firstName} ${userInfo.lastName}`);
+      setDepartment(userInfo.faculty.department);
+    }
+  }, []);
 
   useEffect(() => {
     FacultyJobService.getJobs()
@@ -66,21 +76,17 @@ const FacultyProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchCurrentTAs = async () => {
-      // const data = await SomeService.getCurrentTAs();
-      // just an Example, this module has no fetch function for current TA job
-      const data: TA[] = [
-        {
-          id: 1,
-          TAName: 'Current TA',
-          smuID: 'SMU123456',
-          courseId: 101,
-          facultyID: 10,
-          courseName: 'Introduction to Computer Science',
-        },
-      ];
-      setCurrentTAs(data);
+      try {
+        const facultyId = getCurrentUserId();
+        if (facultyId) {
+          const coursesTAs: FacultyCourseTAInfo[] =
+            await getFacultyCoursesWithTAs(facultyId);
+          setCurrentTAs(coursesTAs);
+        }
+      } catch (error) {
+        console.error('Error fetching TAs:', error);
+      }
     };
-
     fetchCurrentTAs();
   }, []);
 
@@ -124,6 +130,10 @@ const FacultyProfile: React.FC = () => {
   }
 
   const navigate = useNavigate();
+
+  const handleEvaluateTA = (taInfo: FacultyCourseTAInfo) => {
+    navigate('/evaluate-performance', { state: { taInfo } });
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -221,6 +231,8 @@ const FacultyProfile: React.FC = () => {
               alt="User Profile"
               src={profileImage || undefined}
             />
+            <Typography>Name: {name}</Typography>
+            <Typography>Department: {department}</Typography>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -255,7 +267,7 @@ const FacultyProfile: React.FC = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <form>
-                <TextField
+                {/* <TextField
                   label="Name"
                   variant="outlined"
                   fullWidth
@@ -270,7 +282,7 @@ const FacultyProfile: React.FC = () => {
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   sx={{ mb: 2 }}
-                />
+                /> */}
                 <Input
                   type="file"
                   id="resumeUpload"
@@ -307,13 +319,13 @@ const FacultyProfile: React.FC = () => {
                 </Button>
               </Box>
             </Box>
-            {name && department && (
+            {/* {name && department && (
               <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
                 <Typography variant="h6">User Information</Typography>
                 <Typography>Name: {name}</Typography>
                 <Typography>Department: {department}</Typography>
               </Paper>
-            )}
+            )} */}
           </Box>
         </Grid>
         <Grid item xs={6}>
@@ -365,17 +377,18 @@ const FacultyProfile: React.FC = () => {
           >
             {currentTAs.map((ta) => (
               <Paper
-                key={ta.id}
+                key={ta.courseId}
                 elevation={3}
                 sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
               >
-                <Typography variant="h6">TA Name: {ta.TAName}</Typography>
-                <Typography>SMU ID: {ta.smuID}</Typography>
+                <Typography variant="h6">TA Name: {ta.username}</Typography>
+                <Typography>SMU ID: {ta.smuNo}</Typography>
                 <Typography>Course ID: {ta.courseId}</Typography>
-                <Typography>Faculty ID: {ta.facultyID}</Typography>
-                <Typography>Course Name: {ta.courseName}</Typography>
+                <Typography>course Code: {ta.courseCode}</Typography>
+                <Typography>Course Name: {ta.title}</Typography>
                 {/* TA performance evaluation button */}
                 <Button
+                  onClick={() => handleEvaluateTA(ta)}
                   component={Link}
                   to="/evaluate-performance"
                   variant="contained"

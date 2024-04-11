@@ -14,7 +14,6 @@ import AuthService from '../../services/auth';
 import styled from 'styled-components';
 
 //MENU STUFF START
-
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -231,31 +230,50 @@ const ViewApplications: React.FC = () => {
 
   const makeTA = async () => {
     if (selectionModel.length > 0) {
-      //get first selected if more than 1 is selected
       const selectedApplicationId = selectionModel[0];
-      //get application from grid
       const selectedApplication = rows.find(
         (row) => row.id === selectedApplicationId
       );
-      console.log(selectedApplication);
+
+      console.log('selcetedApplication', selectedApplication);
+
       if (selectedApplication) {
         try {
-          // api endpoint
-          const endpoint = `http://localhost:9000/ta-application/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
+          const endpoint = 'http://localhost:9000/jobs/student/course/make-ta';
 
-          //POST to backend
+          const requestData = {
+            studentId: selectedApplication.studentId,
+            courseId: selectedApplication.courseId,
+          };
+
+          const requestBody = JSON.stringify(requestData);
+          console.log('requestBody', requestBody);
+
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+            body: requestBody,
           });
 
-          if (!response.ok) throw new Error('Error');
-          alert('Student has been made a TA successfully!');
+          if (!response.ok) {
+            let errorMessage = 'Unknown error occurred';
+            try {
+              const errorResponse = await response.json();
+              errorMessage = errorResponse.message || errorMessage;
+              console.error('Server Error Response:', errorResponse);
+            } catch (e) {
+              console.log('Error parsing error response:', e);
+            }
+            throw new Error(errorMessage);
+          } else {
+            alert('Make TA seccessfully!');
+          }
         } catch (error) {
           console.error('Error making student a TA:', error);
-          alert('Failed to make the student a TA. Please try again.');
+          alert(`Failed to make the student a TA. ${(error as Error).message}`);
         }
       } else {
         alert('Selected application not found.');
