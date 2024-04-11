@@ -10,6 +10,7 @@ interface Task {
   description: string | null;
   TaskId: number;
   completed: boolean;
+  courseId: number;
 }
 
 const ViewAssignedTasks: React.FC = () => {
@@ -47,6 +48,7 @@ const ViewAssignedTasks: React.FC = () => {
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ backgroundColor: '#f2f2f2' }}>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>CourseID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
@@ -55,6 +57,7 @@ const ViewAssignedTasks: React.FC = () => {
         <tbody>
           {tasks.map(task => (
             <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>

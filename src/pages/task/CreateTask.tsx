@@ -12,7 +12,7 @@ const CreateTask: React.FC = () => {
   // State hooks for form fields and validation errors
   //   const [faculty_id, setFaculty_id] = useState(''); // COmes from later check
   const [student_id, setStudent_id] = useState('');
-  const [courseId, setCourseId ] = useState('');
+  const [courseId, setCourseId ] = useState(0);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   // const [urgency, setUrgency] = useState('');
@@ -71,7 +71,7 @@ const CreateTask: React.FC = () => {
     if(checkNumeric(input))
     {
       
-      setCourseId(input); 
+      setCourseId(+input); 
       setCourseIdError(''); 
     }
     else {

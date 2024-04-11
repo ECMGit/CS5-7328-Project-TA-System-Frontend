@@ -11,6 +11,7 @@ interface Task {
   description: string | null;
   TaskId: number;
   completed: boolean;
+  courseId: number; 
 }
 
 const ViewCurrentTasks: React.FC = (): JSX.Element => {
@@ -64,6 +65,7 @@ const StudentTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Course ID</th>
           </tr>
         </thead>
         <tbody>
@@ -72,6 +74,7 @@ const StudentTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId}</td>
             </tr>
           ))}
         </tbody>
@@ -93,6 +96,7 @@ const FacultyTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Course ID</th>
           </tr>
         </thead>
         <tbody>

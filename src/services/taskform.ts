@@ -3,7 +3,7 @@ const BASE_URL = 'http://localhost:9000';
 const token = localStorage.getItem('token');
 
 
-const createTask = (facultyId: string, studentId: string,  title: string, description: string, courseId: string ) => {
+const createTask = (facultyId: string, studentId: string,  title: string, description: string, courseId: number ) => {
   const CREATE_TASK_API = `${BASE_URL}/tasks`;
   return axios.post(CREATE_TASK_API, { facultyId, studentId, title, description, courseId}, {
     headers: {
