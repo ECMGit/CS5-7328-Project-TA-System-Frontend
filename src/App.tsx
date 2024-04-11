@@ -51,6 +51,7 @@ import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 import { StudentFeatureRequestPage } from './pages/feedback/StudentFeatureRequestpage';
 import { MainLayout } from './components/MainLayout';
 import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
+import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -197,6 +198,7 @@ const App: React.FC = () => {
           {/* FeedBack and Bug Report Module */}
           <Route path="/feedback" element={<MainLayout />} >
             <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
+            <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
             <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
           </Route>
           
