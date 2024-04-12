@@ -33,7 +33,9 @@ export const StudentFeatureRequestPage = () => {
     <Box>
       <Typography variant="h6">Feedback Page</Typography>
       <SubmitFeedbackForm onSubmitted={onSubmit}>
-        <Button onClick={toggleFeedbackVisibility} color="primary">
+        <Button onClick={toggleFeedbackVisibility} 
+        color="primary"
+        variant="outlined">
           {showFeedback ? 'Hide My Feedback' : 'Show My Feedback'}
         </Button>
       </SubmitFeedbackForm>

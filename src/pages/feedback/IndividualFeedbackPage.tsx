@@ -47,13 +47,15 @@ export const IndividualFeedbackPage = () => {
     <div>
       {location.pathname === `/feedback/${id}` && (
         <>
-          <div>Comments on Feedback ID: {id}</div>
-          <Button variant="outlined" color="primary" onClick={handleOpenCommentDialog}>
-            Add Comment
-          </Button>
-          <Button onClick={toggleCommentsVisibility} color="primary">
-            {showComments ? 'Hide Comments' : 'Show Comments'}
-          </Button>
+          <Typography variant="h6">Comments on Feedback ID: {id}</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Button variant="contained" color="primary" onClick={handleOpenCommentDialog}>
+              Add Comment
+            </Button>
+            <Button onClick={toggleCommentsVisibility} color="primary" variant="outlined">
+              {showComments ? 'Hide Comments' : 'Show Comments'}
+            </Button>
+          </Box>
           {loading && <CircularProgress />}
           {showComments && comments.map((commentItem, index) => (
             <Box key={index} p={1} my={1} bgcolor="#f0f0f0">
