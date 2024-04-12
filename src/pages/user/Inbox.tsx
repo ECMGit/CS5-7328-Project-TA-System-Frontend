@@ -220,6 +220,11 @@ const MessagesList = () => {
       content.toLowerCase().includes(searchValue)
     );
   });
+
+  useEffect(() => {
+    // Placeholder for any initialization logic
+    setMessages(userMessages); // Simulating fetching messages
+  }, []);
   
   // Check if the user is an admin
   const isAdmin = user && user.role === 'admin';
