@@ -12,25 +12,25 @@ export const StudentFeatureRequestPage = () => {
   useEffect(() => {
     const getFeedback = async () => {
       const feedbackResponse = await FeedbackService.getMyFeedback();
-      setFeedbackList(feedbackResponse);
+      const nonCommentFeedback = feedbackResponse.filter(item => item.type !== 'comment');
+      setFeedbackList(nonCommentFeedback);
       setLoading(false);
     };
     getFeedback();
   }, []);
 
   const onSubmit = (newFeedback: FeedbackItem) => {
-    setFeedbackList([...feedbackList, newFeedback]);
+    if (newFeedback.type !== 'comment') {
+      setFeedbackList([...feedbackList, newFeedback]);
+    }
   };
 
   return (
     <Box>
       <Typography variant="h6">Feedback Page</Typography>
-
       <SubmitFeedbackForm onSubmitted={onSubmit} />
-
       {loading && <CircularProgress />}
       <FeedbackList feedback={feedbackList} />
     </Box>
   );
 };
-
