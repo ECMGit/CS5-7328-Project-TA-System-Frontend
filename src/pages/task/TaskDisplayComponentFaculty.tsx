@@ -17,6 +17,7 @@ const ViewAssignedTasks: React.FC = () => {
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
+  const [userId ,setUserId] = useState(0);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -24,6 +25,7 @@ const ViewAssignedTasks: React.FC = () => {
         if (storedUser) {
           const userId = JSON.parse(storedUser).id;
           const responseObj = await api.viewPending(userId);
+          setUserId(userId);
           setTasks(responseObj);
         }
       } catch (error) {
@@ -59,7 +61,9 @@ const ViewAssignedTasks: React.FC = () => {
             <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
               {/* Add logic here for the button to call the checkOFF api call 
               I think this may have to be on the task Display for the student*/}
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId} <button>Completed</button></td>
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId} <button onClick={() => {
+                api.checkoff(userId, task.TaskId);
+              }}>Completed</button></td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
