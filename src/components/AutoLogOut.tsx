@@ -1,39 +1,69 @@
-import { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import CustomModal from './CustomModal'; // Adjust the import path as necessary
 
-const useAutoLogout = (timeoutDuration: number, logoutFunction: () => void) => {
-  const logoutTimerRef = useRef<number | null>(null);
+interface UseAutoLogoutProps {
+  timeoutDuration: number;
+  logoutFunction: () => void;
+}
 
+const useAutoLogout = ({ timeoutDuration, logoutFunction }: UseAutoLogoutProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const logoutTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showModal = () => {
+    setIsModalOpen(true); 
+    // Start a logout countdown once the modal is shown
+    logoutTimerRef.current = setTimeout(() => {
+      logoutFunction(); // Log out the user automatically if no response
+    }, 20000); // Give the user 20 seconds to respond to the modal
+  };
+  const handleUserActivity = () => {
+    setIsModalOpen(false); 
+    if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current); // Cancel automatic logout if user shows activity
+    resetInactivityTimer(); // Reset the inactivity timer
+  };
+
+  const handleInactivity = () => {
+    if (!isModalOpen) showModal();
+  };
+
+  const resetInactivityTimer = () => {
+    if (inactivityTimerRef.current !== null) clearTimeout(inactivityTimerRef.current);
+    inactivityTimerRef.current = setTimeout(handleInactivity, timeoutDuration);
+  };
+
+  // Setup to detect user activity
   useEffect(() => {
-    const handleInactivity = () => {
-      const userWantsToStay = window.confirm('Do you want to keep browsing?');
-      if (!userWantsToStay) {
-        logoutFunction(); // Call the logout function passed as a parameter
-      } else {
-        resetInactivityTimer();
-      }
-    };
-
-    const resetInactivityTimer = () => {
-      if (logoutTimerRef.current !== null) {
-        clearTimeout(logoutTimerRef.current);
-      }
-      logoutTimerRef.current = window.setTimeout(handleInactivity, timeoutDuration);
-    };
-
-    const activityDetected = () => resetInactivityTimer();
+    const activityDetected = () => handleUserActivity();
     window.addEventListener('mousemove', activityDetected);
     window.addEventListener('keydown', activityDetected);
 
     resetInactivityTimer();
 
+    // Cleanup
     return () => {
       window.removeEventListener('mousemove', activityDetected);
       window.removeEventListener('keydown', activityDetected);
-      if (logoutTimerRef.current !== null) {
-        clearTimeout(logoutTimerRef.current);
-      }
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+      if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
     };
   }, [timeoutDuration, logoutFunction]);
+
+  return {
+    Modal: (
+      <CustomModal
+        isOpen={isModalOpen}
+        message="You've been inactive for a while. Do you want to continue your session?"
+        onStay={handleUserActivity} // User decides to stay logged in
+        onLeave={() => { // User decides to log out or does not respond in time
+          if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
+          logoutFunction();
+        }}
+      />
+    ),
+    closeModal: () => setIsModalOpen(false), // Allows manual closing of the modal
+  };
 };
 
 export default useAutoLogout;

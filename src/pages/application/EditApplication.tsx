@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import ApplyService from '../../services/apply';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const EditApplication = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,7 +44,16 @@ const EditApplication = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  const { Modal, closeModal } = useAutoLogout({
+    timeoutDuration: 400, // Use the defined timeout duration
+    logoutFunction: () => {
+      console.log('called');
+      localStorage.clear(); 
+      console.log('go to login');
+      navigate('/login'); 
+      
+    },
+  });
   // // Handle file change
   // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   if (e.target.files) {
@@ -167,6 +177,7 @@ const EditApplication = () => {
           </Button>
         </Box>
       </Box>
+      {Modal}
     </Container>
   );
 };
