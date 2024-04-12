@@ -221,6 +221,13 @@ const ViewJobs: React.FC = () => {
   const Placeholder = styled.div`
   height: 30px; 
 `;
+  const ButtonWrapper = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 0;
+`;
 
   return (
     <>
@@ -354,42 +361,40 @@ const ViewJobs: React.FC = () => {
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-  <FlexContainer>
-    <DataGrid
-      style={{ flexGrow: 1 }}
-      rowHeight={50}
-      rows={jobs}
-      columns={[
-        { field: 'courseId', headerName: 'Course ID', width: 130 },
-        { field: 'title', headerName: 'Title', width: 150 },
-        { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
-        { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
-        { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
-        { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
-        { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
-        { field: 'TAStats', headerName: 'TA Stats', width: 150 },
-        { field: 'notes', headerName: 'Notes', width: 200 },
-        { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
-        { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
-        // other columns...
-      ]}
+      <FlexContainer>
+        <DataGrid
+          style={{ flexGrow: 1 }}
+          rowHeight={50}
+          rows={jobs}
+          columns={[
+            { field: 'courseId', headerName: 'Course ID', width: 130 },
+            { field: 'title', headerName: 'Title', width: 150 },
+            { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
+            { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
+            { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
+            { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
+            { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
+            { field: 'TAStats', headerName: 'TA Stats', width: 150 },
+            { field: 'notes', headerName: 'Notes', width: 200 },
+            { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
+            { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
+            // other columns...
+          ]}
 
-    />
-    <ButtonColumn>
-      <Placeholder />
-      {jobs.map(job => canEdit(job) && (
-        <EditButton key={job.id} onClick={() => navigate(`/edit-job/${job.id}`)}>
-          Edit
-        </EditButton>
-      ))}
-    </ButtonColumn>
-  </FlexContainer>
-  {/* <Container>
-=======
+        />
+        <ButtonColumn>
+          <Placeholder />
+          {jobs.map(job => canEdit(job) && (
+            <ButtonWrapper key={job.id}>
+              <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
+                Edit
+              </EditButton>
+            </ButtonWrapper>
+          ))}
+        </ButtonColumn>
 
-      <Container>
->>>>>>> fa818015baf060f36349cefd2200bc25c513ee35
+      </FlexContainer>
+      {/* <Container>
         <Box sx={{ my: 4 }}>
           {/* <Typography variant="h4" gutterBottom>
           Jobs
@@ -513,28 +518,24 @@ const ViewJobs: React.FC = () => {
             ))
           }
         </Box>
-<<<<<<< HEAD
         {user?.role === 'faculty' ?
           (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
           : ''
         }
       </Container> */}
-=======
-      </Container>
->>>>>>> fa818015baf060f36349cefd2200bc25c513ee35
     </>
   );
 
-function handleUploadClick() {
-  document.getElementById('profileUpload')?.click();
-}
-
-function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-  const file = event.target.files?.[0];
-  if (file) {
-    // Handle the file upload here
+  function handleUploadClick() {
+    document.getElementById('profileUpload')?.click();
   }
-}
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Handle the file upload here
+    }
+  }
 };
 
 export default ViewJobs;
