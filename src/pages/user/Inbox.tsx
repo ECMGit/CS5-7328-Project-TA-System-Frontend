@@ -270,7 +270,7 @@ const MessagesList = () => {
   }, []);
 
   // Check if the user is an admin to show message search functionality
-  const isAdmin = user && user.role === 'faculty';
+  const isAdmin = user && user.role === 'admin';
 
   return (
     <Container>
