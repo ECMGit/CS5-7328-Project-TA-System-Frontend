@@ -47,6 +47,7 @@ import ViewAllCourses from './pages/courses/ViewAllCourses';
 import AddCourse from './pages/courses/AddCourse';
 import ViewCourse from './pages/courses/ViewCourse';
 import EditCourse from './pages/courses/EditCourse';
+import TopNav from './components/TopNav';
 
 
 import CreateTask from './pages/task/CreateTask';

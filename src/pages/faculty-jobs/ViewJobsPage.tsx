@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Typography, Box, Button, IconButton, Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import TopNav from '../../components/TopNav';
+
 import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import AvatarWrapper from '../../components/AvatarWrapper';
 import api from '../../services/faculty-job';
@@ -45,6 +47,7 @@ const ViewJobs: React.FC = () => {
   const storedUser = localStorage.getItem('user');
   //check the edit access of faculty
   const canEdit = (job: Job) => {
+    console.log('Checking edit access for: ', job);
     return user && user.id === job.facultyId;
   };
 
@@ -230,6 +233,7 @@ const ViewJobs: React.FC = () => {
 `;
 
   return (
+
     <>
       {/* Navigation Bar division */}
       <div>
@@ -384,14 +388,21 @@ const ViewJobs: React.FC = () => {
         />
         <ButtonColumn>
           <Placeholder />
-          {jobs.map(job => canEdit(job) && (
+          {jobs.map(job => (
             <ButtonWrapper key={job.id}>
-              <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
-                Edit
-              </EditButton>
+              {canEdit(job) ? (
+                <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
+                  Edit
+                </EditButton>
+              ) : (
+                <div style={{ visibility: 'hidden', height: '36px' }}> {/* Adjust the height as needed */} 
+                  Edit
+                </div>
+              )}
             </ButtonWrapper>
           ))}
         </ButtonColumn>
+        
 
       </FlexContainer>
       {/* <Container>

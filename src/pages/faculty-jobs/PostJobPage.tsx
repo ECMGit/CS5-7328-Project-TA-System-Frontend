@@ -8,6 +8,7 @@ import { LoadingButton } from '@mui/lab';
 
 
 import api from '../../services/faculty-job';
+import TopNav from '../../components/TopNav';
 import AvatarWrapper from '../../components/AvatarWrapper';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
@@ -151,6 +152,7 @@ const PostJob: React.FC = () => {
     setLoading(true);
 
     const userId = JSON.parse(storedUser!).id;
+    console.log(new Date(deadline));
     api.postJob({
       title: title,
       courseId: parseInt(courseId),
