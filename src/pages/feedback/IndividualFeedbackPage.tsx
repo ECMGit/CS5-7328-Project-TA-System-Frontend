@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography } from '@mui/material';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 
 export const IndividualFeedbackPage = () => {
@@ -42,16 +42,33 @@ export const IndividualFeedbackPage = () => {
     <div>
       {location.pathname === `/feedback/${id}` && (
         <>
-          <div>Comments on Feedback: {id}</div>
+          <div>Comments on Feedback ID: {id}</div>
           <Button variant="outlined" color="primary" onClick={handleOpenCommentDialog}>
             Add Comment
           </Button>
           {comments.map((commentItem, index) => (
             <div key={index}>{commentItem.content}</div>
           ))}
-          <Dialog open={open} onClose={handleCloseCommentDialog}>
+          <Dialog open={open} onClose={handleCloseCommentDialog} fullWidth maxWidth="md">
             <DialogTitle>Add Comment</DialogTitle>
             <DialogContent>
+              {/* Feedback ID Display */}
+              <Box sx={{ marginBottom: 2, padding: 1, backgroundColor: '#f0f0f0' }}>
+                <Typography variant="body2" color="textSecondary">Feedback ID</Typography>
+                <TextField
+                  margin="dense"
+                  id="feedbackId"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  value={id}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Box>
+
+              {/* Comment Input Area */}
               <TextField
                 autoFocus
                 margin="dense"
@@ -59,6 +76,8 @@ export const IndividualFeedbackPage = () => {
                 label="Comment"
                 type="text"
                 fullWidth
+                multiline
+                rows={4}
                 variant="outlined"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
