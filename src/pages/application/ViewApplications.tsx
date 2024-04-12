@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import MockResume from '../MockResume'; //This import is used so that we can display additional application details for a particular applicant
+import CustomModal from '../../components/CustomModal';
 import {
   Container,
   Title,
@@ -100,18 +101,71 @@ const FirstButtonWrapper = styled(ButtonWrapper)`
 //this is the ViewApplications component
 const ViewApplications: React.FC = () => {
   const navigate = useNavigate();
-  //this is the state for the applications
+  
+
+
+
+
+
+
+
+
+  const [isOpen, setIsOpen] = useState(false); // State to control the CustomModal visibility
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null); // Store timeout ID for clearing
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
   //The below stores the current selected applications
   const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
   const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
-
+  const timeoutIdRef = useRef<number | null>(null);
+  //logout timer
+  const logoutTimerRef = useRef<number | null>(null);
 
   //MENU STUFF
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const open = Boolean(anchorEl);
+
+  const logOutUser = () => {
+    console.log('Logging out');
+    localStorage.clear();
+    navigate('/login');
+  };
+
+  // Define more functionality and hooks as needed
+
+  useEffect(() => {
+    let time: number;
+    const resetTimer = () => {
+      clearTimeout(time);
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+      setIsOpen(false);
+      timeoutIdRef.current = null;
+      time = window.setTimeout(() => {
+        setIsOpen(true);
+        timeoutIdRef.current = window.setTimeout(logOutUser, 6000); // 20 seconds until automatic logout
+      }, 6000); // 10 minutes of inactivity allowed before showing modal
+    };
+
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keydown', resetTimer);
+    resetTimer();
+
+    return () => {
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      clearTimeout(time);
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+    };
+  }, []);
+
+  // Handle "Stay Logged In" button click
+  const handleStayLoggedIn = () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    setIsOpen(false);
+    setTimeoutId(null);
+  };
+  
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -286,11 +340,16 @@ const ViewApplications: React.FC = () => {
         value={searchText}
         onChange={handleSearch}
       />
-
+        <CustomModal
+        isOpen={isOpen}
+        message="You've been inactive for a while. Do you want to continue your session?"
+        onStay={handleStayLoggedIn}
+        onLeave={() => navigate('/login')}
+      />
       {/* Container for DataGrid and ButtonColumn */}
       <FlexContainer>
         <DataGrid
-          style={{ width: '80%' }} // Adjust as necessary
+          style={{ width: '80%' }}
           rows={rows}
           columns={columns}
           filterModel={{
