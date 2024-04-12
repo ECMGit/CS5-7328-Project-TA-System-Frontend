@@ -11,9 +11,10 @@ export const IndividualFeedbackPage = () => {
   const [comments, setComments] = useState<FeedbackItem[]>([]);
 
   useEffect(() => {
+
     if (location.pathname === `/feedback/${id}`) {
       const fetchComments = async () => {
-        const fetchedComments = await FeedbackService.getMyFeedback();
+        const fetchedComments = await FeedbackService.getMyComment();
         setComments(fetchedComments);
       };
 
@@ -27,7 +28,7 @@ export const IndividualFeedbackPage = () => {
   const handleCommentSubmit = async () => {
     if (location.pathname === `/feedback/${id}`) {
       try {
-        const newComment = await FeedbackService.submitFeedback(comment, 'feedback');
+        const newComment = await FeedbackService.submitComment(comment);
         setComments([...comments, newComment]);
         setComment('');
         setOpen(false);

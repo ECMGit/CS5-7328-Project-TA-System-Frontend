@@ -8,7 +8,7 @@ interface FeedbackListProps {
   feedback: FeedbackItem[];
 }
 
-const FeedbackTypeIcon = ({ type }: { type: 'bug' | 'feedback' }) => {
+const FeedbackTypeIcon = ({ type }: { type: 'bug' | 'feedback' | 'comment'}) => {
   if (type === 'bug') {
     return (
       <Tooltip title="Bug Report">
