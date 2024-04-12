@@ -2,11 +2,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 // Import components (Typography and Container) from the Material-UI library.
 import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link for navigation
 import AvatarWrapper from '../components/AvatarWrapper';
 import { UserContext } from '../provider';
 
 const TopNav: React.FC = () => {
+
+    const location = useLocation();
+    const isViewJobsPage = location.pathname === '/jobs';
+    const isPostJobsPage = location.pathname === '/post-job';
+    const isEditJobsPage = location.pathname === 'edit-job/:jobId';
+
     // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
     const userContext = useContext(UserContext);
     if (!userContext) {
@@ -112,7 +118,7 @@ const TopNav: React.FC = () => {
                                         color="secondary"
                                         style={{ marginLeft: '5px', marginRight: '5px' }}
                                     >
-                                        See Jobs
+                                        View Jobs
                                     </Button>
                                     <Button
                                         component={Link}
@@ -156,29 +162,90 @@ const TopNav: React.FC = () => {
                                 </>
                             ) : user.role === 'faculty' ? (
                                 <>
-                                    <Button
-                                        component={Link}
-                                        to="/jobs"
-                                        variant="contained"
-                                        color="secondary"
-                                        style={{ marginLeft: '5px', marginRight: '5px' }}
-                                    >
-                                        See Jobs
-                                    </Button>
-                                    <Button
-                                        component={Link}
-                                        to="/view-applications"
-                                        variant="contained"
-                                        color="secondary"
-                                        style={{ marginLeft: '5px', marginRight: '10px' }}
-                                    >
-                                        View Applications
-                                    </Button>
+                                    {isPostJobsPage ? (
+                                        <>
+                                            <Button
+                                                component={Link}
+                                                to="/jobs"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '5px' }}
+                                            >
+                                                View Jobs
+                                            </Button>
+                                            <Button
+                                                component={Link}
+                                                to="/view-applications"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '10px' }}
+                                            >
+                                                View Applications
+                                            </Button>
+                                        </>
+                                    ) : isViewJobsPage ? (
+                                        <>
+                                            <Button
+                                                component={Link}
+                                                to="/post-job"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '5px' }}
+                                            >
+                                                Post Job
+                                            </Button>
+                                            <Button
+                                                component={Link}
+                                                to="/view-applications"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '10px' }}
+                                            >
+                                                View Applications
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                        <Button
+                                                component={Link}
+                                                to="/post-job"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '5px' }}
+                                            >
+                                                Post Job
+                                            </Button>
+                                            <Button
+                                                component={Link}
+                                                to="/jobs"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '5px' }}
+                                            >
+                                                View Jobs
+                                            </Button>
+                                            <Button
+                                                component={Link}
+                                                to="/view-applications"
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ marginLeft: '5px', marginRight: '10px' }}
+                                            >
+                                                View Applications
+                                            </Button>
+                                        </>
+                                    )}
                                 </>
-
-                            ) : (
-                                ''
-                            )}
+                            ) : null}
+                            <Button
+                            component={Link}
+                            to="/home"
+                            variant="contained"
+                            color="secondary"
+                            style={{ marginRight: '10px' }}
+                        >
+                            Home
+                        </Button>
                             <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
                         </div>
                     ) : (
@@ -196,6 +263,7 @@ const TopNav: React.FC = () => {
             </div>
         </div>
     );
+    
 };
 
 export default TopNav;
