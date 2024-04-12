@@ -57,7 +57,8 @@ export const IndividualFeedbackPage = () => {
           {loading && <CircularProgress />}
           {showComments && comments.map((commentItem, index) => (
             <Box key={index} p={1} my={1} bgcolor="#f0f0f0">
-              <Typography variant="subtitle2">{commentItem.content}</Typography>
+              <Typography variant="caption" color="textSecondary">UserID: {commentItem.leftById}</Typography>
+              <Typography variant="subtitle2">Comment: {commentItem.content}</Typography>
             </Box>
           ))}
           <Dialog open={open} onClose={handleCloseCommentDialog} fullWidth maxWidth="md">
