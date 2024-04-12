@@ -226,7 +226,7 @@ const MessagesList = () => {
     setMessages(userMessages); // Simulating fetching messages
   }, []);
   
-  // Check if the user is an admin
+  // Check if the user is an admin to show message search functionality
   const isAdmin = user && user.role === 'admin';
 
   return (
@@ -244,7 +244,7 @@ const MessagesList = () => {
       >
         Inbox
       </Box>
-      {isAdmin && (
+      {isAdmin && (  // Show search fields only if the user is an admin
         <>
           <TextField
             label="Search"
@@ -292,7 +292,7 @@ const MessagesList = () => {
       )}
       <List sx={{ width: '100%' }}>
         {messages.map((message) => (
-          <MessageItem key={message.id} message={message} />
+          <MessageItem key={message.id} message={message} /> // all users can see messages
         ))}
       </List>
     </Container>
