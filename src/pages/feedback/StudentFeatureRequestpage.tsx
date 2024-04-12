@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm';
@@ -8,6 +8,7 @@ import FeedbackService, { FeedbackItem } from '../../services/feedback';
 export const StudentFeatureRequestPage = () => {
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false);  // State to toggle feedback visibility
 
   useEffect(() => {
     const getFeedback = async () => {
@@ -25,12 +26,20 @@ export const StudentFeatureRequestPage = () => {
     }
   };
 
+  // Toggle function to show or hide the feedback list
+  const toggleFeedbackVisibility = () => {
+    setShowFeedback(!showFeedback);
+  };
+
   return (
     <Box>
       <Typography variant="h6">Feedback Page</Typography>
       <SubmitFeedbackForm onSubmitted={onSubmit} />
+      <Button onClick={toggleFeedbackVisibility}>
+        {showFeedback ? 'Hide Feedback' : 'Show Feedback'}
+      </Button>
       {loading && <CircularProgress />}
-      <FeedbackList feedback={feedbackList} />
+      {showFeedback && <FeedbackList feedback={feedbackList} />}
     </Box>
   );
 };
