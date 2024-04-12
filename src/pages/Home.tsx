@@ -58,6 +58,10 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
+  const handlePerformance = () => {
+    navigate('/performance-result', { state: { user } });
+  };
+
   /**
    * Navigate to the corresponding user profile.
    */
@@ -236,8 +240,7 @@ const Home: React.FC = () => {
                   </Button>
                   {/* Add a view performance button in the home page, just for student */}
                   <Button
-                    component={Link}
-                    to="/performance-result"
+                    onClick={() => handlePerformance()}
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllTaEvaluations } from '../../services/evaluate';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -27,12 +28,19 @@ const ratingToPercentage = (rating: number) => (rating / 10) * 100;
 
 const PerformanceResultPage: React.FC = () => {
   const [results, setResults] = useState<PerformanceResult[]>([]);
+  const location = useLocation();
+  const currentTaId = location.state?.user.id;
 
   useEffect(() => {
+    if (!currentTaId) {
+      console.error('No TA information available.');
+      return;
+    }
     const fetchResults = async () => {
       try {
         const data = await getAllTaEvaluations();
-        setResults(data);
+        const filteredResults = data.filter((result) => result.taUserId === currentTaId);
+        setResults(filteredResults);
       } catch (error) {
         if (error instanceof Error) {
           console.error('Error:', error.message);

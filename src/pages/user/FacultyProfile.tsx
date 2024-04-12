@@ -41,8 +41,6 @@ interface Job {
 
 
 
-
-
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
@@ -389,8 +387,6 @@ const FacultyProfile: React.FC = () => {
                 {/* TA performance evaluation button */}
                 <Button
                   onClick={() => handleEvaluateTA(ta)}
-                  component={Link}
-                  to="/evaluate-performance"
                   variant="contained"
                   color="primary"
                   sx={{ mt: 2, alignSelf: 'center' }}

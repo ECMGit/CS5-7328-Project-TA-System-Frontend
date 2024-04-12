@@ -410,7 +410,7 @@ const StudentProfile: React.FC = () => {
                   View Applications
                 </Button>
               </Box>
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+              {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                 <Button
                   component={Link}
                   to="/performance-result"
@@ -420,7 +420,7 @@ const StudentProfile: React.FC = () => {
                 >
                   View My Performance
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
             {/* This stuff should be sent to the database following successful submission. Upon login, this will
               be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
