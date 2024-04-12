@@ -17,6 +17,7 @@ const ViewAssignedTasks: React.FC = () => {
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
+  console.log(storedUser);
   const [userId ,setUserId] = useState(0);
 
   useEffect(() => {
@@ -61,29 +62,6 @@ const ViewAssignedTasks: React.FC = () => {
             <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
               {/* Add logic here for the button to call the checkOFF api call 
               I think this may have to be on the task Display for the student*/}
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId} <button onClick={() => {
-                api.checkoff(userId, task.TaskId);
-              }}>Completed</button></td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <h2>Tasks Completed</h2> 
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>CourseID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map(task => (
-            <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>

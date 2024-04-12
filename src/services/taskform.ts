@@ -46,8 +46,8 @@ const viewPending = (facultyId: number) => {
   });
 };
 
-const checkoff = (studentId: number, taskId: number) => {
-  const CHECKOFF_API = `${BASE_URL}/tasks/checkoff/${studentId}/${taskId}`;
+const checkoff = (smuNo: number, taskId: number) => {
+  const CHECKOFF_API = `${BASE_URL}/tasks/checkoff/${smuNo}/${taskId}`;
   return axios.put(CHECKOFF_API, {}, {
     headers: {
       'Authorization': `Bearer ${token}`
