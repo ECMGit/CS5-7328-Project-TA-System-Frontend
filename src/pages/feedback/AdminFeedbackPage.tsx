@@ -10,7 +10,8 @@ export const AdminFeedbackPage = () => {
   useEffect(() => {
     const getFeedback = async () => {
       const feedbackResponse = await FeedbackService.getAdminFeedback();
-      setFeedbackList(feedbackResponse);
+      const nonCommentFeedback = feedbackResponse.filter(item => item.type !== 'comment');
+      setFeedbackList(nonCommentFeedback);
       setLoading(false);
     };
     getFeedback();
