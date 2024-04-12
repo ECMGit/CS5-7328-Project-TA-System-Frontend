@@ -1,21 +1,20 @@
+// Import necessary components and hooks
 import { Box, Button, MenuItem, Select, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 
 interface SubmitFeedbackFormProps {
-  // Called after feedback is submitted
   onSubmitted?: (feedback: FeedbackItem) => void;
+  children?: ReactNode; // Allow children to be passed to the component
 }
 
-// Component that allows user to input site feedback for admins to see
 export const SubmitFeedbackForm = ({
   onSubmitted,
+  children, // Destructure children from props
 }: SubmitFeedbackFormProps) => {
   const [content, setContent] = useState('');
-  // The type of feedback they are submitting
   const [type, setType] = useState<'feedback' | 'bug'>('feedback');
 
-  // Function to submit feedback
   const submit = async () => {
     try {
       const response = await FeedbackService.submitFeedback(content, type);
@@ -24,7 +23,6 @@ export const SubmitFeedbackForm = ({
       }
       setContent('');
     } catch (err) {
-      // TODO: show better alert
       alert('Failed to submit feedback');
     }
   };
@@ -43,20 +41,22 @@ export const SubmitFeedbackForm = ({
         mt={1}
         sx={{
           display: 'flex',
-          justifyContent: 'end',
+          justifyContent: 'space-between',
+          alignItems: 'center', // Ensure alignment of children
         }}
       >
+        <Select
+          value={type}
+          onChange={(e) => setType(e.target.value as 'feedback' | 'bug')}
+        >
+          <MenuItem value="feedback">Feature Request</MenuItem>
+          <MenuItem value="bug">Bug Report</MenuItem>
+        </Select>
         <Box sx={{ display: 'flex', gap: '12px' }}>
-          <Select
-            value={type}
-            onChange={(e) => setType(e.target.value as 'feedback' | 'bug')}
-          >
-            <MenuItem value="feedback">Feature Request</MenuItem>
-            <MenuItem value="bug">Bug Report</MenuItem>
-          </Select>
           <Button onClick={submit} variant="contained">
             Submit
           </Button>
+          {children} 
         </Box>
       </Box>
     </Box>

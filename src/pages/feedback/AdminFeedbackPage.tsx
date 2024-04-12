@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Tooltip, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 
 export const AdminFeedbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false); // State to manage feedback list visibility
 
   useEffect(() => {
     const getFeedback = async () => {
@@ -17,11 +18,19 @@ export const AdminFeedbackPage = () => {
     getFeedback();
   }, []);
 
+  // Toggle the visibility of the feedback list
+  const toggleFeedbackVisibility = () => {
+    setShowFeedback(!showFeedback);
+  };
+
   return (
     <Box>
       <Typography variant="h6">Admin Feedback Page</Typography>
+      <Button onClick={toggleFeedbackVisibility}>
+        {showFeedback ? 'Hide All User Feedback' : 'Show All User Feedback'}
+      </Button>
       {loading && <CircularProgress />}
-      <FeedbackList feedback={feedbackList} />
+      {showFeedback && <FeedbackList feedback={feedbackList} />}
     </Box>
   );
 };
