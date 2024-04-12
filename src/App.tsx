@@ -16,10 +16,7 @@ import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 9f5483c76ca0c113908a20ff5c56c1bbe33a926c
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';

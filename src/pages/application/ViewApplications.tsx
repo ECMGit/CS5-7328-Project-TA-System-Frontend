@@ -130,6 +130,9 @@ const ViewApplications: React.FC = () => {
       window.setTimeout(logOutUser, 10000);
       const userWantsToStay = window.confirm('Do you want to keep browsing?');
       if (!userWantsToStay) {
+        console.log('Logging out');
+        localStorage.clear;
+        navigate('/login'); // Navigate to login or perform any logout operation
         logOutUser();
       } else {
         // If user stays reset timer
@@ -146,7 +149,7 @@ const ViewApplications: React.FC = () => {
       if (logoutTimerRef.current !== null) {
         clearTimeout(logoutTimerRef.current);
       }
-      logoutTimerRef.current = window.setTimeout(handleInactivity, 10000); // 10 minutes timeout
+      logoutTimerRef.current = window.setTimeout(handleInactivity, 600000); // 10 minutes timeout
     };
 
     // Set up event listeners for activity detection
