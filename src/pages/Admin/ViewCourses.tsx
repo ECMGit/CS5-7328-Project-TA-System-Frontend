@@ -10,11 +10,13 @@ import {
 import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
 
+
 export type CourseData = {
   id: number;
   courseCode: string;
   title: string;
   description: string;
+
 };
 
 export const ViewCourse: React.FC = () => {
@@ -34,16 +36,21 @@ export const ViewCourse: React.FC = () => {
       headerName: 'Details',
       width: 200,
       renderCell: (params :GridRenderCellParams) => {
-        const handleViewDetails = (id: number) => {
-          navigate(`/view-adminDetails/${id}`);
-        };
         return (
           <NavbarButton onClick={() => handleViewDetails(params.row.id)}>View Details</NavbarButton>
         );
       },
     },
   ];
-
+  const handleViewDetails =async  (id: number) => {
+    const exists = await AdminService.getCourseDetail(id);
+    if (!exists) {
+      alert('Error: No TA job found for this course.'); 
+      return;
+    }
+    // If a TA job exists, navigate to the course details
+    navigate(`/course/${id}`);
+  };
 
 
   const rows = course

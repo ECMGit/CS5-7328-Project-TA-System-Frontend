@@ -40,6 +40,7 @@ import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
 import CreateMessage from './pages/user/CreateMessage';
+import CourseDetail from './pages/Admin/ViewCourseDetail';
 
 // TODO: Merge following page with above viewAllCourses page, we only need one page for viewing courses
 import ViewAllCourses from './pages/courses/ViewAllCourses';
@@ -308,34 +309,11 @@ const App: React.FC = () => {
           <Route path="/bug-report" element={<BugReportPage />} />
 
           {/* admin resources */}
-          <Route
-            path="/students"
-            element={
-              <PrivateRoute role="admin">
-                {' '}
-                <ViewStudents />{' '}
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/faculties"
-            element={
-              <PrivateRoute role="admin">
-                {' '}
-                <ViewFaculties />{' '}
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/courses"
-            element={
-              <PrivateRoute role="admin">
-                {' '}
-                <ViewCourses />{' '}
-              </PrivateRoute>
-            }
-          />
-        </Route>
+          <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
+          <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
+          <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
+          <Route path="/course/:id" element={<PrivateRoute role="admin"> <CourseDetail /> </PrivateRoute>} />
+          </Route>
       </Routes>
     </Router>
   );

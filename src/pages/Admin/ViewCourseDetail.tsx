@@ -10,29 +10,10 @@ import {
 import axios, { AxiosError } from 'axios';
 import AdminService from '../../services/admin';
 import { useParams } from 'react-router-dom';
-import { DataGrid, GridColDef, GridFilterModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel ,GridToolbar } from '@mui/x-data-grid';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import Chip from '@mui/material/Chip';
 
-export const statusStyles = {
-    rejected: {
-      borderColor: 'red',
-      color: 'red',
-      borderWidth: '2px',
-      borderStyle: 'solid',
-    },
-    partiallyFilled: {
-      borderColor: 'orange',
-      color: 'orange',
-      borderWidth: '2px',
-      borderStyle: 'solid',
-    },
-    open: {
-      borderColor: 'blue',
-      color: 'blue',
-      borderWidth: '2px',
-      borderStyle: 'solid',
-    },
-  };
 
 export type TAApplication = {
   id: number;
@@ -66,10 +47,9 @@ export type CourseData = {
   
   };
 
-const ViewCourse: React.FC = () => {
+const ViewCourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [taJobs, setTaJobs] = useState<TAJob[]>([]);
-   const [loading, setLoading] = useState(true);
   const [taApplication, setTaApplication] = useState<TAApplication[]>([]);
   const theme = useTheme();
   const [course, setCourse] = useState<CourseData | null>(null); 
@@ -78,11 +58,11 @@ const ViewCourse: React.FC = () => {
   });
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'courseId', headerName: 'CourseId', width: 130 },
-    { field: 'GPA', headerName: 'GPA', width: 150 },
+    { field: 'courseId', headerName: 'CourseId', width: 70 },
+    { field: 'hoursCanWorkPerWeek', headerName: 'HoursCanWorkPerWeek', width: 170 },
+    { field: 'GPA', headerName: 'GPA', width: 60 },
     { field: 'requiredCourses', headerName: 'RequiredCourses', width: 150 },
-    { field: 'requiredSkills', headerName: 'RequiredSkills', width: 150 },
+    { field: 'requiredSkills', headerName: 'RequiredSkills', width: 200 },
     {
         field: 'resumeFile',
         headerName: 'ResumeFile',
@@ -93,18 +73,61 @@ const ViewCourse: React.FC = () => {
           </Typography>
         ),
       },
-    { field: 'status', headerName: 'Status', width: 150 },
+    { field: 'status', 
+    headerName: 'Status', 
+    width: 130,
+   },
   ];
 
 
 
   useEffect(() => {
+    const fetchCourseDetailsTAjob = async () => {
+      if (id) {
+        try {
+          const response = await AdminService.getCourseDetail(parseInt(id));
+          setTaJobs(Array.isArray(response.TAJob) ? response.TAJob : []);
+        
+        } catch (error) {
+          const axiosError = error as AxiosError;
+          console.error(
+            'Error fetching course details:',
+            axiosError?.response?.data || error
+          );
+        }
+      }
+    };
+    fetchCourseDetailsTAjob();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchCourseDetailsTAjob = async () => {
+      if (id) {
+        try {
+          const response = await AdminService.getCourseDetail(parseInt(id));
+          setCourse(response);
+        
+        } catch (error) {
+          const axiosError = error as AxiosError;
+          console.error(
+            'Error fetching course details:',
+            axiosError?.response?.data || error
+          );
+        }
+      }
+    };
+    fetchCourseDetailsTAjob();
+  }, [id]);
+
+
+  
+  useEffect(() => {
     const fetchCourseDetailsApplication = async () => {
       if (id) {
         try {
-          const response = await AdminService.getCourseDetail();
+          const response = await AdminService.getCourseDetail(parseInt(id));
           setTaApplication(
-            Array.isArray(response.data) ? response.data : []
+            Array.isArray(response.TAApplication) ? response.TAApplication : []
           );
         } catch (error) {
           const axiosError = error as AxiosError;
@@ -117,11 +140,9 @@ const ViewCourse: React.FC = () => {
     };
     fetchCourseDetailsApplication();
   }, [id]);
-  
 
-  
   return (
-    <Container>
+    <Container  maxWidth="lg">
           <Box
             sx={{
               display: 'flex',
@@ -151,21 +172,56 @@ const ViewCourse: React.FC = () => {
             </Button>
           </Box>
       
-      
+      {taJobs?.map((job) => (
+        <Paper
+          key={job.id}
+          elevation={3}
+          sx={{
+            p: 3,
+            mt: 2,
+            backgroundColor: theme.palette.background.paper,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ mb: 2, color: theme.palette.primary.main }}
+          >
+            <strong>TA Title:</strong> {job.title}
+          </Typography>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ mb: 2, color: theme.palette.primary.main }}
+          >
+            <strong>CourseSchedule: </strong> {job.courseSchedule}
+          </Typography>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ mb: 2, color: theme.palette.primary.main }}
+          >
+            <strong>TotalHoursPerWeek:</strong> {job.totalHoursPerWeek}
+          </Typography>
+        </Paper>
+      ))}
       <Typography variant="h5" color="primary" margin="10px" fontWeight="800">
-        {' '}
-        TA Application List
+        {course?.courseCode} TA Application List
       </Typography>
-      <Paper sx ={{ height: 400, width: '100%' }}>
-        <DataGrid
+        <DataGrid 
           rows={taApplication}
-          columns={columns} 
+          columns={columns}
           filterModel={filterModel}
+          checkboxSelection
           onFilterModelChange={setFilterModel}
+          slots={{ toolbar: GridToolbar }} 
         />
-      </Paper>
     </Container>
   );
 };
 
-export default ViewCourse;
+export default ViewCourseDetail;
