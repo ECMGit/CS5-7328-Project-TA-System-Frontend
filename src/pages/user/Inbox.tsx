@@ -76,7 +76,13 @@ const userMessages: UserMessage[] = [
   },
 ];
 
-const MessageItem = ({ message }: { message: UserMessage }) => {
+const MessageItem = ({
+  message,
+  isAdmin,
+}: {
+  message: UserMessage;
+  isAdmin: boolean | undefined | null;
+}) => {
   // Initial color state
   const [color, setColor] = React.useState(
     message.isRead ? 'transparent' : '#FFD700'
@@ -101,36 +107,69 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
   };
 
   return (
-    <Container
-      onClick={() => onRead(message.id)}
-      style={{ backgroundColor: color }}
-    >
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary={`${message.taJob.title} - ${message.course.title}`}
-          secondary={
-            <>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {`${message.sender.firstName} ${message.sender.lastName}`}
+    <>
+      {isAdmin ? (
+        <Link to={`/inbox/${message.id}`} style={{ textDecoration: 'none' }}>
+          <Container
+            onClick={() => onRead(message.id)}
+            style={{ backgroundColor: color }}
+          >
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                primary={`${message.taJob.title} - ${message.course.title}`}
+                secondary={
+                  <>
+                    <Typography
+                      sx={{ display: 'inline' }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {`${message.sender.firstName} ${message.sender.lastName}`}
+                    </Typography>
+                    {` — ${message.content}`}
+                  </>
+                }
+              />
+              <Typography variant="caption" display="block" gutterBottom>
+                {message.createdAt.toLocaleString()}
               </Typography>
-              {` — ${message.content}`}
-            </>
-          }
-        />
-        <Typography variant="caption" display="block" gutterBottom>
-          {message.createdAt.toLocaleString()}
-        </Typography>
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </Container>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </Container>
+        </Link>
+      ) : (
+        <Container
+          onClick={() => onRead(message.id)}
+          style={{ backgroundColor: color }}
+        >
+          <ListItem alignItems="flex-start">
+            <ListItemText
+              primary={`${message.taJob.title} - ${message.course.title}`}
+              secondary={
+                <>
+                  <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {`${message.sender.firstName} ${message.sender.lastName}`}
+                  </Typography>
+                  {` — ${message.content}`}
+                </>
+              }
+            />
+            <Typography variant="caption" display="block" gutterBottom>
+              {message.createdAt.toLocaleString()}
+            </Typography>
+          </ListItem>
+          <Divider variant="inset" component="li" />
+        </Container>
+      )}
+    </>
   );
 };
-
 
 const MessagesList = () => {
   const context = useContext(UserContext); // Get the whole context
@@ -142,7 +181,7 @@ const MessagesList = () => {
 
   const { user } = context; // Now safe to destructure
 
-  const [messages, setMessages] = React.useState<UserMessage[]>([]); 
+  const [messages, setMessages] = React.useState<UserMessage[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
   const [senderIdQuery, setSenderIdQuery] = React.useState('');
@@ -152,7 +191,9 @@ const MessagesList = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleReceiverIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleReceiverIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setReceiverIdQuery(event.target.value);
   };
 
@@ -160,7 +201,9 @@ const MessagesList = () => {
     setSenderIdQuery(event.target.value);
   };
 
-  const handleApplicationIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleApplicationIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setApplicationIdQuery(event.target.value);
   };
 
@@ -225,9 +268,9 @@ const MessagesList = () => {
     // Placeholder for any initialization logic
     setMessages(userMessages); // Simulating fetching messages
   }, []);
-  
+
   // Check if the user is an admin to show message search functionality
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = user && user.role === 'faculty';
 
   return (
     <Container>
@@ -244,7 +287,7 @@ const MessagesList = () => {
       >
         Inbox
       </Box>
-      {isAdmin && (  // Show search fields only if the user is an admin
+      {isAdmin && ( // Show search fields only if the user is an admin
         <>
           <TextField
             label="Search"
@@ -292,7 +335,7 @@ const MessagesList = () => {
       )}
       <List sx={{ width: '100%' }}>
         {messages.map((message) => (
-          <MessageItem key={message.id} message={message} /> // all users can see messages
+          <MessageItem key={message.id} message={message} isAdmin={isAdmin} />
         ))}
       </List>
     </Container>

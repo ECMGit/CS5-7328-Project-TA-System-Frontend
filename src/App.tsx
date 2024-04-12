@@ -39,7 +39,6 @@ import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
 import CreateMessage from './pages/user/CreateMessage';
 
-
 // TODO: Merge following page with above viewAllCourses page, we only need one page for viewing courses
 import ViewAllCourses from './pages/courses/ViewAllCourses';
 import AddCourse from './pages/courses/AddCourse';
@@ -49,6 +48,7 @@ import EditCourse from './pages/courses/EditCourse';
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+import Messages from './pages/user/Messages';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -65,7 +65,6 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 
 interface PrivateRouteProps {
   role: string;
@@ -98,8 +97,7 @@ function PrivateRouteJob() {
   }
   if (userContext.user.role === 'admin') {
     return <ViewJobs />;
-  }
-  else if (userContext.user.role === 'student') {
+  } else if (userContext.user.role === 'student') {
     return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
     return <ViewJobs />;
@@ -145,7 +143,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/home-default' element={<HomeDefault />} />
+        <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
@@ -158,48 +156,186 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home />} />
           {/* Profile module */}
 
-          <Route path="/student-profile" element={<PrivateRoute role="student"> <StudentProfile /> </PrivateRoute> }/>
-          <Route path="/faculty-profile" element={<PrivateRoute role="faculty"> <FacultyProfile /> </PrivateRoute>} />
-          
+          <Route
+            path="/student-profile"
+            element={
+              <PrivateRoute role="student">
+                {' '}
+                <StudentProfile />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/faculty-profile"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <FacultyProfile />{' '}
+              </PrivateRoute>
+            }
+          />
+
           {/* Job Module */}
 
-          <Route path= "/create-task" element = {<CreateTask/>}/>
-          <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks/></PrivateRoute>  } />
-          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks/></PrivateRoute>  } />
-          <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
+          <Route path="/create-task" element={<CreateTask />} />
+          <Route
+            path="/tasks/student"
+            element={
+              <PrivateRoute role="student">
+                <ViewCurrentTasks />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tasks/faculty"
+            element={
+              <PrivateRoute role="faculty">
+                <ViewAssignedTasks />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/student-profile"
+            element={
+              <PrivateRoute role="student">
+                <StudentProfile />
+              </PrivateRoute>
+            }
+          />
 
           <Route path="/inbox" element={<Inbox />} />
 
           <Route index element={<Navigate to="/home" />} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/view-courses" element={<PrivateRoute role="admin"><ViewAllCourses /></PrivateRoute>} />
-          <Route path="/view-course/:id" element={<PrivateRoute role="admin"><ViewCourse /></PrivateRoute>} />
-          <Route path="/add-course" element={<PrivateRoute role="admin"><AddCourse /></PrivateRoute>} />
-          <Route path="/edit-course/:id" element={<PrivateRoute role="admin"><EditCourse /></PrivateRoute>} />
+          <Route path="/inbox/:messageId" element={<Messages />} />
+
+          <Route
+            path="/view-courses"
+            element={
+              <PrivateRoute role="admin">
+                <ViewAllCourses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-course/:id"
+            element={
+              <PrivateRoute role="admin">
+                <ViewCourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-course"
+            element={
+              <PrivateRoute role="admin">
+                <AddCourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-course/:id"
+            element={
+              <PrivateRoute role="admin">
+                <EditCourse />
+              </PrivateRoute>
+            }
+          />
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
-          <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
+          <Route
+            path="/post-job"
+            element={
+              <PrivateRoute role="faculty">
+                <PostJob />
+              </PrivateRoute>
+            }
+          />
           <Route path="/jobs" element={<PrivateRouteJob />} />
-          
+
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplications /> </PrivateRoute>}/>
-          <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>}/>
-          <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>}/>
+          <Route
+            path="/view-applications"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <ViewApplications />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-application/:id"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <ViewApplication />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-application/:id"
+            element={
+              <PrivateRoute role="student">
+                {' '}
+                <EditApplication />{' '}
+              </PrivateRoute>
+            }
+          />
 
           {/* Student Performance Review Module */}
-          <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>}/>
-          <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>}/>
+          <Route
+            path="/evaluate-performance"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <EvaluatePerformance />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/performance-result/:id"
+            element={
+              <PrivateRoutePerformanceReview>
+                {' '}
+                <PerformanceResult />{' '}
+              </PrivateRoutePerformanceReview>
+            }
+          />
           <Route path="/user-data" element={<UserDataPage />} />
-          
+
           {/* FeedBack and Bug Report Module */}
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/bug-report" element={<BugReportPage />} />
-          
+
           {/* admin resources */}
-          <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
-          <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
-          <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
+          <Route
+            path="/students"
+            element={
+              <PrivateRoute role="admin">
+                {' '}
+                <ViewStudents />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/faculties"
+            element={
+              <PrivateRoute role="admin">
+                {' '}
+                <ViewFaculties />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <PrivateRoute role="admin">
+                {' '}
+                <ViewCourses />{' '}
+              </PrivateRoute>
+            }
+          />
         </Route>
       </Routes>
     </Router>
