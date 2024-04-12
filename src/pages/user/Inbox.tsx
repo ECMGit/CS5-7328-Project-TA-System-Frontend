@@ -18,7 +18,8 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../provider';
 
 interface User {
   id: number;
@@ -130,20 +131,28 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
   );
 };
 
+
 const MessagesList = () => {
+  const context = useContext(UserContext); // Get the whole context
+
+  if (!context) {
+    console.error('UserContext is not available.');
+    return null; // or some fallback UI
+  }
+
+  const { user } = context; // Now safe to destructure
+
+  const [messages, setMessages] = React.useState<UserMessage[]>([]); 
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
   const [senderIdQuery, setSenderIdQuery] = React.useState('');
   const [applicationIdQuery, setApplicationIdQuery] = React.useState('');
-  const [messages, setMessages] = React.useState<UserMessage[]>(userMessages);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleReceiverIdChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleReceiverIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReceiverIdQuery(event.target.value);
   };
 
@@ -151,12 +160,9 @@ const MessagesList = () => {
     setSenderIdQuery(event.target.value);
   };
 
-  const handleApplicationIdChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleApplicationIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setApplicationIdQuery(event.target.value);
   };
-
 
   const fetchMessagesByReceiverId = async (receiverId: string) => {
     try {
@@ -214,6 +220,9 @@ const MessagesList = () => {
       content.toLowerCase().includes(searchValue)
     );
   });
+  
+  // Check if the user is an admin
+  const isAdmin = user && user.role === 'admin';
 
   return (
     <Container>
@@ -230,51 +239,54 @@ const MessagesList = () => {
       >
         Inbox
       </Box>
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      <TextField
-        label="Search by Receiver ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={receiverIdQuery}
-        onChange={handleReceiverIdChange}
-      />
-      <TextField
-        label="Search by Sender ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={senderIdQuery}
-        onChange={handleSenderIdChange}
-      />
-      <TextField
-        label="Search by Application ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={applicationIdQuery}
-        onChange={ handleApplicationIdChange}
-      />
-      <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
-        <Button
-          component={Link}
-          to="/inbox/new"
-          variant="contained"
-          color="primary"
-        >
-          New Message
-        </Button>
-      </Box>
-
+      {isAdmin && (
+        <>
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Receiver ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={receiverIdQuery}
+            onChange={(e) => setReceiverIdQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Sender ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={senderIdQuery}
+            onChange={(e) => setSenderIdQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Application ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={applicationIdQuery}
+            onChange={(e) => setApplicationIdQuery(e.target.value)}
+          />
+          <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
+            <Button
+              component={Link}
+              to="/inbox/new"
+              variant="contained"
+              color="primary"
+            >
+              New Message
+            </Button>
+          </Box>
+        </>
+      )}
       <List sx={{ width: '100%' }}>
-        {filteredMessages.map((message) => (
+        {messages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
       </List>
