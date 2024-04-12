@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
-import { useState, useEffect, FormEvent } from 'react';
-import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
-
-import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, Button, Card, CardContent, IconButton, AppBar, Toolbar } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Typography, Box, Button, IconButton, Container } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TopNav from '../../components/TopNav';
 
+import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import AvatarWrapper from '../../components/AvatarWrapper';
 import api from '../../services/faculty-job';
 import { UserContext } from '../../provider';
+import AdminDashboard from '../AdminDashboard';
+import TAJobDisplayComponent from '../TAJobDisplayComponent';
 
 
 
@@ -34,25 +37,76 @@ const ViewJobs: React.FC = () => {
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
-  const { user } = userContext;
+
+  const { user, setUser } = userContext;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editing, setEditing] = useState<number | null>(null); // Add a state to track which job is being edited
   const [editedJob, setEditedJob] = useState<Job | null>(null); // Add a state to store the edited job data
 
   const storedUser = localStorage.getItem('user');
+  //check the edit access of faculty
+  const canEdit = (job: Job) => {
+    return user && user.id === job.facultyId;
+  };
+
+  /**
+  * Log out the user, delete user from localStorage
+  */
+  const handleLogout = function () {
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsLoggedIn(false);
+    navigate('/home-default');
+  };
+
+  /**
+   * Navigate to the corresponding user profile. 
+   */
+  const handleProfile = function () {
+    // Guard clause.
+    if (!user) { return; }
+
+    // Navigate to student/faculty profile.
+    if (user.role === 'student') { navigate('/student-profile'); }
+    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
+  };
+
+  const renderContent = () => {
+    // When the user is an administrator, display the AdminDashboard component
+    if (user && user.role === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      // Content displayed by non administrator users
+      return (
+        <>
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </>
+      );
+    }
+  };
+
 
   //faculty can see all TA jobs published
   useEffect(() => {
     console.log('Finding all jobs for: ');
     const fetchJobs = async () => {
-      try {
-        const jobs = await api.getJobs(); // get the promise object
-        if (jobs !== undefined) {
-          setJobs(jobs);
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      const fetchedJobs: Job[] = await api.getJobs();
+      setJobs(fetchedJobs);
+      // try {
+      //   const jobs = await api.getJobs(); // get the promise object
+      //   if (jobs !== undefined) {
+      //     setJobs(jobs);
+      //   }
+      // } catch (error) {
+      //   console.error(error);
+      // }
     };
     fetchJobs();
   }, []);
@@ -60,9 +114,10 @@ const ViewJobs: React.FC = () => {
   const navigate = useNavigate();
 
   // Add a function to handle the edit button click
-  const handleEditClick = (job: Job) => {
-    setEditing(job.id); // Set the editing state to the job id
-    setEditedJob(job); // Set the edited job state to the job data
+  const handleEditClick = (jobId: number) => {
+    navigate(`/edit-job/${jobId}`);
+    // setEditing(job.id); // Set the editing state to the job id
+    // setEditedJob(job); // Set the edited job state to the job data
   };
 
   // Add a function to handle the input change for the edited job
@@ -105,55 +160,248 @@ const ViewJobs: React.FC = () => {
     }
   };
 
+  //New UI
+  const columns = [
+    { field: 'courseId', headerName: 'Course ID', width: 130 },
+    { field: 'title', headerName: 'Title', width: 150 },
+    { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
+    { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
+    { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
+    { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
+    { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
+    { field: 'TAStats', headerName: 'TA Stats', width: 150 },
+    { field: 'notes', headerName: 'Notes', width: 200 },
+    { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
+    { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
+  ];
+
+  const rows = jobs.map((job, index) => ({
+    id: job.id,
+    title: job.title,
+    courseId: job.courseId,
+    courseSchedule: job.courseSchedule,
+    totalHoursPerWeek: job.totalHoursPerWeek,
+    maxNumberOfTAs: job.maxNumberOfTAs,
+    requiredCourses: job.requiredCourses,
+    requiredSkills: job.requiredSkills,
+    TAStats: job.TAStats,
+    notes: job.notes,
+    deadlineToApply: job.deadlineToApply,
+    facultyId: job.facultyId,
+  }));
+  //new edit button
+  const EditButton = styled.button`
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+  const ButtonColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  padding: 20px;
+  height: 100%; 
+  overflow-y: auto; 
+`;
+
+  const FlexContainer = styled.div`
+  display: flex;
+  width: 100%; 
+  align-items: flex-start; 
+
+`;
+  const Placeholder = styled.div`
+  height: 30px; 
+`;
+  const ButtonWrapper = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px 0;
+`;
 
   return (
 
     <>
-    {/* <TopNav /> */}
-      {/* Add the universal navigation bar using MUI components */}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{ flexGrow: 1 }}>
-            View TA Jobs
+      {/* Navigation Bar division */}
+      <div>
+        {/* Blue banner with "Login" button */}
+        <div
+          style={{
+            backgroundColor: '#1976D2',
+            padding: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h5" style={{ color: '#FFF' }}>
+            Jobs
           </Typography>
-          <Button
-            component={Link}
-            to="/post-job"
-            variant="contained"
-            color="secondary"
-            style={{ marginLeft: '10px', marginRight: '5px' }}
-          >
-            Post Job
-          </Button>
-          <Button
-            component={Link}
-            to="/view-applications"
-            variant="contained"
-            color="secondary"
-            style={{ marginLeft: '5px', marginRight: '5px' }}
-          >
-            View TA Applications
-          </Button>
-          <Button
-            component={Link}
-            to="/home"
-            variant='contained'
-            color="secondary"
-            style={{ marginLeft: '5px', marginRight: '5px' }}
-          >
-            Home
-          </Button>
-          {/* Add more navigation or action buttons as needed */}
-        </Toolbar>
-      </AppBar>
-      <Container>
+          <div style={{ marginLeft: 'auto' }}>
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                {user.role === 'admin' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/view-courses"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '10px', marginRight: '5px' }}
+                    >
+                      View Courses
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/view-applications"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Applications
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/create-task"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      Create Task
+                    </Button>
+
+                    <Button
+                      component={Link}
+                      to="/tasks/faculty"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Tasks
+                    </Button>
+                  </>
+                ) : user.role === 'student' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/jobs"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '10px' }}
+                    >
+                      View Available Jobs
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/tasks/student"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Tasks
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/view-applications"  // Should be navigate to view my applications page (Student only)
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View My Applications
+                    </Button>
+
+                  </>
+                ) : user.role === 'faculty' ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/view-applications"
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginLeft: '5px', marginRight: '5px' }}
+                    >
+                      View Applications
+                    </Button>
+                  </>
+                ) : (
+                  ''
+                )}
+                <Button
+                  component={Link}
+                  to="/home"
+                  variant='contained'
+                  color="secondary"
+                  style={{ marginLeft: '5px', marginRight: '15px' }}
+                >
+                  Home
+                </Button>
+                <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
+              </div>
+            ) : (
+              <Button
+                component={Link}
+                to="/login"
+                variant="contained"
+                color="secondary"
+                style={{ marginRight: '10px' }}
+              >
+                Login
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+      <FlexContainer>
+        <DataGrid
+          style={{ flexGrow: 1 }}
+          rowHeight={50}
+          rows={jobs}
+          columns={[
+            { field: 'courseId', headerName: 'Course ID', width: 130 },
+            { field: 'title', headerName: 'Title', width: 150 },
+            { field: 'courseSchedule', headerName: 'Schedule', width: 200 },
+            { field: 'totalHoursPerWeek', headerName: 'Hours/Week', width: 130 },
+            { field: 'maxNumberOfTAs', headerName: 'Max TAs', width: 130 },
+            { field: 'requiredCourses', headerName: 'Required Courses', width: 200 },
+            { field: 'requiredSkills', headerName: 'Required Skills', width: 200 },
+            { field: 'TAStats', headerName: 'TA Stats', width: 150 },
+            { field: 'notes', headerName: 'Notes', width: 200 },
+            { field: 'deadlineToApply', headerName: 'Apply By', width: 150 },
+            { field: 'facultyId', headerName: 'Faculty ID', width: 130 },
+            // other columns...
+          ]}
+
+        />
+        <ButtonColumn>
+          <Placeholder />
+          {jobs.map(job => canEdit(job) && (
+            <ButtonWrapper key={job.id}>
+              <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
+                Edit
+              </EditButton>
+            </ButtonWrapper>
+          ))}
+        </ButtonColumn>
+
+      </FlexContainer>
+      {/* <Container>
         <Box sx={{ my: 4 }}>
           {/* <Typography variant="h4" gutterBottom>
           Jobs
-        </Typography> */}
+        </Typography> 
           {
             jobs.map((job, index) => (
               <Card key={index} sx={{ mb: 2 }}>
@@ -240,7 +488,8 @@ const ViewJobs: React.FC = () => {
                         <TextField
                           label="Apply By"
                           name="deadlineToApply"
-                          value={editedJob?.deadlineToApply ? new Date(editedJob?.deadlineToApply).toLocaleDateString() : ''}
+                          value={editedJob?.deadlineToApply ? 
+                            new Date(editedJob?.deadlineToApply).toLocaleDateString() : ''}
                           onChange={handleInputChange}
                           fullWidth
                           margin="normal"
@@ -276,7 +525,7 @@ const ViewJobs: React.FC = () => {
           (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
           : ''
         }
-      </Container>
+      </Container> */}
     </>
   );
 
