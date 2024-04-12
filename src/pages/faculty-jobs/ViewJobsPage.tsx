@@ -47,6 +47,7 @@ const ViewJobs: React.FC = () => {
   const storedUser = localStorage.getItem('user');
   //check the edit access of faculty
   const canEdit = (job: Job) => {
+    console.log('Checking edit access for: ', job);
     return user && user.id === job.facultyId;
   };
 
@@ -387,14 +388,21 @@ const ViewJobs: React.FC = () => {
         />
         <ButtonColumn>
           <Placeholder />
-          {jobs.map(job => canEdit(job) && (
+          {jobs.map(job => (
             <ButtonWrapper key={job.id}>
-              <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
-                Edit
-              </EditButton>
+              {canEdit(job) ? (
+                <EditButton onClick={() => navigate(`/edit-job/${job.id}`)}>
+                  Edit
+                </EditButton>
+              ) : (
+                <div style={{ visibility: 'hidden', height: '36px' }}> {/* Adjust the height as needed */} 
+                  Edit
+                </div>
+              )}
             </ButtonWrapper>
           ))}
         </ButtonColumn>
+        
 
       </FlexContainer>
       {/* <Container>
