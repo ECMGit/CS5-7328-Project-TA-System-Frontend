@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography, CircularProgress } from '@mui/material';
-import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import FeedbackService, { FeedbackComment } from '../../services/feedback';
 
 export const IndividualFeedbackPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState<FeedbackItem[]>([]);
+  const [comments, setComments] = useState<FeedbackComment[]>([]);
   const [showComments, setShowComments] = useState(false);  // State to toggle comments visibility
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (location.pathname === `/feedback/${id}`) {
+      console.log('id', id);
       const fetchComments = async () => {
-        const fetchedComments = await FeedbackService.getMyComment();
+        const fetchedComments = await FeedbackService.getMyComment(Number(id));
+        console.log(fetchedComments);
         setComments(fetchedComments);
         setLoading(false);
       };
@@ -29,7 +31,7 @@ export const IndividualFeedbackPage = () => {
   const handleCommentSubmit = async () => {
     if (location.pathname === `/feedback/${id}`) {
       try {
-        const newComment = await FeedbackService.submitComment(comment);
+        const newComment = await FeedbackService.submitComment(Number(id), comment);
         setComments([...comments, newComment]);
         setComment('');
         setOpen(false);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isTemplateExpression } from 'typescript';
 const BASE_URL = 'http://localhost:9000';
 const token = localStorage.getItem('token');
 
@@ -9,6 +10,14 @@ export type FeedbackItem = {
   complete: boolean;
   timeSubmitted: Date;
   type: 'bug' | 'feedback' | 'comment'; 
+};
+
+export type FeedbackComment = {
+  id: number;
+  feedbackId: number;
+  leftById: number;
+  content: string;
+  timeSubmitted: Date; 
 };
 
 const submitFeedback = async (content: string, type: string) => {
@@ -62,12 +71,11 @@ const getAdminFeedback = async () => {
   return data as FeedbackItem[]; // Assuming the response is an array of FeedbackItem objects
 };
 
-const submitComment = async (content: string) => {
-  const CREATE_FEEDBACK = `${BASE_URL}/feedback`;
-  const type = 'comment'; // Setting type directly in the function
+const submitComment = async (feedbackId: number, content: string) => {
+  const CREATE_FEEDBACK = `${BASE_URL}/feedback/comment`;
   const response = await axios.post(
     CREATE_FEEDBACK,
-    { content, type },
+    { feedbackId, content},
     {
       headers: {
         Authorization: `Bearer ${token}`, // Ensure token is defined or accessible in this context
@@ -79,11 +87,11 @@ const submitComment = async (content: string) => {
     throw new Error('Failed to submit feedback');
   }
   const data = response.data;
-  return data as FeedbackItem;
+  return data as FeedbackComment;
 };
 
-const getMyComment = async () => {
-  const GET_ALL_FEEDBACK = `${BASE_URL}/feedback`; // Endpoint to fetch all feedback
+const getMyComment = async (feedbackId : number) => {
+  const GET_ALL_FEEDBACK = `${BASE_URL}/feedback/comment`; // Endpoint to fetch all feedback
   const response = await axios.get(GET_ALL_FEEDBACK, {
     headers: {
       Authorization: `Bearer ${token}`, // Assuming token is defined somewhere in the scope
@@ -94,8 +102,8 @@ const getMyComment = async () => {
     throw new Error('Failed to fetch feedback');
   }
 
-  const data = response.data.filter((item: FeedbackItem) => item.type === 'comment');
-  return data as FeedbackItem[]; // Filtering to only include items of type "comment"
+  const data = response.data.filter((item: FeedbackComment) => item.feedbackId==feedbackId);
+  return data as FeedbackComment[]; // Filtering to only include items of type "comment"
 };
 
 const getAdminComment = async () => {
@@ -111,7 +119,7 @@ const getAdminComment = async () => {
   }
 
   const data = response.data;
-  return data as FeedbackItem[]; // Assuming the response is an array of FeedbackItem objects
+  return data as FeedbackComment[]; // Assuming the response is an array of FeedbackItem objects
 };
 
 const FeedbackService = {
