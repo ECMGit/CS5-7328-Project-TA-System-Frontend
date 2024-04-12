@@ -235,19 +235,19 @@ const ViewApplications: React.FC = () => {
         (row) => row.id === selectedApplicationId
       );
 
-      console.log('selcetedApplication', selectedApplication);
+      // console.log('selcetedApplication', selectedApplication);
 
       if (selectedApplication) {
         try {
-          const endpoint = 'http://localhost:9000/jobs/student/course/make-ta';
-
           const requestData = {
             studentId: selectedApplication.studentId,
             courseId: selectedApplication.courseId,
           };
+          console.log('requestData', requestData);
+          const endpoint = `http://localhost:9000/jobs/make-student-ta/${requestData.studentId}/${requestData.courseId}`;
 
-          const requestBody = JSON.stringify(requestData);
-          console.log('requestBody', requestBody);
+          // const requestBody = JSON.stringify(requestData);
+          // console.log('requestBody', requestBody);
 
           const response = await fetch(endpoint, {
             method: 'POST',
@@ -255,7 +255,7 @@ const ViewApplications: React.FC = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-            body: requestBody,
+            // body: requestBody,
           });
 
           if (!response.ok) {
