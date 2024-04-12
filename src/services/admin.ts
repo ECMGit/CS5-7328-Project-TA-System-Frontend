@@ -44,11 +44,20 @@ const getFaculty = async () => {
   }
 
 };
-
+const getCourseDetail = async () => {
+  try {
+    const response = await axios.get(ADMIN_API_URL + '/faculty');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error;
+  }
+}
 const AdminService = {
   getStudent,
   getCourse,
   getFaculty,
+  getCourseDetail
 };
 
 export default AdminService;
