@@ -32,8 +32,6 @@ import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 
-import FeedbackPage from './pages/feedback/Feedback';
-import BugReportPage from './pages/bug-report/bug-report';
 import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
@@ -49,6 +47,10 @@ import EditCourse from './pages/courses/EditCourse';
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
+import { StudentFeatureRequestPage } from './pages/feedback/StudentFeatureRequestpage';
+import { MainLayout } from './components/MainLayout';
+import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
+import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -193,8 +195,11 @@ const App: React.FC = () => {
           <Route path="/user-data" element={<UserDataPage />} />
           
           {/* FeedBack and Bug Report Module */}
-          <Route path="/feedback" element={<FeedbackPage />} />
-          <Route path="/bug-report" element={<BugReportPage />} />
+          <Route path="/feedback" element={<MainLayout />} >
+            <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
+            <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
+            <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
+          </Route>
           
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
