@@ -15,11 +15,7 @@ import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
-
-<<<<<<< HEAD
-=======
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
->>>>>>> team7
 import ApplicationPage from './pages/application/ApplicationPage';
 import PostJob from './pages/faculty-jobs/PostJobPage';
 import ViewJobs from './pages/faculty-jobs/ViewJobsPage';
