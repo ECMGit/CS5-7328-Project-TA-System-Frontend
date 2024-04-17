@@ -108,8 +108,51 @@ const Home: React.FC = () => {
           {user && (
                     <div className='w-full p-5 border-2 shadow-lg text-xl border-gray-300 bg-white h-fit my-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
           )}
+  
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </Container> 
+      );
+    }
+  };
+  
+  return (
+    // Render the component within a container with a maximum width of 'sm'.
 
-{user.role === 'admin' ? (
+    <div>
+      {/* Blue banner with "Login" button */}
+      <div
+        style={{
+          backgroundColor: '#1976D2',
+          padding: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6" style={{ color: '#FFF' }}>
+          SMU Lyle School of Engineering Job Site
+        </Typography>
+        {/* show student Profile if the user log in as student  */}
+        {/* {role === 'student' && (
+          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
+        )} */}
+        {/* show falcuty if the user log in as faculty */}
+        {/* {role === 'faculty' && (
+          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
+        )} */}
+
+        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
+          View Applications
+        </Button> */}
+        <div style={{ marginLeft: 'auto' }}>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {user.role === 'admin' ? (
                 <>
                   <Button
                     component={Link}
@@ -227,50 +270,6 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-  
-          {/* If the user is a student, display their work list */}
-          {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-              <TAJobDisplayComponent />
-            </Container>
-          )}
-        </Container> 
-      );
-    }
-  };
-  
-  return (
-    // Render the component within a container with a maximum width of 'sm'.
-
-    <div>
-      {/* Blue banner with "Login" button */}
-      <div
-        style={{
-          backgroundColor: '#1976D2',
-          padding: '16px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h6" style={{ color: '#FFF' }}>
-          SMU Lyle School of Engineering Job Site
-        </Typography>
-        {/* show student Profile if the user log in as student  */}
-        {/* {role === 'student' && (
-          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-        )} */}
-        {/* show falcuty if the user log in as faculty */}
-        {/* {role === 'faculty' && (
-          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-        )} */}
-
-        {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
-          View Applications
-        </Button> */}
-        <div style={{ marginLeft: 'auto' }}>
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
               <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
             </div>
           ) : (
