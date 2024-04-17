@@ -10,12 +10,15 @@ interface Task {
   description: string | null;
   TaskId: number;
   completed: boolean;
+  courseId: number;
 }
 
 const ViewAssignedTasks: React.FC = () => {
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
+  console.log(storedUser);
+  const [userId ,setUserId] = useState(0);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -23,6 +26,7 @@ const ViewAssignedTasks: React.FC = () => {
         if (storedUser) {
           const userId = JSON.parse(storedUser).id;
           const responseObj = await api.viewPending(userId);
+          setUserId(userId);
           setTasks(responseObj);
         }
       } catch (error) {
@@ -47,6 +51,7 @@ const ViewAssignedTasks: React.FC = () => {
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ backgroundColor: '#f2f2f2' }}>
+            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>CourseID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
             <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
@@ -55,6 +60,9 @@ const ViewAssignedTasks: React.FC = () => {
         <tbody>
           {tasks.map(task => (
             <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+              {/* Add logic here for the button to call the checkOFF api call 
+              I think this may have to be on the task Display for the student*/}
+              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
               <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
@@ -62,6 +70,7 @@ const ViewAssignedTasks: React.FC = () => {
           ))}
         </tbody>
       </table>
+      
       <Button component = {Link} to="/home">Home</Button>
 
       
