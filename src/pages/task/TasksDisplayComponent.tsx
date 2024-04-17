@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import api from '../../services/taskform';
 import { UserContext } from '../../provider';
+import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 interface Task {
   facultyId: number;
   studentId: number;
@@ -56,29 +58,37 @@ const ViewCurrentTasks: React.FC = (): JSX.Element => {
 
 const StudentTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
   return (
-    <div>
-      <h2>Current Tasks</h2>
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map(task => (
-            <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Button component = {Link} to="/home" variant ="contained" color = "secondary">Home</Button>
-
-    </div>
+    <Box sx={{ flexGrow: 1, padding: '20px'}}>
+      <Grid container spacing={2}>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+        <Typography variant="h2" gutterBottom>
+        Current Tasks
+        </Typography>
+          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f2f2f2' }}>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tasks.map(task => (
+                <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Button component = {Link} to="/home" variant ="contained" color = "secondary">Home</Button>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
+    </Box>
+    
   );
 };
 
