@@ -134,6 +134,7 @@ const RegistrationPage: React.FC = () => {
             >
               <FormControlLabel value="student" control={<Radio />} label="Student" />
               <FormControlLabel value="faculty" control={<Radio />} label="Faculty" required />
+              <FormControlLabel value="admin" control={<Radio />} label="Admin" />
             </RadioGroup>  
           </FormControl>
 
