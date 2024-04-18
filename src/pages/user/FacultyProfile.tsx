@@ -2,31 +2,42 @@ import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Container, 
-  Typography, 
-  Button, 
-  Avatar, 
-  Box, Input, TextField, Paper, Grid, IconButton,
+import { getFacultyCoursesWithTAs } from '../../services/evaluate';
+import { FacultyCourseTAInfo } from '../../services/evaluate';
+import { getCurrentUserId } from '../../services/auth';
+import {
+  Container,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Input,
+  TextField,
+  Paper,
+  Grid,
+  IconButton,
   Tooltip,
   Menu,
   MenuItem,
-  ListItemIcon } from '@mui/material';
+  ListItemIcon,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 interface Job {
-    id: number;
-    title: string;
-    courseId: number;
-    courseSchedule: string;
-    totalHoursPerWeek: number;
-    maxNumberOfTAs: number;
-    requiredCourses: string;
-    requiredSkills: string;
-    TAStats: string;
-    notes: string;
-    deadlineToApply: string;
-    facultyId: number;
+  id: number;
+  title: string;
+  courseId: number;
+  courseSchedule: string;
+  totalHoursPerWeek: number;
+  maxNumberOfTAs: number;
+  requiredCourses: string;
+  requiredSkills: string;
+  TAStats: string;
+  notes: string;
+  deadlineToApply: string;
+  facultyId: number;
 }
+
 
 
 
@@ -36,29 +47,59 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-  useEffect(()=>{
+
+  const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
+
+  const storedUserInfo = localStorage.getItem('user');
+
+  useEffect(() => {
+    // localStorage to get the user information
+    if (storedUserInfo) {
+      const userInfo = JSON.parse(storedUserInfo);
+      setName(`${userInfo.firstName} ${userInfo.lastName}`);
+      setDepartment(userInfo.faculty.department);
+    }
+  }, []);
+
+  useEffect(() => {
     FacultyJobService.getJobs()
       .then((data) => {
         console.log('Jobs data:', data);
-        setJobs(data.slice(0,3));
+        setJobs(data.slice(0, 3));
       })
       .catch((error) => {
         console.error('Error fetching jobs:', error);
       });
-  },[]);
-  
+  }, []);
+
+  useEffect(() => {
+    const fetchCurrentTAs = async () => {
+      try {
+        const facultyId = getCurrentUserId();
+        if (facultyId) {
+          const coursesTAs: FacultyCourseTAInfo[] =
+            await getFacultyCoursesWithTAs(facultyId);
+          setCurrentTAs(coursesTAs);
+        }
+      } catch (error) {
+        console.error('Error fetching TAs:', error);
+      }
+    };
+    fetchCurrentTAs();
+  }, []);
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
   const open = Boolean(anchorEl);
 
-  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
+  const [messages, setMessages] = useState([
+    { id: 1, content: 'Test Message' },
+  ]);
 
   // Function to open the file upload dialog when the "Upload Profile" button is clicked
   function handleUploadClick() {
     document.getElementById('profileUpload')?.click();
   }
-
 
   // Function to handle the change of the profile image file
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -88,6 +129,9 @@ const FacultyProfile: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const handleEvaluateTA = (taInfo: FacultyCourseTAInfo) => {
+    navigate('/evaluate-performance', { state: { taInfo } });
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -99,17 +143,12 @@ const FacultyProfile: React.FC = () => {
 
   const fetchMessages = () => {
     // TODO: Implement fetch logic here
-
-    
   };
 
   const navigateToInbox = () => {
     navigate('/inbox');
     handleClose();
   };
-
-
-
 
   return (
     <Container>
@@ -166,10 +205,8 @@ const FacultyProfile: React.FC = () => {
               onClose={handleClose}
             >
               {/* Map through messages and display them */}
-              {messages.map(message => (
-                <MenuItem key={message.id}>
-                  {message.content}
-                </MenuItem>
+              {messages.map((message) => (
+                <MenuItem key={message.id}>{message.content}</MenuItem>
               ))}
             </Menu>
           </MenuItem>
@@ -177,7 +214,13 @@ const FacultyProfile: React.FC = () => {
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <Typography component="h1" variant="h5">
               Faculty Profile
             </Typography>
@@ -186,16 +229,35 @@ const FacultyProfile: React.FC = () => {
               alt="User Profile"
               src={profileImage || undefined}
             />
+            <Typography>Name: {name}</Typography>
+            <Typography>Department: {department}</Typography>
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleUploadClick}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={handleUploadClick}
+                  >
                     Upload Profile
                   </Button>
-                  <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input
+                    type="file"
+                    id="profileUpload"
+                    sx={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={() => document.getElementById('resumeUpload')?.click()}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    onClick={() =>
+                      document.getElementById('resumeUpload')?.click()
+                    }
+                  >
                     Upload Resume
                   </Button>
                 </Grid>
@@ -203,7 +265,7 @@ const FacultyProfile: React.FC = () => {
             </Box>
             <Box sx={{ mt: 4 }}>
               <form>
-                <TextField
+                {/* <TextField
                   label="Name"
                   variant="outlined"
                   fullWidth
@@ -218,8 +280,13 @@ const FacultyProfile: React.FC = () => {
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   sx={{ mb: 2 }}
+                /> */}
+                <Input
+                  type="file"
+                  id="resumeUpload"
+                  sx={{ display: 'none' }}
+                  onChange={handleResumeChange}
                 />
-                <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
                     View Resume
@@ -227,7 +294,12 @@ const FacultyProfile: React.FC = () => {
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'column', justifyContent: 'center' }}>
-                <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                  onClick={handleSave}
+                >
                   Save
                 </Button>
                 <Button
@@ -235,27 +307,42 @@ const FacultyProfile: React.FC = () => {
                   to="/jobs"
                   variant="contained"
                   color="primary"
-                  style={{ marginTop: '8px', width: '100%', textAlign: 'center' }}
+                  style={{
+                    marginTop: '8px',
+                    width: '100%',
+                    textAlign: 'center',
+                  }}
                 >
                   View All Jobs
                 </Button>
               </Box>
             </Box>
-            {name && department && (
+            {/* {name && department && (
               <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
                 <Typography variant="h6">User Information</Typography>
                 <Typography>Name: {name}</Typography>
                 <Typography>Department: {department}</Typography>
               </Paper>
-            )}
+            )} */}
           </Box>
         </Grid>
         <Grid item xs={6}>
           {/* Right section with Job Boxes using Box components */}
           {/* These boxes should be active applications or open positions that you've filled*/}
-          <Box sx={{ mt: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box
+            sx={{
+              mt: '50px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             {jobs.map((job) => (
-              <Paper key={job.id} elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+              <Paper
+                key={job.id}
+                elevation={3}
+                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+              >
                 <Typography variant="h6">{job.title}</Typography>
                 <Typography>{job.notes}</Typography>
                 <Typography>Date Submitted: {job.deadlineToApply}</Typography>
@@ -277,16 +364,37 @@ const FacultyProfile: React.FC = () => {
               </Paper>
             ))}
           </Box>
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-            <Button
-              component={Link}
-              to="/evaluate-performance"
-              variant="contained"
-              color="primary"
-              sx={{ width: '31%', ml: '-70%' }}
-            >
-              Evaluate TA
-            </Button>
+          {/* Box for current TA and evaluate performance */}
+          <Box
+            sx={{
+              mt: '50px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {currentTAs.map((ta) => (
+              <Paper
+                key={ta.courseId}
+                elevation={3}
+                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+              >
+                <Typography variant="h6">TA Name: {ta.username}</Typography>
+                <Typography>SMU ID: {ta.smuNo}</Typography>
+                <Typography>Course ID: {ta.courseId}</Typography>
+                <Typography>course Code: {ta.courseCode}</Typography>
+                <Typography>Course Name: {ta.title}</Typography>
+                {/* TA performance evaluation button */}
+                <Button
+                  onClick={() => handleEvaluateTA(ta)}
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2, alignSelf: 'center' }}
+                >
+                  Evaluate TA
+                </Button>
+              </Paper>
+            ))}
           </Box>
         </Grid>
       </Grid>
@@ -306,7 +414,6 @@ const FacultyProfile: React.FC = () => {
     // Handle editing the posting for the specified job ID
     console.log(`Editing posting for job ${jobId}`);
   }
-
 };
 
 export default FacultyProfile;

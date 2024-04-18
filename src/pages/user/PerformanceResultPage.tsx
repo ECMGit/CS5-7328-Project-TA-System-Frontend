@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getAllTaEvaluations } from '../../services/evaluate';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -11,7 +13,6 @@ import {
 } from '@mui/material';
 
 type PerformanceResult = {
-  id: number;
   taUserId: number;
   facultyUserId: number;
   courseId: number;
@@ -19,35 +20,35 @@ type PerformanceResult = {
   mentoringSkill: number;
   effectiveCommunication: number;
   comments: string;
-  createdAt: string;
-  taUser: {
-    username: string;
-  };
-  facultyUser: {
-    username: string;
-  };
-  course: {
-    title: string;
-  };
 };
+
 
 
 const ratingToPercentage = (rating: number) => (rating / 10) * 100;
 
 const PerformanceResultPage: React.FC = () => {
   const [results, setResults] = useState<PerformanceResult[]>([]);
+  const location = useLocation();
+  const currentTaId = location.state?.user.id;
 
   useEffect(() => {
+    if (!currentTaId) {
+      console.error('No TA information available.');
+      return;
+    }
     const fetchResults = async () => {
       try {
-        const response = await fetch('http://localhost:9000/api/ta-performance/performance-results');
-        if (!response.ok) {
-          throw new Error('Data fetch failed');
-        }
-        const data = await response.json();
-        setResults(data);
+        const data = await getAllTaEvaluations();
+        const filteredResults = data.filter((result) => result.taUserId === currentTaId);
+        setResults(filteredResults);
       } catch (error) {
-        console.error('Error:', error);
+        if (error instanceof Error) {
+          console.error('Error:', error.message);
+          alert('Failed to fetch performance results: ' + error.message);
+        } else {
+          console.error('An unexpected error occurred:', error);
+          alert('An unexpected error occurred while fetching performance results');
+        }
       }
     };
 
@@ -61,10 +62,11 @@ const PerformanceResultPage: React.FC = () => {
           TA Performance Results
         </Typography>
         {results.map((result) => (
-          <Card variant="outlined" key={result.id} style={{ marginBottom: '20px' }}>
-            <CardContent>
-              <Typography variant="h6">{result.course.title}</Typography>
-              <Typography color="textSecondary">Professor: {result.facultyUser.username}</Typography>
+            <Card variant="outlined" key={result.courseId} sx={{ marginBottom: 2 }}>
+              <CardContent>
+                <Typography variant="h6">TA: {result.taUserId}</Typography>
+                <Typography color="textSecondary">Professor: {result.facultyUserId}</Typography>
+                <Typography color="textSecondary" mb={2}>Course: {result.courseId}</Typography>
 
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
@@ -103,7 +105,6 @@ const PerformanceResultPage: React.FC = () => {
               </Grid>
 
               <Typography variant="body1">Comment: {result.comments}</Typography>
-              <Typography color="textSecondary">Reviewed on: {new Date(result.createdAt).toLocaleDateString()}</Typography>
             </CardContent>
           </Card>
         ))}

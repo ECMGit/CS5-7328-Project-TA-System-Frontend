@@ -74,25 +74,37 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
       }}
     >
       {/* TAJob Info displayed, which includes the job title, id, course schedule, faculty, and application deadline */}
-      <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Typography
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <h2 style={{ padding: '0rem', margin: '0rem' }}>
-          <span style={{ textDecoration: 'underline' }}>TA Job</span>: {tajob.title}
+          <span style={{ textDecoration: 'underline' }}>TA Job</span>:{' '}
+          {tajob.title}
         </h2>
         <div style={{ fontSize: '12px', color: 'gray' }}>(ID: {tajob.id})</div>
       </Typography>
       <p>
-        <span style={{ textDecoration: 'underline' }}>Title</span>: {tajob.title}
+        <span style={{ textDecoration: 'underline' }}>Title</span>:{' '}
+        {tajob.title}
       </p>
       <p>
-        <span style={{ textDecoration: 'underline' }}>Course Schedule</span>: {tajob.courseSchedule}
+        <span style={{ textDecoration: 'underline' }}>Course Schedule</span>:{' '}
+        {tajob.courseSchedule}
       </p>
       <p>
-        <span style={{ textDecoration: 'underline' }}>Faculty/Professor</span>: {facName}
+        <span style={{ textDecoration: 'underline' }}>Faculty/Professor</span>:{' '}
+        {facName}
       </p>{' '}
       {/* WIP --> Will need to change this to get the faculty's name from their ID */}
       <p>
-        <span style={{ textDecoration: 'underline' }}>Application Deadline</span>:{' '}
-        {new Date(tajob.deadlineToApply).toDateString()}
+        <span style={{ textDecoration: 'underline' }}>
+          Application Deadline
+        </span>
+        : {new Date(tajob.deadlineToApply).toDateString()}
       </p>
       {/* 2 buttons to go to the specified TAJob's details and application pages respectively */}
       <Typography
@@ -114,7 +126,16 @@ const TAJobComponent: React.FC<TAJobComponentProps> = ({ tajob }) => {
         <Button
           style={{ marginLeft: '1rem' }}
           variant="contained"
-          onClick={() => navigate('/application-form/?jobId='+ tajob.id + '&courseId=' + tajob.courseId + '&title=' + tajob.title)}
+          onClick={() =>
+            navigate(
+              '/application-form/?jobId=' +
+                tajob.id +
+                '&courseId=' +
+                tajob.courseId +
+                '&title=' +
+                tajob.title
+            )
+          }
         >
           Apply
         </Button>

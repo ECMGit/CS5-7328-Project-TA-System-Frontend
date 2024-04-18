@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { createTaEvaluation } from '../../services/evaluate';
+
 import {
   Container,
   Typography,
@@ -9,72 +12,56 @@ import {
   Grid,
 } from '@mui/material';
 
-const marks = [
-  { value: 0, label: '0: Completely Absent' },
-  { value: 2, label: '2' },
-  { value: 4, label: '4' },
-  { value: 6, label: '6' },
-  { value: 8, label: '8' },
-  { value: 10, label: '10: Always Punctual' },
-];
-
 const PerformanceReview: React.FC = () => {
+  const location = useLocation();
+  const taInfo = location.state?.taInfo;
+
   const [teachingSkill, setTeachingSkill] = useState<number>(5);
   const [mentoringSkill, setMentoringSkill] = useState<number>(5);
-  const [effectiveCommunication, setEffectiveCommunication] =
-    useState<number>(5);
+  const [effectiveCommunication, setEffectiveCommunication] = useState<number>(5);
   const [comments, setComments] = useState<string>('');
 
-  //Just example, real data get from the database
-  const taInfo = {
-    Name: 'John Doe',
-    SMUid: 'TA01',
-    Course: 'Cs01',
-    Time: '2024	Spring',
-  };
+  const marks = [
+    { value: 0, label: '0: Completely Absent' },
+    { value: 2, label: '2' },
+    { value: 4, label: '4' },
+    { value: 6, label: '6' },
+    { value: 8, label: '8' },
+    { value: 10, label: '10: Always Punctual' },
+  ];
 
-
+    useEffect(() => {
+      // Ensure taInfo is properly updated upon location change
+      if (!taInfo) {
+        console.error('TA information is missing in the state.');
+      }
+    }, [location.state]); 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // get a  taUserId and facultyUserId
-    const taUserId = 8; // hardcode from database user table for testing
-    const facultyUserId = 9; // hardcode from database user table for testing
-    const courseId = 1;
+    if (taInfo) {
+      const evaluationData = {
+        taUserId: taInfo.userId,
+        facultyUserId: taInfo.facultyUserId,
+        courseId: taInfo.courseId,
+        teachingSkill,
+        mentoringSkill,
+        effectiveCommunication,
+        comments,
+      };
+      console.log('Evaluation data:', evaluationData); // try to catch what happen here
 
-    const evaluationData = {
-      taUserId,
-      facultyUserId,
-      courseId,
-      teachingSkill,
-      mentoringSkill,
-      effectiveCommunication,
-      comments,
-    };
-
-    // POSt to the backend and fetch data
-    try {
-      const response = await fetch('http://localhost:9000/api/ta-performance/ta-evaluation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(evaluationData),
-      });
-
-
-      if (response.ok) {
+      try {
+        await createTaEvaluation(evaluationData);
         alert('Evaluation submitted successfully');
-      } else {
-        const resJson = await response.json();
-        alert('Failed to submit evaluation: ' + resJson.message);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error occurred during submission');
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to submit evaluation');
+    } else {
+      alert('TA information is not available');
     }
-
   };
 
   return (
@@ -198,30 +185,33 @@ const PerformanceReview: React.FC = () => {
       </form>
 
       {/* TA information box here */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-        }}
-      >
-        <Typography variant="subtitle1">
-          <span style={{ fontWeight: 'bold' }}>Name:</span> {taInfo.Name}
-        </Typography>
-        <Typography variant="subtitle1">
-          <span style={{ fontWeight: 'bold' }}>SMU ID:</span> {taInfo.SMUid}
-        </Typography>
-        <Typography variant="subtitle1">
-          <span style={{ fontWeight: 'bold' }}>Course:</span> {taInfo.Course}
-        </Typography>
-        <Typography variant="subtitle1">
-          <span style={{ fontWeight: 'bold' }}>Job ID:</span> {taInfo.Time}
-        </Typography>
-      </Box>
+      {taInfo && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Typography variant="subtitle1">
+            <span style={{ fontWeight: 'bold' }}>Name:</span> {taInfo.username}
+          </Typography>
+          <Typography variant="subtitle1">
+            <span style={{ fontWeight: 'bold' }}>SMU ID:</span> {taInfo.smuNo}
+          </Typography>
+          <Typography variant="subtitle1">
+            <span style={{ fontWeight: 'bold' }}>Course:</span> {taInfo.title}
+          </Typography>
+          <Typography variant="subtitle1">
+            <span style={{ fontWeight: 'bold' }}>Course ID:</span>{' '}
+            {taInfo.courseId}
+          </Typography>
+        </Box>
+      )}
     </Container>
   );
 };

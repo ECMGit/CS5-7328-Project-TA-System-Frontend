@@ -15,6 +15,7 @@ import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
+
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
 import ViewApplicationsbyFacultyID from './pages/application/ViewApplications';
 import ApplicationPage from './pages/application/ApplicationPage';
@@ -237,8 +238,8 @@ const App: React.FC = () => {
             <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
             <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
             <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
-          </Route>
-
+          
+          <Route path="/bug-report" element={<BugReportPage />} /></Route>
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />

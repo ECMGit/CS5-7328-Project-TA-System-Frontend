@@ -34,7 +34,6 @@ export type TAApplicationData = {
   TAStats: string;
   status: string;
 };
-
 const SearchInput = styled.input`
   padding: 10px;
   margin-bottom: 10px;
@@ -43,11 +42,12 @@ const SearchInput = styled.input`
   font-size: 16px;
 `;
 
+
 const MakeTaButton = styled.button`
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #4CAF50; 
+  background-color: #4caf50; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -79,16 +79,17 @@ const ButtonWrapper = styled.div`
   margin: 1px 0;
 `;
 
-const FirstButtonWrapper = styled(ButtonWrapper)`
-  margin-top: 52px;
-`;
+// const FirstButtonWrapper = styled(ButtonWrapper)`
+//   margin-top: 52px;
+// `;
 
 const ViewApplicationsbyFacultyID: React.FC = () => {
   const navigate = useNavigate();
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
-  // Below states are not used in the current implementation
-  // const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
-  // const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  //The below stores the current selected applications
+  const [currentApplication, setCurrentApplication] =
+    useState<TAApplicationData | null>(null);
+  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
   const [searchText, setSearchText] = useState('');
 
@@ -111,7 +112,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
-    index: number,
+    index: number
   ) => {
     setSelectedIndex(index);
     setAnchorEl(null);
@@ -173,17 +174,64 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   // Columns configuration for MUI DataGrid
   const columns = [
-    { field: 'studentId', headerName: 'Student ID', width: 150, filterable: true },
-    { field: 'courseId', headerName: 'Course ID', width: 130, filterable: true },
-    { field: 'hoursCanWorkPerWeek', headerName: 'Hours/Week', width: 130, filterable: true },
-    { field: 'coursesTaken', headerName: 'Courses Taken', width: 200, filterable: true },
+    {
+      field: 'studentId',
+      headerName: 'Student ID',
+      width: 150,
+      filterable: true,
+    },
+    {
+      field: 'courseId',
+      headerName: 'Course ID',
+      width: 130,
+      filterable: true,
+    },
+    {
+      field: 'hoursCanWorkPerWeek',
+      headerName: 'Hours/Week',
+      width: 130,
+      filterable: true,
+    },
+    {
+      field: 'coursesTaken',
+      headerName: 'Courses Taken',
+      width: 200,
+      filterable: true,
+    },
     { field: 'GPA', headerName: 'GPA', width: 100, filterable: true },
-    { field: 'requiredCourses', headerName: 'Required Courses', width: 200, filterable: true },
-    { field: 'requiredSkills', headerName: 'Required Skills', width: 200, filterable: true },
+    {
+      field: 'requiredCourses',
+      headerName: 'Required Courses',
+      width: 200,
+      filterable: true,
+    },
+    {
+      field: 'requiredSkills',
+      headerName: 'Required Skills',
+      width: 200,
+      filterable: true,
+    },
     { field: 'resumeFile', headerName: 'Resume', width: 150, filterable: true },
     { field: 'taJobId', headerName: 'TA Job ID', width: 130, filterable: true },
     // { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
     { field: 'status', headerName: 'Status', width: 120, filterable: true },
+    // put View_performance button here, click to view student's
+    {
+      field: 'viewPerformance',
+      headerName: 'View Performance',
+      width: 180,
+      renderCell: (cellValues: GridCellParams) => {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleViewPerformanceClick(cellValues.row.studentId)}
+          >
+            View Performance
+          </Button>
+        );
+      },
+    },
   ];
 
   // This is the data that will be displayed in the DataGrid
@@ -203,13 +251,16 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   }));
 
   const [filterModel, setFilterModel] = useState({});
-  const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
+  const [originalApplications, setOriginalApplications] = useState<
+    TAApplicationData[]
+  >([]);
 
   const onRowsSelectionHandler = (ids: (number | string)[]) => {
     // Select Student from row
     setSelectionModel(ids.map(Number));
   };
 
+  // Fetching the data from the API
   useEffect(() => {
     const fetchApplicationsByFacultyId = async () => {
       try {
@@ -229,29 +280,50 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   const makeTA = async () => {
     if (selectionModel.length > 0) {
-      //get first selected if more than 1 is selected
       const selectedApplicationId = selectionModel[0];
-      //get application from grid
-      const selectedApplication = rows.find(row => row.id === selectedApplicationId);
-      console.log(selectedApplication);
+      const selectedApplication = rows.find(
+        (row) => row.id === selectedApplicationId
+      );
+
+      // console.log('selcetedApplication', selectedApplication);
+
       if (selectedApplication) {
         try {
-          // api endpoint
-          const endpoint = `http://localhost:9000/ta-application/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
+          const requestData = {
+            studentId: selectedApplication.studentId,
+            courseId: selectedApplication.courseId,
+          };
+          console.log('requestData', requestData);
+          const endpoint = `http://localhost:9000/jobs/make-student-ta/${requestData.studentId}/${requestData.courseId}`;
 
-          //POST to backend
+          // const requestBody = JSON.stringify(requestData);
+          // console.log('requestBody', requestBody);
+
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+            // body: requestBody,
           });
 
-          if (!response.ok) throw new Error('Error');
-          alert('Student has been made a TA successfully!');
+          if (!response.ok) {
+            let errorMessage = 'Unknown error occurred';
+            try {
+              const errorResponse = await response.json();
+              errorMessage = errorResponse.message || errorMessage;
+              console.error('Server Error Response:', errorResponse);
+            } catch (e) {
+              console.log('Error parsing error response:', e);
+            }
+            throw new Error(errorMessage);
+          } else {
+            alert('Make TA seccessfully!');
+          }
         } catch (error) {
           console.error('Error making student a TA:', error);
-          alert('Failed to make the student a TA. Please try again.');
+          alert(`Failed to make the student a TA. ${(error as Error).message}`);
         }
       } else {
         alert('Selected application not found.');
@@ -273,12 +345,24 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
     // Initialize Fuse with the original, unfiltered applications
     const fuse = new Fuse(originalApplications, {
-      keys: ['studentId', 'courseId', 'hoursCanWorkPerWeek', 'GPA', 'coursesTaken', 'requiredCourses', 'requiredSkills', 'resumeFile', 'taJobId', 'TAStats', 'status'],
+      keys: [
+        'studentId',
+        'courseId',
+        'hoursCanWorkPerWeek',
+        'GPA',
+        'coursesTaken',
+        'requiredCourses',
+        'requiredSkills',
+        'resumeFile',
+        'taJobId',
+        'TAStats',
+        'status',
+      ],
       includeScore: true,
     });
 
     const results = fuse.search(searchValue);
-    const filteredApplications = results.map(result => result.item);
+    const filteredApplications = results.map((result) => result.item);
     setApplications(filteredApplications); // Update applications state with search results
   };
 
@@ -323,11 +407,20 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
             );
           })}
         </ButtonColumn>
-
       </FlexContainer>
 
-      <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', mt: 2 }}>
-        {/* <ListItemButton
+      {/* Displays additional application details for the selected application */}
+      <div>
+        {currentApplication && <MockResume application={currentApplication} />}
+      </div>
+
+      <div>
+        <List
+          component="nav"
+          aria-label="Device settings"
+          sx={{ bgcolor: 'background.paper' }}
+        >
+          <ListItemButton
             id="lock-button"
             aria-haspopup="listbox"
             aria-controls="lock-menu"

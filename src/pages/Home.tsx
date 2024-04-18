@@ -36,7 +36,6 @@ const Home: React.FC = () => {
 
   //console.log('home:', user);
 
-
   if (!user) {
     return <div>Loading...</div>; // or any other fallback UI
   }
@@ -61,17 +60,26 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
+  const handlePerformance = () => {
+    navigate('/performance-result', { state: { user } });
+  };
+
   /**
-   * Navigate to the corresponding user profile. 
+   * Navigate to the corresponding user profile.
    */
   const handleProfile = function () {
     // Guard clause.
-    if (!user) { return; }
-
+    if (!user) {
+      return;
+    }
     // Navigate to student/faculty profile.
-    if (user.role === 'student') { navigate('/student-profile'); }
-    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
-    else if (user.role === 'admin') { navigate('/admin-profile'); }
+    if (user.role === 'student') {
+      navigate('/student-profile');
+    } else if (user.role === 'faculty') {
+      navigate('/faculty-profile');
+    } else if (user.role === 'admin') {
+      navigate('/admin-profile');
+    }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -105,12 +113,17 @@ const Home: React.FC = () => {
           />
           {/* Text box that spans the page */}
           {user && (
-                    <div className='w-full p-5 border-2 shadow-lg text-xl border-gray-300 bg-white h-fit my-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
+            <Paper style={{ padding: '20px' }}>
+              <Typography variant="body1">
+                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle
+                School of Engineering students to find TA jobs.
+              </Typography>
+            </Paper>
           )}
-  
+
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
               <TAJobDisplayComponent />
             </Container>
           )}
@@ -230,6 +243,15 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
+                  {/* Add a view performance button in the home page, just for student */}
+                  <Button
+                    onClick={() => handlePerformance()}
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View My Performance
+                  </Button>
                   <Button
                     component={Link}
                     to="/view-applications"  // Should be navigate to view my applications page (Student only)
@@ -274,7 +296,11 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
+              <AvatarWrapper
+                user={user}
+                onLogout={handleLogout}
+                onProfile={handleProfile}
+              />
             </div>
           ) : (
             <Button
