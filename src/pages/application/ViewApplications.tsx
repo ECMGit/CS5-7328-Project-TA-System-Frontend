@@ -388,7 +388,8 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           onRowSelectionModelChange={onRowsSelectionHandler}
           rowSelectionModel={selectionModel}
         />
-        <ButtonColumn>      {/* Button to make student TA*/}
+        <ButtonColumn>      
+          {/* Button to make student TA*/}
           <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
           {rows.map((row, index) => {
@@ -414,13 +415,12 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         {currentApplication && <MockResume application={currentApplication} />}
       </div>
 
-      <div>
         <List
           component="nav"
           aria-label="Device settings"
           sx={{ bgcolor: 'background.paper' }}
         >
-          <ListItemButton
+          {/* <ListItemButton
             id="lock-button"
             aria-haspopup="listbox"
             aria-controls="lock-menu"
@@ -452,13 +452,13 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           ))} */}
       </Menu>
       <div>
-        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper>
+      {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+      <Paper style={{ padding: '20px' }}>
+        <Typography variant="body1">
+          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+          Engineering students to find TA jobs.
+        </Typography>
+      </Paper>
       </div>
     </>
   );

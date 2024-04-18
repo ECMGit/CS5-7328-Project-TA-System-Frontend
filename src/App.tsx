@@ -238,8 +238,7 @@ const App: React.FC = () => {
             <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
             <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
             <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
-          
-          <Route path="/bug-report" element={<BugReportPage />} /></Route>
+          </Route>
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
