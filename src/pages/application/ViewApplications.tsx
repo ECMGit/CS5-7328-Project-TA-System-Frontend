@@ -1,38 +1,24 @@
-import Fuse from 'fuse.js';
-import { Button } from '@mui/material';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import MockResume from '../MockResume'; //This import is used so that we can display additional application details for a particular applicant
-import {
-  Container,
-  Title,
-  Navbar,
-  NavbarButton,
-} from '../user/styledComponents';
+import { DataGrid, GridCellParams } from '@mui/x-data-grid';
+import Fuse from 'fuse.js';
+import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box, Paper } from '@mui/material';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
+import MockResume from '../MockResume';
+import { Link } from 'react-router-dom';
+import AvatarWrapper from '../../components/AvatarWrapper';
+import { UserContext } from '../../provider';
+import AdminDashboard from '../AdminDashboard';
+import TAJobDisplayComponent from '../TAJobDisplayComponent';
+import TopNav from '../../components/TopNav';
 
-//MENU STUFF START
+// const options = [
+//   'Course 1',
+//   'Course 2',
+//   'Course 3',
+// ];
 
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-
-
-//MENU STUFF START
-
-const options = [
-  'Course 1',
-  'Course 2',
-  'Course 3',
-];
-
-//MENU STUFF END
-
-// Define the data structure for a TA Application entry that we will get from database
 export type TAApplicationData = {
   //id is the primary key for the table
   id: number;
@@ -49,21 +35,19 @@ export type TAApplicationData = {
   status: string;
 };
 
-
-// Create a styled component for the search input
 const SearchInput = styled.input`
-  padding: 10px; // Adjust padding as needed
-  margin-bottom: 10px; // Adjust margin as needed
-  border: 1px solid #ccc; // Adjust border as needed
-  border-radius: 4px; // Adjust for rounded corners
-  font-size: 16px; // Adjust font size as needed
-  // Add more styling here to match your NavbarButton
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 `;
-//styled button for making TA
+
 const MakeTaButton = styled.button`
   padding: 10px;
   margin-top: 10px;
-  background-color: #4CAF50;
+  margin-bottom: 10px;
+  background-color: #4CAF50; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -72,9 +56,11 @@ const MakeTaButton = styled.button`
     background-color: #45a049;
   }
 `;
+
 const FlexContainer = styled.div`
   display: flex;
   position: relative;
+  margin-top: 10px;
 `;
 
 const ButtonColumn = styled.div`
@@ -86,7 +72,7 @@ const ButtonColumn = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  height: 52px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,21 +83,28 @@ const FirstButtonWrapper = styled(ButtonWrapper)`
   margin-top: 52px;
 `;
 
-//this is the ViewApplications component
-const ViewApplications: React.FC = () => {
+const ViewApplicationsbyFacultyID: React.FC = () => {
   const navigate = useNavigate();
-  //this is the state for the applications
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
-  //The below stores the current selected applications
-  const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
-  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  // Below states are not used in the current implementation
+  // const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
+  // const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
+  const [searchText, setSearchText] = useState('');
 
-
-  //MENU STUFF
+  //Menu related functions
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const open = Boolean(anchorEl);
+
+  // User context
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    return <div>Loading...</div>; // or any other fallback UI
+  }
+
+  const { user, setUser } = userContext;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -128,15 +121,57 @@ const ViewApplications: React.FC = () => {
     setAnchorEl(null);
   };
 
+  /**
+ * Log out the user, delete user from localStorage
+ */
+  const handleLogout = function () {
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsLoggedIn(false);
+    navigate('/home-default');
+  };
+
+  /**
+   * Navigate to the corresponding user profile. 
+   */
+  const handleProfile = function () {
+    // Guard clause.
+    if (!user) { return; }
+
+    // Navigate to student/faculty profile.
+    if (user.role === 'student') { navigate('/student-profile'); }
+    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
+  };
+
+  const renderContent = () => {
+    // When the user is an administrator, display the AdminDashboard component
+    if (user && user.role === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      // Content displayed by non administrator users
+      return (
+        <>
+          {/* If the user is a student, display their work list */}
+          {user && user.role === 'student' && (
+            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+              <TAJobDisplayComponent />
+            </Container>
+          )}
+        </>
+      );
+    }
+  };
 
   const handleViewPerformanceClick = (applicationId: number) => {
-    navigate('/performance-result');
+    // Navigate to the performance page or handle the click event
+    console.log('Viewing performance for application ID:', applicationId);
+    // Example navigation (adjust the path as needed)
+    navigate(`/performance/${applicationId}`); // Backend url may not be implemented yet
   };
 
 
-
-
-  // XGrid definitions
+  // Columns configuration for MUI DataGrid
   const columns = [
     { field: 'studentId', headerName: 'Student ID', width: 150, filterable: true },
     { field: 'courseId', headerName: 'Course ID', width: 130, filterable: true },
@@ -147,10 +182,11 @@ const ViewApplications: React.FC = () => {
     { field: 'requiredSkills', headerName: 'Required Skills', width: 200, filterable: true },
     { field: 'resumeFile', headerName: 'Resume', width: 150, filterable: true },
     { field: 'taJobId', headerName: 'TA Job ID', width: 130, filterable: true },
-    { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
+    // { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
     { field: 'status', headerName: 'Status', width: 120, filterable: true },
   ];
-  // This is the data that will be displayed in the XGrid
+
+  // This is the data that will be displayed in the DataGrid
   const rows = applications.map((app) => ({
     id: app.id,
     studentId: app.studentId,
@@ -166,7 +202,6 @@ const ViewApplications: React.FC = () => {
     status: app.status,
   }));
 
-  const [searchText, setSearchText] = useState('');
   const [filterModel, setFilterModel] = useState({});
   const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
 
@@ -174,23 +209,22 @@ const ViewApplications: React.FC = () => {
     // Select Student from row
     setSelectionModel(ids.map(Number));
   };
-  
 
-
-
-
-  // Fetching the data from the API
   useEffect(() => {
-    // This function will be called when the component mounts for the first time
-    const fetchApplications = async () => {
-      const taApplications = await AuthService.getTaApplication();
-      console.log(taApplications);
-      setApplications(taApplications);
-      console.log(applications);
-      setOriginalApplications(taApplications); // Set the original applications
+    const fetchApplicationsByFacultyId = async () => {
+      try {
+        const userId = AuthService.getCurrentUser()?.id; // Assuming getCurrentUser returns user object
+        if (userId) {
+          const taApplications = await AuthService.getTaApplicationsByFacultyId(userId);
+          setApplications(taApplications);
+          setOriginalApplications(taApplications);
+        }
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
     };
-  
-    fetchApplications();
+
+    fetchApplicationsByFacultyId();
   }, []);
 
   const makeTA = async () => {
@@ -212,7 +246,7 @@ const ViewApplications: React.FC = () => {
               'Content-Type': 'application/json',
             },
           });
-  
+
           if (!response.ok) throw new Error('Error');
           alert('Student has been made a TA successfully!');
         } catch (error) {
@@ -226,8 +260,7 @@ const ViewApplications: React.FC = () => {
       alert('Please select a student first.');
     }
   };
-  
-    
+
   // Fuzzy search function
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
@@ -249,43 +282,11 @@ const ViewApplications: React.FC = () => {
     setApplications(filteredApplications); // Update applications state with search results
   };
 
-  //This section involves the formatting and rendering of al the data and logic defined above.
   return (
     <>
-      <Navbar>
-        <NavbarButton
-          onClick={() => {
-            // You can add an onClick handler here, if you want the button to navigate or perform an action.
-          }}
-        >
-          View TA Applications
-        </NavbarButton>
-        <NavbarButton
-          onClick={() => {
-            // View Applications from Faculty 1's Point of View if he were logged in
-            setFacultyFilter(1);
-          }}
-        >
-          Faculty 1 Log In View
-        </NavbarButton>
-        <NavbarButton
-          onClick={() => {
-            // Clear the faculty filter.
-            setFacultyFilter(null);
-          }}
-        >
-          Clear Faculty Filter
-        </NavbarButton>
-      </Navbar>
-      <Title>View Applications for Course</Title>
+      {/* Navigation Bar division */}
+      {<TopNav/>}
 
-      {/* Search Bar for Fuzzy Search */}
-      <SearchInput
-        type="text"
-        placeholder="Search..."
-        value={searchText}
-        onChange={handleSearch}
-      />
 
       {/* Container for DataGrid and ButtonColumn */}
       <FlexContainer>
@@ -300,14 +301,15 @@ const ViewApplications: React.FC = () => {
           onFilterModelChange={(model) => setFilterModel(model)}
           checkboxSelection
           //onSelection go to handler
-        onRowSelectionModelChange={onRowsSelectionHandler} 
-        rowSelectionModel={selectionModel}
-      />
+          onRowSelectionModelChange={onRowsSelectionHandler}
+          rowSelectionModel={selectionModel}
+        />
         <ButtonColumn>      {/* Button to make student TA*/}
-      <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
+          <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
           {rows.map((row, index) => {
-            const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
+            // const Wrapper = index === 0 ? FirstButtonWrapper : ButtonWrapper;
+            const Wrapper = ButtonWrapper;
             return (
               <Wrapper key={row.id}>
                 <Button
@@ -324,43 +326,29 @@ const ViewApplications: React.FC = () => {
 
       </FlexContainer>
 
-      {/* Displays additional application details for the selected application */}
-      <div>
-        {currentApplication && <MockResume application={currentApplication} />}
-      </div>
-
-
-      <div>
-        <List
-          component="nav"
-          aria-label="Device settings"
-          sx={{ bgcolor: 'background.paper' }}
-        >
-          <ListItemButton
+      <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', mt: 2 }}>
+        {/* <ListItemButton
             id="lock-button"
             aria-haspopup="listbox"
             aria-controls="lock-menu"
             aria-label="when device is locked"
             aria-expanded={open ? 'true' : undefined}
-            onClick={handleClickListItem}
+            onClick={(event) => setAnchorEl(event.currentTarget)}
           >
-            <ListItemText
-              // primary="When device is locked"
-              secondary={options[selectedIndex]}
-            />
-          </ListItemButton>
-        </List>
-        <Menu
-          id="lock-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'lock-button',
-            role: 'listbox',
-          }}
-        >
-          {options.map((option, index) => (
+            <ListItemText secondary={options[selectedIndex]} />
+          </ListItemButton> */}
+      </List>
+      <Menu
+        id="lock-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'lock-button',
+          role: 'listbox',
+        }}
+      >
+        {/* {options.map((option, index) => (
             <MenuItem
               key={option}
               selected={index === selectedIndex}
@@ -368,13 +356,20 @@ const ViewApplications: React.FC = () => {
             >
               {option}
             </MenuItem>
-          ))}
-        </Menu>
+          ))} */}
+      </Menu>
+      <div>
+        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+        <Paper style={{ padding: '20px' }}>
+          <Typography variant="body1">
+            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+            Engineering students to find TA jobs.
+          </Typography>
+        </Paper>
       </div>
-
-
     </>
   );
+
 };
 
-export default ViewApplications;
+export default ViewApplicationsbyFacultyID;

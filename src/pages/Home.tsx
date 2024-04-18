@@ -61,8 +61,6 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
-
-
   /**
    * Navigate to the corresponding user profile. 
    */
@@ -86,6 +84,7 @@ const Home: React.FC = () => {
       setIsLoggedIn(true);
     }
   }, []);
+
   const renderContent = () => {
     // When the user is an administrator, display the AdminDashboard component
     if (user && user.role === 'admin') {
@@ -119,7 +118,7 @@ const Home: React.FC = () => {
       );
     }
   };
-  
+
   return (
     // Render the component within a container with a maximum width of 'sm'.
 
@@ -134,7 +133,7 @@ const Home: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6" style={{ color: '#FFF' }}>
+        <Typography variant="h5" style={{ color: '#FFF' }}>
           SMU Lyle School of Engineering Job Site
         </Typography>
         {/* show student Profile if the user log in as student  */}
@@ -170,7 +169,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -179,7 +178,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '10px' }}
                   >
-                    Publish
+                    Post Job
                   </Button>
                   <Button
                     component={Link}
@@ -210,9 +209,6 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                 
-                 
-
                 </>
               ) : user.role === 'student' ? (
                 <>
@@ -223,9 +219,8 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    Display
+                    View Available Jobs
                   </Button>
-
                   <Button
                     component={Link}
                     to="/tasks/student"
@@ -235,19 +230,28 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                  {/* <Button
+                  <Button
                     component={Link}
-                    to="/view-applications"
+                    to="/view-applications"  // Should be navigate to view my applications page (Student only)
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    View Applications
-                  </Button> */}
-                 
+                    View My Applications
+                  </Button>
+
                 </>
               ) : user.role === 'faculty' ? (
                 <>
+                  <Button
+                    component={Link}
+                    to="/post-job"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px', marginRight: '5px' }}
+                  >
+                    Post Job
+                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
@@ -255,7 +259,7 @@ const Home: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
+                    View Jobs
                   </Button>
                   <Button
                     component={Link}
