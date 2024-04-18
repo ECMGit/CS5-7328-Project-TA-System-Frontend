@@ -11,7 +11,7 @@ interface User {
 const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: 400, // Use the defined timeout duration
+    timeoutDuration: 5 * 60 * 1000, // Use the defined timeout duration
     logoutFunction: () => {
       console.log('called');
       localStorage.clear(); 

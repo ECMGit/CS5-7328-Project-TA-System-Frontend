@@ -83,13 +83,13 @@ const Home: React.FC = () => {
     }
   };
 
-  const TIMEOUT_DURATION = 10 * 60 * 1000; // 0.5 minutes
+  const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes
 
   const logoutFunction = () => navigate('/login'); // Define your logout action
 
   // Use the auto-logout hook
   const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: 400, // Use the defined timeout duration
+    timeoutDuration: TIMEOUT_DURATION, // Use the defined timeout duration
     logoutFunction: () => {
       console.log('called');
       localStorage.clear(); 
