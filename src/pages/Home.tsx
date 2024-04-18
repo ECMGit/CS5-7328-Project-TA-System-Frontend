@@ -7,9 +7,10 @@ import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
 import AdminDashboard from './AdminDashboard';
+import useAutoLogout from '../components/AutoLogOut';
 import { link } from 'fs';
 import Footer from '../components/Footer';
-
+import CustomModal from '../components/CustomModal';
 
 // Define an interface 'User' to specify the structure of a user object.
 // interface User {
@@ -81,6 +82,24 @@ const Home: React.FC = () => {
       navigate('/admin-profile');
     }
   };
+
+  const TIMEOUT_DURATION = 10 * 60 * 1000; // 0.5 minutes
+
+  const logoutFunction = () => navigate('/login'); // Define your logout action
+
+  // Use the auto-logout hook
+  const { Modal, closeModal } = useAutoLogout({
+    timeoutDuration: 400, // Use the defined timeout duration
+    logoutFunction: () => {
+      console.log('called');
+      localStorage.clear(); 
+      setUser(null); 
+      setIsLoggedIn(false); 
+      console.log('go to login');
+      navigate('/login'); 
+      
+    },
+  });
 
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {
@@ -315,7 +334,6 @@ const Home: React.FC = () => {
           )}
         </div>
       </div>
-
       <div>
         {/* Call renderContent to display corresponding content based on user roles */}
         {renderContent()}
@@ -352,6 +370,8 @@ const Home: React.FC = () => {
       </div>
 
       <Footer />
+      {Modal}
+      
     </div>
   );
 };

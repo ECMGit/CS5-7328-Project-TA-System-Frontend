@@ -9,6 +9,7 @@ import {
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
 import LoginPage from './pages/login/LoginPage';
+import AdminSignUpPage from './pages/login/AdminSignUpPage';
 import SignUpPage from './pages/login/SignUpPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
@@ -160,6 +161,7 @@ const App: React.FC = () => {
         <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
+        <Route path={'/signup/admin'} element = {<AdminSignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
         <Route path="/about-us" element={<AboutUs/>}/>
