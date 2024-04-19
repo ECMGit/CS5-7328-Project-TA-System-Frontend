@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import AdminService from '../../services/admin';
-import { useParams } from 'react-router-dom';
+import { useParams ,useNavigate } from 'react-router-dom';
 import { DataGrid, GridColDef, GridFilterModel ,GridToolbar } from '@mui/x-data-grid';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Chip from '@mui/material/Chip';
@@ -56,7 +56,7 @@ const ViewCourseDetail: React.FC = () => {
   const [filterModel, setFilterModel] = useState<GridFilterModel>({
     items: [],
   });
-
+  const navigate = useNavigate();
   const columns: GridColDef[] = [
     { field: 'courseId', headerName: 'CourseId', width: 70 },
     { field: 'hoursCanWorkPerWeek', headerName: 'HoursCanWorkPerWeek', width: 170 },
@@ -143,9 +143,15 @@ const ViewCourseDetail: React.FC = () => {
     fetchCourseDetailsApplication();
   }, [id]);
 
+  const handleEdit = () => {
+    navigate(`/edit-course/${id}`);
+};
+
+
+
   return (
     <Container  maxWidth="lg">
-          <Box
+      <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -173,6 +179,23 @@ const ViewCourseDetail: React.FC = () => {
               Back
             </Button>
           </Box>
+          
+      <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
+                <Typography variant="h4" sx={{ mb: 2 }}>
+                    {course?.title}
+                </Typography>
+                <Box sx={{ mb: 1 }}>
+                    <Typography variant="body1"><strong>Course Code:</strong> {course?.courseCode}</Typography>
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                    <Typography variant="body1"><strong>Description:</strong> {course?.description || 'No description available'}</Typography>
+                </Box>
+                {/* Edit Button */}
+                <Button variant="contained" color="primary" onClick={handleEdit} sx={{ mt: 2 }}>
+                    Edit
+                </Button>
+            </Paper>
+
       
       {taJobs?.map((job) => (
         <Paper
