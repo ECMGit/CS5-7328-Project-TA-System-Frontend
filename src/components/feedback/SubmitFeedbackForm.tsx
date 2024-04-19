@@ -1,6 +1,7 @@
 // Import necessary components and hooks
 import { Box, Button, MenuItem, Select, TextField } from '@mui/material';
 import React, { useState, ReactNode } from 'react';
+import {useNavigate } from 'react-router-dom';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 
 interface SubmitFeedbackFormProps {
@@ -14,6 +15,7 @@ export const SubmitFeedbackForm = ({
 }: SubmitFeedbackFormProps) => {
   const [content, setContent] = useState('');
   const [type, setType] = useState<'feedback' | 'bug'>('feedback');
+  const navigate = useNavigate();
 
   const submit = async () => {
     try {
@@ -55,6 +57,10 @@ export const SubmitFeedbackForm = ({
         <Box sx={{ display: 'flex', gap: '12px' }}>
           <Button onClick={submit} variant="contained">
             Submit
+          </Button>
+            {/* Back Button to navigate to back to home page */}
+          <Button variant="contained" color="secondary" onClick={() => navigate('/home')}>
+              Back to Home Page
           </Button>
           {children} 
         </Box>

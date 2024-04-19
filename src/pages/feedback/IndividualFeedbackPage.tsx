@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography, CircularProgress } from '@mui/material';
 import FeedbackService, { FeedbackComment } from '../../services/feedback';
 
@@ -7,6 +7,7 @@ export const IndividualFeedbackPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<FeedbackComment[]>([]);
   const [showComments, setShowComments] = useState(false);  // State to toggle comments visibility
@@ -56,6 +57,10 @@ export const IndividualFeedbackPage = () => {
             </Button>
             <Button onClick={toggleCommentsVisibility} color="primary" variant="outlined">
               {showComments ? 'Hide Comments' : 'Show Comments'}
+            </Button>
+            {/* Back Button to navigate to feedback display */}
+            <Button variant="contained" color="secondary" onClick={() => navigate('/feedback')}>
+              Back to Feedback List
             </Button>
           </Box>
           {loading && <CircularProgress />}
