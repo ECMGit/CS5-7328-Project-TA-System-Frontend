@@ -63,20 +63,22 @@ const ViewCourseDetail: React.FC = () => {
     { field: 'GPA', headerName: 'GPA', width: 60 },
     { field: 'requiredCourses', headerName: 'RequiredCourses', width: 150 },
     { field: 'requiredSkills', headerName: 'RequiredSkills', width: 200 },
-    {
-        field: 'resumeFile',
-        headerName: 'ResumeFile',
-        width: 300,
-        renderCell: (params) => (
-          <Typography sx={{ textDecoration: 'underline' }}>
-            {params.value}
-          </Typography>
-        ),
-      },
     { field: 'status', 
     headerName: 'Status', 
     width: 130,
-   },
+    renderCell: (params) => {
+      const status = params.value;
+      let color: 'warning' | 'success' | 'primary';
+      if (status === 'Rejected') {
+        color = 'warning'; 
+      } else if (status === 'Approved') {
+        color = 'success'; 
+      } else {
+        color = 'primary'; 
+      }
+      return <Chip label={status} color={color} />;
+    },
+    },
   ];
 
 
