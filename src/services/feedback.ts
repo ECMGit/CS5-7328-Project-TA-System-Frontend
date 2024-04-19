@@ -9,6 +9,7 @@ export type FeedbackItem = {
   content: string;
   complete: boolean;
   timeSubmitted: Date;
+  status: string;
   type: 'bug' | 'feedback' | 'comment'; 
 };
 

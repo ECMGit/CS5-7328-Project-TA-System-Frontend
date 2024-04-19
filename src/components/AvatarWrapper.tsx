@@ -103,7 +103,7 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
         <MenuItem onClick={() => {
           navigate('/feedback');
         }}>
-          <Typography variant="body1">Feedback</Typography>
+          <Typography variant="body1">Feedback/Bug Report</Typography>
         </MenuItem>
         <MenuItem onClick={onLogout}>
           <Typography variant="body1">Logout</Typography>
