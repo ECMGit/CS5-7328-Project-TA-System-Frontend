@@ -22,6 +22,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
+import TopNav from '../../components/TopNav';
 
 interface Course {
   id: number;
@@ -265,6 +266,7 @@ const StudentProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
+        <TopNav />
         My Student Dashboard
         <Tooltip title="Menu">
           <IconButton

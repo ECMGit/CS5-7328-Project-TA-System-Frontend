@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
+import TopNav from '../../components/TopNav';
 interface Job {
   id: number;
   title: string;
@@ -92,6 +93,8 @@ const FacultyProfile: React.FC = () => {
 
   const open = Boolean(anchorEl);
 
+
+  //TODO: Remove test message
   const [messages, setMessages] = useState([
     { id: 1, content: 'Test Message' },
   ]);
@@ -150,6 +153,9 @@ const FacultyProfile: React.FC = () => {
     handleClose();
   };
 
+
+  /* Note - The inbox menu and the profile menu don't make sense being together. 
+  A solution -> put view messages button in profile menu*/
   return (
     <Container>
       <Box
@@ -162,7 +168,7 @@ const FacultyProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-        My Faculty Dashboard
+        <TopNav />
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
@@ -197,18 +203,17 @@ const FacultyProfile: React.FC = () => {
               </IconButton>
             </Tooltip>
             {/* Add an inbox UI element */}
-            <Menu
+            {/* <Menu
               id="inbox-menu"
               anchorEl={anchorEl}
               keepMounted
               open={open}
               onClose={handleClose}
             >
-              {/* Map through messages and display them */}
               {messages.map((message) => (
                 <MenuItem key={message.id}>{message.content}</MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
           </MenuItem>
         </Menu>
       </Box>
