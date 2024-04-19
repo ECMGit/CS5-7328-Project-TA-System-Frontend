@@ -43,6 +43,11 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
    */
   const handleClose = () => { setAnchorEl(null); };
 
+  const navigateToInbox = () => {
+    navigate('/inbox');
+    handleClose();
+  };
+
   /* JSX */
   return (
     <>
@@ -97,6 +102,7 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
           <Typography variant="subtitle1" sx={{ color: 'grey' }}>Welcome {user.firstName}!</Typography>
         </ListItem>
         <Divider />
+        <MenuItem onClick={navigateToInbox}></MenuItem>
         <MenuItem onClick={onProfile}>
           <Typography variant="body1">User Profile</Typography>
         </MenuItem>
