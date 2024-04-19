@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography, CircularProgress } from '@mui/material';
 import FeedbackService, { FeedbackComment } from '../../services/feedback';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export const IndividualFeedbackPage = () => {
   const { id } = useParams();
@@ -10,16 +11,18 @@ export const IndividualFeedbackPage = () => {
   const navigate = useNavigate();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<FeedbackComment[]>([]);
-  const [showComments, setShowComments] = useState(false);  // State to toggle comments visibility
+  const [visibleComments, setVisibleComments] = useState<FeedbackComment[]>([]);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
+  const nextItems = useRef(20);
 
   useEffect(() => {
     if (location.pathname === `/feedback/${id}`) {
       console.log('id', id);
       const fetchComments = async () => {
         const fetchedComments = await FeedbackService.getMyComment(Number(id));
-        console.log(fetchedComments);
         setComments(fetchedComments);
+        setVisibleComments(fetchedComments.slice(0, 20));
         setLoading(false);
       };
       fetchComments();
@@ -33,7 +36,8 @@ export const IndividualFeedbackPage = () => {
     if (location.pathname === `/feedback/${id}`) {
       try {
         const newComment = await FeedbackService.submitComment(Number(id), comment);
-        setComments([...comments, newComment]);
+        setComments(prev => [newComment, ...prev]);
+        setVisibleComments(prev => [newComment, ...prev.slice(0, 19)]);
         setComment('');
         setOpen(false);
       } catch (error) {
@@ -42,8 +46,18 @@ export const IndividualFeedbackPage = () => {
     }
   };
 
-  const toggleCommentsVisibility = () => {
-    setShowComments(!showComments);
+  const fetchMoreComments = () => {
+    if (nextItems.current >= comments.length) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setVisibleComments(prevComments => [
+        ...prevComments,
+        ...comments.slice(nextItems.current, nextItems.current + 20)
+      ]);
+      nextItems.current += 20;
+    }, 1000);
   };
 
   return (
@@ -55,21 +69,28 @@ export const IndividualFeedbackPage = () => {
             <Button variant="contained" color="primary" onClick={handleOpenCommentDialog}>
               Add Comment
             </Button>
-            <Button onClick={toggleCommentsVisibility} color="primary" variant="outlined">
-              {showComments ? 'Hide Comments' : 'Show Comments'}
-            </Button>
             {/* Back Button to navigate to feedback display */}
             <Button variant="contained" color="secondary" onClick={() => navigate('/feedback')}>
               Back to Feedback List
             </Button>
           </Box>
-          {loading && <CircularProgress />}
-          {showComments && comments.map((commentItem, index) => (
-            <Box key={index} p={1} my={1} bgcolor="#f0f0f0">
-              <Typography variant="caption" color="textSecondary">UserID: {commentItem.leftById}</Typography>
-              <Typography variant="subtitle2">Comment: {commentItem.content}</Typography>
-            </Box>
-          ))}
+          {loading ? <CircularProgress /> : (
+            <InfiniteScroll
+              dataLength={visibleComments.length}
+              next={fetchMoreComments}
+              hasMore={hasMore}
+              loader={<CircularProgress />}
+              endMessage={<Typography>No more comments left</Typography>}
+              scrollThreshold="100px"
+            >
+              {visibleComments.map((commentItem, index) => (
+                <Box key={index} p={1} my={1} bgcolor="#f0f0f0">
+                  <Typography variant="caption" color="textSecondary">UserID: {commentItem.leftById}</Typography>
+                  <Typography variant="subtitle2">Comment: {commentItem.content}</Typography>
+                </Box>
+              ))}
+            </InfiniteScroll>
+          )}
           <Dialog open={open} onClose={handleCloseCommentDialog} fullWidth maxWidth="md">
             <DialogTitle>Add Comment</DialogTitle>
             <DialogContent>
