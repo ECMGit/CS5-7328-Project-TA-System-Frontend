@@ -9,7 +9,9 @@ import {
 } from '../user/styledComponents';
 import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
-
+import {
+  Typography,
+} from '@mui/material';
 
 export type CourseData = {
   id: number;
@@ -123,8 +125,16 @@ export const ViewCourse: React.FC = () => {
         value={searchCourse}
         onChange={(e) => setSearchCourse(e.target.value)}
       />
+      
       <DataGrid rows={rows} columns={columns} checkboxSelection />
+      <Title style={{ padding: '20px' }}>
+        <Typography variant="body1">
+          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+          Engineering students to find TA jobs.
+        </Typography>
+      </Title>
     </Container>
+    
   );
 };
 
