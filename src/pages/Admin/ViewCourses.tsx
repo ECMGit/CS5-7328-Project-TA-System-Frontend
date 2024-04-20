@@ -87,7 +87,9 @@ export const ViewCourse: React.FC = () => {
   }, []);
 
 
-
+  const handleAddNewCourse = () => {
+    navigate('/add-course');
+};
 
   
   return (
@@ -102,12 +104,10 @@ export const ViewCourse: React.FC = () => {
         </NavbarButton>
         <NavbarButton onClick={() => {}}>View Course</NavbarButton>
         <NavbarButton
-          onClick={() => {
-            // Clear the Student filter.
-            setCourseFilter(null);
-          }}
+        onClick={handleAddNewCourse}
+        
         >
-          Clear Faculty Filter
+          Add Course
         </NavbarButton>
       </Navbar>
       <Title>Course Information</Title>
