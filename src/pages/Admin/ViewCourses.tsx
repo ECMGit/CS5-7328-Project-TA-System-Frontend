@@ -102,10 +102,10 @@ export const ViewCourse: React.FC = () => {
         >
           Back
         </NavbarButton>
-        <NavbarButton onClick={() => {}}>View Course</NavbarButton>
+        <NavbarButton onClick={() => {  }}>View Course</NavbarButton>
+        <NavbarButton onClick={() => {   setCourseFilter(null); }}>Clear fitter</NavbarButton>
         <NavbarButton
-        onClick={handleAddNewCourse}
-        
+          onClick={handleAddNewCourse}
         >
           Add Course
         </NavbarButton>
