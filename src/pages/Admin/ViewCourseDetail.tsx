@@ -245,7 +245,15 @@ const ViewCourseDetail: React.FC = () => {
           onFilterModelChange={setFilterModel}
           slots={{ toolbar: GridToolbar }} 
         />
+
+      <Paper style={{ padding: '20px' }}>
+        <Typography variant="body1">
+          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+          Engineering students to find TA jobs.
+        </Typography>
+      </Paper>
     </Container>
+    
   );
 };
 
