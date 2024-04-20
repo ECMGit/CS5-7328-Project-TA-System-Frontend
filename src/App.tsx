@@ -26,7 +26,7 @@ import ViewJobsStudent from './pages/faculty-jobs/StudentApplyJobPage';
 import EvaluatePerformance from './pages/faculty-jobs/JobPerformanceReviewPage';
 import PerformanceResult from './pages/user/PerformanceResultPage';
 import UserDataPage from './pages/user/UserDataPage';
-
+import UnauthorizedPage from'./pages/UnauthorizedPage' ;
 
 import EditApplication from './pages/application/EditApplication';
 import ViewApplication from './pages/application/ViewApplication';
@@ -174,7 +174,7 @@ function PrivateRoutePerformanceReview({
   }
 
   // if none of the condition is fulfilled, to unauthoried
-  return <Navigate to="/unauthorized" />;
+  return <Navigate to="/unauthoried" />;
 }
 
 const App: React.FC = () => {
@@ -270,6 +270,10 @@ const App: React.FC = () => {
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
           <Route path="/course/:id" element={<PrivateRoute role="admin"> <CourseDetail /> </PrivateRoute>} />
+
+          {/* 404 resources */}
+          <Route path="/*" element={<UnauthorizedPage />} />
+          
 
           </Route>
       </Routes>
