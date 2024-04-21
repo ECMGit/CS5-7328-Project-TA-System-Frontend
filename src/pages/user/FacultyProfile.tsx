@@ -415,7 +415,9 @@ const FacultyProfile: React.FC = () => {
   function handleCheckApplicants(jobId: number) {
     // Handle checking applicants for the specified job ID
     //TODO: Implement this function and pull data from backend -- team3 sprint3
+    
     console.log(`Checking applicants for job ${jobId}`);
+    navigate('/view-applications');
   }
 
   function handleEditPosting(jobId: number) {
