@@ -1,46 +1,34 @@
-// Import React and specific hooks (useState and useEffect) from the 'react' library.
-import React, { useState, useEffect, useContext } from 'react';
-// Import components (Typography and Container) from the Material-UI library.
-import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
-import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link for navigation
-import AvatarWrapper from '../components/AvatarWrapper';
+// FREE FOR OTHER TEAMS TO USE AS WELL
+import { Box, Button, Typography } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { UserContext } from '../provider';
+import AvatarWrapper from './AvatarWrapper';
 
-const TopNav: React.FC = () => {
-  const location = useLocation();
-  const isViewJobsPage = location.pathname === '/jobs';
-  const isPostJobsPage = location.pathname === '/post-job';
-  const isEditJobsPage = location.pathname === '/edit-job/:jobId';
-  const isViewApplicationsPage = location.pathname === '/view-applications';
-
-  // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
+export const MainLayout = () => {
   const userContext = useContext(UserContext);
   if (!userContext) {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
   const { user, setUser } = userContext;
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // React hooks
   const navigate = useNavigate();
 
-  //console.log('home:', user);
-
-  if (!user) {
-    return <div>Loading...</div>; // or any other fallback UI
-  }
-
-  const { role } = user;
-  /**
-   * Log out the user, delete user from localStorage
-   */
   const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
-    setIsLoggedIn(false);
     navigate('/home-default');
   };
+
+  useEffect(() => {
+    // Retrieve the 'user' data from local storage, parsing it from JSON, or default to 'null'.
+    const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+    // Set the 'user' state with the retrieved user data.
+    if (currentUser) {
+      setUser(currentUser);
+    }
+  }, []);
 
   /**
    * Navigate to the corresponding user profile.
@@ -56,27 +44,12 @@ const TopNav: React.FC = () => {
       navigate('/student-profile');
     } else if (user.role === 'faculty') {
       navigate('/faculty-profile');
+    } else if (user.role === 'admin') {
+      navigate('/admin-profile');
     }
   };
-
-  const handlePerformance = () => {
-    navigate('/performance-result', { state: { user } });
-  };
-
-  // Use the 'useEffect' hook to execute code after the component renders.
-  useEffect(() => {
-    // Retrieve the 'user' data from local storage, parsing it from JSON, or default to 'null'.
-    const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-    // Set the 'user' state with the retrieved user data.
-    if (currentUser) {
-      setUser(currentUser);
-      setIsLoggedIn(true);
-    }
-  }, []);
-
   return (
-    <div>
-      {/* Blue banner with "Login" button */}
+    <>
       <div
         style={{
           backgroundColor: '#1976D2',
@@ -86,32 +59,21 @@ const TopNav: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {isViewJobsPage ? (
-          <Typography variant="h6" style={{ color: '#FFF' }}>
-            View All Jobs
-          </Typography>
-        ) : isViewApplicationsPage ? (
-          <Typography variant="h6" style={{ color: '#FFF' }}>
-            View All Applications
-          </Typography>
-        ) : (
-          <Typography variant="h6" style={{ color: '#FFF' }}>
-            SMU Lyle School of Engineering Job Site
-          </Typography>
-        )}
-
+        <Typography variant="h6" style={{ color: '#FFF' }}>
+          SMU Lyle School of Engineering Job Site
+        </Typography>
         {/* show student Profile if the user log in as student  */}
         {/* {role === 'student' && (
-            <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
-            )} */}
+          <Button onClick={navigateToStudentProfile} variant="contained" color="secondary">Student Profile</Button>
+        )} */}
         {/* show falcuty if the user log in as faculty */}
         {/* {role === 'faculty' && (
-            <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
-            )} */}
+          <Button onClick={navigateToFacultyProfile} variant="contained" color="secondary">Faculty Profile</Button>
+        )} */}
 
         {/* <Button component={Link} to="/view-applications" variant="contained" color="secondary">
-            View Applications
-            </Button> */}
+          View Applications
+        </Button> */}
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -133,7 +95,7 @@ const TopNav: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    View Jobs
+                    See Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -142,7 +104,7 @@ const TopNav: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '10px' }}
                   >
-                    Post Job
+                    Publish
                   </Button>
                   <Button
                     component={Link}
@@ -183,8 +145,9 @@ const TopNav: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    View Available Jobs
+                    Display
                   </Button>
+
                   <Button
                     component={Link}
                     to="/tasks/student"
@@ -194,37 +157,18 @@ const TopNav: React.FC = () => {
                   >
                     View Tasks
                   </Button>
-                  {/* Add a view performance button in the home page, just for student */}
-                  <Button
-                    onClick={() => handlePerformance()}
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginLeft: '5px', marginRight: '5px' }}
-                  >
-                    View My Performance
-                  </Button>
-                  <Button
+                  {/* <Button
                     component={Link}
-                    to="/view-applications"  // Should be navigate to view my applications page (Student only)
+                    to="/view-applications"
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
                   >
-                    View My Applications
-                  </Button>
-
+                    View Applications
+                  </Button> */}
                 </>
               ) : user.role === 'faculty' ? (
                 <>
-                  <Button
-                    component={Link}
-                    to="/post-job"
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginLeft: '10px', marginRight: '5px' }}
-                  >
-                    Post Job
-                  </Button>
                   <Button
                     component={Link}
                     to="/jobs"
@@ -232,7 +176,7 @@ const TopNav: React.FC = () => {
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    View Jobs
+                    See Jobs
                   </Button>
                   <Button
                     component={Link}
@@ -266,8 +210,30 @@ const TopNav: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+      <Box padding={5} style={{ position: 'relative' }}>
+        <img
+          src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
+          alt="SMU Dallas Hall"
+          style={{
+            zIndex: -1,
+            width: '100%',
+            objectFit: 'cover',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+          }}
+        />
+        <Box
+          borderRadius={1}
+          boxShadow={3}
+          bgcolor={'white'}
+          zIndex={100}
+          padding={2}
+        >
+          <Outlet />
+        </Box>
+      </Box>
+    </>
   );
 };
-
-export default TopNav;

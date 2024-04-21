@@ -35,7 +35,7 @@ import { AxiosError } from 'axios';
 //import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const RegistrationPage: React.FC = () => {
+const AdminRegistrationPage: React.FC = () => {
   // Define and initialize state variables for form fields, loading status, and error messages.
 
   const [email, setEmail] = useState('');
@@ -44,8 +44,10 @@ const RegistrationPage: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [smuNo, setSmuNo] = useState('');
   const [username, setUsername] = useState('');
-  const [userType, setUserType] = useState('');
-  const [year, setYear] = useState('');
+  // const [userType, setUserType] = useState('');
+  const userType = 'admin';
+  //const [year, setYear] = useState('');
+  const year = 'none';
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -91,16 +93,6 @@ const RegistrationPage: React.FC = () => {
     );
   };
 
-  // Change handlers for button input (radio)
-  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserType((event.target as HTMLInputElement).value);
-  };
-
-  // Change handlers for year input (select)
-  const handleYearChange = (event: SelectChangeEvent) => {
-    setYear(event.target.value);
-  };
-
   return (
     // Render the component within a container with a maximum width of 'sm'.
     <Container component="main" maxWidth="xs">
@@ -121,47 +113,6 @@ const RegistrationPage: React.FC = () => {
           Sign up
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-
-          <FormControl fullWidth>
-            <FormLabel id="userType">User Type</FormLabel>
-            <RadioGroup
-              row 
-              aria-labelledby="userType group" 
-              defaultValue="student" 
-              value={userType}
-              onChange={handleTypeChange}
-              name="radio-button-group"
-            >
-              <FormControlLabel value="student" control={<Radio />} label="Student" />
-              <FormControlLabel value="faculty" control={<Radio />} label="Faculty" required />
-              <FormControlLabel value="admin" control={<Radio />} label="Admin" />
-            </RadioGroup>  
-          </FormControl>
-
-
-          {userType == 'student' && (
-            <p>
-              <FormControl fullWidth>
-                <InputLabel id="studentYear">School Year</InputLabel>
-                <Select
-                  labelId="studentYear"
-                  id="studentYear"
-                  value={year}
-                  label="studentYear"
-                  onChange={handleYearChange}
-                >
-                  <MenuItem value={1}>First Year</MenuItem>
-                  <MenuItem value={2}>Sophomore</MenuItem>
-                  <MenuItem value={3}>Junior</MenuItem>
-                  <MenuItem value={4}>Senior</MenuItem>
-                  <MenuItem value={5}>Graduate</MenuItem>
-                </Select> 
-              </FormControl>
-            </p>
-          )} 
-
-
-
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               {/* First name input field */}
@@ -255,11 +206,11 @@ const RegistrationPage: React.FC = () => {
           >
             Sign Up
           </LoadingButton>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-start">
             <Grid item>
               {/* Link to the login page for users who already have an account. */}
               <Link href="/login" variant="body2">
-                Already have an account? Sign in
+                Already have an account? Sign in here.
               </Link>
             </Grid>
           </Grid>
@@ -271,4 +222,4 @@ const RegistrationPage: React.FC = () => {
 };
 
 // Export the 'RegistrationPage' component for use in other parts of the application.
-export default RegistrationPage;
+export default AdminRegistrationPage;

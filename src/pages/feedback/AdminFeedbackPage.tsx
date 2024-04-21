@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
-import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 
-export const StudentFeatureRequestPage = () => {
+export const AdminFeedbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
-  const [showFeedback, setShowFeedback] = useState(false);  // State to toggle feedback visibility
+  const [showFeedback, setShowFeedback] = useState(false); // State to manage feedback list visibility
 
   useEffect(() => {
     const getFeedback = async () => {
-      const feedbackResponse = await FeedbackService.getMyFeedback();
+      const feedbackResponse = await FeedbackService.getAdminFeedback();
       const nonCommentFeedback = feedbackResponse.filter(item => item.type !== 'comment');
       setFeedbackList(nonCommentFeedback);
       setLoading(false);
@@ -19,26 +18,17 @@ export const StudentFeatureRequestPage = () => {
     getFeedback();
   }, []);
 
-  const onSubmit = (newFeedback: FeedbackItem) => {
-    if (newFeedback.type !== 'comment') {
-      setFeedbackList([...feedbackList, newFeedback]);
-    }
-  };
-
+  // Toggle the visibility of the feedback list
   const toggleFeedbackVisibility = () => {
     setShowFeedback(!showFeedback);
   };
 
   return (
     <Box>
-      <Typography variant="h6">Feedback Page</Typography>
-      <SubmitFeedbackForm onSubmitted={onSubmit}>
-        <Button onClick={toggleFeedbackVisibility} 
-        color="primary"
-        variant="outlined">
-          {showFeedback ? 'Hide My Feedback' : 'Show My Feedback'}
-        </Button>
-      </SubmitFeedbackForm>
+      <Typography variant="h6">Admin Feedback Page</Typography>
+      <Button onClick={toggleFeedbackVisibility}>
+        {showFeedback ? 'Hide All User Feedback' : 'Show All User Feedback'}
+      </Button>
       {loading && <CircularProgress />}
       {showFeedback && <FeedbackList feedback={feedbackList} />}
     </Box>

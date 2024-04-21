@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 import Fuse from 'fuse.js';
 import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box, Paper } from '@mui/material';
+import CustomModal from '../../components/CustomModal';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
 import MockResume from '../MockResume';
@@ -11,6 +12,7 @@ import AvatarWrapper from '../../components/AvatarWrapper';
 import { UserContext } from '../../provider';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
+import TopNav from '../../components/TopNav';
 
 // const options = [
 //   'Course 1',
@@ -33,7 +35,6 @@ export type TAApplicationData = {
   TAStats: string;
   status: string;
 };
-
 const SearchInput = styled.input`
   padding: 10px;
   margin-bottom: 10px;
@@ -42,11 +43,12 @@ const SearchInput = styled.input`
   font-size: 16px;
 `;
 
+
 const MakeTaButton = styled.button`
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #4CAF50; 
+  background-color: #4caf50; 
   color: white;
   border: none;
   border-radius: 4px;
@@ -78,19 +80,33 @@ const ButtonWrapper = styled.div`
   margin: 1px 0;
 `;
 
-const FirstButtonWrapper = styled(ButtonWrapper)`
-  margin-top: 52px;
-`;
+// const FirstButtonWrapper = styled(ButtonWrapper)`
+//   margin-top: 52px;
+// `;
 
 const ViewApplicationsbyFacultyID: React.FC = () => {
   const navigate = useNavigate();
+  
+
+
+
+
+
+
+
+
+  const [isOpen, setIsOpen] = useState(false); // State to control the CustomModal visibility
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null); // Store timeout ID for clearing
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
-  // Below states are not used in the current implementation
-  // const [currentApplication, setCurrentApplication] = useState<TAApplicationData | null>(null);
-  // const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
+  //The below stores the current selected applications
+  const [currentApplication, setCurrentApplication] =
+    useState<TAApplicationData | null>(null);
+  const [facultyFilter, setFacultyFilter] = useState<number | null>(null);
   const [selectionModel, setSelectionModel] = useState<number[]>([]);
   const [searchText, setSearchText] = useState('');
-
+  const timeoutIdRef = useRef<number | null>(null);
+  //logout timer
+  const logoutTimerRef = useRef<number | null>(null);
   //Menu related functions
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -104,13 +120,54 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const logOutUser = () => {
+    console.log('Logging out');
+    localStorage.clear();
+    navigate('/login');
+  };
+
+  // Define more functionality and hooks as needed
+
+  useEffect(() => {
+    let time: number;
+    const resetTimer = () => {
+      clearTimeout(time);
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+      setIsOpen(false);
+      timeoutIdRef.current = null;
+      time = window.setTimeout(() => {
+        setIsOpen(true);
+        timeoutIdRef.current = window.setTimeout(logOutUser, 6000); // 20 seconds until automatic logout
+      }, 6000); // 10 minutes of inactivity allowed before showing modal
+    };
+
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keydown', resetTimer);
+    resetTimer();
+
+    return () => {
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      clearTimeout(time);
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+    };
+  }, []);
+
+  // Handle "Stay Logged In" button click
+  const handleStayLoggedIn = () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    setIsOpen(false);
+    setTimeoutId(null);
+  };
+  
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLElement>,
-    index: number,
+    index: number
   ) => {
     setSelectedIndex(index);
     setAnchorEl(null);
@@ -172,17 +229,64 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   // Columns configuration for MUI DataGrid
   const columns = [
-    { field: 'studentId', headerName: 'Student ID', width: 150, filterable: true },
-    { field: 'courseId', headerName: 'Course ID', width: 130, filterable: true },
-    { field: 'hoursCanWorkPerWeek', headerName: 'Hours/Week', width: 130, filterable: true },
-    { field: 'coursesTaken', headerName: 'Courses Taken', width: 200, filterable: true },
+    {
+      field: 'studentId',
+      headerName: 'Student ID',
+      width: 150,
+      filterable: true,
+    },
+    {
+      field: 'courseId',
+      headerName: 'Course ID',
+      width: 130,
+      filterable: true,
+    },
+    {
+      field: 'hoursCanWorkPerWeek',
+      headerName: 'Hours/Week',
+      width: 130,
+      filterable: true,
+    },
+    {
+      field: 'coursesTaken',
+      headerName: 'Courses Taken',
+      width: 200,
+      filterable: true,
+    },
     { field: 'GPA', headerName: 'GPA', width: 100, filterable: true },
-    { field: 'requiredCourses', headerName: 'Required Courses', width: 200, filterable: true },
-    { field: 'requiredSkills', headerName: 'Required Skills', width: 200, filterable: true },
+    {
+      field: 'requiredCourses',
+      headerName: 'Required Courses',
+      width: 200,
+      filterable: true,
+    },
+    {
+      field: 'requiredSkills',
+      headerName: 'Required Skills',
+      width: 200,
+      filterable: true,
+    },
     { field: 'resumeFile', headerName: 'Resume', width: 150, filterable: true },
     { field: 'taJobId', headerName: 'TA Job ID', width: 130, filterable: true },
     // { field: 'TAStats', headerName: 'TA Stats', width: 150, filterable: true },
     { field: 'status', headerName: 'Status', width: 120, filterable: true },
+    // put View_performance button here, click to view student's
+    {
+      field: 'viewPerformance',
+      headerName: 'View Performance',
+      width: 180,
+      renderCell: (cellValues: GridCellParams) => {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleViewPerformanceClick(cellValues.row.studentId)}
+          >
+            View Performance
+          </Button>
+        );
+      },
+    },
   ];
 
   // This is the data that will be displayed in the DataGrid
@@ -202,13 +306,16 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   }));
 
   const [filterModel, setFilterModel] = useState({});
-  const [originalApplications, setOriginalApplications] = useState<TAApplicationData[]>([]);
+  const [originalApplications, setOriginalApplications] = useState<
+    TAApplicationData[]
+  >([]);
 
   const onRowsSelectionHandler = (ids: (number | string)[]) => {
     // Select Student from row
     setSelectionModel(ids.map(Number));
   };
 
+  // Fetching the data from the API
   useEffect(() => {
     const fetchApplicationsByFacultyId = async () => {
       try {
@@ -228,29 +335,50 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
   const makeTA = async () => {
     if (selectionModel.length > 0) {
-      //get first selected if more than 1 is selected
       const selectedApplicationId = selectionModel[0];
-      //get application from grid
-      const selectedApplication = rows.find(row => row.id === selectedApplicationId);
-      console.log(selectedApplication);
+      const selectedApplication = rows.find(
+        (row) => row.id === selectedApplicationId
+      );
+
+      // console.log('selcetedApplication', selectedApplication);
+
       if (selectedApplication) {
         try {
-          // api endpoint
-          const endpoint = `http://localhost:9000/ta-application/student/${selectedApplication.studentId}/course/${selectedApplication.courseId}/make-ta`;
+          const requestData = {
+            studentId: selectedApplication.studentId,
+            courseId: selectedApplication.courseId,
+          };
+          console.log('requestData', requestData);
+          const endpoint = `http://localhost:9000/jobs/make-student-ta/${requestData.studentId}/${requestData.courseId}`;
 
-          //POST to backend
+          // const requestBody = JSON.stringify(requestData);
+          // console.log('requestBody', requestBody);
+
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+            // body: requestBody,
           });
 
-          if (!response.ok) throw new Error('Error');
-          alert('Student has been made a TA successfully!');
+          if (!response.ok) {
+            let errorMessage = 'Unknown error occurred';
+            try {
+              const errorResponse = await response.json();
+              errorMessage = errorResponse.message || errorMessage;
+              console.error('Server Error Response:', errorResponse);
+            } catch (e) {
+              console.log('Error parsing error response:', e);
+            }
+            throw new Error(errorMessage);
+          } else {
+            alert('Make TA seccessfully!');
+          }
         } catch (error) {
           console.error('Error making student a TA:', error);
-          alert('Failed to make the student a TA. Please try again.');
+          alert(`Failed to make the student a TA. ${(error as Error).message}`);
         }
       } else {
         alert('Selected application not found.');
@@ -272,194 +400,42 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
     // Initialize Fuse with the original, unfiltered applications
     const fuse = new Fuse(originalApplications, {
-      keys: ['studentId', 'courseId', 'hoursCanWorkPerWeek', 'GPA', 'coursesTaken', 'requiredCourses', 'requiredSkills', 'resumeFile', 'taJobId', 'TAStats', 'status'],
+      keys: [
+        'studentId',
+        'courseId',
+        'hoursCanWorkPerWeek',
+        'GPA',
+        'coursesTaken',
+        'requiredCourses',
+        'requiredSkills',
+        'resumeFile',
+        'taJobId',
+        'TAStats',
+        'status',
+      ],
       includeScore: true,
     });
 
     const results = fuse.search(searchValue);
-    const filteredApplications = results.map(result => result.item);
+    const filteredApplications = results.map((result) => result.item);
     setApplications(filteredApplications); // Update applications state with search results
   };
 
   return (
     <>
       {/* Navigation Bar division */}
-      <div>
-        {/* Blue banner with "Login" button */}
-        <div
-          style={{
-            backgroundColor: '#1976D2',
-            padding: '16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h5" style={{ color: '#FFF' }}>
-            TA Applications
-          </Typography>
-          <div style={{ marginLeft: 'auto' }}>
-            {user ? (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+      {<TopNav/>}
 
-                {user.role === 'admin' ? (
-                  <>
-                    <Button
-                      component={Link}
-                      to="/view-courses"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '10px', marginRight: '5px' }}
-                    >
-                      View Courses
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/jobs"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      View Jobs
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-
-                    <Button
-                      component={Link}
-                      to="/create-task"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      Create Task
-                    </Button>
-
-                    <Button
-                      component={Link}
-                      to="/tasks/faculty"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      View Tasks
-                    </Button>
-                  </>
-                ) : user.role === 'student' ? (
-                  <>
-                    <Button
-                      component={Link}
-                      to="/jobs"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '10px' }}
-                    >
-                      View Available Jobs
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/tasks/student"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      View Tasks
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/view-applications"  // Should be navigate to view my applications page (Student only)
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      View My Applications
-                    </Button>
-
-                  </>
-                ) : user.role === 'faculty' ? (
-                  <>
-                    <Button
-                      component={Link}
-                      to="/post-job"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '10px', marginRight: '5px' }}
-                    >
-                      Post Job
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/jobs"
-                      variant="contained"
-                      color="secondary"
-                      style={{ marginLeft: '5px', marginRight: '5px' }}
-                    >
-                      View Jobs
-                    </Button>
-                  </>
-                ) : (
-                  ''
-                )}
-                <Button
-                  component={Link}
-                  to="/home"
-                  variant='contained'
-                  color="secondary"
-                  style={{ marginLeft: '5px', marginRight: '15px' }}
-                >
-                  Home
-                </Button>
-                <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
-              </div>
-            ) : (
-              <Button
-                component={Link}
-                to="/login"
-                variant="contained"
-                color="secondary"
-                style={{ marginRight: '10px' }}
-              >
-                Login
-              </Button>
-            )}
-          </div>
-        </div>
-
-        <div>
-          {/* Call renderContent to display corresponding content based on user roles */}
-          {renderContent()}
-
-          {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-          {/* Duplicated */}
-          {/* <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper> */}
-          {/* TODO: hide this Component when user not login */}
-
-          {/* show the TAjob listing if the user is student */}
-          {/* {role === 'student' && (
-          <Container maxWidth='sm' style={{ marginTop: '20px' }}>
-            <TAJobDisplayComponent></TAJobDisplayComponent>
-          </Container>
-        )} */}
-        </div>
-      </div>
-
-
+        <CustomModal
+        isOpen={isOpen}
+        message="You've been inactive for a while. Do you want to continue your session?"
+        onStay={handleStayLoggedIn}
+        onLeave={() => navigate('/login')}
+      />
       {/* Container for DataGrid and ButtonColumn */}
       <FlexContainer>
         <DataGrid
-          style={{ width: '80%' }} // Adjust as necessary
+          style={{ width: '80%' }}
           rows={rows}
           columns={columns}
           filterModel={{
@@ -472,7 +448,8 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           onRowSelectionModelChange={onRowsSelectionHandler}
           rowSelectionModel={selectionModel}
         />
-        <ButtonColumn>      {/* Button to make student TA*/}
+        <ButtonColumn>      
+          {/* Button to make student TA*/}
           <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
           {rows.map((row, index) => {
@@ -491,11 +468,19 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
             );
           })}
         </ButtonColumn>
-
       </FlexContainer>
 
-      <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', mt: 2 }}>
-        {/* <ListItemButton
+      {/* Displays additional application details for the selected application */}
+      <div>
+        {currentApplication && <MockResume application={currentApplication} />}
+      </div>
+
+        <List
+          component="nav"
+          aria-label="Device settings"
+          sx={{ bgcolor: 'background.paper' }}
+        >
+          {/* <ListItemButton
             id="lock-button"
             aria-haspopup="listbox"
             aria-controls="lock-menu"
@@ -527,13 +512,13 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           ))} */}
       </Menu>
       <div>
-        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-        <Paper style={{ padding: '20px' }}>
-          <Typography variant="body1">
-            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-            Engineering students to find TA jobs.
-          </Typography>
-        </Paper>
+      {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+      <Paper style={{ padding: '20px' }}>
+        <Typography variant="body1">
+          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+          Engineering students to find TA jobs.
+        </Typography>
+      </Paper>
       </div>
     </>
   );

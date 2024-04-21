@@ -53,8 +53,11 @@ const StudentProfile: React.FC = () => {
   const open = Boolean(anchorEl);
   const [applications, setApplications] = useState<Application[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [selectedApplicationStatus, setSelectedApplicationStatus] = useState<string>('');
-  const [selectedApplicationId, setSelectedApplicationId] = useState<string | null>(null);
+  const [selectedApplicationStatus, setSelectedApplicationStatus] =
+    useState<string>('');
+  const [selectedApplicationId, setSelectedApplicationId] = useState<
+    string | null
+  >(null);
   const [showFullList, setShowFullList] = useState<boolean>(false);
 
   // CSS style for hiding items
@@ -67,6 +70,16 @@ const StudentProfile: React.FC = () => {
     maxHeight: '1000px',
     transition: 'max-height 0.5s ease-in',
   };
+  const storedUserInfo = localStorage.getItem('user');
+
+  useEffect(() => {
+    // localStorage to get the user information
+    if (storedUserInfo) {
+      const userInfo = JSON.parse(storedUserInfo);
+      setName(`${userInfo.firstName} ${userInfo.lastName}`);
+      setGraduationYear(userInfo.student.year);
+    }
+  }, []);
 
   useEffect(() => {
     // Fetch logged in student data from local storage.
@@ -80,7 +93,8 @@ const StudentProfile: React.FC = () => {
     const fetchAndSetApplications = async () => {
       if (studentId) {
         try {
-          const tempApplications = await ApplyService.getTaApplicationsByStudentId(studentId);
+          const tempApplications =
+            await ApplyService.getTaApplicationsByStudentId(studentId);
           setApplications(tempApplications);
         } catch (error) {
           console.error('Error fetching applications:', error);
@@ -150,7 +164,9 @@ const StudentProfile: React.FC = () => {
   // Create customArray and only use the first 3 elements.
   const customArray = createCustomArray(jobs, applications);
 
-  const [messages, setMessages] = useState([{ id: 1, content: 'Test Message' }]);
+  const [messages, setMessages] = useState([
+    { id: 1, content: 'Test Message' },
+  ]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -252,11 +268,22 @@ const StudentProfile: React.FC = () => {
       >
         <TopNav />
         <Tooltip title="Menu">
-          <IconButton color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+          <IconButton
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
             <MenuIcon />
           </IconButton>
         </Tooltip>
-        <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
           <MenuItem onClick={navigateToInbox}>
             <Tooltip title="Inbox">
               <IconButton
@@ -288,7 +315,11 @@ const StudentProfile: React.FC = () => {
             <Typography component="h1" variant="h5">
               Student Profile
             </Typography>
-            <Avatar sx={{ width: 200, height: 200, mt: 3 }} alt="User Profile" src={profileImage || undefined} />
+            <Avatar
+              sx={{ width: 200, height: 200, mt: 3 }}
+              alt="User Profile"
+              src={profileImage || undefined}
+            />
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -300,14 +331,21 @@ const StudentProfile: React.FC = () => {
                   >
                     Upload Profile
                   </Button>
-                  <Input type="file" id="profileUpload" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input
+                    type="file"
+                    id="profileUpload"
+                    sx={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Button
                     variant="contained"
                     color="primary"
                     sx={{ width: '100%', height: '50px' }}
-                    onClick={() => document.getElementById('resumeUpload')?.click()}
+                    onClick={() =>
+                      document.getElementById('resumeUpload')?.click()
+                    }
                   >
                     Upload Resume
                   </Button>
@@ -340,7 +378,12 @@ const StudentProfile: React.FC = () => {
                   onChange={(e) => setMajor(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Input type="file" id="resumeUpload" sx={{ display: 'none' }} onChange={handleResumeChange} />
+                <Input
+                  type="file"
+                  id="resumeUpload"
+                  sx={{ display: 'none' }}
+                  onChange={handleResumeChange}
+                />
                 {resume && (
                   <a href={resume} target="_blank" rel="noopener noreferrer">
                     View Resume
@@ -348,7 +391,12 @@ const StudentProfile: React.FC = () => {
                 )}
               </form>
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleSave}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                  onClick={handleSave}
+                >
                   Save
                 </Button>
               </Box>
@@ -363,7 +411,7 @@ const StudentProfile: React.FC = () => {
                   View Applications
                 </Button>
               </Box>
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+              {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                 <Button
                   component={Link}
                   to="/performance-result"
@@ -373,7 +421,7 @@ const StudentProfile: React.FC = () => {
                 >
                   View My Performance
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
             {/* This stuff should be sent to the database following successful submission. Upon login, this will
               be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
@@ -400,7 +448,10 @@ const StudentProfile: React.FC = () => {
             }}
           >
             {/* This <Box> component contains a set of job-related information */}
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+            <Paper
+              elevation={3}
+              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+            >
               <Typography variant="h6">Job Title 1</Typography>
               <Typography>Description of Job 1</Typography>
               <Typography>Date Submitted: 2023-10-15</Typography>
@@ -408,7 +459,10 @@ const StudentProfile: React.FC = () => {
                 Check Application Status
               </Button>
             </Paper>
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
+            <Paper
+              elevation={3}
+              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+            >
               <Typography variant="h6">Job Title 2</Typography>
               <Typography>Description of Job 2</Typography>
               <Typography>Date Submitted: 2023-10-16</Typography>
@@ -427,11 +481,24 @@ const StudentProfile: React.FC = () => {
             {customArray.length > 0 ? (
               customArray.map((application, index) =>
                 application ? (
-                  <div key={index} style={index >= 3 && !showFullList ? hiddenStyle : visibleStyle}>
-                    <Paper key={index} elevation={3} sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}>
-                      <Typography variant="h6">Application title: {application.title}</Typography>
+                  <div
+                    key={index}
+                    style={
+                      index >= 3 && !showFullList ? hiddenStyle : visibleStyle
+                    }
+                  >
+                    <Paper
+                      key={index}
+                      elevation={3}
+                      sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+                    >
+                      <Typography variant="h6">
+                        Application title: {application.title}
+                      </Typography>
                       <Typography>Course: {application.courseCode}</Typography>
-                      <Typography>Application ID: {application.applicationId}</Typography>
+                      <Typography>
+                        Application ID: {application.applicationId}
+                      </Typography>
                       <Box
                         sx={{
                           mt: '5px',
@@ -443,12 +510,17 @@ const StudentProfile: React.FC = () => {
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() => handleCheckStatus(application.applicationId)}
+                          onClick={() =>
+                            handleCheckStatus(application.applicationId)
+                          }
                         >
                           Check Application Status
                         </Button>
-                        {selectedApplicationId === application.applicationId && (
-                          <Typography sx={{ marginLeft: 2 }}>{selectedApplicationStatus}</Typography>
+                        {selectedApplicationId ===
+                          application.applicationId && (
+                          <Typography sx={{ marginLeft: 2 }}>
+                            {selectedApplicationStatus}
+                          </Typography>
                         )}
                       </Box>
                     </Paper>
@@ -456,11 +528,18 @@ const StudentProfile: React.FC = () => {
                 ) : null
               )
             ) : (
-              <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
+              <Paper
+                elevation={3}
+                sx={{ spacing: 2, padding: 2, width: '100%' }}
+              >
                 <Typography variant="h6">Start applying now!</Typography>
               </Paper>
             )}
-            <Button onClick={toggleFullList} color="primary" variant="contained">
+            <Button
+              onClick={toggleFullList}
+              color="primary"
+              variant="contained"
+            >
               {showFullList ? (
                 <>
                   <ArrowUpwardIcon /> Show Less

@@ -25,6 +25,7 @@ import BottomPanel from '../../components/BottomPanel';
 import ApplyService from '../../services/apply';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import useAutoLogout from '../../components/AutoLogOut';
 
 // TODO: this needs to come from back-end in the future
 // Static variable field
@@ -140,6 +141,16 @@ function ApplicationPage() {
   /**
    * Submission handler
    */
+  const { Modal, closeModal } = useAutoLogout({
+    timeoutDuration: 10 * 60 * 1000, // Use the defined timeout duration
+    logoutFunction: () => {
+      console.log('called');
+      localStorage.clear(); 
+      console.log('go to login');
+      navigate('/login'); 
+      
+    },
+  });
   const handleSubmit = function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // Get the data in json format.
@@ -565,6 +576,7 @@ function ApplicationPage() {
           </Box>
         </Box>
       </Container>
+      {Modal}
       <BottomPanel />
     </>
   );

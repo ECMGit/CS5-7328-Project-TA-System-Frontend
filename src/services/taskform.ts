@@ -3,9 +3,9 @@ const BASE_URL = 'http://localhost:9000';
 const token = localStorage.getItem('token');
 
 
-const createTask = (facultyId: number, studentId: number,  title: string, description: string ) => {
+const createTask = (facultyId: string, studentId: string,  title: string, description: string, courseId: number ) => {
   const CREATE_TASK_API = `${BASE_URL}/tasks`;
-  return axios.post(CREATE_TASK_API, { facultyId,studentId, title, description}, {
+  return axios.post(CREATE_TASK_API, { facultyId, studentId, title, description, courseId}, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -46,8 +46,8 @@ const viewPending = (facultyId: number) => {
   });
 };
 
-const checkoff = (studentId: number, taskId: number) => {
-  const CHECKOFF_API = `${BASE_URL}/tasks/checkoff/${studentId}/${taskId}`;
+const checkoff = (smuNo: number, taskId: number) => {
+  const CHECKOFF_API = `${BASE_URL}/tasks/checkoff/${smuNo}/${taskId}`;
   return axios.put(CHECKOFF_API, {}, {
     headers: {
       'Authorization': `Bearer ${token}`

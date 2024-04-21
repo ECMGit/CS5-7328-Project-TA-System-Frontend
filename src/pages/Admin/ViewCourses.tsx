@@ -1,4 +1,4 @@
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid ,GridRenderCellParams } from '@mui/x-data-grid';
 import React, { useState, useEffect } from 'react';
 import {
   Container,
@@ -7,27 +7,51 @@ import {
   NavbarButton,
   Input,
 } from '../user/styledComponents';
+import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
+
 
 export type CourseData = {
   id: number;
   courseCode: string;
   title: string;
   description: string;
+
 };
 
 export const ViewCourse: React.FC = () => {
+  const navigate =useNavigate();
   const [course, setCourse] = useState<CourseData[]>([]);
   const [searchID, setSearchID] = useState('');
   const [searchCourse, setSearchCourse] = useState('');
   const [CourseFilter, setCourseFilter] = useState<number | null>(null);
 
-  const columns = [
+  const columns  = [
     { field: 'id', headerName: 'ID', width: 100 },
     { field: 'courseCode', headerName: 'Course Code', width: 120 },
     { field: 'title', headerName: 'Title', width: 400 },
-    { field: 'description', headerName: 'description', width: 250 },
+    { field: 'description', headerName: 'description', flex: 1 },
+    {
+      field: 'details',
+      headerName: 'Details',
+      width: 200,
+      renderCell: (params :GridRenderCellParams) => {
+        return (
+          <NavbarButton onClick={() => handleViewDetails(params.row.id)}>View Details</NavbarButton>
+        );
+      },
+    },
   ];
+  const handleViewDetails =async  (id: number) => {
+    const exists = await AdminService.getCourseDetail(id);
+    if (!exists) {
+      alert('Error: No TA job found for this course.'); 
+      return;
+    }
+    // If a TA job exists, navigate to the course details
+    navigate(`/course/${id}`);
+  };
+
 
   const rows = course
     .map((course, index) => ({
@@ -62,6 +86,10 @@ export const ViewCourse: React.FC = () => {
     fetchCourse();
   }, []);
 
+
+
+
+  
   return (
     <Container>
       <Navbar>

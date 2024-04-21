@@ -1,14 +1,16 @@
 // Import React and specific hooks (useState and useEffect) from the 'react' library.
 import React, { useState, useEffect, useContext } from 'react';
 // Import components (Typography and Container) from the Material-UI library.
-import { Typography, Container, Button, Paper, Avatar } from '@mui/material';
+import { Typography, Container, Button, Paper, Avatar ,Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
 import AdminDashboard from './AdminDashboard';
+import useAutoLogout from '../components/AutoLogOut';
 import { link } from 'fs';
-
+import Footer from '../components/Footer';
+import CustomModal from '../components/CustomModal';
 
 // Define an interface 'User' to specify the structure of a user object.
 // interface User {
@@ -35,7 +37,6 @@ const Home: React.FC = () => {
 
   //console.log('home:', user);
 
-
   if (!user) {
     return <div>Loading...</div>; // or any other fallback UI
   }
@@ -60,18 +61,45 @@ const Home: React.FC = () => {
     navigate('/home-default');
   };
 
+  const handlePerformance = () => {
+    navigate('/performance-result', { state: { user } });
+  };
+
   /**
-   * Navigate to the corresponding user profile. 
+   * Navigate to the corresponding user profile.
    */
   const handleProfile = function () {
     // Guard clause.
-    if (!user) { return; }
-
+    if (!user) {
+      return;
+    }
     // Navigate to student/faculty profile.
-    if (user.role === 'student') { navigate('/student-profile'); }
-    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
-    else if (user.role === 'admin') { navigate('/admin-profile'); }
+    if (user.role === 'student') {
+      navigate('/student-profile');
+    } else if (user.role === 'faculty') {
+      navigate('/faculty-profile');
+    } else if (user.role === 'admin') {
+      navigate('/admin-profile');
+    }
   };
+
+  const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes
+
+  const logoutFunction = () => navigate('/login'); // Define your logout action
+
+  // Use the auto-logout hook
+  const { Modal, closeModal } = useAutoLogout({
+    timeoutDuration: TIMEOUT_DURATION, // Use the defined timeout duration
+    logoutFunction: () => {
+      console.log('called');
+      localStorage.clear(); 
+      setUser(null); 
+      setIsLoggedIn(false); 
+      console.log('go to login');
+      navigate('/login'); 
+      
+    },
+  });
 
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {
@@ -91,31 +119,34 @@ const Home: React.FC = () => {
     } else {
       // Content displayed by non administrator users
       return (
-        <>
+        <Container style={{
+          paddingLeft: '10px',
+          paddingRight: '10px',
+          minHeight: '80vh'
+        }}>
           {/* Large image at the top */}
           <img
             src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
             alt="SMU Dallas Hall"
-            style={{ width: '100%', height: 'auto' }}
+            style={{ width: '100%', height: 'auto', paddingTop: '50px' }}
           />
           {/* Text box that spans the page */}
-          {/* Duplicate page spanning text */}
-          {/* {user && (
+          {user && (
             <Paper style={{ padding: '20px' }}>
               <Typography variant="body1">
-                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-                Engineering students to find TA jobs.
+                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle
+                School of Engineering students to find TA jobs.
               </Typography>
             </Paper>
-          )} */}
+          )}
 
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
               <TAJobDisplayComponent />
             </Container>
           )}
-        </>
+        </Container> 
       );
     }
   };
@@ -152,7 +183,6 @@ const Home: React.FC = () => {
         <div style={{ marginLeft: 'auto' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-
               {user.role === 'admin' ? (
                 <>
                   <Button
@@ -232,6 +262,15 @@ const Home: React.FC = () => {
                   >
                     View Tasks
                   </Button>
+                  {/* Add a view performance button in the home page, just for student */}
+                  <Button
+                    onClick={() => handlePerformance()}
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '5px' }}
+                  >
+                    View My Performance
+                  </Button>
                   <Button
                     component={Link}
                     to="/view-applications"  // Should be navigate to view my applications page (Student only)
@@ -276,7 +315,11 @@ const Home: React.FC = () => {
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
+              <AvatarWrapper
+                user={user}
+                onLogout={handleLogout}
+                onProfile={handleProfile}
+              />
             </div>
           ) : (
             <Button
@@ -291,18 +334,31 @@ const Home: React.FC = () => {
           )}
         </div>
       </div>
-
       <div>
         {/* Call renderContent to display corresponding content based on user roles */}
         {renderContent()}
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+        <Box
+        sx={{
+          py: 2,
+          px: 3,
+          mt: 'auto',
+          color: 'white',
+          textAlign: 'center',
+          position: 'fixed',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+        }}
+      >
         <Paper style={{ padding: '20px' }}>
           <Typography variant="body1">
             Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
             Engineering students to find TA jobs.
           </Typography>
         </Paper>
+        </Box>
         {/* TODO: hide this Component when user not login */}
 
         {/* show the TAjob listing if the user is student */}
@@ -312,6 +368,10 @@ const Home: React.FC = () => {
           </Container>
         )} */}
       </div>
+
+      <Footer />
+      {Modal}
+      
     </div>
   );
 };

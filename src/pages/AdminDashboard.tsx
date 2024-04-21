@@ -4,12 +4,14 @@ import { To, useNavigate } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
 import BookIcon from '@mui/icons-material/Book';
 import GroupIcon from '@mui/icons-material/Group';
+import  Checklist  from '@mui/icons-material/Checklist';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const navigationCards = [
     { title: 'All Students', path: '/students', icon: <SchoolIcon fontSize="large" />, color: '#1976d2', textColor: '#fff' },
+    { title: 'Feedback', path: '/feedback/admin', icon: <Checklist fontSize="large" />, color: '#d143c8', textColor: '#fff' },
     { title: 'All Courses', path: '/courses', icon: <BookIcon fontSize="large" />, color: '#388e3c', textColor: '#fff' },
     { title: 'All Faculties', path: '/faculties', icon: <GroupIcon fontSize="large" />, color: '#d32f2f', textColor: '#fff' },
   ];

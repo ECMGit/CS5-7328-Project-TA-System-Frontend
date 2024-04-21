@@ -11,6 +11,7 @@ import api from '../../services/faculty-job';
 import AvatarWrapper from '../../components/AvatarWrapper';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
+import TopNav from '../../components/TopNav';
 
 
 const EditJobPage: React.FC = () => {
@@ -132,156 +133,10 @@ const EditJobPage: React.FC = () => {
     if (!job) return <Typography>Loading...</Typography>;
 
     return (
-        <>
+        <div>
             {/* Navigation Bar division */}
-            <div>
-                {/* Blue banner with "Login" button */}
-                <div
-                    style={{
-                        backgroundColor: '#1976D2',
-                        padding: '16px',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography variant="h5" style={{ color: '#FFF' }}>
-                        Post Job
-                    </Typography>
-                    <div style={{ marginLeft: 'auto' }}>
-                        {user ? (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-
-                                {user.role === 'admin' ? (
-                                    <>
-                                        <Button
-                                            component={Link}
-                                            to="/view-courses"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '10px', marginRight: '5px' }}
-                                        >
-                                            View Courses
-                                        </Button>
-                                        <Button
-                                            component={Link}
-                                            to="/view-applications"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            View Applications
-                                        </Button>
-                                        <Button
-                                            component={Link}
-                                            to="/post-job"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            Publish
-                                        </Button>
-
-                                        <Button
-                                            component={Link}
-                                            to="/create-task"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            Create Task
-                                        </Button>
-
-                                        <Button
-                                            component={Link}
-                                            to="/tasks/faculty"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            View Tasks
-                                        </Button>
-                                    </>
-                                ) : user.role === 'student' ? (
-                                    <>
-                                        <Button
-                                            component={Link}
-                                            to="/jobs"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '10px' }}
-                                        >
-                                            View Available Jobs
-                                        </Button>
-                                        <Button
-                                            component={Link}
-                                            to="/tasks/student"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            View Tasks
-                                        </Button>
-                                        <Button
-                                            component={Link}
-                                            to="/view-applications"  // Should be navigate to view my applications page (Student only)
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            View My Applications
-                                        </Button>
-
-                                    </>
-                                ) : user.role === 'faculty' ? (
-                                    <>
-                                        <Button
-                                            component={Link}
-                                            to="/post-job"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '10px', marginRight: '5px' }}
-                                        >
-                                            Post Job
-                                        </Button>
-                                        <Button
-                                            component={Link}
-                                            to="/view-applications"
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ marginLeft: '5px', marginRight: '5px' }}
-                                        >
-                                            View Applications
-                                        </Button>
-                                    </>
-                                ) : (
-                                    ''
-                                )}
-                                <Button
-                                    component={Link}
-                                    to="/home"
-                                    variant='contained'
-                                    color="secondary"
-                                    style={{ marginLeft: '5px', marginRight: '15px' }}
-                                >
-                                    Home
-                                </Button>
-                                <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
-                            </div>
-                        ) : (
-                            <Button
-                                component={Link}
-                                to="/login"
-                                variant="contained"
-                                color="secondary"
-                                style={{ marginRight: '10px' }}
-                            >
-                                Login
-                            </Button>
-                        )}
-                    </div>
-                </div>
-            </div>
+            <TopNav />
+            <div />
             <Container maxWidth="md">
                 <Typography variant="h4" align="center" mt={5} mb={1}>Edit Job</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
@@ -294,7 +149,6 @@ const EditJobPage: React.FC = () => {
                             value={job.title || ''}
                             onChange={(e) => handleInputChange(e, 'title')}
                             autoFocus
-
                         />
                         <TextField
                             label="Course ID"
@@ -304,32 +158,6 @@ const EditJobPage: React.FC = () => {
                             type="number"
                             value={job.courseId || ''}
                             onChange={(e) => handleInputChange(e, 'courseId')}
-                        />
-                        <TextField
-                            label="Course Schedule"
-                            sx={{ my: 1 }}
-                            required
-                            fullWidth
-                            value={job.courseSchedule || ''}
-                            onChange={(e) => handleInputChange(e, 'courseSchedule')}
-                        />
-                        <TextField
-                            label="Total Hours Per Week"
-                            sx={{ my: 1 }}
-                            required
-                            fullWidth
-                            type="number"
-                            value={job.totalHoursPerWeek || ''}
-                            onChange={(e) => handleInputChange(e, 'totalHoursPerWeek')}
-                        />
-                        <TextField
-                            label="Max Number of TAs"
-                            sx={{ my: 1 }}
-                            required
-                            fullWidth
-                            type="number"
-                            value={job.maxNumberOfTAs || ''}
-                            onChange={(e) => handleInputChange(e, 'maxNumberOfTAs')}
                         />
                         <TextField
                             label="Required Courses"
@@ -376,14 +204,14 @@ const EditJobPage: React.FC = () => {
                                 shrink: true,
                             }}
                         />
-                        {/* Add other fields similarly using handleInputChange */}
+                        {/* Add other TextField components similarly */}
                         <LoadingButton type="submit" variant="contained" loading={loading} sx={{ mt: 4, mb: 3 }}>Update Job</LoadingButton>
                         <Button variant="text" onClick={() => navigate('/jobs')} sx={{ mt: 4, mb: 3 }}>Cancel</Button>
                         <FormHelperText>{message}</FormHelperText>
                     </Box>
                 </Box>
             </Container>
-        </>
+        </div>
     );
 
 };

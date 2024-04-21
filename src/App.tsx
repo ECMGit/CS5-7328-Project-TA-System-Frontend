@@ -9,12 +9,14 @@ import {
 import PasswordResetRequestPage from './pages/login/PasswordResetRequest';
 import PasswordResetPage from './pages/login/PasswordReset';
 import LoginPage from './pages/login/LoginPage';
+import AdminSignUpPage from './pages/login/AdminSignUpPage';
 import SignUpPage from './pages/login/SignUpPage';
 import Home from './pages/Home';
 import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
 import JobInfo from './pages/JobInfo';
+
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
 import ViewApplicationsbyFacultyID from './pages/application/ViewApplications';
 import ApplicationPage from './pages/application/ApplicationPage';
@@ -34,13 +36,11 @@ import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 
-import FeedbackPage from './pages/feedback/Feedback';
-import BugReportPage from './pages/bug-report/bug-report';
 import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
 import CreateMessage from './pages/user/CreateMessage';
-
+import CourseDetail from './pages/Admin/ViewCourseDetail';
 
 // TODO: Merge following page with above viewAllCourses page, we only need one page for viewing courses
 import ViewAllCourses from './pages/courses/ViewAllCourses';
@@ -57,6 +57,14 @@ import PostJobSuccessPage from './pages/faculty-jobs/PostJobSuccessPage';
 import EditJobPage from './pages/faculty-jobs/EditJobPage';
 
 
+
+
+import { StudentFeatureRequestPage } from './pages/feedback/StudentFeatureRequestpage';
+import { MainLayout } from './components/MainLayout';
+import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
+import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
+import AboutUs from './pages/AboutUs';
+
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
   (config) => {
@@ -72,7 +80,6 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 
 interface PrivateRouteProps {
   role: string;
@@ -151,12 +158,13 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/home-default' element={<HomeDefault />} />
+        <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
+        <Route path={'/signup/admin'} element = {<AdminSignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-
+        <Route path="/about-us" element={<AboutUs/>}/>
         <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
@@ -178,10 +186,38 @@ const App: React.FC = () => {
 
           <Route index element={<Navigate to="/home" />} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/view-courses" element={<PrivateRoute role="admin"><ViewAllCourses /></PrivateRoute>} />
-          <Route path="/view-course/:id" element={<PrivateRoute role="admin"><ViewCourse /></PrivateRoute>} />
-          <Route path="/add-course" element={<PrivateRoute role="admin"><AddCourse /></PrivateRoute>} />
-          <Route path="/edit-course/:id" element={<PrivateRoute role="admin"><EditCourse /></PrivateRoute>} />
+          <Route
+            path="/view-courses"
+            element={
+              <PrivateRoute role="admin">
+                <ViewAllCourses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-course/:id"
+            element={
+              <PrivateRoute role="admin">
+                <ViewCourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-course"
+            element={
+              <PrivateRoute role="admin">
+                <AddCourse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-course/:id"
+            element={
+              <PrivateRoute role="admin">
+                <EditCourse />
+              </PrivateRoute>
+            }
+          />
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
@@ -200,14 +236,17 @@ const App: React.FC = () => {
           <Route path="/user-data" element={<UserDataPage />} />
 
           {/* FeedBack and Bug Report Module */}
-          <Route path="/feedback" element={<FeedbackPage />} />
-          <Route path="/bug-report" element={<BugReportPage />} />
-
+          <Route path="/feedback" element={<MainLayout />} >
+            <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
+            <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
+            <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
+          </Route>
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
-        </Route>
+          <Route path="/course/:id" element={<PrivateRoute role="admin"> <CourseDetail /> </PrivateRoute>} />
+          </Route>
       </Routes>
     </Router>
   );
