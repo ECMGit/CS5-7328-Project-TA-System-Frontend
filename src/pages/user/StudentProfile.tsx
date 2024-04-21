@@ -267,6 +267,7 @@ const StudentProfile: React.FC = () => {
         }}
       >
         <TopNav />
+        {/* Old menu 
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
@@ -277,6 +278,7 @@ const StudentProfile: React.FC = () => {
             <MenuIcon />
           </IconButton>
         </Tooltip>
+        
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -300,8 +302,8 @@ const StudentProfile: React.FC = () => {
           {messages.map((message) => (
             <MenuItem key={message.id}>{message.content}</MenuItem>
           ))}
-          {/* Add an inbox UI element */}
-        </Menu>
+          {/* Add an inbox UI element 
+        </Menu>*/}
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>

@@ -169,6 +169,7 @@ const FacultyProfile: React.FC = () => {
         }}
       >
         <TopNav />
+        {/* Old menu 
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
@@ -179,6 +180,7 @@ const FacultyProfile: React.FC = () => {
             <MenuIcon />
           </IconButton>
         </Tooltip>
+        
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -190,7 +192,7 @@ const FacultyProfile: React.FC = () => {
             {/* <ListItemIcon>
               <MailIcon fontSize="small" />
             </ListItemIcon>
-            Inbox */}
+            Inbox
             <Tooltip title="Inbox">
               <IconButton
                 color="inherit"
@@ -202,7 +204,7 @@ const FacultyProfile: React.FC = () => {
                 <MailIcon />
               </IconButton>
             </Tooltip>
-            {/* Add an inbox UI element */}
+            {/* Add an inbox UI element
             {/* <Menu
               id="inbox-menu"
               anchorEl={anchorEl}
@@ -213,9 +215,9 @@ const FacultyProfile: React.FC = () => {
               {messages.map((message) => (
                 <MenuItem key={message.id}>{message.content}</MenuItem>
               ))}
-            </Menu> */}
+            </Menu>
           </MenuItem>
-        </Menu>
+        </Menu>*/}
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={6}>

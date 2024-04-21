@@ -102,10 +102,13 @@ const AvatarWrapper: React.FC<AvatarWrapperProps> = ({ user, onLogout, onProfile
           <Typography variant="subtitle1" sx={{ color: 'grey' }}>Welcome {user.firstName}!</Typography>
         </ListItem>
         <Divider />
-        <MenuItem onClick={navigateToInbox}></MenuItem>
         <MenuItem onClick={onProfile}>
           <Typography variant="body1">User Profile</Typography>
         </MenuItem>
+        <MenuItem onClick={navigateToInbox}><Typography variant="body1">Inbox</Typography></MenuItem>
+        <MenuItem onClick={() => {
+          navigate('/home');
+        }}><Typography variant="body1">Home</Typography> </MenuItem>
         <MenuItem onClick={() => {
           navigate('/feedback');
         }}>
