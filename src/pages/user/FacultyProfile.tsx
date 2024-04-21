@@ -421,7 +421,9 @@ const FacultyProfile: React.FC = () => {
   function handleEditPosting(jobId: number) {
     // Handle editing the posting for the specified job ID
     //TODO: Implement this function and pull data from backend -- team3 sprint3
+    
     console.log(`Editing posting for job ${jobId}`);
+    navigate(`/edit-job/${jobId}`);
   }
 };
 
