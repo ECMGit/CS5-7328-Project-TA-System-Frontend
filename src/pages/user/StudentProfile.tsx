@@ -267,11 +267,11 @@ const StudentProfile: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h5">
+              <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
                 Student Profile
               </Typography>
               <Avatar
-                sx={{ width: 200, height: 200, mt: 3 }}
+                sx={{ width: 200, height: 200, mt: 3, md: 3 }}
                 alt="User Profile"
                 src={profileImage || undefined}
               />
