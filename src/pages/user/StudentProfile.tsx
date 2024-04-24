@@ -14,6 +14,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Alert,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
@@ -23,6 +24,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
 import TopNav from '../../components/TopNav';
+import { alignProperty } from '@mui/material/styles/cssUtils';
+import { AlignHorizontalRight } from '@mui/icons-material';
 
 interface Course {
   id: number;
@@ -35,6 +38,9 @@ interface Application {
   id: string;
   taJobId: string;
   status: string;
+  studentId: string;
+  requiredCourses: string;
+  requiredSkills: string;
 }
 
 interface Job {
@@ -153,6 +159,9 @@ const StudentProfile: React.FC = () => {
             courseCode: job.course.courseCode,
             title: job.title,
             applicationId: application.id,
+            studentId: application.studentId,
+            requiredCourses: application.requiredCourses,
+            requiredSkills: application.requiredSkills,
           };
         }
 
@@ -398,55 +407,6 @@ const StudentProfile: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={8}>
-            {/* Right section with Job Boxes using Box components */}
-            {/* These boxes should be active applications or open positions that you've filled*/}
-            <Box
-              sx={{
-                mt: '50px',
-                margin: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              {/* This <Box> component contains a set of job-related information */}
-              <Typography variant="h5" mt={2} mb={2}>
-                Jobs
-              </Typography>
-              <Paper
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-              >
-                <Typography variant="h6">Job Title 1</Typography>
-                <Typography>Description of Job 1</Typography>
-                <Typography>Date Submitted: 2023-10-15</Typography>
-                <Button variant="contained" color="primary">
-                  Check Application Status
-                </Button>
-              </Paper>
-              <Paper
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-              >
-                <Typography variant="h6">Job Title 2</Typography>
-                <Typography>Description of Job 2</Typography>
-                <Typography>Date Submitted: 2023-10-16</Typography>
-                <Button variant="contained" color="primary">
-                  Check Application Status
-                </Button>
-              </Paper>
-              <Paper
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, width: '100%' }}
-              >
-                <Typography variant="h6">Job Title 3</Typography>
-                <Typography>Description of Job 3</Typography>
-                <Typography>Date Submitted: 2023-10-17</Typography>
-                <Button variant="contained" color="primary">
-                  Check Application Status
-                </Button>
-              </Paper>
-            </Box>
             {/* Applications box*/}
             <Box>
               <Typography variant="h5" mt={2} mb={2} align="center">
@@ -458,7 +418,7 @@ const StudentProfile: React.FC = () => {
                     <div
                       key={index}
                       style={
-                        index >= 3 && !showFullList ? hiddenStyle : visibleStyle
+                        index >= 6 && !showFullList ? hiddenStyle : visibleStyle
                       }
                     >
                       <Paper
@@ -467,7 +427,7 @@ const StudentProfile: React.FC = () => {
                         sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                       >
                         <Typography variant="h6">
-                          Application title: {application.title}
+                          Application #{index}: {application.title}
                         </Typography>
                         <Typography>
                           Course: {application.courseCode}
@@ -475,9 +435,19 @@ const StudentProfile: React.FC = () => {
                         <Typography>
                           Application ID: {application.applicationId}
                         </Typography>
+                        {/* Student ID for test only */}
+                        {/* <Typography>
+                          Student ID: {application.studentId}
+                        </Typography> */}
+                        <Typography>
+                          Required Courses: {application.requiredCourses}
+                        </Typography>
+                        <Typography>
+                          Required Skills: {application.requiredSkills}
+                        </Typography>
                         <Box
                           sx={{
-                            mt: '5px',
+                            mt: '2px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'start',
@@ -494,8 +464,29 @@ const StudentProfile: React.FC = () => {
                           </Button>
                           {selectedApplicationId ===
                             application.applicationId && (
-                            <Typography sx={{ marginLeft: 2 }}>
-                              {selectedApplicationStatus}
+                            <Typography sx={{ marginLeft: 20 }}>
+                              {/* Conditionally render the application status */}
+                              {selectedApplicationStatus === 'Pending' ? (
+                                <Alert severity="warning">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Approved' ? (
+                                <Alert severity="success">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Rejected' ? (
+                                <Alert severity="error">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : (
+                                <Alert severity="info">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              )}
                             </Typography>
                           )}
                         </Box>
@@ -511,21 +502,23 @@ const StudentProfile: React.FC = () => {
                   <Typography variant="h6">Start applying now!</Typography>
                 </Paper>
               )}
-              <Button
-                onClick={toggleFullList}
-                color="primary"
-                variant="contained"
-              >
-                {showFullList ? (
-                  <>
-                    <ArrowUpwardIcon /> Show Less
-                  </>
-                ) : (
-                  <>
-                    <ArrowDownwardIcon /> Show More
-                  </>
-                )}
-              </Button>
+              <Box display="flex" justifyContent="right" alignItems="center">
+                <Button
+                  onClick={toggleFullList}
+                  color="primary"
+                  variant="contained"
+                >
+                  {showFullList ? (
+                    <>
+                      <ArrowUpwardIcon /> Show Less
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownwardIcon /> Show More
+                    </>
+                  )}
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>
