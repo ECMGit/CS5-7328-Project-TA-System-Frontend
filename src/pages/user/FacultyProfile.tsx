@@ -45,7 +45,7 @@ const FacultyProfile: React.FC = () => {
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-
+  const [designation, setDesignation] = useState<string>('Professor');
   const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
 
   const storedUserInfo = localStorage.getItem('user');
@@ -175,15 +175,17 @@ const FacultyProfile: React.FC = () => {
               {/* Display user info with name and department */}
               {name && department && (
                 <>
-                  <Typography variant="h6" sx={{ mt: 2 }}>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
                     User Information
                   </Typography>
+                  <Typography>SMU ID: {getCurrentUserId()}</Typography>
                   <Typography>Name: {name}</Typography>
+                  <Typography>Designation: {designation}</Typography>
                   <Typography>Department: {department}</Typography>
                 </>
               )}
               {/* Handle the upload profile and upload resume buttons */}
-              <Box sx={{ mt: 2 }}>
+              <Box sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Button
@@ -217,12 +219,20 @@ const FacultyProfile: React.FC = () => {
               </Box>
               <Box sx={{ mt: 4 }}>
                 <form>
-                  {/* <TextField
+                  <TextField
                     label="Name"
                     variant="outlined"
                     fullWidth
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    label="Designation"
+                    variant="outlined"
+                    fullWidth
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
                     sx={{ mb: 2 }}
                   />
                   <TextField
@@ -232,7 +242,7 @@ const FacultyProfile: React.FC = () => {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     sx={{ mb: 2 }}
-                  /> */}
+                  />
                   <Input
                     type="file"
                     id="resumeUpload"
@@ -245,45 +255,14 @@ const FacultyProfile: React.FC = () => {
                     </a>
                   )}
                 </form>
-                <Box
-                  sx={{ mt: 2, display: 'column', justifyContent: 'center' }}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ width: '100%' }}
+                  onClick={handleSave}
                 >
-                  <form>
-                    <TextField
-                      label="Name"
-                      variant="outlined"
-                      fullWidth
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      sx={{ mb: 2 }}
-                    />
-                    <TextField
-                      label="Department"
-                      variant="outlined"
-                      fullWidth
-                      value={department}
-                      // onChange={(e) => seDepartment(e.target.value)}
-                      sx={{ mb: 2 }}
-                    />
-                    {resume && (
-                      <a
-                        href={resume}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Resume
-                      </a>
-                    )}
-                  </form>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: '100%' }}
-                    onClick={handleSave}
-                  >
-                    Save
-                  </Button>
-                </Box>
+                  Save Personal Information
+                </Button>
               </Box>
             </Box>
           </Grid>
@@ -308,8 +287,17 @@ const FacultyProfile: React.FC = () => {
                   sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                 >
                   <Typography variant="h6">{job.title}</Typography>
+                  <Typography>Course ID: {job.courseId}</Typography>
+                  <Typography>TA Stats: {job.TAStats}</Typography>
                   <Typography>Note: {job.notes}</Typography>
-                  <Typography>Date Submitted: {job.deadlineToApply}</Typography>
+                  <Typography>Deadline: {job.deadlineToApply}</Typography>
+                  <Typography>
+                    Required Courses: {job.requiredCourses}
+                  </Typography>
+                  <Typography>Required Skills: {job.requiredSkills}</Typography>
+                  <Typography variant="h6">
+                    Faculty ID (For Testing Purpose): {job.facultyId}
+                  </Typography>
                   <Button
                     variant="contained"
                     color="primary"
@@ -347,11 +335,17 @@ const FacultyProfile: React.FC = () => {
                   elevation={3}
                   sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                 >
-                  <Typography variant="h6">TA Name: {ta.username}</Typography>
+                  {/* <Typography variant="h6">
+                    TA Name: {ta.firstName} {ta.lastName}
+                  </Typography> */}
+                  <Typography variant="h6">
+                    TA Information: {ta.username}
+                  </Typography>
                   <Typography>SMU ID: {ta.smuNo}</Typography>
                   <Typography>Course ID: {ta.courseId}</Typography>
-                  <Typography>course Code: {ta.courseCode}</Typography>
-                  <Typography>Course Name: {ta.title}</Typography>
+                  <Typography>
+                    Course Title: {ta.courseCode} {ta.title}
+                  </Typography>
                   {/* TA performance evaluation button */}
                   <Button
                     onClick={() => handleEvaluateTA(ta)}
