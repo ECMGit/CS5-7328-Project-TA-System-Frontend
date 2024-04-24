@@ -309,7 +309,7 @@ const FacultyProfile: React.FC = () => {
                     color="secondary"
                     onClick={() => handleEditPosting(job.id)}
                   >
-                    Edit Posting
+                    Edit Job
                   </Button>
                 </Paper>
               ))}
@@ -364,12 +364,12 @@ const FacultyProfile: React.FC = () => {
     //TODO: Implement this function and pull data from backend -- team3 sprint3
 
     console.log(`Checking applicants for job ${jobId}`);
-    navigate('/view-applications');
+    navigate(`/view-application/:${jobId}`);
   }
 
   function handleEditPosting(jobId: number) {
     // Handle editing the posting for the specified job ID
-    //TODO: Implement this function and pull data from backend -- team3 sprint3
+    // TODO: Implement this function and pull data from backend -- team3 sprint3
 
     console.log(`Editing posting for job ${jobId}`);
     navigate(`/edit-job/${jobId}`);
