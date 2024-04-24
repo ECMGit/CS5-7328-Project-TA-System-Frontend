@@ -248,6 +248,33 @@ const FacultyProfile: React.FC = () => {
                 <Box
                   sx={{ mt: 2, display: 'column', justifyContent: 'center' }}
                 >
+                  <form>
+                    <TextField
+                      label="Name"
+                      variant="outlined"
+                      fullWidth
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      sx={{ mb: 2 }}
+                    />
+                    <TextField
+                      label="Department"
+                      variant="outlined"
+                      fullWidth
+                      value={department}
+                      // onChange={(e) => seDepartment(e.target.value)}
+                      sx={{ mb: 2 }}
+                    />
+                    {resume && (
+                      <a
+                        href={resume}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Resume
+                      </a>
+                    )}
+                  </form>
                   <Button
                     variant="contained"
                     color="primary"
@@ -255,19 +282,6 @@ const FacultyProfile: React.FC = () => {
                     onClick={handleSave}
                   >
                     Save
-                  </Button>
-                  <Button
-                    component={Link}
-                    to="/jobs"
-                    variant="contained"
-                    color="primary"
-                    style={{
-                      marginTop: '8px',
-                      width: '100%',
-                      textAlign: 'center',
-                    }}
-                  >
-                    View All Jobs
                   </Button>
                 </Box>
               </Box>
@@ -299,7 +313,7 @@ const FacultyProfile: React.FC = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    style={{ marginRight: '10px' }}
+                    style={{ marginRight: '10px', marginTop: '10px' }}
                     onClick={() => handleCheckApplicants(job.id)}
                   >
                     Check Applicants
@@ -307,6 +321,7 @@ const FacultyProfile: React.FC = () => {
                   <Button
                     variant="contained"
                     color="secondary"
+                    style={{ marginLeft: '10px', marginTop: '10px' }}
                     onClick={() => handleEditPosting(job.id)}
                   >
                     Edit Job
@@ -323,7 +338,7 @@ const FacultyProfile: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography variant="h5" mb={2}>
+              <Typography variant="h5" mb={4}>
                 Current TA
               </Typography>
               {currentTAs.map((ta) => (
