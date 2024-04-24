@@ -14,6 +14,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Alert,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
@@ -492,10 +493,58 @@ const StudentProfile: React.FC = () => {
                           >
                             Check Application Status
                           </Button>
+                          {/* {selectedApplicationId ===
+                            application.applicationId && (
+                            <Typography sx={{ marginLeft: 2 }}>
+                              {selectedApplicationStatus === 'Pending' ? (
+                                <Typography color="warning">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Typography>
+                              ) : selectedApplicationStatus === 'Approved' ? (
+                                <Typography color="success">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Typography>
+                              ) : selectedApplicationStatus === 'Rejected' ? (
+                                <Typography color="error">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Typography>
+                              ) : (
+                                <Typography color="info">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Typography>
+                              )}
+                            </Typography>
+                          )} 
+                          */}
                           {selectedApplicationId ===
                             application.applicationId && (
                             <Typography sx={{ marginLeft: 2 }}>
-                              {selectedApplicationStatus}
+                              {/* Conditionally render the application status with appropriate color */}
+                              {selectedApplicationStatus === 'Pending' ? (
+                                <Alert severity="warning">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Approved' ? (
+                                <Alert severity="success">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Rejected' ? (
+                                <Alert severity="error">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : (
+                                <Alert severity="info">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              )}
                             </Typography>
                           )}
                         </Box>
