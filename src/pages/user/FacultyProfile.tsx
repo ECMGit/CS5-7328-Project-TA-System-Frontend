@@ -156,7 +156,7 @@ const FacultyProfile: React.FC = () => {
       <TopNav />
       <Container>
         <Grid container spacing={4}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Box
               sx={{
                 display: 'flex',
@@ -164,23 +164,32 @@ const FacultyProfile: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h5">
+              <Typography component="h1" variant="h5" mt={3}>
                 Faculty Profile
               </Typography>
               <Avatar
-                sx={{ width: 200, height: 200, mt: 3 }}
+                sx={{ width: 200, height: 200, mt: 3, md: 3 }}
                 alt="User Profile"
                 src={profileImage || undefined}
               />
-              <Typography>Name: {name}</Typography>
-              <Typography>Department: {department}</Typography>
+              {/* Display user info with name and department */}
+              {name && department && (
+                <>
+                  <Typography variant="h6" sx={{ mt: 2 }}>
+                    User Information
+                  </Typography>
+                  <Typography>Name: {name}</Typography>
+                  <Typography>Department: {department}</Typography>
+                </>
+              )}
+              {/* Handle the upload profile and upload resume buttons */}
               <Box sx={{ mt: 2 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Button
                       variant="contained"
                       color="primary"
-                      sx={{ width: '100%' }}
+                      sx={{ width: '100%', height: '50px' }}
                       onClick={handleUploadClick}
                     >
                       Upload Profile
@@ -196,7 +205,7 @@ const FacultyProfile: React.FC = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      sx={{ width: '100%' }}
+                      sx={{ width: '100%', height: '50px' }}
                       onClick={() =>
                         document.getElementById('resumeUpload')?.click()
                       }
@@ -262,26 +271,22 @@ const FacultyProfile: React.FC = () => {
                   </Button>
                 </Box>
               </Box>
-              {/* {name && department && (
-                <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
-                  <Typography variant="h6">User Information</Typography>
-                  <Typography>Name: {name}</Typography>
-                  <Typography>Department: {department}</Typography>
-                </Paper>
-              )} */}
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             {/* Right section with Job Boxes using Box components */}
             {/* These boxes should be active applications or open positions that you've filled*/}
             <Box
               sx={{
-                mt: '50px',
+                mt: '20px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
             >
+              <Typography variant="h5" mb={2}>
+                Your Job Postings
+              </Typography>
               {jobs.map((job) => (
                 <Paper
                   key={job.id}
@@ -289,7 +294,7 @@ const FacultyProfile: React.FC = () => {
                   sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                 >
                   <Typography variant="h6">{job.title}</Typography>
-                  <Typography>{job.notes}</Typography>
+                  <Typography>Note: {job.notes}</Typography>
                   <Typography>Date Submitted: {job.deadlineToApply}</Typography>
                   <Button
                     variant="contained"
@@ -312,12 +317,15 @@ const FacultyProfile: React.FC = () => {
             {/* Box for current TA and evaluate performance */}
             <Box
               sx={{
-                mt: '50px',
+                mt: '20px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
             >
+              <Typography variant="h5" mb={2}>
+                Current TA
+              </Typography>
               {currentTAs.map((ta) => (
                 <Paper
                   key={ta.courseId}
