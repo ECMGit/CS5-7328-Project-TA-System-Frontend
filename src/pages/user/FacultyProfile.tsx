@@ -156,7 +156,7 @@ const FacultyProfile: React.FC = () => {
       <TopNav />
       <Container>
         <Grid container spacing={4}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Box
               sx={{
                 display: 'flex',
@@ -271,16 +271,9 @@ const FacultyProfile: React.FC = () => {
                   </Button>
                 </Box>
               </Box>
-              {/* {name && department && (
-                <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
-                  <Typography variant="h6">User Information</Typography>
-                  <Typography>Name: {name}</Typography>
-                  <Typography>Department: {department}</Typography>
-                </Paper>
-              )} */}
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             {/* Right section with Job Boxes using Box components */}
             {/* These boxes should be active applications or open positions that you've filled*/}
             <Box

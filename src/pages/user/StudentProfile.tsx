@@ -259,7 +259,7 @@ const StudentProfile: React.FC = () => {
       <TopNav />
       <Container>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={4}>
             <Box
               sx={{
                 display: 'flex',
@@ -267,7 +267,7 @@ const StudentProfile: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
+              <Typography component="h1" variant="h5" mt={3}>
                 Student Profile
               </Typography>
               <Avatar
@@ -275,6 +275,20 @@ const StudentProfile: React.FC = () => {
                 alt="User Profile"
                 src={profileImage || undefined}
               />
+
+              {/* Display user info with name and department */}
+              {name && graduationYear && major && (
+                <Paper
+                  elevation={3}
+                  sx={{ padding: 2, mt: 2, maxWidth: '80%' }}
+                >
+                  <Typography variant="h6">User Information</Typography>
+                  <Typography>Name: {name}</Typography>
+                  <Typography>Graduation Year: {graduationYear}</Typography>
+                  <Typography>Major: {major}</Typography>
+                </Paper>
+              )}
+              {/* Handle the upload profile and upload resume buttons */}
               <Box sx={{ mt: 2 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
@@ -307,6 +321,7 @@ const StudentProfile: React.FC = () => {
                   </Grid>
                 </Grid>
               </Box>
+              {/* fields to update student information */}
               <Box sx={{ mt: 4 }}>
                 <form>
                   <TextField
@@ -380,20 +395,9 @@ const StudentProfile: React.FC = () => {
               </Box>
               {/* This stuff should be sent to the database following successful submission. Upon login, this will
                 be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
-              {name && graduationYear && major && (
-                <Paper
-                  elevation={3}
-                  sx={{ padding: 2, mt: 2, maxWidth: '80%' }}
-                >
-                  <Typography variant="h6">User Information</Typography>
-                  <Typography>Name: {name}</Typography>
-                  <Typography>Graduation Year: {graduationYear}</Typography>
-                  <Typography>Major: {major}</Typography>
-                </Paper>
-              )}
             </Box>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={8}>
             {/* Right section with Job Boxes using Box components */}
             {/* These boxes should be active applications or open positions that you've filled*/}
             <Box
@@ -406,6 +410,9 @@ const StudentProfile: React.FC = () => {
               }}
             >
               {/* This <Box> component contains a set of job-related information */}
+              <Typography variant="h5" mt={2} mb={2}>
+                Jobs
+              </Typography>
               <Paper
                 elevation={3}
                 sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
@@ -439,6 +446,12 @@ const StudentProfile: React.FC = () => {
                   Check Application Status
                 </Button>
               </Paper>
+            </Box>
+            {/* Applications box*/}
+            <Box>
+              <Typography variant="h5" mt={2} mb={2} align="center">
+                My Applications
+              </Typography>
               {customArray.length > 0 ? (
                 customArray.map((application, index) =>
                   application ? (
@@ -513,14 +526,6 @@ const StudentProfile: React.FC = () => {
                   </>
                 )}
               </Button>
-              {/* <Button
-                component={Link}
-                to="/home"
-                color="primary"
-                variant="contained"
-              >
-                Click here to see full list!
-              </Button> */}
             </Box>
           </Grid>
         </Grid>
