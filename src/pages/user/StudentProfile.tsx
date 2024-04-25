@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
@@ -265,7 +266,20 @@ const StudentProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-        My Student Dashboard
+        <IconButton
+          color="inherit"
+          onClick={() => navigate('/home')} // Use navigate to go back to home
+          sx={{ marginRight: 'auto' }} // This pushes the icon to the left
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography
+          variant="h6"
+          component="h1"
+          sx={{ flexGrow: 1, textAlign: 'center' }} // Centers the text and allows it to grow
+        >
+          My Student Dashboard
+        </Typography>
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
@@ -549,14 +563,6 @@ const StudentProfile: React.FC = () => {
                 </>
               )}
             </Button>
-            {/* <Button
-              component={Link}
-              to="/home"
-              color="primary"
-              variant="contained"
-            >
-              Click here to see full list!
-            </Button> */}
           </Box>
         </Grid>
       </Grid>

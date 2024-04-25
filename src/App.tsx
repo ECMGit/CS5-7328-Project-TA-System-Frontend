@@ -82,20 +82,25 @@ axios.interceptors.request.use(
 );
 
 interface PrivateRouteProps {
-  role: string;
+  role?: string;
+  roles?: string[];
   userId?: number;
   children: React.ReactNode;
 }
 
-const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
+const PrivateRoute = ({ role, roles, userId, children }: PrivateRouteProps) => {
   const userContext = useContext(UserContext);
 
   if (!userContext?.user) {
     return <Navigate to="/login" />;
   }
 
+  const effectiveRoles = Array.from(
+    new Set([...(roles || []), ...(role ? [role] : [])])
+  );
+
   if (
-    userContext.user.role === role &&
+    effectiveRoles.includes(userContext.user.role) &&
     (!userId || userContext.user.id === userId)
   ) {
     return <>{children}</>;
@@ -221,7 +226,7 @@ const App: React.FC = () => {
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
-          <Route path="/jobs" element={<PrivateRoute role="faculty"><ViewJobs /></PrivateRoute>} />
+          <Route path="/jobs" element={<PrivateRoute roles={['faculty', 'student']}><ViewJobs /></PrivateRoute>} />
           <Route path="/job-success" element={<PrivateRoute role="faculty"><PostJobSuccessPage /></PrivateRoute>} />
           <Route path="/edit-job/:jobId" element={<PrivateRoute role="faculty"><EditJobPage /></PrivateRoute>} />
           {/* Application Module */}
