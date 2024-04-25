@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import api from '../../services/taskform';
 import { UserContext } from '../../provider';
-import Grid from '@mui/material/Grid';
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Grid, Button, Box, Typography, IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import MUI Icon for back button
+import { Link, useNavigate } from 'react-router-dom';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -13,18 +12,19 @@ interface Task {
   description: string | null;
   TaskId: number;
   completed: boolean;
-  courseId: number; 
+  courseId: number;
   course: {
     courseCode: string;
     title: string;
-  }
+  };
 }
 
 const ViewCurrentTasks: React.FC = () => {
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
-  const [userId, setUserId] = useState(0); 
+  const [userId, setUserId] = useState(0);
+  const navigate = useNavigate();
 
   const fetchTasks = async () => {
     try {
@@ -38,61 +38,107 @@ const ViewCurrentTasks: React.FC = () => {
       console.error('Error fetching tasks:', error);
     }
   };
-  useEffect(() => {
-    
 
+  useEffect(() => {
     fetchTasks();
   }, [storedUser]);
 
-  if (!tasks.length) {
-    return <div>No Tasks Available</div>;
-  }
-  
-  if (!Array.isArray(tasks)) {
-    return <div>Error: Tasks data is not in the expected format</div>;
-  }
-
-  // const handleTaskCompletion = async (userId: number , taskId: number) => {
-  //   try {
-  //     await api.checkoff(userId, taskId);
-  //     // You can also update the state or perform any other logic here
-  //   } catch (error) {
-  //     console.error('Error completing task:', error);
-  //   }
-  // };
-
   return (
-    <Box sx={{ flexGrow: 1, padding: '20px'}}>
-      <Grid container spacing={2}>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={8}>
-        <Typography variant="h2" gutterBottom>
+    <Box sx={{ flexGrow: 1, padding: '20px' }}>
+      <IconButton onClick={() => navigate(-1)} sx={{ mb: 2 }}>
+        {' '}
+        {/* Back button with navigate */}
+        <ArrowBackIcon />
+      </IconButton>
+      <Typography variant="h2" gutterBottom align="center">
         Current Tasks
-        </Typography>
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#f2f2f2' }}>
-                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
-                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
-                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map(task => (
-                <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
-                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
-                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
-                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
+      </Typography>
+      {tasks.length > 0 ? (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f2f2f2' }}>
+                  <th
+                    style={{
+                      padding: '8px',
+                      borderBottom: '1px solid #ddd',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Task ID
+                  </th>
+                  <th
+                    style={{
+                      padding: '8px',
+                      borderBottom: '1px solid #ddd',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Title
+                  </th>
+                  <th
+                    style={{
+                      padding: '8px',
+                      borderBottom: '1px solid #ddd',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Description
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <Button component = {Link} to="/home" variant ="contained" color = "secondary">Home</Button>
+              </thead>
+              <tbody>
+                {tasks.map((task) => (
+                  <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+                    <td
+                      style={{
+                        padding: '8px',
+                        borderBottom: '1px solid #ddd',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {task.TaskId}
+                    </td>
+                    <td
+                      style={{
+                        padding: '8px',
+                        borderBottom: '1px solid #ddd',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {task.title}
+                    </td>
+                    <td
+                      style={{
+                        padding: '8px',
+                        borderBottom: '1px solid #ddd',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {task.description}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Button
+              component={Link}
+              to="/home"
+              variant="contained"
+              color="secondary"
+              sx={{ mt: 2 }}
+            >
+              Home
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={2}></Grid>
-      </Grid>
+      ) : (
+        <Typography variant="subtitle1" align="center" sx={{ mt: 2 }}>
+          No Tasks Available
+        </Typography>
+      )}
     </Box>
-    
   );
 };
 
