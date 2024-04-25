@@ -31,6 +31,7 @@ import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // TODO: this needs to come from back-end in the future
 // Static variable field
@@ -75,6 +76,7 @@ interface UserMessage {
 
 /* Component for the application page */
 function ApplicationPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [messages, setMessages] = useState<UserMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -169,11 +171,17 @@ function ApplicationPage() {
 
   return (
     <Container component="main" maxWidth="md">
-      <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', pb: 4 }}>
-        <Typography component="h1" variant="h4" sx={{ pb: 2, borderBottom: '2px solid rgba(0, 0, 255, 0.5)', width: '100%', marginTop: 2 }}>
+      <Box sx={{ my: 2, display: 'flex', alignItems: 'center' , marginLeft: '-55px' }}>
+        {/* Back Button */}
+        <IconButton onClick={() => navigate(-1)} sx={{ marginRight: 2 }}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography component="h1" variant="h4" sx={{ flexGrow: 1 }}>
           Application Details
         </Typography>
-
+      </Box>
+      
+      <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', pb: 4 }}>
         <Typography variant="h6">Name: {application.firstName} {application.lastName}</Typography>
         <Typography variant="h6">Student ID: {application.studentId}</Typography>
         <Typography variant="h6">Course Name: {application.courseName}</Typography>
@@ -316,8 +324,6 @@ function ApplicationPage() {
       fileName,
     };
   };
-
-  const navigate = useNavigate();
 
   /* DOM Event Handlers */
   /**
