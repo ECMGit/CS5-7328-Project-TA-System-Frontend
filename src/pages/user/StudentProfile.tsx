@@ -416,7 +416,7 @@ const StudentProfile: React.FC = () => {
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                 <Button
                   component={Link}
-                  to="/view-applications"
+                  to="/view-application"
                   variant="contained"
                   color="primary"
                   sx={{ width: '100%' }}

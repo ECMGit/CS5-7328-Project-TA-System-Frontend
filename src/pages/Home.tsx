@@ -273,7 +273,7 @@ const Home: React.FC = () => {
                   </Button>
                   <Button
                     component={Link}
-                    to="/view-applications"  // Should be navigate to view my applications page (Student only)
+                    to="/view-application"  // Should be navigate to view my applications page (Student only)
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}
