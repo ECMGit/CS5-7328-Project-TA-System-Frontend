@@ -232,12 +232,14 @@ const App: React.FC = () => {
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
           <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplicationsbyFacultyID /> </PrivateRoute>} />
-          <Route path="/view-application/:id" element={<PrivateRoute role="student"> <ViewApplication /> </PrivateRoute>} />
+          <Route path="/view-application" element={<PrivateRoute role="student"> <ViewApplication /> </PrivateRoute>} />
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>} />
 
           {/* Student Performance Review Module */}
           <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>} />
-          <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>} />
+          {/* <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> 
+            <PerformanceResult /> </PrivateRoutePerformanceReview>} /> */}
+          <Route path="/performance-result" element={<PrivateRoute role="student"> <PerformanceResult /> </PrivateRoute>} />
           <Route path="/user-data" element={<UserDataPage />} />
 
           {/* FeedBack and Bug Report Module */}
