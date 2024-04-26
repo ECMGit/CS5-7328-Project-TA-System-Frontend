@@ -60,14 +60,26 @@ const FacultyProfile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    FacultyJobService.getJobs()
-      .then((data) => {
-        console.log('Jobs data:', data);
-        setJobs(data.slice(0, 3));
-      })
-      .catch((error) => {
-        console.error('Error fetching jobs:', error);
-      });
+    const fetchJobs = async () => {
+      const facultyId = await getCurrentUserId();
+      if (facultyId) {
+        try {
+          const data = await FacultyJobService.getJobsByFacultyID(facultyId);
+          if (data) {
+            console.log('Jobs data:', data);
+            setJobs(data);
+          } else {
+            console.log('No jobs data returned');
+            setJobs([]);
+          }
+        } catch (error) {
+          console.error('Error fetching jobs:', error);
+          setJobs([]);
+        }
+      }
+    };
+
+    fetchJobs();
   }, []);
 
   useEffect(() => {
