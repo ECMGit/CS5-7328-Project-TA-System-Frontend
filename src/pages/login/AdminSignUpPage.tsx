@@ -37,6 +37,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const AdminRegistrationPage: React.FC = () => {
   // Define and initialize state variables for form fields, loading status, and error messages.
+  const CORRECTADMINCODE = '123456';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,6 +45,7 @@ const AdminRegistrationPage: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [smuNo, setSmuNo] = useState('');
   const [username, setUsername] = useState('');
+  const [adminCode, setAdminCode] = useState('');
   // const [userType, setUserType] = useState('');
   const userType = 'admin';
   //const [year, setYear] = useState('');
@@ -76,6 +78,9 @@ const AdminRegistrationPage: React.FC = () => {
         } // Run the validEmail to see if the user entered a valid email address
         else if (!validEmail.test(email)){
           resMessage = 'Invalid email. Please enter a valid email address.';
+        }
+        else if (adminCode != CORRECTADMINCODE) {
+          resMessage = 'Wrong admin code. Please verify that you have typed it in correctly.';
         }
         else if (error instanceof AxiosError) {
           resMessage =
@@ -190,6 +195,20 @@ const AdminRegistrationPage: React.FC = () => {
                 autoComplete="new-password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              {/* Admin code input field */}
+              <TextField
+                required
+                fullWidth
+                name="admin-code"
+                label="Admin Code"
+                type="admin-code"
+                id="admin-code"
+                autoComplete="admin-code"
+                onChange={(e) => setAdminCode(e.target.value)}
+                value={adminCode}
               />
             </Grid>
             <Grid item xs={12}>
