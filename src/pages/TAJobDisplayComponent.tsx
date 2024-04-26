@@ -4,6 +4,9 @@ import TAJobComponent from '../components/TAJobComponent';
 import { Typography, Container, Button, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../provider'; // update user context
+import useAutoLogout from '../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 // Update User interface to include userType
 interface User {
@@ -225,6 +228,8 @@ const TAJobDisplayComponent = () => {
           <p>No job openings available.</p>
         )}
       </div>
+      {Modal}
+
     </div>
   );
 };

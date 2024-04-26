@@ -11,6 +11,9 @@ import {
   Typography,
 
 } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 type PerformanceResult = {
   taUserId: number;
@@ -109,6 +112,7 @@ const PerformanceResultPage: React.FC = () => {
           </Card>
         ))}
       </Box>
+      {Modal}
     </Container>
   );
 };

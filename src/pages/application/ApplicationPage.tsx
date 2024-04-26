@@ -141,16 +141,7 @@ function ApplicationPage() {
   /**
    * Submission handler
    */
-  const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: 10 * 60 * 1000, // Use the defined timeout duration
-    logoutFunction: () => {
-      console.log('called');
-      localStorage.clear(); 
-      console.log('go to login');
-      navigate('/login'); 
-      
-    },
-  });
+  const { Modal, closeModal } = useAutoLogout();
   const handleSubmit = function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // Get the data in json format.

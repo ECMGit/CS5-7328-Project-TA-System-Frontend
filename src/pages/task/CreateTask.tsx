@@ -6,7 +6,9 @@ import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, B
 import { LoadingButton } from '@mui/lab';
 
 import api from '../../services/taskform';
+import useAutoLogout from '../../components/AutoLogOut';
 
+const { Modal, closeModal } = useAutoLogout();
 
 const CreateTask: React.FC = () => {
   // State hooks for form fields and validation errors
@@ -197,6 +199,7 @@ const CreateTask: React.FC = () => {
           <FormHelperText>{message}</FormHelperText>
         </Box>
       </Box>
+      {Modal}
     </Container>
   );
 };

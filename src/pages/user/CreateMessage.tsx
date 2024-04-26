@@ -10,6 +10,9 @@ import {
   InputLabel,
 } from '@mui/material';
 import axios from 'axios';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 interface User {
   id: number;
@@ -119,6 +122,7 @@ const CreateMessage = () => {
           Send Message
         </Button>
       </form>
+      {Modal}
     </Container>
   );
 };

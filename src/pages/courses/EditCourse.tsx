@@ -4,6 +4,9 @@ import { Container, Typography, Button, Box, TextField } from '@mui/material';
 
 import CourseService from '../../services/course';
 import { courseData } from './courseData';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 const EditCourse: React.FC = () => {
     const [course, setCourse] = useState<courseData>({ id: 0, title: '', courseCode: '', description: '' });
@@ -106,6 +109,7 @@ const EditCourse: React.FC = () => {
                     )}
                 </Box>
             </Box>
+            {Modal}
         </Container>
     );
 };

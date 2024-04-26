@@ -23,6 +23,10 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
+
 interface Job {
   id: number;
   title: string;
@@ -398,6 +402,7 @@ const FacultyProfile: React.FC = () => {
           </Box>
         </Grid>
       </Grid>
+      {Modal}
     </Container>
   );
 

@@ -13,6 +13,9 @@ import { useParams } from 'react-router-dom';
 import { DataGrid, GridColDef, GridFilterModel ,GridToolbar } from '@mui/x-data-grid';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Chip from '@mui/material/Chip';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 
 export type TAApplication = {
@@ -220,6 +223,7 @@ const ViewCourseDetail: React.FC = () => {
           onFilterModelChange={setFilterModel}
           slots={{ toolbar: GridToolbar }} 
         />
+        {Modal}
     </Container>
   );
 };

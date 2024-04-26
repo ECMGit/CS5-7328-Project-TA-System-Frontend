@@ -5,6 +5,9 @@ import axios, { AxiosError } from 'axios';
 import CourseService from '../../services/course';
 
 import { courseData } from './courseData';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 const ViewCourse: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -63,6 +66,7 @@ const ViewCourse: React.FC = () => {
                     Edit
                 </Button>
             </Paper>
+            {Modal}
         </Container>
     );
 };

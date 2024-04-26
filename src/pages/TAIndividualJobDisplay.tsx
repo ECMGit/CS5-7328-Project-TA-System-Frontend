@@ -5,6 +5,10 @@ import { title } from 'process';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Typography, Container, Button, Paper } from '@mui/material';
 import { UserContext } from '../provider'; // Adjust the path accordingly
+import useAutoLogout from '../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
+
 // Update User interface to include userType
 
 interface TAJobs {
@@ -105,6 +109,7 @@ const TAJobDisplayComponent = () => {
           Apply to Job
         </button>
       </div>
+      {Modal}
     </div>
   );
 };

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 export const AdminFeedbackPage = () => {
   const [loading, setLoading] = useState(true);
@@ -31,6 +34,7 @@ export const AdminFeedbackPage = () => {
       </Button>
       {loading && <CircularProgress />}
       {showFeedback && <FeedbackList feedback={feedbackList} />}
+      {Modal}
     </Box>
   );
 };

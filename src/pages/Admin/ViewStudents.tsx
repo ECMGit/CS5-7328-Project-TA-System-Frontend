@@ -8,6 +8,9 @@ import {
   Input,
 } from '../user/styledComponents'; // Ensure Input is correctly imported
 import AdminService from '../../services/admin';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 export type StudentData = {
   UserId: number;
@@ -128,6 +131,7 @@ const ViewStudents: React.FC = () => {
           },
         }}
       />
+      {Modal}
     </Container>
   );
 };

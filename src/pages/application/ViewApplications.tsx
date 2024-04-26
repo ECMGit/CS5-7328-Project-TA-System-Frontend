@@ -13,6 +13,9 @@ import { UserContext } from '../../provider';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import TopNav from '../../components/TopNav';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 // const options = [
 //   'Course 1',
@@ -520,6 +523,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         </Typography>
       </Paper>
       </div>
+      {Modal}
     </>
   );
 

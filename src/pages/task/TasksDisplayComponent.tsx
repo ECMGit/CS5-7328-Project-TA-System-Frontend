@@ -6,6 +6,10 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -91,6 +95,7 @@ const ViewCurrentTasks: React.FC = () => {
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>
+      {Modal}
     </Box>
     
   );

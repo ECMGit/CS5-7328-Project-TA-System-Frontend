@@ -5,7 +5,9 @@ import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigat
 import TAJobDisplayComponent from './TAJobDisplayComponent';
 import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
+import useAutoLogout from '../components/AutoLogOut';
 
+const { Modal, closeModal } = useAutoLogout();
 
 const HomeDefault: React.FC = () => {
 
@@ -57,6 +59,7 @@ const HomeDefault: React.FC = () => {
         {/* show the TAjob listing if the user is student */}
 
       </div>
+      {Modal}
     </div>
   );
 

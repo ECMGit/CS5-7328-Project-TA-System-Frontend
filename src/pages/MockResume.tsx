@@ -8,6 +8,9 @@ import { TAApplicationData } from './application/ViewApplications';
 import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledComponents';
 // Used for buttons
 import { Button } from '@mui/material';
+import useAutoLogout from '../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 // Define the 'Props' type, specifying that it should contain an 'application' property of type 'TAApplicationData'.
 type Props = {
@@ -34,6 +37,7 @@ const MockResume: React.FC<Props> = ({ application }) => {return (
       {' '}
       Edit Application{' '}
     </Button>
+    {Modal}
   </Container>
 );
 };

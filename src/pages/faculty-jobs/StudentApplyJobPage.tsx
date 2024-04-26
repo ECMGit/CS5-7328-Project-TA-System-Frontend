@@ -10,7 +10,9 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import api from '../../services/tajob';
 import { UserContext } from '../../provider';
+import useAutoLogout from '../../components/AutoLogOut';
 
+const { Modal, closeModal } = useAutoLogout();
 
 const ViewJobsStudent: React.FC = () => {
 
@@ -88,6 +90,7 @@ const ViewJobsStudent: React.FC = () => {
         (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
         : ''
       }
+      {Modal}
     </Container>
   );
 };

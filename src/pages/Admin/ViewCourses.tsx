@@ -9,6 +9,9 @@ import {
 } from '../user/styledComponents';
 import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 
 export type CourseData = {
@@ -124,6 +127,7 @@ export const ViewCourse: React.FC = () => {
         onChange={(e) => setSearchCourse(e.target.value)}
       />
       <DataGrid rows={rows} columns={columns} checkboxSelection />
+      {Modal}
     </Container>
   );
 };

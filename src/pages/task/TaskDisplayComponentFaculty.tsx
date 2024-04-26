@@ -3,6 +3,10 @@ import api from '../../services/taskform';
 import { UserContext } from '../../provider';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -72,7 +76,7 @@ const ViewAssignedTasks: React.FC = () => {
       </table>
       
       <Button component = {Link} to="/home">Home</Button>
-
+      {Modal}
       
     </div>
   );

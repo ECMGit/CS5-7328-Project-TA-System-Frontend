@@ -13,6 +13,9 @@ import AvatarWrapper from '../../components/AvatarWrapper';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import { UserContext } from '../../provider';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 interface Course {
   courseID: number;
@@ -287,6 +290,7 @@ const PostJob: React.FC = () => {
             <FormHelperText>{message}</FormHelperText>
           </Box>
         </Box>
+        {Modal}
       </Container>
     </>
   );

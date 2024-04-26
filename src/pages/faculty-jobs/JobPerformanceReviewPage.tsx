@@ -11,6 +11,9 @@ import {
   Box,
   Grid,
 } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 const PerformanceReview: React.FC = () => {
   const location = useLocation();
@@ -212,6 +215,7 @@ const PerformanceReview: React.FC = () => {
           </Typography>
         </Box>
       )}
+      {Modal}
     </Container>
   );
 };

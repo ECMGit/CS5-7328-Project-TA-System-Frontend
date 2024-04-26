@@ -5,6 +5,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import CourseService from '../../services/course';
 import { courseData } from './courseData';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 
 const ViewAllCourses: React.FC = () => {
@@ -88,6 +91,7 @@ const ViewAllCourses: React.FC = () => {
                     onFilterModelChange={model => setFilterModel(model)}
                 />
             </Paper>
+            {Modal}
         </Container>
     );
 };

@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import userService from '../../services/auth';
 import { Typography, Container, Box } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 const UserDataPage: React.FC = () => {
   // set the initial state of the data
@@ -74,6 +77,7 @@ const UserDataPage: React.FC = () => {
           />
         </div>
       </Box>
+      {Modal}
     </Container>
   );
 };

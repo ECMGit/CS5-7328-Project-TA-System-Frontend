@@ -5,6 +5,9 @@ import SchoolIcon from '@mui/icons-material/School';
 import BookIcon from '@mui/icons-material/Book';
 import GroupIcon from '@mui/icons-material/Group';
 import  Checklist  from '@mui/icons-material/Checklist';
+import useAutoLogout from '../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -46,6 +49,7 @@ const AdminDashboard = () => {
           </Grid>
         ))}
       </Grid>
+      {Modal}
     </Paper>
   );
 };

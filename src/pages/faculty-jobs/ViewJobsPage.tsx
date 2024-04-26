@@ -12,9 +12,9 @@ import api from '../../services/faculty-job';
 import { UserContext } from '../../provider';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
+import useAutoLogout from '../../components/AutoLogOut';
 
-
-
+const { Modal, closeModal } = useAutoLogout();
 
 const ViewJobs: React.FC = () => {
 
@@ -276,7 +276,7 @@ const ViewJobs: React.FC = () => {
             </ButtonWrapper>
           ))}
         </ButtonColumn>
-
+        {Modal}
 
       </FlexContainer>
       {/* <Container>

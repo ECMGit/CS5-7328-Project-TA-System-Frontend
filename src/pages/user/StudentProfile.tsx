@@ -22,6 +22,9 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
+import useAutoLogout from '../../components/AutoLogOut';
+
+const { Modal, closeModal } = useAutoLogout();
 
 interface Course {
   id: number;
@@ -560,6 +563,7 @@ const StudentProfile: React.FC = () => {
           </Box>
         </Grid>
       </Grid>
+      {Modal}
     </Container>
   );
 
