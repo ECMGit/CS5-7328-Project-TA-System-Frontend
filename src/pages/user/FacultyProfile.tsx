@@ -298,8 +298,10 @@ const FacultyProfile: React.FC = () => {
                   elevation={3}
                   sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                 >
-                  <Typography variant="h6">{job.title}</Typography>
-                  <Typography>Course ID: {job.courseId}</Typography>
+                  <Typography variant="h6">
+                    TA Position for Course CS {job.courseId}
+                  </Typography>
+                  {/* <Typography>Course ID: {job.courseId}</Typography> */}
                   <Typography>TA Stats: {job.TAStats}</Typography>
                   <Typography>Note: {job.notes}</Typography>
                   <Typography>Deadline: {job.deadlineToApply}</Typography>
@@ -307,16 +309,16 @@ const FacultyProfile: React.FC = () => {
                     Required Courses: {job.requiredCourses}
                   </Typography>
                   <Typography>Required Skills: {job.requiredSkills}</Typography>
-                  <Typography variant="h6">
+                  {/* <Typography variant="h6">
                     Faculty ID (For Testing Purpose): {job.facultyId}
-                  </Typography>
+                  </Typography> */}
                   <Button
                     variant="contained"
                     color="primary"
                     style={{ marginRight: '10px', marginTop: '10px' }}
                     onClick={() => handleCheckApplicants(job.id)}
                   >
-                    Check Applicants
+                    Check Applicantions
                   </Button>
                   <Button
                     variant="contained"
@@ -385,7 +387,7 @@ const FacultyProfile: React.FC = () => {
     //TODO: Implement this function and pull data from backend -- team3 sprint3
 
     console.log(`Checking applicants for job ${jobId}`);
-    navigate(`/view-application/:${jobId}`);
+    navigate('/view-applications');
   }
 
   function handleEditPosting(jobId: number) {

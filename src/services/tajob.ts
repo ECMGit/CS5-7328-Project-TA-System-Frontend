@@ -34,14 +34,22 @@ const getTAJobById = (id: number): Promise<AxiosResponse> => {
  * @returns A promise that resolves to the filtered TA jobs data.
  */
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
-const fetchTAJobsWithFilters = async (filters: Record<string, any>): Promise<any> => {
+const fetchTAJobsWithFilters = async <T = any>(
+  filters: Record<string, string | number | string[]>
+): Promise<T> => {
   try {
-    // Convert the 'filters' object into a query string.
-    const queryString = new URLSearchParams(filters).toString();
+    const queryParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => queryParams.append(key, item));
+      } else {
+        queryParams.append(key, value.toString());
+      }
+    });
+    const queryString = queryParams.toString();
 
-    // Make a GET request with the query string.
-    const response = await axios.get(`${TA_API_URL}/query?${queryString}`);
-    return response.data; // TA jobs data.
+    const response = await axios.get<T>(`${TA_API_URL}/query?${queryString}`);
+    return response.data;
   } catch (error) {
     console.error('Error fetching TA jobs with filters:', error);
     throw error;
