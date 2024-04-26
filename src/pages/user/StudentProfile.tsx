@@ -9,11 +9,6 @@ import {
   TextField,
   Paper,
   Grid,
-  IconButton,
-  Tooltip,
-  Menu,
-  MenuItem,
-  ListItemIcon,
   Alert,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -39,6 +34,8 @@ interface Application {
   taJobId: string;
   status: string;
   studentId: string;
+  courseId: string;
+  applicationId: string;
   requiredCourses: string;
   requiredSkills: string;
 }
@@ -146,32 +143,32 @@ const StudentProfile: React.FC = () => {
    * @param applications the applications to be combined
    * @returns an array of customized information being stored in JSON
    */
-  const createCustomArray = (jobs: Job[], applications: Application[]) => {
-    if (!applications) {
-      return [];
-    }
-    return applications
-      .map((application) => {
-        const job = jobs.find((job) => job.id === application.taJobId);
+  // const createCustomArray = (jobs: Job[], applications: Application[]) => {
+  //   if (!applications) {
+  //     return [];
+  //   }
+  //   return applications
+  //     .map((application) => {
+  //       const job = jobs.find((job) => job.id === application.taJobId);
 
-        if (job) {
-          return {
-            courseCode: job.course.courseCode,
-            title: job.title,
-            applicationId: application.id,
-            studentId: application.studentId,
-            requiredCourses: application.requiredCourses,
-            requiredSkills: application.requiredSkills,
-          };
-        }
-
-        return null;
-      })
-      .filter((item) => item !== null);
-  };
+  //       if (job) {
+  //         return {
+  //           courseCode: job.course.courseCode,
+  //           title: job.title,
+  //           courseId: job.course.id,
+  //           applicationId: application.id,
+  //           studentId: application.studentId,
+  //           requiredCourses: application.requiredCourses,
+  //           requiredSkills: application.requiredSkills,
+  //         };
+  //       }
+  //       return null;
+  //     })
+  //     .filter((item) => item !== null);
+  // };
 
   // Create customArray and only use the first 3 elements.
-  const customArray = createCustomArray(jobs, applications);
+  // const customArray = createCustomArray(jobs, applications);
 
   const [messages, setMessages] = useState([
     { id: 1, content: 'Test Message' },
@@ -412,8 +409,8 @@ const StudentProfile: React.FC = () => {
               <Typography variant="h5" mt={2} mb={2} align="center">
                 My Applications
               </Typography>
-              {customArray.length > 0 ? (
-                customArray.map((application, index) =>
+              {applications.length > 0 ? (
+                applications.map((application, index) =>
                   application ? (
                     <div
                       key={index}
@@ -427,18 +424,15 @@ const StudentProfile: React.FC = () => {
                         sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                       >
                         <Typography variant="h6">
-                          Application #{index}: {application.title}
+                          Application #{index + 1}: CS {application.courseId}
                         </Typography>
-                        <Typography>
-                          Course: {application.courseCode}
-                        </Typography>
-                        <Typography>
-                          Application ID: {application.applicationId}
-                        </Typography>
-                        {/* Student ID for test only */}
                         {/* <Typography>
-                          Student ID: {application.studentId}
+                          Course: {application.}
                         </Typography> */}
+                        {/* Student ID for test only */}
+                        <Typography>
+                          Student ID: {application.studentId}
+                        </Typography>
                         <Typography>
                           Required Courses: {application.requiredCourses}
                         </Typography>
