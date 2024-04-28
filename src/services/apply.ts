@@ -83,6 +83,21 @@ export const getTaApplicationsByStudentId = async (id: number) => {
   }
 };
 
+export const getTaApplicationsByTaJobId = async (jobId: number) => {
+  try {
+    const response = await axios.get(`http://localhost:9000/ta-application/tajob/${jobId}`);
+
+    if (!response) {
+      throw new Error('Failed to get with the ID provided!');
+    }
+
+    const applications = await response.data;
+    return applications; 
+  } catch (error) {
+    console.error('Error fetching applications: ', error);
+  }
+};
+
 const ApplyService = {
   apply,
   updateApplication,
@@ -91,6 +106,7 @@ const ApplyService = {
   fetchMessages,
   updateApplicationStatus,
   getTaApplicationsByStudentId,
+  getTaApplicationsByTaJobId,
 };
 
 export default ApplyService;

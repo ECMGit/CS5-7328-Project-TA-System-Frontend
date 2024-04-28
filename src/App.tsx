@@ -59,6 +59,7 @@ import { MainLayout } from './components/MainLayout';
 import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
 import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 import AboutUs from './pages/AboutUs';
+import ViewApplicationsByJobID from './pages/application/ViewApplicationsByJobID';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -301,6 +302,15 @@ const App: React.FC = () => {
               <PrivateRoute role="faculty">
                 {' '}
                 <ViewApplication />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/view-applications/:jobId"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <ViewApplicationsByJobID />{' '}
               </PrivateRoute>
             }
           />

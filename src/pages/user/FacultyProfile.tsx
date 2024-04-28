@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
+import ApplyService from '../../services/apply';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getFacultyCoursesWithTAs } from '../../services/evaluate';
@@ -85,7 +86,7 @@ const FacultyProfile: React.FC = () => {
   useEffect(() => {
     const fetchCurrentTAs = async () => {
       try {
-        const facultyId = getCurrentUserId();
+        const facultyId = await getCurrentUserId();
         if (facultyId) {
           const coursesTAs: FacultyCourseTAInfo[] =
             await getFacultyCoursesWithTAs(facultyId);
@@ -97,6 +98,7 @@ const FacultyProfile: React.FC = () => {
     };
     fetchCurrentTAs();
   }, []);
+  
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
@@ -382,13 +384,36 @@ const FacultyProfile: React.FC = () => {
     // Handle saving the user's information
   }
 
-  function handleCheckApplicants(jobId: number) {
+  async function handleCheckApplicants(jobId: number) {
     // Handle checking applicants for the specified job ID
-    //TODO: Implement this function and pull data from backend -- team3 sprint3
+    try {
+      // Asynchronously fetch the applications for the given job ID
+      const applications = await ApplyService.getTaApplicationsByTaJobId(jobId);
+      
+      // Optionally, check if the applications data is empty or not
+      if (!applications || applications.length === 0) {
+        console.warn(`No applications found for job ${jobId}`);
+        // Optionally, you might want to handle the case when no applications are found
+        // For example, redirect to a 'no data' page or display a message
+        navigate('/no-applications');
+        return;
+      }
+      
+      // Log the successful fetching of applications
+      console.log(`Checking applicants for job ${jobId}:`, applications);
+  
+      // Navigate to the page to view applications, passing the job ID
+      navigate(`/view-applications/${jobId}`, { state: { taApplications: applications } });
 
-    console.log(`Checking applicants for job ${jobId}`);
-    navigate('/view-applications');
+    } catch (error) {
+      // Log any errors that occur during the fetching process
+      console.error(`Error fetching applications for job ${jobId}:`, error);
+      
+      // Handle the error by navigating to an error page or showing an error message
+      navigate('/error');
+    }
   }
+  
 
   function handleEditPosting(jobId: number) {
     // Handle editing the posting for the specified job ID
