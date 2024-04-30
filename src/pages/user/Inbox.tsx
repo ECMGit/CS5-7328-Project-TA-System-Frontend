@@ -215,6 +215,10 @@ const MessagesList = () => {
     );
   });
 
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  const isAdmin = user && user.role === 'admin';
+
   return (
     <Container>
       <Box
@@ -230,51 +234,54 @@ const MessagesList = () => {
       >
         Inbox
       </Box>
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      <TextField
-        label="Search by Receiver ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={receiverIdQuery}
-        onChange={handleReceiverIdChange}
-      />
-      <TextField
-        label="Search by Sender ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={senderIdQuery}
-        onChange={handleSenderIdChange}
-      />
-      <TextField
-        label="Search by Application ID"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={applicationIdQuery}
-        onChange={ handleApplicationIdChange}
-      />
-      <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
-        <Button
-          component={Link}
-          to="/inbox/new"
-          variant="contained"
-          color="primary"
-        >
-          New Message
-        </Button>
-      </Box>
-
+      {isAdmin && (
+        <>
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Receiver ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={receiverIdQuery}
+            onChange={(e) => setReceiverIdQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Sender ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={senderIdQuery}
+            onChange={(e) => setSenderIdQuery(e.target.value)}
+          />
+          <TextField
+            label="Search by Application ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={applicationIdQuery}
+            onChange={(e) => setApplicationIdQuery(e.target.value)}
+          />
+          <Box sx={{ marginTop: '16px', textAlign: 'right' }}>
+            <Button
+              component={Link}
+              to="/inbox/new"
+              variant="contained"
+              color="primary"
+            >
+              New Message
+            </Button>
+          </Box>
+        </>
+      )}
       <List sx={{ width: '100%' }}>
-        {filteredMessages.map((message) => (
+        {messages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
       </List>
