@@ -64,6 +64,8 @@ import { MainLayout } from './components/MainLayout';
 import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
 import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 import AboutUs from './pages/AboutUs';
+import Messages from './pages/user/Messages';
+
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -183,6 +185,7 @@ const App: React.FC = () => {
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
 
           <Route path="/inbox" element={<Inbox />} />
+          <Route path="/inbox/:messageId" element={<Messages />} />
 
           <Route index element={<Navigate to="/home" />} />
           <Route path="/inbox" element={<Inbox />} />
