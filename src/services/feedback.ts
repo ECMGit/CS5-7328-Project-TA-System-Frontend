@@ -87,6 +87,26 @@ const getAdminFeedback = async () => {
   return data as FeedbackItem[]; // Assuming the response is an array of FeedbackItem objects
 };
 
+const setFeedbackStatus = async (id: number, status: string) => {
+  const SET_FEEDBACK_STATUS = `${BASE_URL}/feedback/status/`;
+  const response = await axios.post(
+    SET_FEEDBACK_STATUS,
+    { status, id },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Assuming token is defined somewhere in the scope
+      },
+    }
+  );
+
+  if (response.status !== 200) {
+    throw new Error('Failed to set feedback status');
+  }
+
+  const data = response.data;
+  return data as FeedbackItem;
+};
+
 const getFeedbackById = async (id: number) => {
   const GET_FEEDBACK_BY_ID = `${BASE_URL}/feedback/single/${id}`; // Endpoint to fetch feedback by ID
   const response = await axios.get(GET_FEEDBACK_BY_ID, {
@@ -164,6 +184,7 @@ const FeedbackService = {
   getMyComment,
   getAdminComment,
   getFeedbackById,
+  setFeedbackStatus,
 };
 
 export default FeedbackService;

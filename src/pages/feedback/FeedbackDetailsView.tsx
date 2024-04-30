@@ -1,7 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../provider';
 import FeedbackService, { FeedbackItemWithName } from '../../services/feedback';
+import { StatusSetter } from './StatusSetter';
 
 interface FeedbackDetailsViewProps {
   id: number;
@@ -20,8 +21,12 @@ export const FeedbackDetailsView: React.FC<FeedbackDetailsViewProps> = ({
   }, []);
   return (
     <Box mb="xl">
-      <Typography variant="h5">{feedback?.content}</Typography>
-      {user?.user?.role === 'admin' && <div>admin</div>}
+      <Stack flexDirection="row" justifyContent="space-between">
+        <Typography variant="h5">{feedback?.content}</Typography>
+        {user?.user?.role == 'admin' && feedback && (
+          <StatusSetter initialStatus={feedback.status} id={id} />
+        )}
+      </Stack>
     </Box>
   );
 };
