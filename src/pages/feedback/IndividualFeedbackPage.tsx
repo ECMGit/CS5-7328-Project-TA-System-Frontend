@@ -111,7 +111,7 @@ export const IndividualFeedbackPage = () => {
           {visibleComments.map((commentItem, index) => (
             <Box key={index} p={1} my={1} bgcolor="#f0f0f0">
               <Typography variant="caption" color="textSecondary">
-                UserID: {commentItem.leftById}
+                {commentItem.leftBy?.firstName} {commentItem.leftBy?.lastName}
               </Typography>
               <Typography variant="subtitle2">
                 Comment: {commentItem.content}

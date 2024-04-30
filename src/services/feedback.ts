@@ -34,6 +34,10 @@ export type FeedbackComment = {
   leftById: number;
   content: string;
   timeSubmitted: Date;
+  leftBy?: {
+    firstName: true;
+    lastName: true;
+  };
 };
 
 const submitFeedback = async (content: string, type: string) => {
