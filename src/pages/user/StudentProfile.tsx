@@ -296,10 +296,10 @@ const StudentProfile: React.FC = () => {
               </IconButton>
             </Tooltip>
           </MenuItem>
-          {messages.map((message) => (
+          {/* {messages.map((message) => (
             <MenuItem key={message.id}>{message.content}</MenuItem>
           ))}
-          {/* Add an inbox UI element */}
+          Add an inbox UI element */}
         </Menu>
       </Box>
       <Grid container spacing={4}>
