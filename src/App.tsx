@@ -24,6 +24,7 @@ import HomeDefault from './pages/HomeDefault';
 import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
+import AboutUs from './pages/AboutUs';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
@@ -85,6 +86,7 @@ const App: React.FC = () => {
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
+        <Route path="/about-us" element={<AboutUs/>}/>
 
         <Route path="/" element={<ProviderLayout />} >
           {/* These routes are nested with user auth :D */}
