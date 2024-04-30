@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { isTemplateExpression } from 'typescript';
 const BASE_URL = 'http://localhost:9000';
 const token = localStorage.getItem('token');
 
@@ -10,7 +9,23 @@ export type FeedbackItem = {
   complete: boolean;
   timeSubmitted: Date;
   status: 'Unread' | 'Pending' | 'In-Progress' | 'Complete';
-  type: 'bug' | 'feedback' | 'comment'; 
+  type: 'bug' | 'feedback' | 'comment';
+};
+
+export type FeedbackItemWithName = FeedbackItem & {
+  leftBy: {
+    id: number;
+    smuNo: number;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+    resetToken: string | null;
+    resetTokenExpiry: bigint | null;
+    updatedAt: Date | null;
+    userType: string | null;
+  };
 };
 
 export type FeedbackComment = {
@@ -18,7 +33,7 @@ export type FeedbackComment = {
   feedbackId: number;
   leftById: number;
   content: string;
-  timeSubmitted: Date; 
+  timeSubmitted: Date;
 };
 
 const submitFeedback = async (content: string, type: string) => {
@@ -72,11 +87,27 @@ const getAdminFeedback = async () => {
   return data as FeedbackItem[]; // Assuming the response is an array of FeedbackItem objects
 };
 
+const getFeedbackById = async (id: number) => {
+  const GET_FEEDBACK_BY_ID = `${BASE_URL}/feedback/single/${id}`; // Endpoint to fetch feedback by ID
+  const response = await axios.get(GET_FEEDBACK_BY_ID, {
+    headers: {
+      Authorization: `Bearer ${token}`, // Assuming token is defined somewhere in the scope
+    },
+  });
+
+  if (response.status !== 200) {
+    throw new Error('Failed to fetch feedback');
+  }
+
+  const data = response.data as FeedbackItemWithName;
+  return data;
+};
+
 const submitComment = async (feedbackId: number, content: string) => {
   const CREATE_FEEDBACK = `${BASE_URL}/feedback/comment`;
   const response = await axios.post(
     CREATE_FEEDBACK,
-    { feedbackId, content},
+    { feedbackId, content },
     {
       headers: {
         Authorization: `Bearer ${token}`, // Ensure token is defined or accessible in this context
@@ -91,7 +122,7 @@ const submitComment = async (feedbackId: number, content: string) => {
   return data as FeedbackComment;
 };
 
-const getMyComment = async (feedbackId : number) => {
+const getMyComment = async (feedbackId: number) => {
   const GET_ALL_FEEDBACK = `${BASE_URL}/feedback/comment`; // Endpoint to fetch all feedback
   const response = await axios.get(GET_ALL_FEEDBACK, {
     headers: {
@@ -103,7 +134,9 @@ const getMyComment = async (feedbackId : number) => {
     throw new Error('Failed to fetch feedback');
   }
 
-  const data = response.data.filter((item: FeedbackComment) => item.feedbackId==feedbackId);
+  const data = response.data.filter(
+    (item: FeedbackComment) => item.feedbackId == feedbackId
+  );
   return data as FeedbackComment[]; // Filtering to only include items of type "comment"
 };
 
@@ -129,7 +162,8 @@ const FeedbackService = {
   getAdminFeedback,
   submitComment,
   getMyComment,
-  getAdminComment
+  getAdminComment,
+  getFeedbackById,
 };
 
 export default FeedbackService;
