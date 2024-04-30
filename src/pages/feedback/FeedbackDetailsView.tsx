@@ -21,6 +21,9 @@ export const FeedbackDetailsView: React.FC<FeedbackDetailsViewProps> = ({
   }, []);
   return (
     <Box mb="xl">
+      <Typography>
+        Left by: {feedback?.leftBy.firstName} {feedback?.leftBy.lastName}
+      </Typography>
       <Stack flexDirection="row" justifyContent="space-between">
         <Typography variant="h5">{feedback?.content}</Typography>
         {user?.user?.role == 'admin' && feedback && (
