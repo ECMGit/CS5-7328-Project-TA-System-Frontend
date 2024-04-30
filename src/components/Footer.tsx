@@ -25,7 +25,7 @@ export default function Footer() {
                             <li>SMU Guildhall</li>
                         </ul>
                     </div>
-                    <div>
+                    {/*<div>
                         <h5 className="text-lg font-semibold mb-4">AUDIENCE LINKS</h5>
                         <ul className="space-y-2">
                             <li>Undergraduate Students</li>
@@ -53,7 +53,7 @@ export default function Footer() {
                             <li>Virtual Tour</li>
                             <li>SMU Stories</li>
                         </ul>
-                    </div>
+    </div>*/}
                     <div>
                         <h5 className="text-lg font-semibold mb-4">GET IN TOUCH</h5>
                         <ul className="space-y-2">
