@@ -18,7 +18,8 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../provider';
 
 interface User {
   id: number;
@@ -75,7 +76,13 @@ const userMessages: UserMessage[] = [
   },
 ];
 
-const MessageItem = ({ message }: { message: UserMessage }) => {
+const MessageItem = ({
+  message,
+  isAdmin,
+}: {
+  message: UserMessage;
+  isAdmin: boolean | undefined | null;
+}) => {
   // Initial color state
   const [color, setColor] = React.useState(
     message.isRead ? 'transparent' : '#FFD700'
@@ -100,42 +107,85 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
   };
 
   return (
-    <Container
-      onClick={() => onRead(message.id)}
-      style={{ backgroundColor: color }}
-    >
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary={`${message.taJob.title} - ${message.course.title}`}
-          secondary={
-            <>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {`${message.sender.firstName} ${message.sender.lastName}`}
+    <>
+      {isAdmin ? (
+        <Link to={`/inbox/${message.id}`} style={{ textDecoration: 'none' }}>
+          <Container
+            onClick={() => onRead(message.id)}
+            style={{ backgroundColor: color }}
+          >
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                primary={`${message.taJob.title} - ${message.course.title}`}
+                secondary={
+                  <>
+                    <Typography
+                      sx={{ display: 'inline' }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {`${message.sender.firstName} ${message.sender.lastName}`}
+                    </Typography>
+                    {` — ${message.content}`}
+                  </>
+                }
+              />
+              <Typography variant="caption" display="block" gutterBottom>
+                {message.createdAt.toLocaleString()}
               </Typography>
-              {` — ${message.content}`}
-            </>
-          }
-        />
-        <Typography variant="caption" display="block" gutterBottom>
-          {message.createdAt.toLocaleString()}
-        </Typography>
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </Container>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </Container>
+        </Link>
+      ) : (
+        <Container
+          onClick={() => onRead(message.id)}
+          style={{ backgroundColor: color }}
+        >
+          <ListItem alignItems="flex-start">
+            <ListItemText
+              primary={`${message.taJob.title} - ${message.course.title}`}
+              secondary={
+                <>
+                  <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {`${message.sender.firstName} ${message.sender.lastName}`}
+                  </Typography>
+                  {` — ${message.content}`}
+                </>
+              }
+            />
+            <Typography variant="caption" display="block" gutterBottom>
+              {message.createdAt.toLocaleString()}
+            </Typography>
+          </ListItem>
+          <Divider variant="inset" component="li" />
+        </Container>
+      )}
+    </>
   );
 };
 
 const MessagesList = () => {
+  const context = useContext(UserContext); // Get the whole context
+
+  if (!context) {
+    console.error('UserContext is not available.');
+    return null; // or some fallback UI
+  }
+
+  const { user } = context; // Now safe to destructure
+
+  const [messages, setMessages] = React.useState<UserMessage[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
   const [senderIdQuery, setSenderIdQuery] = React.useState('');
   const [applicationIdQuery, setApplicationIdQuery] = React.useState('');
-  const [messages, setMessages] = React.useState<UserMessage[]>(userMessages);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -156,7 +206,6 @@ const MessagesList = () => {
   ) => {
     setApplicationIdQuery(event.target.value);
   };
-
 
   const fetchMessagesByReceiverId = async (receiverId: string) => {
     try {
@@ -215,8 +264,12 @@ const MessagesList = () => {
     );
   });
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  useEffect(() => {
+    // Placeholder for any initialization logic
+    setMessages(userMessages); // Simulating fetching messages
+  }, []);
 
+  // Check if the user is an admin to show message search functionality
   const isAdmin = user && user.role === 'admin';
 
   return (
@@ -234,7 +287,7 @@ const MessagesList = () => {
       >
         Inbox
       </Box>
-      {isAdmin && (
+      {isAdmin && ( // Show search fields only if the user is an admin
         <>
           <TextField
             label="Search"
@@ -282,7 +335,7 @@ const MessagesList = () => {
       )}
       <List sx={{ width: '100%' }}>
         {messages.map((message) => (
-          <MessageItem key={message.id} message={message} />
+          <MessageItem key={message.id} message={message} isAdmin={isAdmin} />
         ))}
       </List>
     </Container>
