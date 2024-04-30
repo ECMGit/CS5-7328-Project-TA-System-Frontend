@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
     Box,
@@ -13,29 +13,33 @@ import {
 } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 
-const MessageThread = ({ messageId }: { messageId: number }) => {
-    // Simulated message thread data
-    const messageThread = [
-        {
-            id: 1,
-            content: 'Hello, your application has been received.',
-            createdAt: new Date('2023-12-01T10:20:30Z'),
-            sender: { id: 1, firstName: 'John', lastName: 'Doe' },
-        },
-        {
-            id: 2,
-            content: 'Thank you for the update. When can I expect a decision?',
-            createdAt: new Date('2023-12-02T09:15:00Z'),
-            sender: { id: 4, firstName: 'Jane', lastName: 'Smith' },
-        },
-        {
-            id: 3,
-            content:
-                'We will review your application and get back to you within a week.',
-            createdAt: new Date('2023-12-03T14:30:00Z'),
-            sender: { id: 1, firstName: 'John', lastName: 'Doe' },
-        },
-    ];
+interface Sender {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
+interface Message {
+    id: number;
+    content: string;
+    createdAt: string; // or Date if you prefer
+    sender: Sender;
+}
+
+interface MessageThreadProps {
+    messageId: number;
+}
+
+
+const MessageThread = ({ messageId }: MessageThreadProps) => {
+    const [messages, setMessages] = useState<Message[]>([]);
+
+    useEffect(() => {
+        fetch(`/api/messages/${messageId}`)
+            .then(response => response.json())
+            .then(data => setMessages(data))
+            .catch(error => console.error('Failed to load messages', error));
+    }, [messageId]);
 
     return (
         <Box sx={{ marginTop: 4 }}>
@@ -44,7 +48,7 @@ const MessageThread = ({ messageId }: { messageId: number }) => {
             </Typography>
             <Paper elevation={3}>
                 <List>
-                    {messageThread.map((message) => (
+                    {messages.map((message: Message) => (
                         <React.Fragment key={message.id}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
@@ -69,7 +73,7 @@ const MessageThread = ({ messageId }: { messageId: number }) => {
                                                 {message.content}
                                             </Typography>
                                             <Typography variant="caption" color="text.secondary">
-                                                {message.createdAt.toLocaleString()}
+                                                {new Date(message.createdAt).toLocaleString()}
                                             </Typography>
                                         </>
                                     }
@@ -85,7 +89,7 @@ const MessageThread = ({ messageId }: { messageId: number }) => {
 };
 
 export default function Messages() {
-    const { messageId } = useParams<{ messageId: string }>();
+    const { messageId } = useParams<string>();
 
     return (
         <Box
