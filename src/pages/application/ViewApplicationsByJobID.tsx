@@ -92,7 +92,6 @@ const ViewApplicationsByJobID: React.FC = () => {
                           </Typography>
                           <br />
                           <Typography component="span" variant="body2">
-                            {/* Status: {app.status} */}
                             {app.status === 'Pending' ? (
                               <Alert severity="warning">
                                 Application Status: {app.status}
