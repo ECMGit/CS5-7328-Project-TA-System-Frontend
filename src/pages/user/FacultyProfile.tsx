@@ -204,10 +204,10 @@ const FacultyProfile: React.FC = () => {
               open={open}
               onClose={handleClose}
             >
-              {/* Map through messages and display them */}
+              {/* Map through messages and display them
               {messages.map((message) => (
                 <MenuItem key={message.id}>{message.content}</MenuItem>
-              ))}
+              ))} */}
             </Menu>
           </MenuItem>
         </Menu>
