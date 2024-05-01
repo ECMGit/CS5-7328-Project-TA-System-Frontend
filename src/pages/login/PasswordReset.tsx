@@ -7,11 +7,9 @@ import AuthService from '../../services/auth';
 // Import necessary components and hooks from the Material-UI library and 'react-router-dom'.
 import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import useAutoLogout from '../../components/AutoLogOut';
 
 // Define a functional component called 'PasswordReset' using the React.FC (Functional Component) type.
 const PasswordReset: React.FC = () => {
-  const { Modal } = useAutoLogout();
   // Get the 'token' parameter from the URL using 'useParams'.
   const { token } = useParams<{ token: string }>();
 
@@ -104,7 +102,6 @@ const PasswordReset: React.FC = () => {
         {/* Display an error message if 'message' is not null. */}
         {message && <Typography variant="body2" color="error" sx={{ mt: 3 }}>{message}</Typography>}
       </Box>
-      {Modal}
     </Container>
   );
 };

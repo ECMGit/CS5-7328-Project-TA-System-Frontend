@@ -28,7 +28,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
 import { AxiosError } from 'axios';
-import useAutoLogout from '../../components/AutoLogOut';
 
 // JUST ADDED
 // import InputLabel from '@mui/material/InputLabel';
@@ -38,7 +37,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const AdminRegistrationPage: React.FC = () => {
   // Define and initialize state variables for form fields, loading status, and error messages.
-  const { Modal } = useAutoLogout();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -218,7 +216,6 @@ const AdminRegistrationPage: React.FC = () => {
         </Box>
       </Box>
       <Copyright sx={{ mt: 5 }} />
-      { Modal }
     </Container>
   );
 };

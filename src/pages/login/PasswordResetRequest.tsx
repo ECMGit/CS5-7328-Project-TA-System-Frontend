@@ -6,13 +6,11 @@ import AuthService from '../../services/auth';
 
 // Import Material-UI components and elements for styling and form handling.
 import { Container, Typography, Button, TextField, Box } from '@mui/material';
-import useAutoLogout from '../../components/AutoLogOut';
 
 
 
 // Define a functional component called 'PasswordResetRequest' using the React.FC (Functional Component) type.
 const PasswordResetRequest: React.FC = () => {
-  const { Modal } = useAutoLogout();
   // Define and initialize state variable for email input field.
   const [email, setEmail] = useState('');
 
@@ -46,7 +44,6 @@ const PasswordResetRequest: React.FC = () => {
           </Button>
         </Box>
       </Box>
-      {Modal}
     </Container>
   );
 
