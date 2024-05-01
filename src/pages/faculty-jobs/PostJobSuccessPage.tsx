@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Button } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const PostJobSuccessPage = () => {
+  const { Modal } = useAutoLogout();
   const navigate = useNavigate();
 
   const handleBackToJobs = () => {
@@ -26,6 +28,7 @@ const PostJobSuccessPage = () => {
           Back to Job Listings
         </Button>
       </Box>
+      {Modal}
     </Container>
   );
 };

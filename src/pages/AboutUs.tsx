@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 import Footer from '../components/Footer';
+import useAutoLogout from '../components/AutoLogOut';
+
 export default function AboutUs() {
+  const { Modal } = useAutoLogout();
     return (
         <div className="px-4 md:px-6 w-full flex items-center justify-center flex-col pb-20">
           <div className="flex flex-col gap-4 min-h-[600px] justify-center space-y-4 text-center xl:gap-8 xl:space-y-6">
@@ -109,6 +112,7 @@ export default function AboutUs() {
             </a>
           </div>
           <Footer/>
+          {Modal}
         </div>
     );
   }

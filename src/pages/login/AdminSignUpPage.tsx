@@ -38,7 +38,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 const AdminRegistrationPage: React.FC = () => {
   // Define and initialize state variables for form fields, loading status, and error messages.
   const CORRECTADMINCODE = '123456';
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');

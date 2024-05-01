@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import useAutoLogout from '../../components/AutoLogOut';
 
 export const AdminFeedbackPage = () => {
+  const { Modal } = useAutoLogout();
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [showFeedback, setShowFeedback] = useState(false); // State to manage feedback list visibility
@@ -31,6 +33,7 @@ export const AdminFeedbackPage = () => {
       </Button>
       {loading && <CircularProgress />}
       {showFeedback && <FeedbackList feedback={feedbackList} />}
+      {Modal}
     </Box>
   );
 };

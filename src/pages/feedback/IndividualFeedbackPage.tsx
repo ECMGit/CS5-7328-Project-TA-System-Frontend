@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box, Typography, CircularProgress } from '@mui/material';
 import FeedbackService, { FeedbackComment } from '../../services/feedback';
+import useAutoLogout from '../../components/AutoLogOut';
 
 export const IndividualFeedbackPage = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams();
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -99,6 +101,7 @@ export const IndividualFeedbackPage = () => {
           </Dialog>
         </>
       )}
+      {Modal}
     </div>
   );
 };

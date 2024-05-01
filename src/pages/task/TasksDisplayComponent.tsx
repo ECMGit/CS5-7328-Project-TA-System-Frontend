@@ -6,6 +6,8 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import useAutoLogout from '../../components/AutoLogOut';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -21,6 +23,7 @@ interface Task {
 }
 
 const ViewCurrentTasks: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
@@ -91,6 +94,7 @@ const ViewCurrentTasks: React.FC = () => {
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>
+      {Modal}
     </Box>
     
   );

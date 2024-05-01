@@ -4,6 +4,7 @@ import TAJobComponent from '../components/TAJobComponent';
 import { Typography, Container, Button, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../provider'; // update user context
+import useAutoLogout from '../components/AutoLogOut';
 
 // Update User interface to include userType
 interface User {
@@ -31,6 +32,7 @@ interface User {
 }
 
 const TAJobDisplayComponent = () => {
+  const { Modal } = useAutoLogout();
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
   const [selectedId, setSelectedId] = useState('');
   
@@ -225,6 +227,8 @@ const TAJobDisplayComponent = () => {
           <p>No job openings available.</p>
         )}
       </div>
+      {Modal}
+
     </div>
   );
 };

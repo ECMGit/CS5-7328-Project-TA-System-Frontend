@@ -3,8 +3,10 @@ import { Box, CircularProgress, Typography, Button } from '@mui/material';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import useAutoLogout from '../../components/AutoLogOut';
 
 export const StudentFeatureRequestPage = () => {
+  const { Modal } = useAutoLogout();
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);  // State to toggle feedback visibility
@@ -41,6 +43,7 @@ export const StudentFeatureRequestPage = () => {
       </SubmitFeedbackForm>
       {loading && <CircularProgress />}
       {showFeedback && <FeedbackList feedback={feedbackList} />}
+      {Modal}
     </Box>
   );
 };

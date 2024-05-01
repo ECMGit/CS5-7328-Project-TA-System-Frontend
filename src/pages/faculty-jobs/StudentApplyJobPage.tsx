@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import api from '../../services/tajob';
 import { UserContext } from '../../provider';
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 const ViewJobsStudent: React.FC = () => {
 
@@ -29,6 +29,7 @@ const ViewJobsStudent: React.FC = () => {
     deadlineToApply: string;
     facultyId: number;
   };
+  const { Modal } = useAutoLogout();
   //define user context
   const userContext = useContext(UserContext);
   //if user context is undefined then return loading
@@ -88,6 +89,7 @@ const ViewJobsStudent: React.FC = () => {
         (<Button variant="contained" onClick={() => navigate('/post-job')}>Post Job</Button>)
         : ''
       }
+      {Modal}
     </Container>
   );
 };

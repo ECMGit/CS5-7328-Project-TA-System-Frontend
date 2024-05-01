@@ -8,6 +8,7 @@ import {
   Input,
 } from '../user/styledComponents'; // Ensure Input is correctly imported
 import AdminService from '../../services/admin';
+import useAutoLogout from '../../components/AutoLogOut';
 
 export type FacultyData = {
   UserId: number;
@@ -26,6 +27,7 @@ export type UserData = {
 };
 
 const ViewFaculties: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [faculties, setFaculties] = useState<FacultyData[]>([]);
   const [searchID, setSearchID] = useState('');
   const [searchSmuID, setSearchSmuID] = useState('');
@@ -132,6 +134,7 @@ const ViewFaculties: React.FC = () => {
           },
         }}
       />
+      {Modal}
     </Container>
   );
 };

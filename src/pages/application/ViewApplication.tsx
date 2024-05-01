@@ -31,6 +31,7 @@ import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
+import useAutoLogout from '../../components/AutoLogOut';
 
 // TODO: this needs to come from back-end in the future
 // Static variable field
@@ -75,6 +76,7 @@ interface UserMessage {
 
 /* Component for the application page */
 function ApplicationPage() {
+  const { Modal } = useAutoLogout();
   const { id } = useParams();
   const [messages, setMessages] = useState<UserMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -251,6 +253,7 @@ function ApplicationPage() {
         </Box>
       </Box>
       <BottomPanel />
+      {Modal}
     </Container>
   );
 

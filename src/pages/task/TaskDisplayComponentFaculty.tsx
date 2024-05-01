@@ -3,6 +3,8 @@ import api from '../../services/taskform';
 import { UserContext } from '../../provider';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import useAutoLogout from '../../components/AutoLogOut';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -14,6 +16,7 @@ interface Task {
 }
 
 const ViewAssignedTasks: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
@@ -72,7 +75,7 @@ const ViewAssignedTasks: React.FC = () => {
       </table>
       
       <Button component = {Link} to="/home">Home</Button>
-
+      {Modal}
       
     </div>
   );

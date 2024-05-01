@@ -19,6 +19,7 @@ import {
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import useAutoLogout from '../../components/AutoLogOut';
 
 interface User {
   id: number;
@@ -131,6 +132,7 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
 };
 
 const MessagesList = () => {
+  const { Modal } = useAutoLogout();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
   const [senderIdQuery, setSenderIdQuery] = React.useState('');
@@ -278,6 +280,7 @@ const MessagesList = () => {
           <MessageItem key={message.id} message={message} />
         ))}
       </List>
+      {Modal}
     </Container>
   );
 };

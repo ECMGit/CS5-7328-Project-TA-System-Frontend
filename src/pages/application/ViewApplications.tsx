@@ -13,6 +13,7 @@ import { UserContext } from '../../provider';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import TopNav from '../../components/TopNav';
+import useAutoLogout from '../../components/AutoLogOut';
 
 // const options = [
 //   'Course 1',
@@ -94,7 +95,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
 
 
 
-
+  const { Modal } = useAutoLogout();
   const [isOpen, setIsOpen] = useState(false); // State to control the CustomModal visibility
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null); // Store timeout ID for clearing
   const [applications, setApplications] = useState<TAApplicationData[]>([]);
@@ -520,6 +521,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         </Typography>
       </Paper>
       </div>
+      {Modal}
     </>
   );
 

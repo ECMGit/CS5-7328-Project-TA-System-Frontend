@@ -9,7 +9,7 @@ import {
 } from '../user/styledComponents';
 import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 export type CourseData = {
   id: number;
@@ -20,6 +20,7 @@ export type CourseData = {
 };
 
 export const ViewCourse: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const navigate =useNavigate();
   const [course, setCourse] = useState<CourseData[]>([]);
   const [searchID, setSearchID] = useState('');
@@ -124,6 +125,7 @@ export const ViewCourse: React.FC = () => {
         onChange={(e) => setSearchCourse(e.target.value)}
       />
       <DataGrid rows={rows} columns={columns} checkboxSelection />
+      {Modal}
     </Container>
   );
 };
