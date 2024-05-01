@@ -61,7 +61,7 @@ const ViewApplicationsByJobID: React.FC = () => {
                       secondary={
                         <>
                           <Typography component="span" variant="body2">
-                            Student ID: {app.studentId} - GPA: {app.gpa}
+                            Student ID: {app.studentId}
                           </Typography>
                           <br />
                           <Typography component="span" variant="body2">
