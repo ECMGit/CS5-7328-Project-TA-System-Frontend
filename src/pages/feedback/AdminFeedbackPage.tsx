@@ -45,10 +45,13 @@ export const AdminFeedbackPage = () => {
 
   return (
     <Box>
-      <Button onClick={handleBack} variant="contained" color="secondary">
-        Back
-      </Button>
-      <Typography variant="h6" style={{ marginBottom: 16 }}>Admin Feedback Page</Typography>
+      {/* Header container with flex display */}
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="h6">Admin Feedback Page</Typography>
+        <Button onClick={handleBack} variant="contained" color="secondary">
+          Back to Home Page
+        </Button>
+      </Box>
       {loading ? (
         <CircularProgress />
       ) : (
