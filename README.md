@@ -86,3 +86,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Recommended VSCode extensions:
 - ESLint or Prettier ESLint
 - GitLens
+
+## How to modify timeout time
+To change the time before the timeout dialog appears and how long it takes before the user is kicked out,
+see the "timeoutWaitTime" and "timeoutDialogTime" variables in config.ts.
