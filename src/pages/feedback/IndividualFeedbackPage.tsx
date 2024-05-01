@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Dialog,
@@ -14,23 +14,22 @@ import {
 import FeedbackService, { FeedbackComment } from '../../services/feedback';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FeedbackDetailsView } from './FeedbackDetailsView';
+import { UserContext } from '../../provider'; // Import UserContext
 
 export const IndividualFeedbackPage = () => {
   const { id } = useParams();
   const location = useLocation();
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<FeedbackComment[]>([]);
   const [visibleComments, setVisibleComments] = useState<FeedbackComment[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const nextItems = useRef(20);
-
-  const previousPath = location.state?.from || '/feedback'; // Default path
+  const user = useContext(UserContext); // Assuming useContext is properly used here
 
   useEffect(() => {
-    console.log('id', id);
     const fetchComments = async () => {
       const fetchedComments = await FeedbackService.getMyComment(Number(id));
       setComments(fetchedComments);
@@ -46,12 +45,9 @@ export const IndividualFeedbackPage = () => {
 
   const handleCommentSubmit = async () => {
     try {
-      const newComment = await FeedbackService.submitComment(
-        Number(id),
-        comment
-      );
-      setComments((prev) => [newComment, ...prev]);
-      setVisibleComments((prev) => [newComment, ...prev.slice(0, 19)]);
+      const newComment = await FeedbackService.submitComment(Number(id), comment);
+      setComments(prev => [newComment, ...prev]);
+      setVisibleComments(prev => [newComment, ...prev.slice(0, 19)]);
       setComment('');
       setOpen(false);
     } catch (error) {
@@ -65,7 +61,7 @@ export const IndividualFeedbackPage = () => {
       return;
     }
     setTimeout(() => {
-      setVisibleComments((prevComments) => [
+      setVisibleComments(prevComments => [
         ...prevComments,
         ...comments.slice(nextItems.current, nextItems.current + 20),
       ]);
@@ -89,16 +85,26 @@ export const IndividualFeedbackPage = () => {
         >
           Add Comment
         </Button>
-        {/* Back Button to navigate to feedback display */}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => navigate(previousPath)}
-        >
-          Back to Feedback List
-        </Button>
+        {/* Conditionally render Back button based on user role */}
+        {user?.user?.role === 'admin' ? (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/feedback/admin')}
+          >
+            Back to Admin Feedback
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/feedback')}
+          >
+            Back to Feedback List
+          </Button>
+        )}
       </Box>
-      <Typography variant="h6">Comments</Typography>
+      <Typography variant="subtitle1">Comments:</Typography>
       {loading ? (
         <CircularProgress />
       ) : (
@@ -162,4 +168,3 @@ export const IndividualFeedbackPage = () => {
     </div>
   );
 };
-
