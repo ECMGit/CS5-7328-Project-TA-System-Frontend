@@ -8,6 +8,8 @@ import useAutoLogout from '../../components/AutoLogOut';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Navbar from '../Navbar'; 
+
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -145,7 +147,7 @@ const ViewCurrentTasks: React.FC = () => {
             />
             <div>
             <Typography variant="h3" align="center" style={{ marginTop: '20px' }}>
-            You currently do not have tasks available! 
+            You currently do not have any active tasks! 
           </Typography>
             </div>  
         </div>

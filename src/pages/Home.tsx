@@ -311,6 +311,25 @@ const Home: React.FC = () => {
                   >
                     View Applications
                   </Button>
+                  <Button
+                    component={Link}
+                    to="/create-task"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    Create Task
+                  </Button>
+
+                  <Button
+                    component={Link}
+                    to="/tasks/faculty"
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '5px', marginRight: '10px' }}
+                  >
+                    View Tasks
+                  </Button>
                 </>
               ) : (
                 ''

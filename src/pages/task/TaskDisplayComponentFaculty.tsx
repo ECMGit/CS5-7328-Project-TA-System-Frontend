@@ -5,6 +5,10 @@ import { Button } from '@mui/material';
 import useAutoLogout from '../../components/AutoLogOut';
 import { Link , useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import  Navbar from '../Navbar';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -130,13 +134,27 @@ const ViewAssignedTasks: React.FC = () => {
   if (!tasks.length) {
     return (
       <div>
-      <Navbar
-        user={user} // Pass the user prop
-        handleLogout={handleLogout} // Pass the handleLogout prop
-        handleProfile={handleProfile} // Pass the handleProfile prop
-        handlePerformance={handlePerformance} // Pass the handlePerformance prop
-        isHomePage={false}
-      /> <div>No Tasks Available</div>
+     <div>
+        <Navbar
+          user={user}
+          handleLogout={handleLogout}
+          handleProfile={handleProfile}
+          handlePerformance={handlePerformance}
+          isHomePage={false}
+        />
+    </div>
+       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <img
+              src="/Lyle_logo.png"
+              alt="SMU Dallas Hall"
+              style={{ width: '500px', height: '500px' }}
+            />
+            <div>
+            <Typography variant="h3" align="center" style={{ marginTop: '20px' }}>
+            You currently do not have any active tasks! 
+          </Typography>
+            </div>  
+        </div>
       </div>
   ) ;
   }
@@ -147,6 +165,7 @@ const ViewAssignedTasks: React.FC = () => {
 
   return (
     <div>
+    <div>
        <Navbar
         user={user} // Pass the user prop
         handleLogout={handleLogout} // Pass the handleLogout prop
@@ -154,33 +173,36 @@ const ViewAssignedTasks: React.FC = () => {
         handlePerformance={handlePerformance} // Pass the handlePerformance prop
         isHomePage={false}
       />
-      <h2>Tasks Assigned</h2> 
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>CourseID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
-            <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map(task => (
-            <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
-              {/* Add logic here for the button to call the checkOFF api call 
-              I think this may have to be on the task Display for the student*/}
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.courseId}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
-              <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      
-      <Button component = {Link} to="/home">Home</Button>
-
-      
+    </div>
+    <Box sx={{ flexGrow: 1, padding: '20px'}}>
+      <Grid container spacing={2}>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+        <Typography variant="h2" gutterBottom>
+        Current Tasks
+        </Typography>
+          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f2f2f2' }}>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Task ID</th>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Title</th>
+                <th style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tasks.map(task => (
+                <tr key={task.TaskId} style={{ backgroundColor: 'white' }}>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.TaskId}</td>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.title}</td>
+                  <td style={{ padding: '8px', borderBottom: '1px solid #ddd', textAlign: 'left' }}>{task.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
+    </Box>
     </div>
   );
 };
