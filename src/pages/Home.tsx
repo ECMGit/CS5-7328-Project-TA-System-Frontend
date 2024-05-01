@@ -27,7 +27,7 @@ const Home: React.FC = () => {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
-  const {user, setUser} = userContext;
+  const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // React hooks
@@ -50,10 +50,14 @@ const Home: React.FC = () => {
     navigate('/faculty-profile');
   };
 
+  const navigateToAdminProfile = () => {
+    navigate('/admin-profile');
+  };
+
   /**
    * Log out the user, delete user from localStorage
    */
-  const handleLogout = function() {
+  const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
     setIsLoggedIn(false);
@@ -65,13 +69,14 @@ const Home: React.FC = () => {
   /**
    * Navigate to the corresponding user profile. 
    */
-  const handleProfile = function() {
+  const handleProfile = function () {
     // Guard clause.
     if (!user) { return; }
-    
+
     // Navigate to student/faculty profile.
     if (user.role === 'student') { navigate('/student-profile'); }
     else if (user.role === 'faculty') { navigate('/faculty-profile'); }
+    else if (user.role === 'admin') { navigate('/admin-profile'); }
   };
 
   // Use the 'useEffect' hook to execute code after the component renders.
@@ -86,7 +91,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-  // Render the component within a container with a maximum width of 'sm'.
+    // Render the component within a container with a maximum width of 'sm'.
 
     <div>
       {/* Blue banner with "Login" button */}
@@ -168,31 +173,22 @@ const Home: React.FC = () => {
                     View Applications
                   </Button> */}
                 </>
-              ) : user.role === 'faculty' ? (
+              ) : user.role === 'admin' ? (
                 <>
                   <Button
                     component={Link}
-                    to="/jobs"
+                    to="/manage-users"
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}
                   >
-                    See Jobs
-                  </Button>
-                  <Button
-                    component={Link}
-                    to="/view-applications"
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginLeft: '5px', marginRight: '10px' }}
-                  >
-                    View Applications
+                    Manage Users
                   </Button>
                 </>
               ) : (
                 ''
               )}
-              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile}/>
+              <AvatarWrapper user={user} onLogout={handleLogout} onProfile={handleProfile} />
             </div>
           ) : (
             <Button
@@ -218,15 +214,15 @@ const Home: React.FC = () => {
 
         {/* Text box that spans the page, will fill it with about us and stuff BWG */}
         <div className='flex min-h-screen w-screen flex-col'>
-        <div className='w-full p-5 border-2 shadow-lg border-gray-300 bg-white h-fit m-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
-        {role === 'faculty' && (
-  <div className='flex flex-row w-full space-x-5 px-5'>
-    <ActionCard title='test' description='test description' actionText='action'/>
-    <ActionCard title='test' description='test description' actionText='action'/>
-    <ActionCard title='test' description='test description' actionText='action'/>
-    </div>
-)}
-</div>
+          <div className='w-full p-5 border-2 shadow-lg border-gray-300 bg-white h-fit m-5 rounded-md'>Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of Engineering students to find TA jobs.</div>
+          {role === 'faculty' && (
+            <div className='flex flex-row w-full space-x-5 px-5'>
+              <ActionCard title='test' description='test description' actionText='action' />
+              <ActionCard title='test' description='test description' actionText='action' />
+              <ActionCard title='test' description='test description' actionText='action' />
+            </div>
+          )}
+        </div>
 
 
         <Footer />

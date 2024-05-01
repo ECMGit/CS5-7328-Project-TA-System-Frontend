@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
+import AdminProfile from './pages/user/AdminProfile';
 import JobInfo from './pages/JobInfo';
 
 
@@ -25,12 +26,13 @@ import ProviderLayout, { UserContext } from './provider';
 import axios from 'axios';
 import Inbox from './pages/user/Inbox';
 import AboutUs from './pages/AboutUs';
+import ManageUsers from './pages/user/ManageUsers';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   // console.log(token); // debugging purposes
-  
+
   if (token) {
     config.headers.Authorization = `${token}`;
   }
@@ -40,9 +42,9 @@ axios.interceptors.request.use(config => {
 });
 
 interface PrivateRouteProps {
-    role: string;
-    userId?: number;
-    children: React.ReactNode;
+  role: string;
+  userId?: number;
+  children: React.ReactNode;
 }
 
 function PrivateRoute({ role, userId, children }: PrivateRouteProps) {
@@ -68,9 +70,9 @@ function PrivateRouteJob() {
   }
 
   if (userContext.user.role === 'student') {
-    return <ViewJobsStudent/>;
+    return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
-    return <ViewJobs/>;
+    return <ViewJobs />;
   } else {
     return <Navigate to="/unauthorized" />;
   }
@@ -81,24 +83,26 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/home-default' element={<HomeDefault/>}/>
+        <Route path='/home-default' element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-        <Route path="/about-us" element={<AboutUs/>}/>
+        <Route path="/about-us" element={<AboutUs />} />
 
         <Route path="/" element={<ProviderLayout />} >
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home/>} />
+          <Route path="/home" element={<Home />} />
 
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/jobs/details/:id" element={<JobInfo/>}/>
+          <Route path="/jobs/details/:id" element={<JobInfo />} />
           <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRouteJob />} />
           <Route path="/faculty-profile" element={<PrivateRoute role="faculty"><FacultyProfile /></PrivateRoute>} />
+          <Route path="/admin-profile" element={<PrivateRoute role="admin"><AdminProfile /></PrivateRoute>} />
+          <Route path="/manage-users" element={<PrivateRoute role="admin"><ManageUsers /></PrivateRoute>} />
           <Route path="/application-form" element={<ApplicationPage />} />
           <Route path="/view-applications" element={<PrivateRoute role="faculty"><ViewApplications /></PrivateRoute>} />
           <Route path="/view-application/:id" element={<PrivateRoute role="faculty"><ViewApplication /></PrivateRoute>} />
