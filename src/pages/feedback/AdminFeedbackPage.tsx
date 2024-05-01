@@ -40,7 +40,7 @@ export const AdminFeedbackPage = () => {
   };
 
   const handleBack = () => {
-    navigate(-1); // Navigate back in history stack
+    navigate('/home'); // Navigate back in history stack
   };
 
   return (
