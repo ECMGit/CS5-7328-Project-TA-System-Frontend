@@ -25,7 +25,7 @@ export const FeedbackDetailsView: React.FC<FeedbackDetailsViewProps> = ({
         Left by: {feedback?.leftBy.firstName} {feedback?.leftBy.lastName}
       </Typography>
       <Stack flexDirection="row" justifyContent="space-between">
-        <Typography variant="h5">{feedback?.content}</Typography>
+        <Typography variant="h5">Feedback: {feedback?.content}</Typography>
         {user?.user?.role == 'admin' && feedback && (
           <StatusSetter initialStatus={feedback.status} id={id} />
         )}

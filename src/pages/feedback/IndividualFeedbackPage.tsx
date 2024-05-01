@@ -27,6 +27,8 @@ export const IndividualFeedbackPage = () => {
   const [loading, setLoading] = useState(true);
   const nextItems = useRef(20);
 
+  const previousPath = location.state?.from || '/feedback'; // Default path
+
   useEffect(() => {
     console.log('id', id);
     const fetchComments = async () => {
@@ -74,7 +76,6 @@ export const IndividualFeedbackPage = () => {
   return (
     <div>
       <FeedbackDetailsView id={Number(id)} />
-      <Typography variant="h6">Comments</Typography>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -92,11 +93,12 @@ export const IndividualFeedbackPage = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => navigate('/feedback')}
+          onClick={() => navigate(previousPath)}
         >
           Back to Feedback List
         </Button>
       </Box>
+      <Typography variant="h6">Comments</Typography>
       {loading ? (
         <CircularProgress />
       ) : (
