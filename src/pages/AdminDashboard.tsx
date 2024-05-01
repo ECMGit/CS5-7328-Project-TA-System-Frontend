@@ -7,9 +7,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import  Checklist  from '@mui/icons-material/Checklist';
 import useAutoLogout from '../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const AdminDashboard = () => {
+  const { Modal } = useAutoLogout();
   const navigate = useNavigate();
 
   const navigationCards = [

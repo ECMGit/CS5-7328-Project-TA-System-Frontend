@@ -15,9 +15,6 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Chip from '@mui/material/Chip';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
-
 export type TAApplication = {
   id: number;
   courseId: number;
@@ -51,6 +48,7 @@ export type CourseData = {
   };
 
 const ViewCourseDetail: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams<{ id: string }>();
   const [taJobs, setTaJobs] = useState<TAJob[]>([]);
   const [taApplication, setTaApplication] = useState<TAApplication[]>([]);

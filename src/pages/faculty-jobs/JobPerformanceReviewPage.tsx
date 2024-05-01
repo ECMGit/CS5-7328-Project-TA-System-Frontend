@@ -13,9 +13,8 @@ import {
 } from '@mui/material';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const PerformanceReview: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const location = useLocation();
   const taInfo = location.state?.taInfo;
 

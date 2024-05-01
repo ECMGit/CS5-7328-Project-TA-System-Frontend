@@ -11,9 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
-
 export type CourseData = {
   id: number;
   courseCode: string;
@@ -23,6 +20,7 @@ export type CourseData = {
 };
 
 export const ViewCourse: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const navigate =useNavigate();
   const [course, setCourse] = useState<CourseData[]>([]);
   const [searchID, setSearchID] = useState('');

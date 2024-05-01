@@ -6,9 +6,8 @@ import CourseService from '../../services/course';
 import { courseData } from './courseData';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const EditCourse: React.FC = () => {
+    const { Modal } = useAutoLogout();
     const [course, setCourse] = useState<courseData>({ id: 0, title: '', courseCode: '', description: '' });
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');

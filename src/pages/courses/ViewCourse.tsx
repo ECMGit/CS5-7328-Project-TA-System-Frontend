@@ -7,9 +7,8 @@ import CourseService from '../../services/course';
 import { courseData } from './courseData';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const ViewCourse: React.FC = () => {
+    const { Modal } = useAutoLogout();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [course, setCourse] = useState<courseData | null>(null);

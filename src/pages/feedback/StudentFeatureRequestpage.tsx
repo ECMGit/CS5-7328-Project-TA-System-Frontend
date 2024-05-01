@@ -5,9 +5,8 @@ import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 export const StudentFeatureRequestPage = () => {
+  const { Modal } = useAutoLogout();
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);  // State to toggle feedback visibility

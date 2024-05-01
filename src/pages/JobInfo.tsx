@@ -10,7 +10,7 @@ interface User {
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const { Modal, closeModal } = useAutoLogout();
+  const { Modal } = useAutoLogout();
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
     setUser(currentUser);

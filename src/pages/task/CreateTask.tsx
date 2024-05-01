@@ -8,9 +8,8 @@ import { LoadingButton } from '@mui/lab';
 import api from '../../services/taskform';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const CreateTask: React.FC = () => {
+  const { Modal } = useAutoLogout();
   // State hooks for form fields and validation errors
   //   const [faculty_id, setFaculty_id] = useState(''); // COmes from later check
   const [student_id, setStudent_id] = useState('');

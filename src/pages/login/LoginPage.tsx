@@ -32,11 +32,14 @@ import AuthService from '../../services/auth';
 // Import the 'Copyright' component.
 import Copyright from '../../components/Copyright';
 
+import useAutoLogout from '../../components/AutoLogOut';
+
 const defaultTheme = createTheme();
 
 // Define a functional component called 'LoginPage' using the React.FC (Functional Component) type.
 const LoginPage: React.FC = () => {
   // Define and initialize state variables for email, password, loading status, and error message.
+  const { Modal } = useAutoLogout();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -151,6 +154,7 @@ const LoginPage: React.FC = () => {
         </Box>
         {/* Display the 'Copyright' component at the bottom of the page. */}
         <Copyright sx={{ mt: 8, mb: 4 }} />
+        {Modal}
       </Container>
     </ThemeProvider>
   );

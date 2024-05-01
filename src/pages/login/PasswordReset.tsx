@@ -9,10 +9,9 @@ import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal } = useAutoLogout();
-
 // Define a functional component called 'PasswordReset' using the React.FC (Functional Component) type.
 const PasswordReset: React.FC = () => {
+  const { Modal } = useAutoLogout();
   // Get the 'token' parameter from the URL using 'useParams'.
   const { token } = useParams<{ token: string }>();
 

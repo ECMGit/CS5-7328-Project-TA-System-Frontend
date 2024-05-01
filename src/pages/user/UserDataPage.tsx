@@ -5,9 +5,8 @@ import userService from '../../services/auth';
 import { Typography, Container, Box } from '@mui/material';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const UserDataPage: React.FC = () => {
+  const { Modal } = useAutoLogout();
   // set the initial state of the data
   const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);

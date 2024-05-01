@@ -4,9 +4,8 @@ import { FeedbackList } from '../../components/feedback/FeedbackList';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 export const AdminFeedbackPage = () => {
+  const { Modal } = useAutoLogout();
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [showFeedback, setShowFeedback] = useState(false); // State to manage feedback list visibility

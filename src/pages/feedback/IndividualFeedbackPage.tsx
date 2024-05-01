@@ -4,9 +4,8 @@ import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, B
 import FeedbackService, { FeedbackComment } from '../../services/feedback';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 export const IndividualFeedbackPage = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams();
   const location = useLocation();
   const [open, setOpen] = useState(false);

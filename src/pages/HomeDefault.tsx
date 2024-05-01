@@ -7,10 +7,8 @@ import { UserContext } from '../provider';
 import AvatarWrapper from '../components/AvatarWrapper';
 import useAutoLogout from '../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const HomeDefault: React.FC = () => {
-
+  const { Modal } = useAutoLogout();
   return (
     // Render the component within a container with a maximum width of 'sm'.
     <div>

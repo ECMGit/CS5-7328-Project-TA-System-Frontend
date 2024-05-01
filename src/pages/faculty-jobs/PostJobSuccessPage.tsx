@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Button } from '@mui/material';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const PostJobSuccessPage = () => {
+  const { Modal } = useAutoLogout();
   const navigate = useNavigate();
 
   const handleBackToJobs = () => {

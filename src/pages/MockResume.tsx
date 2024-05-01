@@ -10,15 +10,15 @@ import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledCom
 import { Button } from '@mui/material';
 import useAutoLogout from '../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 // Define the 'Props' type, specifying that it should contain an 'application' property of type 'TAApplicationData'.
 type Props = {
     application: TAApplicationData;
 }
 
 // Define a React functional component called 'MockResume' that takes 'Props' as its props.
-const MockResume: React.FC<Props> = ({ application }) => {return (
+const MockResume: React.FC<Props> = ({ application }) => {
+  const { Modal } = useAutoLogout();
+  return (
   // Render the component and return JSX.
   <Container>
     <ApplicantTitle>Applicant {application.studentId}</ApplicantTitle>

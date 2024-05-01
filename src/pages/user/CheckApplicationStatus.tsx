@@ -2,9 +2,8 @@ import React from 'react'; // page to check the status of individual application
 import { Container, Paper, Typography, Button } from '@mui/material';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const CheckApplicationStatus = () => {
+  const { Modal } = useAutoLogout();
   // Function to simulate checking the application status
   const checkStatus = () => {
     alert("Application Status: Under Review");

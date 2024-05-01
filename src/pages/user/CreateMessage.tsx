@@ -12,8 +12,6 @@ import {
 import axios from 'axios';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 interface User {
   id: number;
   firstName: string;
@@ -29,6 +27,7 @@ interface Course {
 }
 
 const CreateMessage = () => {
+  const { Modal } = useAutoLogout();
   const [recipient, setRecipient] = useState('');
   const [taJob, setTAJob] = useState('');
   const [course, setCourse] = useState('');

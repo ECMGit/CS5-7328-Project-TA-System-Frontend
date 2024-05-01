@@ -14,8 +14,6 @@ import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const ViewJobs: React.FC = () => {
 
   // Type definition for formatting jobs
@@ -38,6 +36,7 @@ const ViewJobs: React.FC = () => {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
+  const { Modal } = useAutoLogout();
   const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);

@@ -8,8 +8,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 interface Task {
   facultyId: number;
   studentId: number;
@@ -25,6 +23,7 @@ interface Task {
 }
 
 const ViewCurrentTasks: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');

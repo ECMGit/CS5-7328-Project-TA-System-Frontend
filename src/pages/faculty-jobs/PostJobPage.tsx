@@ -15,8 +15,6 @@ import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import { UserContext } from '../../provider';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 interface Course {
   courseID: number;
   courseCode: string;
@@ -25,6 +23,7 @@ interface Course {
 
 const PostJob: React.FC = () => {
   // State hooks for form fields and validation errors
+  const { Modal } = useAutoLogout();
   const [title, setTitle] = useState('');
   const [courseId, setCourseId] = useState('');
   const [courseSchedule, setCourseSchedule] = useState('');

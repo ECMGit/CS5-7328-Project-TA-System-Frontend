@@ -6,6 +6,7 @@ import ApplyService from '../../services/apply';
 import useAutoLogout from '../../components/AutoLogOut';
 
 const EditApplication = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [application, setApplication] = useState({
@@ -44,7 +45,6 @@ const EditApplication = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const { Modal, closeModal } = useAutoLogout();
   // // Handle file change
   // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   if (e.target.files) {

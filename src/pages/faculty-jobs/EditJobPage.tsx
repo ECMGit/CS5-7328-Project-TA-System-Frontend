@@ -14,10 +14,8 @@ import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import TopNav from '../../components/TopNav';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 const EditJobPage: React.FC = () => {
-
+    const { Modal } = useAutoLogout();
     const { jobId } = useParams<{ jobId: string }>();
     const navigate = useNavigate();
     const userContext = useContext(UserContext);

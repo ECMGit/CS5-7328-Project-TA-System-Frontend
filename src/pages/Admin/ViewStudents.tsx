@@ -10,8 +10,6 @@ import {
 import AdminService from '../../services/admin';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 export type StudentData = {
   UserId: number;
   year: number;
@@ -28,6 +26,7 @@ export type UserData = {
 };
 
 const ViewStudents: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [students, setStudents] = useState<StudentData[]>([]);
   const [searchID, setSearchID] = useState('');
   const [searchSmuID, setSearchSmuID] = useState('');

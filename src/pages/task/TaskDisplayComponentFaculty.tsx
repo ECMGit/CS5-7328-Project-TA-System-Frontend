@@ -5,8 +5,6 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 interface Task {
   facultyId: number;
   studentId: number;
@@ -18,6 +16,7 @@ interface Task {
 }
 
 const ViewAssignedTasks: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');

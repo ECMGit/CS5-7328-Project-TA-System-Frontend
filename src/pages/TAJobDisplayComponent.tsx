@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../provider'; // update user context
 import useAutoLogout from '../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 // Update User interface to include userType
 interface User {
   username: string;
@@ -34,6 +32,7 @@ interface User {
 }
 
 const TAJobDisplayComponent = () => {
+  const { Modal } = useAutoLogout();
   const [taJobs, setTAJobs] = useState<TAJobs[]>([]); // Now taJobs is an array of TAJobs
   const [selectedId, setSelectedId] = useState('');
   

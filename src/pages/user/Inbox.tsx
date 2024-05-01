@@ -21,8 +21,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import useAutoLogout from '../../components/AutoLogOut';
 
-const { Modal, closeModal } = useAutoLogout();
-
 interface User {
   id: number;
   firstName: string;
@@ -134,6 +132,7 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
 };
 
 const MessagesList = () => {
+  const { Modal } = useAutoLogout();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [receiverIdQuery, setReceiverIdQuery] = React.useState('');
   const [senderIdQuery, setSenderIdQuery] = React.useState('');
