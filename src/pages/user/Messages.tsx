@@ -10,6 +10,8 @@ import {
     ListItemText,
     ListItemAvatar,
     Avatar,
+    Button,
+    TextField
 } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 
@@ -22,7 +24,7 @@ interface Sender {
 interface Message {
     id: number;
     content: string;
-    createdAt: string; // Keeping createdAt as string for simplicity
+    createdAt: string;
     sender: Sender;
 }
 
@@ -32,21 +34,32 @@ interface MessageThreadProps {
 
 const MessageThread = ({ messageId }: MessageThreadProps) => {
     const [messages, setMessages] = useState<Message[]>([]);
+    const [showReplyBox, setShowReplyBox] = useState(false);
+    const [replyMessage, setReplyMessage] = useState('');
+
     const receiverId = 2; // Assuming the receiver is the current user
 
     useEffect(() => {
-        // Assuming your server returns all messages in a thread based on an initial message ID
         fetch(`http://localhost:9000/api/messages/receiver/${receiverId}`)
             .then(response => response.json())
             .then(data => {
-                // Sort messages by createdAt in ascending order
-                const sortedMessages = data.sort((a: Message, b: Message) => {
-                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-                });
+                const sortedMessages = data.sort((a: Message, b: Message) => 
+                    new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+                );
                 setMessages(sortedMessages);
             })
             .catch(error => console.error('Failed to load messages', error));
-    }, [receiverId]);  // Use receiverId as the dependency to refetch when it changes
+    }, [receiverId]);
+
+    const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setReplyMessage(event.target.value);
+    };
+
+    const sendReply = () => {
+        console.log('Sending reply:', replyMessage);
+        setReplyMessage(''); // clear input after sending
+        setShowReplyBox(false); // close the reply box
+    };
 
     return (
         <Box sx={{ marginTop: 4 }}>
@@ -64,32 +77,38 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={
-                                        <Typography variant="subtitle1" color="text.primary">
-                                            {message.sender.firstName} {message.sender.lastName}
+                                    primary={<Typography variant="subtitle1" color="text.primary">
+                                        {message.sender.firstName} {message.sender.lastName}
+                                    </Typography>}
+                                    secondary={<>
+                                        <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
+                                            {message.content}
                                         </Typography>
-                                    }
-                                    secondary={
-                                        <>
-                                            <Typography
-                                                sx={{ display: 'inline' }}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                            >
-                                                {message.content}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                {new Date(message.createdAt).toLocaleString()}
-                                            </Typography>
-                                        </>
-                                    }
+                                        <Typography variant="caption" color="text.secondary">
+                                            {new Date(message.createdAt).toLocaleString()}
+                                        </Typography>
+                                    </>}
                                 />
                             </ListItem>
                             <Divider variant="inset" component="li" />
                         </React.Fragment>
                     ))}
                 </List>
+                <Button onClick={() => setShowReplyBox(!showReplyBox)}>Reply</Button>
+                {showReplyBox && (
+                    <Box sx={{ margin: 2 }}>
+                        <TextField
+                            fullWidth
+                            multiline
+                            rows={4}
+                            variant="outlined"
+                            value={replyMessage}
+                            onChange={handleReplyChange}
+                            placeholder="Type your reply here..."
+                        />
+                        <Button onClick={sendReply} sx={{ marginTop: 1 }}>Send</Button>
+                    </Box>
+                )}
             </Paper>
         </Box>
     );
@@ -113,5 +132,4 @@ export default function Messages() {
         </Box>
     );
 }
-
 
