@@ -143,19 +143,24 @@ const ViewAssignedTasks: React.FC = () => {
           isHomePage={false}
         />
     </div>
-       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <img
-              src="/Lyle_logo.png"
-              alt="SMU Dallas Hall"
-              style={{ width: '500px', height: '500px' }}
-            />
-            <div>
-            <Typography variant="h3" align="center" style={{ marginTop: '20px' }}>
-            You currently do not have any active tasks! 
+    <Box sx={{ flexGrow: 1, padding: '20px'}}>
+      <Grid container spacing={2}>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+        <Typography variant="h2" gutterBottom>
+          Current Tasks
+        </Typography>
+        <Typography variant="h5" style={{ marginTop: '20px' }}>
+            You currently do not have tasks!
           </Typography>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
+    </Box>
+            
             </div>  
-        </div>
-      </div>
+
+      // </div>
   ) ;
   }
 
