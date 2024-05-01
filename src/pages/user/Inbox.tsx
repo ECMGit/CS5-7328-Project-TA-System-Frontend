@@ -8,7 +8,6 @@ import {
   Container,
   Typography,
 } from '@mui/material';
-
 import { Link } from 'react-router-dom';
 
 interface User {
@@ -47,7 +46,7 @@ const MessageItem = ({
                   {message.content}
                 </Typography>
                 <Typography variant="caption" display="block" gutterBottom>
-                  {new Date(message.createdAt).toLocaleString()}
+                  {message.createdAt.toLocaleString()}
                 </Typography>
               </>
             }
@@ -71,8 +70,13 @@ const MessagesList = () => {
     setLoading(true);
     axios.get(`http://localhost:9000/api/messages/receiver/${receiverId}`)
       .then(response => {
-        console.log('Fetched messages:', response.data);  
-        setMessages(response.data);
+        const sortedMessages = response.data.sort((a: UserMessage, b: UserMessage) => {
+          // Ensure we convert dates only if needed
+          const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+          const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+          return dateB.getTime() - dateA.getTime();
+        });
+        setMessages(sortedMessages.length > 0 ? [sortedMessages[0]] : []);
         setLoading(false);
       })
       .catch(err => {
@@ -90,7 +94,7 @@ const MessagesList = () => {
   
   return (
     <Container>
-      <Typography variant="h4" sx={{ mt: 2, mb: 1 }}>Inbox</Typography>
+      <Typography variant="h4">Inbox</Typography>
       <List>
         {messages.map(message => (
           <MessageItem key={message.id} message={message} />
@@ -101,3 +105,4 @@ const MessagesList = () => {
 };
 
 export default MessagesList;
+

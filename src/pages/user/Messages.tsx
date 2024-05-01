@@ -22,7 +22,7 @@ interface Sender {
 interface Message {
     id: number;
     content: string;
-    createdAt: string; // or Date if you prefer
+    createdAt: string; // Keeping createdAt as string for simplicity
     sender: Sender;
 }
 
@@ -30,16 +30,23 @@ interface MessageThreadProps {
     messageId: number;
 }
 
-
 const MessageThread = ({ messageId }: MessageThreadProps) => {
     const [messages, setMessages] = useState<Message[]>([]);
+    const receiverId = 2; // Assuming the receiver is the current user
 
     useEffect(() => {
-        fetch(`/api/messages/${messageId}`)
+        // Assuming your server returns all messages in a thread based on an initial message ID
+        fetch(`http://localhost:9000/api/messages/receiver/${receiverId}`)
             .then(response => response.json())
-            .then(data => setMessages(data))
+            .then(data => {
+                // Sort messages by createdAt in ascending order
+                const sortedMessages = data.sort((a: Message, b: Message) => {
+                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+                });
+                setMessages(sortedMessages);
+            })
             .catch(error => console.error('Failed to load messages', error));
-    }, [messageId]);
+    }, [receiverId]);  // Use receiverId as the dependency to refetch when it changes
 
     return (
         <Box sx={{ marginTop: 4 }}>
@@ -89,7 +96,7 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
 };
 
 export default function Messages() {
-    const { messageId } = useParams<string>();
+    const { messageId } = useParams<{ messageId: string }>();
 
     return (
         <Box
@@ -106,3 +113,5 @@ export default function Messages() {
         </Box>
     );
 }
+
+
