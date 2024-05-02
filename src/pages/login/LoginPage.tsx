@@ -59,6 +59,7 @@ const LoginPage: React.FC = () => {
         // window.location.reload(); // (Optional) Reloading the page can be done here.
       },
       (error) => {
+        console.error(error); // Log any errors to the console.
         // Handle any errors that may occur during the login attempt.
         const resMessage =
           (error.response &&
@@ -93,7 +94,12 @@ const LoginPage: React.FC = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             {/* Input field for entering the email address. */}
             <TextField
               margin="normal"
@@ -103,7 +109,8 @@ const LoginPage: React.FC = () => {
               label="Username"
               name="username"
               autoComplete="username"
-              onChange={(e) => setEmail(e.target.value)} value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               autoFocus
             />
             {/* Input field for entering the password. */}
@@ -116,7 +123,8 @@ const LoginPage: React.FC = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)} value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -141,7 +149,7 @@ const LoginPage: React.FC = () => {
               </Grid>
               <Grid item>
                 <Link href="/signUp" variant="body2">
-                  {'Don\'t have an account? Sign Up'}
+                  {'Don\t have an account? Sign Up'}
                 </Link>
               </Grid>
             </Grid>
@@ -155,7 +163,6 @@ const LoginPage: React.FC = () => {
     </ThemeProvider>
   );
 };
-
 
 // Export the 'LoginPage' component for use in other parts of the application.
 export default LoginPage;

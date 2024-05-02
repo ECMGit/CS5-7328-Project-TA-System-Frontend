@@ -64,13 +64,14 @@ const MessagesList = () => {
   const [error, setError] = useState('');
 
   // temp receiverId
-  const receiverId = 2; 
+  const receiverId = 2;
 
   useEffect(() => {
     setLoading(true);
     axios.get(`http://localhost:9000/api/messages/receiver/${receiverId}`)
       .then(response => {
         const sortedMessages = response.data.sort((a: UserMessage, b: UserMessage) => {
+          console.log(a.createdAt);
           // Ensure we convert dates only if needed
           const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
           const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
@@ -91,7 +92,7 @@ const MessagesList = () => {
   if (messages.length === 0 && !loading) {
     return <Typography>No messages found.</Typography>;
   }
-  
+
   return (
     <Container>
       <Typography variant="h4">Inbox</Typography>

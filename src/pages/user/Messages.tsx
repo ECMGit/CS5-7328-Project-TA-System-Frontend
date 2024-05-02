@@ -33,17 +33,20 @@ interface MessageThreadProps {
 }
 
 const MessageThread = ({ messageId }: MessageThreadProps) => {
+    const token = localStorage.getItem('token');
     const [messages, setMessages] = useState<Message[]>([]);
     const [showReplyBox, setShowReplyBox] = useState(false);
     const [replyMessage, setReplyMessage] = useState('');
 
     const receiverId = 2; // Assuming the receiver is the current user
+    const applicationId = 5; // Assuming the application ID is known
+    const senderId = 1; // Assuming the sender ID is known
 
     useEffect(() => {
         fetch(`http://localhost:9000/api/messages/receiver/${receiverId}`)
             .then(response => response.json())
             .then(data => {
-                const sortedMessages = data.sort((a: Message, b: Message) => 
+                const sortedMessages = data.sort((a: Message, b: Message) =>
                     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
                 );
                 setMessages(sortedMessages);
@@ -56,10 +59,54 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
     };
 
     const sendReply = () => {
-        console.log('Sending reply:', replyMessage);
-        setReplyMessage(''); // clear input after sending
-        setShowReplyBox(false); // close the reply box
+        // Prepare the payload
+        const newMessage = {
+            senderId: senderId, // Assuming this is already defined
+            receiverId: receiverId, // Assuming this is already defined
+            content: replyMessage,
+            applicationId: applicationId,
+        };
+
+        // Make the POST request
+        fetch('http://localhost:9000/message/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newMessage),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send the reply');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Reply sent successfully:', data);
+
+                // Clear the reply input and hide the box
+                setReplyMessage('');
+                setShowReplyBox(false);
+
+                // Optionally reload messages to update the thread
+                fetchMessages();
+            })
+            .catch(error => console.error('Error sending reply:', error));
     };
+
+    const fetchMessages = () => {
+        fetch(`http://localhost:9000/api/messages/receiver/${receiverId}`)
+            .then(response => response.json())
+            .then(data => {
+                const sortedMessages = data.sort((a: Message, b: Message) =>
+                    new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+                );
+                setMessages(sortedMessages);
+            })
+            .catch(error => console.error('Failed to load messages', error));
+    };
+
 
     return (
         <Box sx={{ marginTop: 4 }}>
