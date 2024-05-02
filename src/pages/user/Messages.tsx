@@ -14,6 +14,7 @@ import {
     TextField
 } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
+import userService from '../../services/auth';
 
 interface Sender {
     id: number;
@@ -40,7 +41,21 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
 
     const receiverId = 2; // Assuming the receiver is the current user
     const applicationId = 5; // Assuming the application ID is known
-    const senderId = 1; // Assuming the sender ID is known
+
+    const [senderId, setSenderId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            try {
+                const response = await userService.getCurrentUser();
+                console.log(response);
+                setSenderId(response.id);
+            } catch (err) {
+                console.error('Failed to get current user', err);
+            }
+        };
+        getCurrentUser();
+    }, []);
 
     useEffect(() => {
         fetch(`http://localhost:9000/api/messages/receiver/${receiverId}`)
@@ -59,40 +74,46 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
     };
 
     const sendReply = () => {
-        // Prepare the payload
-        const newMessage = {
-            senderId: senderId, // Assuming this is already defined
-            receiverId: receiverId, // Assuming this is already defined
-            content: replyMessage,
-            applicationId: applicationId,
-        };
+        if (senderId) {
+            // Prepare the payload
+            const newMessage = {
+                senderId: senderId,
+                receiverId: receiverId,
+                content: replyMessage,
+                applicationId: applicationId,
+            };
 
-        // Make the POST request
-        fetch('http://localhost:9000/message/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(newMessage),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to send the reply');
-                }
-                return response.json();
+            console.log('Sending reply:', newMessage);
+
+            // Make the POST request
+            fetch('http://localhost:9000/message/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newMessage),
             })
-            .then(data => {
-                console.log('Reply sent successfully:', data);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to send the reply');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Reply sent successfully:', data);
 
-                // Clear the reply input and hide the box
-                setReplyMessage('');
-                setShowReplyBox(false);
+                    // Clear the reply input and hide the box
+                    setReplyMessage('');
+                    setShowReplyBox(false);
 
-                // Optionally reload messages to update the thread
-                fetchMessages();
-            })
-            .catch(error => console.error('Error sending reply:', error));
+                    // Optionally reload messages to update the thread
+                    fetchMessages();
+                })
+                .catch(error => console.error('Error sending reply:', error));
+        } else {
+            console.error('Sender ID is not available');
+        }
     };
 
     const fetchMessages = () => {
@@ -106,7 +127,6 @@ const MessageThread = ({ messageId }: MessageThreadProps) => {
             })
             .catch(error => console.error('Failed to load messages', error));
     };
-
 
     return (
         <Box sx={{ marginTop: 4 }}>
@@ -179,4 +199,3 @@ export default function Messages() {
         </Box>
     );
 }
-

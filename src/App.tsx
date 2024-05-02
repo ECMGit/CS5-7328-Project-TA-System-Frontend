@@ -165,10 +165,10 @@ const App: React.FC = () => {
         <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
-        <Route path={'/signup/admin'} element = {<AdminSignUpPage />} />
+        <Route path={'/signup/admin'} element={<AdminSignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-        <Route path="/about-us" element={<AboutUs/>}/>
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
@@ -252,7 +252,7 @@ const App: React.FC = () => {
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
           <Route path="/course/:id" element={<PrivateRoute role="admin"> <CourseDetail /> </PrivateRoute>} />
-          </Route>
+        </Route>
       </Routes>
     </Router>
   );
