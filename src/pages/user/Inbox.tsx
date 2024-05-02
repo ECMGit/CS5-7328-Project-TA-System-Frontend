@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-  Box,
-  Typography,
-  Paper,
-  Divider,
   List,
   ListItem,
   ListItemText,
   ListItemAvatar,
   Avatar,
-  Button,
-  TextField,
+  Divider,
+  Container,
+  Typography,
+  Box,
   CircularProgress,
   IconButton,
+  Paper,
+  AppBar,
+  Toolbar,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { blue, grey } from '@mui/material/colors';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 interface User {
   id: number;
@@ -95,29 +97,38 @@ const MessagesList = () => {
   return (
     <Box
       sx={{
-        padding: 4,
+        flexGrow: 1,
         bgcolor: grey[100],
         height: '100vh',
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Inbox
-      </Typography>
-      {loading ? (
-        <CircularProgress />
-      ) : error ? (
-        <Typography color="error">{error}</Typography>
-      ) : messages.length === 0 ? (
-        <Typography>No messages found.</Typography>
-      ) : (
-        <Paper elevation={3}>
-          <List>
-            {messages.map(message => (
-              <MessageItem key={message.id} message={message} />
-            ))}
-          </List>
-        </Paper>
-      )}
+      <AppBar position="fixed">
+        <Toolbar>
+          <IconButton component={Link} to="/student-profile" edge="start" color="inherit" aria-label="back">
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Inbox
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ padding: 4, marginTop: 8 }}>
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : messages.length === 0 ? (
+          <Typography>No messages found.</Typography>
+        ) : (
+          <Paper elevation={3}>
+            <List>
+              {messages.map(message => (
+                <MessageItem key={message.id} message={message} />
+              ))}
+            </List>
+          </Paper>
+        )}
+      </Box>
     </Box>
   );
 };
