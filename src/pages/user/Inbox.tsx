@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
+  Box,
+  Typography,
+  Paper,
+  Divider,
   List,
   ListItem,
   ListItemText,
-  Divider,
-  Container,
-  Typography,
+  ListItemAvatar,
+  Avatar,
+  Button,
+  TextField,
+  CircularProgress,
+  IconButton,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { blue, grey } from '@mui/material/colors';
 
 interface User {
   id: number;
@@ -24,36 +32,32 @@ interface UserMessage {
   isRead: boolean;
 }
 
-const MessageItem = ({
-  message
-}: {
-  message: UserMessage;
-}) => {
+const MessageItem = ({ message }: { message: UserMessage }) => {
   return (
     <Link to={`/inbox/${message.id}`} style={{ textDecoration: 'none' }}>
-      <Container>
-        <ListItem alignItems="flex-start" style={{ backgroundColor: message.isRead ? 'transparent' : '#FFD700' }}>
-          <ListItemText
-            primary={`Message from ${message.sender.firstName} ${message.sender.lastName}`}
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: 'inline' }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  {message.content}
-                </Typography>
-                <Typography variant="caption" display="block" gutterBottom>
-                  {message.createdAt.toLocaleString()}
-                </Typography>
-              </>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="li" />
-      </Container>
+      <ListItem alignItems="flex-start" style={{ backgroundColor: message.isRead ? 'transparent' : '#FFD700' }}>
+        <ListItemAvatar>
+          <Avatar sx={{ bgcolor: blue[500] }}>{message.sender.firstName.charAt(0)}</Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <Typography variant="subtitle1" color="text.primary">
+              {message.sender.firstName} {message.sender.lastName}
+            </Typography>
+          }
+          secondary={
+            <>
+              <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
+                {message.content}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {message.createdAt.toLocaleString()}
+              </Typography>
+            </>
+          }
+        />
+      </ListItem>
+      <Divider variant="inset" component="li" />
     </Link>
   );
 };
@@ -68,7 +72,8 @@ const MessagesList = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:9000/api/messages/receiver/${receiverId}`)
+    axios
+      .get(`http://localhost:9000/api/messages/receiver/${receiverId}`)
       .then(response => {
         const sortedMessages = response.data.sort((a: UserMessage, b: UserMessage) => {
           console.log(a.createdAt);
@@ -87,23 +92,34 @@ const MessagesList = () => {
       });
   }, []);
 
-  if (loading) return <Typography>Loading messages...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
-  if (messages.length === 0 && !loading) {
-    return <Typography>No messages found.</Typography>;
-  }
-
   return (
-    <Container>
-      <Typography variant="h4">Inbox</Typography>
-      <List>
-        {messages.map(message => (
-          <MessageItem key={message.id} message={message} />
-        ))}
-      </List>
-    </Container>
+    <Box
+      sx={{
+        padding: 4,
+        bgcolor: grey[100],
+        height: '100vh',
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Inbox
+      </Typography>
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : messages.length === 0 ? (
+        <Typography>No messages found.</Typography>
+      ) : (
+        <Paper elevation={3}>
+          <List>
+            {messages.map(message => (
+              <MessageItem key={message.id} message={message} />
+            ))}
+          </List>
+        </Paper>
+      )}
+    </Box>
   );
 };
 
 export default MessagesList;
-
