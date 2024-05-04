@@ -15,6 +15,7 @@ import Home from './pages/Home';
 import './stylesheets/App.css';
 import FacultyProfile from './pages/user/FacultyProfile';
 import StudentProfile from './pages/user/StudentProfile';
+import AdminProfile from './pages/user/AdminProfile';
 import JobInfo from './pages/JobInfo';
 
 import ViewFacultyTasks from './pages/task/TaskDisplayComponentFaculty';
@@ -138,6 +139,7 @@ function PrivateRouteJob() {
   } else if (userContext.user.role === 'student') {
     return <ViewJobsStudent />;
   } else if (userContext.user.role === 'faculty') {
+    return <ViewJobs />;
     return <ViewJobs />;
   } else {
     return <Navigate to="/unauthorized" />;
