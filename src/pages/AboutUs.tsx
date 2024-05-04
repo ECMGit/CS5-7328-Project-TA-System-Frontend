@@ -22,48 +22,60 @@ export default function AboutUs() {
     }, []);
 
     return (
-        <Box sx={{ px: 4, py: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 20 }}>
-            <Typography variant="h3" component="h1" gutterBottom align="center">
-                About Us
-            </Typography>
-            <Typography variant="body1" color="text.secondary" align="center" sx={{ maxWidth: 800 }}>
-                We are a team dedicated to creating tools that empower innovation.
-            </Typography>
-            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 4 }}>
-                <Link href="https://github.com/ECMGit/CS5-7328-Project-TA-System-Frontend" target="_blank" rel="noopener noreferrer">
-                <Button variant="contained" startIcon={<GitHubIcon />}>
-                        Frontend Repo
+        <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+        {/* // <Box sx={{ px: 4, py: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 20 }}> */}
+            <Grid item xs={2}/>
+            <Grid item xs={8}>
+                <Typography variant="h3" component="h1" gutterBottom align="center">
+                    About Us
+                </Typography>
+                <Typography variant="body1" color="text.secondary" align="center" sx={{ maxWidth: 800 }}>
+                    We are a team dedicated to creating tools that empower innovation.
+                </Typography>
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 4 }}>
+                    <Link href="https://github.com/ECMGit/CS5-7328-Project-TA-System-Frontend" target="_blank" rel="noopener noreferrer">
+                    <Button variant="contained" startIcon={<GitHubIcon />}>
+                            Frontend Repo
                     </Button>
-                </Link>
-                <Link href="https://github.com/ECMGit/CS5-7328-Project-TA-System-Backend" target="_blank" rel="noopener noreferrer">
-                <Button variant="contained" startIcon={<GitHubIcon />}>
-                        Backend Repo
-                    </Button>
-                </Link>
-            </Box>
-            <Typography variant="h5" component="h2" sx={{ mt: 6, mb: 4 }} align="center">
-                Contributors
-            </Typography>
-            <Grid container spacing={4} sx={{ mt: 6 }}>
-                {contributors.map((contributor, index) => (
-                    <Grid item key={index} xs={12} sm={6} md={4}>
-                        <Card>
-                            <CardMedia
-                                component="img"
-                                image={contributor.avatar_url}
-                                alt={contributor.login}
-                                sx={{ width: 50, height: 50, margin: 'auto' }}
-                            />
-                            <CardContent>
-                                <Typography gutterBottom variant="h6" component="div">
-                                    {contributor.login}
-                                </Typography>
-                            </CardContent>
-                        </Card>
+                    </Link>
+                    <Link href="https://github.com/ECMGit/CS5-7328-Project-TA-System-Backend" target="_blank" rel="noopener noreferrer">
+                    <Button variant="contained" startIcon={<GitHubIcon />}>
+                            Backend Repo
+                        </Button>
+                    </Link>
+                </Box>
+                <Typography variant="h5" component="h2" sx={{ mt: 6, mb: 4 }} align="center">
+                    Contributors
+                </Typography>
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 4 }}>
+                    <Grid container justifyContent="center" spacing={4} sx={{ mt: 6, flexGrow: 1}}>
+                        
+                        {contributors.map((contributor, index) => (
+                            <Grid item key={index} xs={10} sm={4} md={3}>
+                                <Card>
+                                    <CardMedia
+                                        component="img"
+                                        image={contributor.avatar_url}
+                                        alt={contributor.login}
+                                        sx={{ width: 50, height: 50, margin: 'auto' }}
+                                    />
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6" component="div">
+                                            {contributor.login}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                        
                     </Grid>
-                ))}
+                </Box>
+                <Footer />
             </Grid>
-            <Footer />
-        </Box>
+            <Grid item xs={2}/>
+            
+        {/* </Box> */}
+        </Grid>
+        
     );
 }
