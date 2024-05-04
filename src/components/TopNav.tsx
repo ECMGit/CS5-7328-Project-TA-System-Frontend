@@ -116,7 +116,7 @@ const TopNav: React.FC = () => {
                   {}
                   <Button
                     component={Link}
-                    to="/view-courses"
+                    to="/courses"
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '5px' }}

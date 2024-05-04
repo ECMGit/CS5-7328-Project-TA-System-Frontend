@@ -26,7 +26,7 @@ import ViewJobsStudent from './pages/faculty-jobs/StudentApplyJobPage';
 import EvaluatePerformance from './pages/faculty-jobs/JobPerformanceReviewPage';
 import PerformanceResult from './pages/user/PerformanceResultPage';
 import UserDataPage from './pages/user/UserDataPage';
-
+import UnauthorizedPage from'./pages/UnauthorizedPage' ;
 
 import EditApplication from './pages/application/EditApplication';
 import ViewApplication from './pages/application/ViewApplication';
@@ -85,6 +85,7 @@ interface PrivateRouteProps {
   role: string;
   userId?: number;
   children: React.ReactNode;
+
 }
 
 const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
@@ -103,6 +104,28 @@ const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
     return <Navigate to="/unauthorized" />;
   }
 };
+
+//Define PrivateRoutes to Allow it to handle multiple roles.
+interface PrivateRouteProp {
+  roles: string[];
+  userId?: number;
+  children: React.ReactNode;
+}
+
+const PrivateRoutes = ({ roles, userId, children }: PrivateRouteProp) => {
+  const userContext = useContext(UserContext);
+
+  if (!userContext?.user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (roles.includes(userContext.user.role) && (!userId || userContext.user.id === userId)) {
+    return <>{children}</>;
+  } else {
+    return <Navigate to="/unauthorized" />;
+  }
+};
+
 //make an if statement to check if the user is a student or faculty and then render the correct page for jobs
 function PrivateRouteJob() {
   const userContext = useContext(UserContext);
@@ -151,7 +174,7 @@ function PrivateRoutePerformanceReview({
   }
 
   // if none of the condition is fulfilled, to unauthoried
-  return <Navigate to="/unauthorized" />;
+  return <Navigate to="/unauthoried" />;
 }
 
 const App: React.FC = () => {
@@ -179,7 +202,7 @@ const App: React.FC = () => {
 
           <Route path="/create-task" element={<CreateTask />} />
           <Route path="/tasks/student" element={<PrivateRoute role="student"><ViewCurrentTasks /></PrivateRoute>} />
-          <Route path="/tasks/faculty" element={<PrivateRoute role="faculty"><ViewAssignedTasks /></PrivateRoute>} />
+          <Route path="/tasks/faculty" element={<PrivateRoutes roles={['faculty', 'admin']}><ViewAssignedTasks /></PrivateRoutes>} />
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
 
           <Route path="/inbox" element={<Inbox />} />
@@ -220,13 +243,14 @@ const App: React.FC = () => {
           />
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
-          <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
-          <Route path="/jobs" element={<PrivateRoute role="faculty"><ViewJobs /></PrivateRoute>} />
+          <Route path="/post-job" element={<PrivateRoutes roles={['faculty', 'admin']}><PostJob /></PrivateRoutes>} />
+          <Route path="/jobs" element={<PrivateRoutes roles={['faculty', 'admin']}><ViewJobs /></PrivateRoutes>} />
+
           <Route path="/job-success" element={<PrivateRoute role="faculty"><PostJobSuccessPage /></PrivateRoute>} />
           <Route path="/edit-job/:jobId" element={<PrivateRoute role="faculty"><EditJobPage /></PrivateRoute>} />
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
-          <Route path="/view-applications" element={<PrivateRoute role="faculty"> <ViewApplicationsbyFacultyID /> </PrivateRoute>} />
+          <Route path="/view-applications" element={<PrivateRoutes roles={['faculty', 'admin']}> <ViewApplicationsbyFacultyID /> </PrivateRoutes>} />
           <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>} />
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>} />
 
@@ -246,6 +270,11 @@ const App: React.FC = () => {
           <Route path="/faculties" element={<PrivateRoute role="admin"> <ViewFaculties /> </PrivateRoute>} />
           <Route path="/courses" element={<PrivateRoute role="admin"> <ViewCourses /> </PrivateRoute>} />
           <Route path="/course/:id" element={<PrivateRoute role="admin"> <CourseDetail /> </PrivateRoute>} />
+
+          {/* 404 resources */}
+          <Route path="/*" element={<UnauthorizedPage />} />
+          
+
           </Route>
       </Routes>
     </Router>

@@ -53,7 +53,7 @@ const ViewAllCourses: React.FC = () => {
 
 
     const handleViewDetails = (courseId: number) => {
-        navigate(`/view-course/${courseId}`);
+        navigate(`/course/${courseId}`);
     };
 
 

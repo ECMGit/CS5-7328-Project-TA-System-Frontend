@@ -8,7 +8,9 @@ import {
   Input,
 } from '../user/styledComponents'; // Ensure Input is correctly imported
 import AdminService from '../../services/admin';
-
+import {
+  Typography,
+} from '@mui/material';
 export type FacultyData = {
   UserId: number;
   designation: string;
@@ -132,6 +134,12 @@ const ViewFaculties: React.FC = () => {
           },
         }}
       />
+       <Titles style={{ padding: '20px' }}>
+        <Typography variant="body1">
+          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+          Engineering students to find TA jobs.
+        </Typography>
+      </Titles>
     </Container>
   );
 };
