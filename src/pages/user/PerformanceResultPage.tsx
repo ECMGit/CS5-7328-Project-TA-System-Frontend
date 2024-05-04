@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getAllTaEvaluations } from '../../services/evaluate';
 import { useLocation } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -9,7 +11,7 @@ import {
   LinearProgress,
   Grid,
   Typography,
-
+  IconButton
 } from '@mui/material';
 
 type PerformanceResult = {
@@ -30,6 +32,7 @@ const PerformanceResultPage: React.FC = () => {
   const [results, setResults] = useState<PerformanceResult[]>([]);
   const location = useLocation();
   const currentTaId = location.state?.user.id;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!currentTaId) {
@@ -58,22 +61,43 @@ const PerformanceResultPage: React.FC = () => {
   return (
     <Container maxWidth="md">
       <Box my={4}>
-        <Typography variant="h4" gutterBottom component="div" style={{ textAlign: 'center' }}>
+        <IconButton onClick={() => navigate(-1)} sx={{ mb: 2 }}>
+          {' '}
+          {/* Back button with navigate */}
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography
+          variant="h4"
+          gutterBottom
+          component="div"
+          style={{ textAlign: 'center' }}
+        >
           TA Performance Results
         </Typography>
         {results.map((result) => (
-            <Card variant="outlined" key={result.courseId} sx={{ marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6">TA: {result.taUserId}</Typography>
-                <Typography color="textSecondary">Professor: {result.facultyUserId}</Typography>
-                <Typography color="textSecondary" mb={2}>Course: {result.courseId}</Typography>
+          <Card
+            variant="outlined"
+            key={result.courseId}
+            sx={{ marginBottom: 2 }}
+          >
+            <CardContent>
+              <Typography variant="h6">TA: {result.taUserId}</Typography>
+              <Typography color="textSecondary">
+                Professor: {result.facultyUserId}
+              </Typography>
+              <Typography color="textSecondary" mb={2}>
+                Course: {result.courseId}
+              </Typography>
 
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
                   <Typography>Teaching Skills:</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <LinearProgress variant="determinate" value={ratingToPercentage(result.teachingSkill)} />
+                  <LinearProgress
+                    variant="determinate"
+                    value={ratingToPercentage(result.teachingSkill)}
+                  />
                 </Grid>
                 <Grid item xs={1}>
                   <Typography>{result.teachingSkill}/10</Typography>
@@ -85,7 +109,10 @@ const PerformanceResultPage: React.FC = () => {
                   <Typography>Mentoring Skills:</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <LinearProgress variant="determinate" value={ratingToPercentage(result.mentoringSkill)} />
+                  <LinearProgress
+                    variant="determinate"
+                    value={ratingToPercentage(result.mentoringSkill)}
+                  />
                 </Grid>
                 <Grid item xs={1}>
                   <Typography>{result.mentoringSkill}/10</Typography>
@@ -97,14 +124,19 @@ const PerformanceResultPage: React.FC = () => {
                   <Typography>Effective Communication:</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <LinearProgress variant="determinate" value={ratingToPercentage(result.effectiveCommunication)} />
+                  <LinearProgress
+                    variant="determinate"
+                    value={ratingToPercentage(result.effectiveCommunication)}
+                  />
                 </Grid>
                 <Grid item xs={1}>
                   <Typography>{result.effectiveCommunication}/10</Typography>
                 </Grid>
               </Grid>
 
-              <Typography variant="body1">Comment: {result.comments}</Typography>
+              <Typography variant="body1">
+                Comment: {result.comments}
+              </Typography>
             </CardContent>
           </Card>
         ))}

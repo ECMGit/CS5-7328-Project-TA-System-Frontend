@@ -11,6 +11,7 @@ import useAutoLogout from '../components/AutoLogOut';
 import { link } from 'fs';
 import Footer from '../components/Footer';
 import CustomModal from '../components/CustomModal';
+import StudentDashboard from './StudentDashboard';
 
 // Define an interface 'User' to specify the structure of a user object.
 // interface User {
@@ -113,40 +114,31 @@ const Home: React.FC = () => {
   }, []);
 
   const renderContent = () => {
-    // When the user is an administrator, display the AdminDashboard component
     if (user && user.role === 'admin') {
       return <AdminDashboard />;
+    } else if (user && user.role === 'student') {
+      return <StudentDashboard />;
     } else {
-      // Content displayed by non administrator users
       return (
-        <Container style={{
-          paddingLeft: '10px',
-          paddingRight: '10px',
-          minHeight: '80vh'
-        }}>
-          {/* Large image at the top */}
-          <img
-            src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
-            alt="SMU Dallas Hall"
-            style={{ width: '100%', height: 'auto', paddingTop: '50px' }}
-          />
-          {/* Text box that spans the page */}
-          {user && (
-            <Paper style={{ padding: '20px' }}>
-              <Typography variant="body1">
-                Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle
-                School of Engineering students to find TA jobs.
-              </Typography>
-            </Paper>
-          )}
-
-          {/* If the user is a student, display their work list */}
-          {user && user.role === 'student' && (
-            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
-              <TAJobDisplayComponent />
-            </Container>
-          )}
-        </Container> 
+          <Container style={{
+            paddingLeft: '10px',
+            paddingRight: '10px',
+            minHeight: '80vh'
+          }}>
+            <img
+                src="https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/digital-marketing/students-hanging-dallas-hall.jpg?h=1333&iar=0&w=2000&hash=EAA3D7A0E96DA001440160E0ECB8643D"
+                alt="SMU Dallas Hall"
+                style={{ width: '100%', height: 'auto', paddingTop: '50px' }}
+            />
+            {user && (
+                <Paper style={{ padding: '20px' }}>
+                  <Typography variant="body1">
+                    Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle
+                    School of Engineering students to find TA jobs.
+                  </Typography>
+                </Paper>
+            )}
+          </Container>
       );
     }
   };
@@ -273,7 +265,7 @@ const Home: React.FC = () => {
                   </Button>
                   <Button
                     component={Link}
-                    to="/view-applications"  // Should be navigate to view my applications page (Student only)
+                    to="/view-application"  // Should be navigate to view my applications page (Student only)
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: '5px', marginRight: '10px' }}

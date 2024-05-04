@@ -83,21 +83,26 @@ axios.interceptors.request.use(
 );
 
 interface PrivateRouteProps {
-  role: string;
+  role?: string;
+  roles?: string[];
   userId?: number;
   children: React.ReactNode;
 
 }
 
-const PrivateRoute = ({ role, userId, children }: PrivateRouteProps) => {
+const PrivateRoute = ({ role, roles, userId, children }: PrivateRouteProps) => {
   const userContext = useContext(UserContext);
 
   if (!userContext?.user) {
     return <Navigate to="/login" />;
   }
 
+  const effectiveRoles = Array.from(
+    new Set([...(roles || []), ...(role ? [role] : [])])
+  );
+
   if (
-    userContext.user.role === role &&
+    effectiveRoles.includes(userContext.user.role) &&
     (!userId || userContext.user.id === userId)
   ) {
     return <>{children}</>;
@@ -245,20 +250,21 @@ const App: React.FC = () => {
           />
 
           <Route path="/jobs/details/:id" element={<JobInfo />} />
-          <Route path="/post-job" element={<PrivateRoutes roles={['faculty', 'admin']}><PostJob /></PrivateRoutes>} />
-          <Route path="/jobs" element={<PrivateRoutes roles={['faculty', 'admin']}><ViewJobs /></PrivateRoutes>} />
-
+          <Route path="/post-job" element={<PrivateRoute role="faculty"><PostJob /></PrivateRoute>} />
+          <Route path="/jobs" element={<PrivateRoute roles={['faculty', 'student', 'admin']}><ViewJobs /></PrivateRoute>} />
           <Route path="/job-success" element={<PrivateRoute role="faculty"><PostJobSuccessPage /></PrivateRoute>} />
           <Route path="/edit-job/:jobId" element={<PrivateRoute role="faculty"><EditJobPage /></PrivateRoute>} />
           {/* Application Module */}
           <Route path="/application-form" element={<ApplicationPage />} />
           <Route path="/view-applications" element={<PrivateRoutes roles={['faculty', 'admin']}> <ViewApplicationsbyFacultyID /> </PrivateRoutes>} />
-          <Route path="/view-application/:id" element={<PrivateRoute role="faculty"> <ViewApplication /> </PrivateRoute>} />
+          <Route path="/view-application" element={<PrivateRoute role="student"> <ViewApplication /> </PrivateRoute>} />
           <Route path="/edit-application/:id" element={<PrivateRoute role="student"> <EditApplication /> </PrivateRoute>} />
 
           {/* Student Performance Review Module */}
           <Route path="/evaluate-performance" element={<PrivateRoute role="faculty"> <EvaluatePerformance /> </PrivateRoute>} />
-          <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> <PerformanceResult /> </PrivateRoutePerformanceReview>} />
+          {/* <Route path="/performance-result/:id" element={<PrivateRoutePerformanceReview> 
+            <PerformanceResult /> </PrivateRoutePerformanceReview>} /> */}
+          <Route path="/performance-result" element={<PrivateRoute role="student"> <PerformanceResult /> </PrivateRoute>} />
           <Route path="/user-data" element={<UserDataPage />} />
 
           {/* FeedBack and Bug Report Module */}

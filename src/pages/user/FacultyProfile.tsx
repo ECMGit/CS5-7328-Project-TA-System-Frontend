@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 interface Job {
   id: number;
   title: string;
@@ -162,7 +163,20 @@ const FacultyProfile: React.FC = () => {
           padding: '16px', // Adjust the padding as needed
         }}
       >
-        My Faculty Dashboard
+        <IconButton
+          color="inherit"
+          onClick={() => navigate('/home')} // Use navigate to go back to home
+          sx={{ marginRight: 'auto' }} // This pushes the icon to the left
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography
+          variant="h6"
+          component="h1"
+          sx={{ flexGrow: 1, textAlign: 'center' }} // Centers the text and allows it to grow
+        >
+          My Faculty Dashboard
+        </Typography>
         <Tooltip title="Menu">
           <IconButton
             color="inherit"
