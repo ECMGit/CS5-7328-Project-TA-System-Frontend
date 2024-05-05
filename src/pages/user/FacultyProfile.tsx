@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FacultyJobService from '../../services/faculty-job';
+import ApplyService from '../../services/apply';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getFacultyCoursesWithTAs } from '../../services/evaluate';
@@ -24,6 +25,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
+import TopNav from '../../components/TopNav';
 interface Job {
   id: number;
   title: string;
@@ -39,16 +41,13 @@ interface Job {
   facultyId: number;
 }
 
-
-
-
 const FacultyProfile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [department, setDepartment] = useState<string>('');
   const [resume, setResume] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]); // Assuming jobs have properties like id, title, description, date, etc.
-
+  const [designation, setDesignation] = useState<string>('Professor');
   const [currentTAs, setCurrentTAs] = useState<FacultyCourseTAInfo[]>([]);
 
   const storedUserInfo = localStorage.getItem('user');
@@ -63,20 +62,32 @@ const FacultyProfile: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    FacultyJobService.getJobs()
-      .then((data) => {
-        console.log('Jobs data:', data);
-        setJobs(data.slice(0, 3));
-      })
-      .catch((error) => {
-        console.error('Error fetching jobs:', error);
-      });
+    const fetchJobs = async () => {
+      const facultyId = await getCurrentUserId();
+      if (facultyId) {
+        try {
+          const data = await FacultyJobService.getJobsByFacultyID(facultyId);
+          if (data) {
+            console.log('Jobs data:', data);
+            setJobs(data);
+          } else {
+            console.log('No jobs data returned');
+            setJobs([]);
+          }
+        } catch (error) {
+          console.error('Error fetching jobs:', error);
+          setJobs([]);
+        }
+      }
+    };
+
+    fetchJobs();
   }, []);
 
   useEffect(() => {
     const fetchCurrentTAs = async () => {
       try {
-        const facultyId = getCurrentUserId();
+        const facultyId = await getCurrentUserId();
         if (facultyId) {
           const coursesTAs: FacultyCourseTAInfo[] =
             await getFacultyCoursesWithTAs(facultyId);
@@ -88,11 +99,13 @@ const FacultyProfile: React.FC = () => {
     };
     fetchCurrentTAs();
   }, []);
+  
 
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
   const open = Boolean(anchorEl);
 
+  //TODO: Remove test message
   const [messages, setMessages] = useState([
     { id: 1, content: 'Test Message' },
   ]);
@@ -151,284 +164,264 @@ const FacultyProfile: React.FC = () => {
     handleClose();
   };
 
+  /* Note - The inbox menu and the profile menu don't make sense being together. 
+  A solution -> put view messages button in profile menu*/
   return (
-    <Container>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#1976D2', // Blue color
-          color: '#FFF', // White color
-          padding: '16px', // Adjust the padding as needed
-        }}
-      >
-        <IconButton
-          color="inherit"
-          onClick={() => navigate('/home')} // Use navigate to go back to home
-          sx={{ marginRight: 'auto' }} // This pushes the icon to the left
-        >
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography
-          variant="h6"
-          component="h1"
-          sx={{ flexGrow: 1, textAlign: 'center' }} // Centers the text and allows it to grow
-        >
-          My Faculty Dashboard
-        </Typography>
-        <Tooltip title="Menu">
-          <IconButton
-            color="inherit"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={navigateToInbox}>
-            {/* <ListItemIcon>
-              <MailIcon fontSize="small" />
-            </ListItemIcon>
-            Inbox */}
-            <Tooltip title="Inbox">
-              <IconButton
-                color="inherit"
-                onClick={() => {
-                  // Fetch messages when the inbox is opened (future implementation)
-                  fetchMessages();
-                }}
-              >
-                <MailIcon />
-              </IconButton>
-            </Tooltip>
-            {/* Add an inbox UI element */}
-            <Menu
-              id="inbox-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={open}
-              onClose={handleClose}
+    <>
+      <TopNav />
+      <Container>
+        <Grid container spacing={4}>
+          <Grid item xs={4}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              {/* Map through messages and display them */}
-              {messages.map((message) => (
-                <MenuItem key={message.id}>{message.content}</MenuItem>
-              ))}
-            </Menu>
-          </MenuItem>
-        </Menu>
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Faculty Profile
-            </Typography>
-            <Avatar
-              sx={{ width: 200, height: 200, mt: 3 }}
-              alt="User Profile"
-              src={profileImage || undefined}
-            />
-            <Typography>Name: {name}</Typography>
-            <Typography>Department: {department}</Typography>
-            <Box sx={{ mt: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: '100%' }}
-                    onClick={handleUploadClick}
-                  >
-                    Upload Profile
-                  </Button>
+              <Typography component="h1" variant="h5" mt={3}>
+                Faculty Profile
+              </Typography>
+              <Avatar
+                sx={{ width: 200, height: 200, mt: 3, md: 3 }}
+                alt="User Profile"
+                src={profileImage || undefined}
+              />
+              {/* Display user info with name and department */}
+              {name && department && (
+                <>
+                  <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
+                    User Information
+                  </Typography>
+                  <Typography>SMU ID: {getCurrentUserId()}</Typography>
+                  <Typography>Name: {name}</Typography>
+                  <Typography>Designation: {designation}</Typography>
+                  <Typography>Department: {department}</Typography>
+                </>
+              )}
+              {/* Handle the upload profile and upload resume buttons */}
+              <Box sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ width: '100%', height: '50px' }}
+                      onClick={handleUploadClick}
+                    >
+                      Upload Profile
+                    </Button>
+                    <Input
+                      type="file"
+                      id="profileUpload"
+                      sx={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ width: '100%', height: '50px' }}
+                      onClick={() =>
+                        document.getElementById('resumeUpload')?.click()
+                      }
+                    >
+                      Upload Resume
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+              <Box sx={{ mt: 4 }}>
+                <form>
+                  <TextField
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    label="Designation"
+                    variant="outlined"
+                    fullWidth
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    label="Department"
+                    variant="outlined"
+                    fullWidth
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
                   <Input
                     type="file"
-                    id="profileUpload"
+                    id="resumeUpload"
                     sx={{ display: 'none' }}
-                    onChange={handleFileChange}
+                    onChange={handleResumeChange}
                   />
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: '100%' }}
-                    onClick={() =>
-                      document.getElementById('resumeUpload')?.click()
-                    }
-                  >
-                    Upload Resume
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box sx={{ mt: 4 }}>
-              <form>
-                {/* <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  label="Department"
-                  variant="outlined"
-                  fullWidth
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  sx={{ mb: 2 }}
-                /> */}
-                <Input
-                  type="file"
-                  id="resumeUpload"
-                  sx={{ display: 'none' }}
-                  onChange={handleResumeChange}
-                />
-                {resume && (
-                  <a href={resume} target="_blank" rel="noopener noreferrer">
-                    View Resume
-                  </a>
-                )}
-              </form>
-              <Box sx={{ mt: 2, display: 'column', justifyContent: 'center' }}>
+                  {resume && (
+                    <a href={resume} target="_blank" rel="noopener noreferrer">
+                      View Resume
+                    </a>
+                  )}
+                </form>
                 <Button
                   variant="contained"
                   color="primary"
                   sx={{ width: '100%' }}
                   onClick={handleSave}
                 >
-                  Save
-                </Button>
-                <Button
-                  component={Link}
-                  to="/jobs"
-                  variant="contained"
-                  color="primary"
-                  style={{
-                    marginTop: '8px',
-                    width: '100%',
-                    textAlign: 'center',
-                  }}
-                >
-                  View All Jobs
+                  Save Personal Information
                 </Button>
               </Box>
             </Box>
-            {/* {name && department && (
-              <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
-                <Typography variant="h6">User Information</Typography>
-                <Typography>Name: {name}</Typography>
-                <Typography>Department: {department}</Typography>
-              </Paper>
-            )} */}
-          </Box>
+          </Grid>
+          <Grid item xs={8}>
+            {/* Right section with Job Boxes using Box components */}
+            {/* These boxes should be active applications or open positions that you've filled*/}
+            <Box
+              sx={{
+                mt: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h5" mb={2}>
+                Your Job Postings
+              </Typography>
+              {jobs.map((job) => (
+                <Paper
+                  key={job.id}
+                  elevation={3}
+                  sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+                >
+                  <Typography variant="h6">
+                    TA Position for Course CS {job.courseId}
+                  </Typography>
+                  {/* <Typography>Course ID: {job.courseId}</Typography> */}
+                  <Typography>TA Stats: {job.TAStats}</Typography>
+                  <Typography>Note: {job.notes}</Typography>
+                  <Typography>Deadline: {job.deadlineToApply}</Typography>
+                  <Typography>
+                    Required Courses: {job.requiredCourses}
+                  </Typography>
+                  <Typography>Required Skills: {job.requiredSkills}</Typography>
+                  {/* <Typography variant="h6">
+                    Faculty ID (For Testing Purpose): {job.facultyId}
+                  </Typography> */}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginRight: '10px', marginTop: '10px' }}
+                    onClick={() => handleCheckApplicants(job.id)}
+                  >
+                    Check Applicantions
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: '10px', marginTop: '10px' }}
+                    onClick={() => handleEditPosting(job.id)}
+                  >
+                    Edit Job
+                  </Button>
+                </Paper>
+              ))}
+            </Box>
+            {/* Box for current TA and evaluate performance */}
+            <Box
+              sx={{
+                mt: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h5" mb={4}>
+                Current TA
+              </Typography>
+              {currentTAs.map((ta) => (
+                <Paper
+                  key={ta.courseId}
+                  elevation={3}
+                  sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+                >
+                  {/* <Typography variant="h6">
+                    TA Name: {ta.firstName} {ta.lastName}
+                  </Typography> */}
+                  <Typography variant="h6">
+                    TA Information: {ta.username}
+                  </Typography>
+                  <Typography>SMU ID: {ta.smuNo}</Typography>
+                  <Typography>Course ID: {ta.courseId}</Typography>
+                  <Typography>
+                    Course Title: {ta.courseCode} {ta.title}
+                  </Typography>
+                  {/* TA performance evaluation button */}
+                  <Button
+                    onClick={() => handleEvaluateTA(ta)}
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 2, alignSelf: 'center' }}
+                  >
+                    Evaluate TA
+                  </Button>
+                </Paper>
+              ))}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          {/* Right section with Job Boxes using Box components */}
-          {/* These boxes should be active applications or open positions that you've filled*/}
-          <Box
-            sx={{
-              mt: '50px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            {jobs.map((job) => (
-              <Paper
-                key={job.id}
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-              >
-                <Typography variant="h6">{job.title}</Typography>
-                <Typography>{job.notes}</Typography>
-                <Typography>Date Submitted: {job.deadlineToApply}</Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ marginRight: '10px' }}
-                  onClick={() => handleCheckApplicants(job.id)}
-                >
-                  Check Applicants
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => handleEditPosting(job.id)}
-                >
-                  Edit Posting
-                </Button>
-              </Paper>
-            ))}
-          </Box>
-          {/* Box for current TA and evaluate performance */}
-          <Box
-            sx={{
-              mt: '50px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            {currentTAs.map((ta) => (
-              <Paper
-                key={ta.courseId}
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-              >
-                <Typography variant="h6">TA Name: {ta.username}</Typography>
-                <Typography>SMU ID: {ta.smuNo}</Typography>
-                <Typography>Course ID: {ta.courseId}</Typography>
-                <Typography>course Code: {ta.courseCode}</Typography>
-                <Typography>Course Name: {ta.title}</Typography>
-                {/* TA performance evaluation button */}
-                <Button
-                  onClick={() => handleEvaluateTA(ta)}
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 2, alignSelf: 'center' }}
-                >
-                  Evaluate TA
-                </Button>
-              </Paper>
-            ))}
-          </Box>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 
   function handleSave() {
     // Handle saving the user's information
   }
 
-  function handleCheckApplicants(jobId: number) {
+  async function handleCheckApplicants(jobId: number) {
     // Handle checking applicants for the specified job ID
-    //TODO: Implement this function and pull data from backend -- team3 sprint3
-    console.log(`Checking applicants for job ${jobId}`);
+    try {
+      // Asynchronously fetch the applications for the given job ID
+      const applications = await ApplyService.getTaApplicationsByTaJobId(jobId);
+      
+      // Optionally, check if the applications data is empty or not
+      if (!applications || applications.length === 0) {
+        console.warn(`No applications found for job ${jobId}`);
+        // Optionally, you might want to handle the case when no applications are found
+        // For example, redirect to a 'no data' page or display a message
+        navigate('/no-applications');
+        return;
+      }
+      
+      // Log the successful fetching of applications
+      console.log(`Checking applicants for job ${jobId}:`, applications);
+  
+      // Navigate to the page to view applications, passing the job ID
+      navigate(`/view-applications/${jobId}`, { state: { taApplications: applications } });
+
+    } catch (error) {
+      // Log any errors that occur during the fetching process
+      console.error(`Error fetching applications for job ${jobId}:`, error);
+      
+      // Handle the error by navigating to an error page or showing an error message
+      navigate('/error');
+    }
   }
+  
 
   function handleEditPosting(jobId: number) {
     // Handle editing the posting for the specified job ID
-    //TODO: Implement this function and pull data from backend -- team3 sprint3
+    // TODO: Implement this function and pull data from backend -- team3 sprint3
+
     console.log(`Editing posting for job ${jobId}`);
+    navigate(`/edit-job/${jobId}`);
   }
 };
 

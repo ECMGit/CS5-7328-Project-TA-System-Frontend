@@ -50,21 +50,18 @@ import ViewCourse from './pages/courses/ViewCourse';
 import EditCourse from './pages/courses/EditCourse';
 import TopNav from './components/TopNav';
 
-
 import CreateTask from './pages/task/CreateTask';
 import ViewCurrentTasks from './pages/task/TasksDisplayComponent';
 import ViewAssignedTasks from './pages/task/TaskDisplayComponentFaculty';
 import PostJobSuccessPage from './pages/faculty-jobs/PostJobSuccessPage';
 import EditJobPage from './pages/faculty-jobs/EditJobPage';
 
-
-
-
 import { StudentFeatureRequestPage } from './pages/feedback/StudentFeatureRequestpage';
 import { MainLayout } from './components/MainLayout';
 import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
 import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 import AboutUs from './pages/AboutUs';
+import ViewApplicationsByJobID from './pages/application/ViewApplicationsByJobID';
 
 // adds jsonwebtoken if present to each api request
 axios.interceptors.request.use(
@@ -191,10 +188,10 @@ const App: React.FC = () => {
         <Route path="/home-default" element={<HomeDefault />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
-        <Route path={'/signup/admin'} element = {<AdminSignUpPage />} />
+        <Route path={'/signup/admin'} element={<AdminSignUpPage />} />
         <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
         <Route path="/password-reset/:token" element={<PasswordResetPage />} />
-        <Route path="/about-us" element={<AboutUs/>}/>
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/" element={<ProviderLayout />}>
           {/* These routes are nested with user auth :D */}
           <Route index element={<Navigate to="/home" />} />
@@ -202,8 +199,24 @@ const App: React.FC = () => {
           <Route path="/home" element={<Home />} />
           {/* Profile module */}
 
-          <Route path="/student-profile" element={<PrivateRoute role="student"> <StudentProfile /> </PrivateRoute>} />
-          <Route path="/faculty-profile" element={<PrivateRoute role="faculty"> <FacultyProfile /> </PrivateRoute>} />
+          <Route
+            path="/student-profile"
+            element={
+              <PrivateRoute role="student">
+                {' '}
+                <StudentProfile />{' '}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/faculty-profile"
+            element={
+              <PrivateRoute role="faculty">
+                {' '}
+                <FacultyProfile />{' '}
+              </PrivateRoute>
+            }
+          />
 
           {/* Job Module */}
 
@@ -268,10 +281,19 @@ const App: React.FC = () => {
           <Route path="/user-data" element={<UserDataPage />} />
 
           {/* FeedBack and Bug Report Module */}
-          <Route path="/feedback" element={<MainLayout />} >
-            <Route path='/feedback' element={<StudentFeatureRequestPage />}></Route>
-            <Route path='/feedback/:id' element={<IndividualFeedbackPage />}></Route>
-            <Route path='/feedback/admin' element={<AdminFeedbackPage />}></Route>
+          <Route path="/feedback" element={<MainLayout />}>
+            <Route
+              path="/feedback"
+              element={<StudentFeatureRequestPage />}
+            ></Route>
+            <Route
+              path="/feedback/:id"
+              element={<IndividualFeedbackPage />}
+            ></Route>
+            <Route
+              path="/feedback/admin"
+              element={<AdminFeedbackPage />}
+            ></Route>
           </Route>
           {/* admin resources */}
           <Route path="/students" element={<PrivateRoute role="admin"> <ViewStudents /> </PrivateRoute>} />

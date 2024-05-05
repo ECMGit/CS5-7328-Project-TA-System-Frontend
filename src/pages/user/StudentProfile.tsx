@@ -9,11 +9,7 @@ import {
   TextField,
   Paper,
   Grid,
-  IconButton,
-  Tooltip,
-  Menu,
-  MenuItem,
-  ListItemIcon,
+  Alert,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail'; // Make sure MailIcon is imported
@@ -23,6 +19,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link, useNavigate } from 'react-router-dom';
 import ApplyService from '../../services/apply';
 import TAJobService from '../../services/tajob';
+import TopNav from '../../components/TopNav';
+import { alignProperty } from '@mui/material/styles/cssUtils';
+import { AlignHorizontalRight } from '@mui/icons-material';
 
 interface Course {
   id: number;
@@ -35,6 +34,11 @@ interface Application {
   id: string;
   taJobId: string;
   status: string;
+  studentId: string;
+  courseId: string;
+  applicationId: string;
+  requiredCourses: string;
+  requiredSkills: string;
 }
 
 interface Job {
@@ -140,29 +144,32 @@ const StudentProfile: React.FC = () => {
    * @param applications the applications to be combined
    * @returns an array of customized information being stored in JSON
    */
-  const createCustomArray = (jobs: Job[], applications: Application[]) => {
-    if (!applications) {
-      return [];
-    }
-    return applications
-      .map((application) => {
-        const job = jobs.find((job) => job.id === application.taJobId);
+  // const createCustomArray = (jobs: Job[], applications: Application[]) => {
+  //   if (!applications) {
+  //     return [];
+  //   }
+  //   return applications
+  //     .map((application) => {
+  //       const job = jobs.find((job) => job.id === application.taJobId);
 
-        if (job) {
-          return {
-            courseCode: job.course.courseCode,
-            title: job.title,
-            applicationId: application.id,
-          };
-        }
-
-        return null;
-      })
-      .filter((item) => item !== null);
-  };
+  //       if (job) {
+  //         return {
+  //           courseCode: job.course.courseCode,
+  //           title: job.title,
+  //           courseId: job.course.id,
+  //           applicationId: application.id,
+  //           studentId: application.studentId,
+  //           requiredCourses: application.requiredCourses,
+  //           requiredSkills: application.requiredSkills,
+  //         };
+  //       }
+  //       return null;
+  //     })
+  //     .filter((item) => item !== null);
+  // };
 
   // Create customArray and only use the first 3 elements.
-  const customArray = createCustomArray(jobs, applications);
+  // const customArray = createCustomArray(jobs, applications);
 
   const [messages, setMessages] = useState([
     { id: 1, content: 'Test Message' },
@@ -255,318 +262,263 @@ const StudentProfile: React.FC = () => {
   }
 
   return (
-    <Container>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#1976D2', // Blue color
-          color: '#FFF', // White color
-          padding: '16px', // Adjust the padding as needed
-        }}
-      >
-        <IconButton
-          color="inherit"
-          onClick={() => navigate('/home')} // Use navigate to go back to home
-          sx={{ marginRight: 'auto' }} // This pushes the icon to the left
-        >
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography
-          variant="h6"
-          component="h1"
-          sx={{ flexGrow: 1, textAlign: 'center' }} // Centers the text and allows it to grow
-        >
-          My Student Dashboard
-        </Typography>
-        <Tooltip title="Menu">
-          <IconButton
-            color="inherit"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={navigateToInbox}>
-            <Tooltip title="Inbox">
-              <IconButton
-                color="inherit"
-                onClick={() => {
-                  // Fetch messages when the inbox is opened (future implementation)
-                  fetchMessages();
-                }}
-              >
-                <MailIcon />
-              </IconButton>
-            </Tooltip>
-          </MenuItem>
-          {messages.map((message) => (
-            <MenuItem key={message.id}>{message.content}</MenuItem>
-          ))}
-          {/* Add an inbox UI element */}
-        </Menu>
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Student Profile
-            </Typography>
-            <Avatar
-              sx={{ width: 200, height: 200, mt: 3 }}
-              alt="User Profile"
-              src={profileImage || undefined}
-            />
-            <Box sx={{ mt: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: '100%', height: '50px' }}
-                    onClick={handleUploadClick}
-                  >
-                    Upload Profile
-                  </Button>
+    <>
+      <TopNav />
+      <Container>
+        <Grid container spacing={4}>
+          <Grid item xs={4}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography component="h1" variant="h5" mt={3}>
+                Student Profile
+              </Typography>
+              <Avatar
+                sx={{ width: 200, height: 200, mt: 3, md: 3 }}
+                alt="User Profile"
+                src={profileImage || undefined}
+              />
+
+              {/* Display user info with name and department */}
+              {name && graduationYear && major && (
+                <Paper
+                  elevation={3}
+                  sx={{ padding: 2, mt: 2, maxWidth: '80%' }}
+                >
+                  <Typography variant="h6">User Information</Typography>
+                  <Typography>Name: {name}</Typography>
+                  <Typography>Graduation Year: {graduationYear}</Typography>
+                  <Typography>Major: {major}</Typography>
+                </Paper>
+              )}
+              {/* Handle the upload profile and upload resume buttons */}
+              <Box sx={{ mt: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ width: '100%', height: '50px' }}
+                      onClick={handleUploadClick}
+                    >
+                      Upload Profile
+                    </Button>
+                    <Input
+                      type="file"
+                      id="profileUpload"
+                      sx={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ width: '100%', height: '50px' }}
+                      onClick={() =>
+                        document.getElementById('resumeUpload')?.click()
+                      }
+                    >
+                      Upload Resume
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+              {/* fields to update student information */}
+              <Box sx={{ mt: 4 }}>
+                <form>
+                  <TextField
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    label="Graduation Year"
+                    variant="outlined"
+                    fullWidth
+                    value={graduationYear}
+                    onChange={(e) => setGraduationYear(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    label="Major"
+                    variant="outlined"
+                    fullWidth
+                    value={major}
+                    onChange={(e) => setMajor(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
                   <Input
                     type="file"
-                    id="profileUpload"
+                    id="resumeUpload"
                     sx={{ display: 'none' }}
-                    onChange={handleFileChange}
+                    onChange={handleResumeChange}
                   />
-                </Grid>
-                <Grid item xs={6}>
+                  {resume && (
+                    <a href={resume} target="_blank" rel="noopener noreferrer">
+                      View Resume
+                    </a>
+                  )}
+                </form>
+                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                   <Button
                     variant="contained"
                     color="primary"
-                    sx={{ width: '100%', height: '50px' }}
-                    onClick={() =>
-                      document.getElementById('resumeUpload')?.click()
-                    }
+                    sx={{ width: '100%' }}
+                    onClick={handleSave}
                   >
-                    Upload Resume
+                    Save
                   </Button>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box sx={{ mt: 4 }}>
-              <form>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  label="Graduation Year"
-                  variant="outlined"
-                  fullWidth
-                  value={graduationYear}
-                  onChange={(e) => setGraduationYear(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  label="Major"
-                  variant="outlined"
-                  fullWidth
-                  value={major}
-                  onChange={(e) => setMajor(e.target.value)}
-                  sx={{ mb: 2 }}
-                />
-                <Input
-                  type="file"
-                  id="resumeUpload"
-                  sx={{ display: 'none' }}
-                  onChange={handleResumeChange}
-                />
-                {resume && (
-                  <a href={resume} target="_blank" rel="noopener noreferrer">
-                    View Resume
-                  </a>
-                )}
-              </form>
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ width: '100%' }}
-                  onClick={handleSave}
-                >
-                  Save
-                </Button>
-              </Box>
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  component={Link}
-                  to="/view-application"
-                  variant="contained"
-                  color="primary"
-                  sx={{ width: '100%' }}
-                >
-                  View Applications
-                </Button>
-              </Box>
-              {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  component={Link}
-                  to="/performance-result"
-                  variant="contained"
-                  color="primary"
-                  sx={{ width: '100%' }}
-                >
-                  View My Performance
-                </Button>
-              </Box> */}
-            </Box>
-            {/* This stuff should be sent to the database following successful submission. Upon login, this will
-              be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
-            {name && graduationYear && major && (
-              <Paper elevation={3} sx={{ padding: 2, mt: 2, maxWidth: '80%' }}>
-                <Typography variant="h6">User Information</Typography>
-                <Typography>Name: {name}</Typography>
-                <Typography>Graduation Year: {graduationYear}</Typography>
-                <Typography>Major: {major}</Typography>
-              </Paper>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          {/* Right section with Job Boxes using Box components */}
-          {/* These boxes should be active applications or open positions that you've filled*/}
-          <Box
-            sx={{
-              mt: '50px',
-              margin: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            {/* This <Box> component contains a set of job-related information */}
-            <Paper
-              elevation={3}
-              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-            >
-              <Typography variant="h6">Job Title 1</Typography>
-              <Typography>Description of Job 1</Typography>
-              <Typography>Date Submitted: 2023-10-15</Typography>
-              <Button variant="contained" color="primary">
-                Check Application Status
-              </Button>
-            </Paper>
-            <Paper
-              elevation={3}
-              sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
-            >
-              <Typography variant="h6">Job Title 2</Typography>
-              <Typography>Description of Job 2</Typography>
-              <Typography>Date Submitted: 2023-10-16</Typography>
-              <Button variant="contained" color="primary">
-                Check Application Status
-              </Button>
-            </Paper>
-            <Paper elevation={3} sx={{ spacing: 2, padding: 2, width: '100%' }}>
-              <Typography variant="h6">Job Title 3</Typography>
-              <Typography>Description of Job 3</Typography>
-              <Typography>Date Submitted: 2023-10-17</Typography>
-              <Button variant="contained" color="primary">
-                Check Application Status
-              </Button>
-            </Paper>
-            {customArray.length > 0 ? (
-              customArray.map((application, index) =>
-                application ? (
-                  <div
-                    key={index}
-                    style={
-                      index >= 3 && !showFullList ? hiddenStyle : visibleStyle
-                    }
+                </Box>
+                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    component={Link}
+                    to="/view-applications"
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
                   >
-                    <Paper
+                    View Applications
+                  </Button>
+                </Box>
+                {/* <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    component={Link}
+                    to="/performance-result"
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                  >
+                    View My Performance
+                  </Button>
+                </Box> */}
+              </Box>
+              {/* This stuff should be sent to the database following successful submission. Upon login, this will
+                be pulled from the database and displayed correctly. for now, it will just be displayed BWG*/}
+            </Box>
+          </Grid>
+          <Grid item xs={8}>
+            {/* Applications box*/}
+            <Box>
+              <Typography variant="h5" mt={2} mb={2} align="center">
+                My Applications
+              </Typography>
+              {applications.length > 0 ? (
+                applications.map((application, index) =>
+                  application ? (
+                    <div
                       key={index}
-                      elevation={3}
-                      sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
+                      style={
+                        index >= 6 && !showFullList ? hiddenStyle : visibleStyle
+                      }
                     >
-                      <Typography variant="h6">
-                        Application title: {application.title}
-                      </Typography>
-                      <Typography>Course: {application.courseCode}</Typography>
-                      <Typography>
-                        Application ID: {application.applicationId}
-                      </Typography>
-                      <Box
-                        sx={{
-                          mt: '5px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'start',
-                        }}
+                      <Paper
+                        key={index}
+                        elevation={3}
+                        sx={{ spacing: 2, padding: 2, mb: 2, width: '100%' }}
                       >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() =>
-                            handleCheckStatus(application.applicationId)
-                          }
+                        <Typography variant="h6">
+                          Application #{index + 1}: CS {application.courseId}
+                        </Typography>
+                        {/* <Typography>
+                          Course: {application.}
+                        </Typography> */}
+                        {/* Student ID for test only */}
+                        <Typography>
+                          Student ID: {application.studentId}
+                        </Typography>
+                        <Typography>
+                          Required Courses: {application.requiredCourses}
+                        </Typography>
+                        <Typography>
+                          Required Skills: {application.requiredSkills}
+                        </Typography>
+                        <Box
+                          sx={{
+                            mt: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'start',
+                          }}
                         >
-                          Check Application Status
-                        </Button>
-                        {selectedApplicationId ===
-                          application.applicationId && (
-                          <Typography sx={{ marginLeft: 2 }}>
-                            {selectedApplicationStatus}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Paper>
-                  </div>
-                ) : null
-              )
-            ) : (
-              <Paper
-                elevation={3}
-                sx={{ spacing: 2, padding: 2, width: '100%' }}
-              >
-                <Typography variant="h6">Start applying now!</Typography>
-              </Paper>
-            )}
-            <Button
-              onClick={toggleFullList}
-              color="primary"
-              variant="contained"
-            >
-              {showFullList ? (
-                <>
-                  <ArrowUpwardIcon /> Show Less
-                </>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              handleCheckStatus(application.applicationId)
+                            }
+                          >
+                            Check Application Status
+                          </Button>
+                          {selectedApplicationId ===
+                            application.applicationId && (
+                            <Typography sx={{ marginLeft: 20 }}>
+                              {/* Conditionally render the application status */}
+                              {selectedApplicationStatus === 'Pending' ? (
+                                <Alert severity="warning">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Approved' ? (
+                                <Alert severity="success">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : selectedApplicationStatus === 'Rejected' ? (
+                                <Alert severity="error">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              ) : (
+                                <Alert severity="info">
+                                  Application Status:{' '}
+                                  {selectedApplicationStatus}
+                                </Alert>
+                              )}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Paper>
+                    </div>
+                  ) : null
+                )
               ) : (
-                <>
-                  <ArrowDownwardIcon /> Show More
-                </>
+                <Paper
+                  elevation={3}
+                  sx={{ spacing: 2, padding: 2, width: '100%' }}
+                >
+                  <Typography variant="h6">Start applying now!</Typography>
+                </Paper>
               )}
-            </Button>
-          </Box>
+              <Box display="flex" justifyContent="right" alignItems="center">
+                <Button
+                  onClick={toggleFullList}
+                  color="primary"
+                  variant="contained"
+                >
+                  {showFullList ? (
+                    <>
+                      <ArrowUpwardIcon /> Show Less
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownwardIcon /> Show More
+                    </>
+                  )}
+                </Button>
+              </Box>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 
   function handleSave() {

@@ -2,265 +2,119 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
-  FormHelperText,
-  FormControl,
-  Grid,
-  TextField,
   Typography,
-  InputLabel,
-  OutlinedInput,
-  MenuItem,
-  Select,
-  Stack,
-  Chip,
-  Button,
-  IconButton,
-  InputBase,
   Paper,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
-import CancelIcon from '@mui/icons-material/Cancel';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import FileUpload from '../../components/FileUpload';
-import BottomPanel from '../../components/BottomPanel';
-import ApplyService from '../../services/apply';
-import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
-// TODO: this needs to come from back-end in the future
-// Static variable field
-const courses = [
-  'Math 101',
-  'Comp Sci 201',
-  'Phys 102',
-  'Hist 101',
-  'Comp Sci 301',
-  'Comp Sci 401',
-  'Comp Sci 402',
-  'Stat 302',
-];
-
-const skills = [
-  'Java',
-  'C',
-  'C#',
-  'Python',
-  'AWS',
-  'Azure',
-  'Ruby',
-  'Node.js',
-  'React',
-  'Spring Framework',
-  'Angular',
-  'TypeScript',
-  'Teaching',
-];
-
-interface UserMessage {
-  id: number;
-  content: string;
-  createdAt: string; // or Date if you are converting the date string to a Date object
-  senderId: number;
-  receiverId: number;
-  applicationId: number;
-  sender: { username: string }; // Assuming 'name' is the field you have
-  receiver: { username: string }; // Adjust according to your data structure
-  // Include other fields if necessary
+import ApplyService from '../../services/apply'; // Ensure this service is correctly implemented
+import { useNavigate } from 'react-router-dom';
+// Define the TA application data type based on backend structure
+interface TAApplicationData {
+  courseId: number;
+  studentId: number;
+  hoursCanWorkPerWeek: string;
+  coursesTaken: string;
+  gpa: number;
+  requiredCourses: string;
+  requiredSkills: string;
+  taJobId: number;
 }
 
 /* Component for the application page */
 function ApplicationPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [messages, setMessages] = useState<UserMessage[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [taApplications, setTaApplications] = useState<TAApplicationData[]>([]);
 
-  // Fetch messages when the component mounts or when the ID changes
+  // Fetch TA applications when the component mounts or when the ID changes
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchTaApplications = async () => {
+      const studentId = Number(id);
+      if (!studentId) {
+        console.error('Invalid student ID provided');
+        return;
+      }
       try {
-        if (id === undefined) {
-          // Handle the case where id is undefined
-          console.error('id is undefined');
-          return;
-        }
-        const data = await ApplyService.fetchMessages(id);
-        console.log(data);
-        if (Array.isArray(data)) { // Make sure the received data is an array
-          setMessages(data);
-        } else {
-          console.error('Received data is not an array:', data);
-        }
+        const applications = await ApplyService.getTaApplicationsByStudentId(
+          studentId
+        );
+        setTaApplications(applications);
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error('Error fetching TA applications:', error);
       }
     };
 
-    fetchMessages();
+    fetchTaApplications();
   }, [id]);
-
-  const handleSendMessage = async () => {
-    if (!newMessage.trim()) return; // Prevent sending empty messages
-
-    try {
-      // Replace with your API endpoint and adjust the payload as necessary
-      const response = await axios.post('http://localhost:9000/message', {
-        senderId: 1, // Replace with the logged in user's ID
-        receiverId: 2, // Replace with the recipient's ID
-        content: newMessage,
-        applicationId: Number(id),
-      });
-
-      // Update the messages array to include the new message
-      setMessages(prevMessages => [...prevMessages, response.data]);
-      setNewMessage(''); // Reset the input field
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  const [application, setApplication] = useState({
-    firstName: '',
-    lastName: '',
-    studentId: '',
-    courseName: '',
-    GPA: '',
-    hoursCanWorkPerWeek: '',
-    requiredCourses: [],
-    requiredSkills: [],
-    resume: '',
-    // other fields as necessary
-  });
-
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        if (!id) {
-          console.error('No application ID provided');
-          return;
-        }
-        const data = await ApplyService.fetchApplication(id);
-        // Ensuring requiredCourses and requiredSkills are arrays
-        data.requiredCourses = Array.isArray(data.requiredCourses) ? data.requiredCourses : [];
-        data.requiredSkills = Array.isArray(data.requiredSkills) ? data.requiredSkills : [];
-        data.firstName = data.firstName ? data.firstName : '';
-        data.lastName = data.lastName ? data.lastName : '';
-        data.studentId = data.studentId ? data.studentId : '';
-        data.courseName = data.courseName ? data.courseName : '';
-        data.GPA = data.GPA ? data.GPA : '';
-        data.hoursCanWorkPerWeek = data.hoursCanWorkPerWeek ? data.hoursCanWorkPerWeek : '';
-        data.resume = data.resume ? data.resume : '';
-        setApplication(data);
-      } catch (error) {
-        console.error('Error loading application', error);
-      }
-    };
-
-    loadData();
-  }, [id]);
-  
-
-
 
   return (
     <Container component="main" maxWidth="md">
-      <Box sx={{ my: 2, display: 'flex', alignItems: 'center' , marginLeft: '-55px' }}>
-        {/* Back Button */}
-        <IconButton onClick={() => navigate(-1)} sx={{ marginRight: 2 }}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography component="h1" variant="h4" sx={{ flexGrow: 1 }}>
-          Application Details
+      <Box sx={{ marginTop: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          TA Applications
         </Typography>
+        {taApplications.length > 0 ? (
+          <List>
+            {taApplications.map((app, index) => (
+              <ListItem
+                key={index}
+                sx={{
+                  mb: 2,
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  padding: '10px',
+                }}
+              >
+                <ListItemText
+                  primary={`Application for Course ID: ${app.courseId}`}
+                  secondary={
+                    <>
+                      <Typography component="span" variant="body2">
+                        Student ID: {app.studentId}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        GPA: {app.gpa}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        Hours Available: {app.hoursCanWorkPerWeek}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        Courses Taken: {app.coursesTaken}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        Required Courses: {app.requiredCourses}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        Skills Required: {app.requiredSkills}
+                      </Typography>
+                      <br />
+                      <Typography component="span" variant="body2">
+                        TA Job ID: {app.taJobId}
+                      </Typography>
+                    </>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography>No TA applications found.</Typography>
+        )}
       </Box>
-      
-      <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', pb: 4 }}>
-        <Typography variant="h6">Name: {application.firstName} {application.lastName}</Typography>
-        <Typography variant="h6">Student ID: {application.studentId}</Typography>
-        <Typography variant="h6">Course Name: {application.courseName}</Typography>
-        <Typography variant="h6">GPA: {application.GPA}</Typography>
-        <Typography variant="h6">Hours Available Per Week: {application.hoursCanWorkPerWeek}</Typography>
-
-        <Typography variant="h6">Related Courses:</Typography>
-        <Stack direction="row" spacing={1}>
-          {application.requiredCourses.map(course => (
-            <Chip key={course} label={course} />
-          ))}
-        </Stack>
-
-        <Typography variant="h6">Skills:</Typography>
-        <Stack direction="row" spacing={1}>
-          {application.requiredSkills.map(skill => (
-            <Chip key={skill} label={skill} />
-          ))}
-        </Stack>
-
-        <Typography variant="h6">Resume: {application.resume}</Typography>
-      </Box>
-
-      <Box
-        component="section"
-        sx={{
-          backgroundColor: '#f4f6f8',
-          border: '1px solid #e0e0e0',
-          borderRadius: '10px',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          maxHeight: '400px',
-        }}
-      >
-        {/* Message List */}
-        <Box sx={{ overflowY: 'auto', p: 2, flexGrow: 1 }}>
-          {messages.map((message, index) => (
-            <Paper key={index} sx={{ p: '10px', mb: '10px', maxWidth: '70%', backgroundColor: '#fff' }}>
-              <Typography variant="body1">{message.content}</Typography>
-              <Typography variant="caption" display="block" gutterBottom>
-                Sent by {message.sender.username} to {message.receiver.username} on 
-                {new Date(message.createdAt).toLocaleString()}
-              </Typography>
-            </Paper>
-          ))}
-        </Box>
-
-        {/* New Message Input */}
-        <Box
-          component="form"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: '#fff',
-            p: '10px',
-            borderTop: '1px solid #e0e0e0',
-          }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendMessage();
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            inputProps={{ 'aria-label': 'type a message' }}
-          />
-          <IconButton type="submit" sx={{ p: '10px' }} aria-label="send">
-            <SendIcon />
-          </IconButton>
-        </Box>
-      </Box>
-      <BottomPanel />
     </Container>
   );
+};
 
 
 

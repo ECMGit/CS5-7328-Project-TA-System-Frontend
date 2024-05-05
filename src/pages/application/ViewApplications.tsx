@@ -1,8 +1,22 @@
-import React, { useState, useEffect, useContext, useRef} from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 import Fuse from 'fuse.js';
-import { AppBar, Toolbar, Typography, Button, Container, List, ListItemButton, ListItemText, MenuItem, Menu, TextField, Box, Paper } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  List,
+  ListItemButton,
+  ListItemText,
+  MenuItem,
+  Menu,
+  TextField,
+  Box,
+  Paper,
+} from '@mui/material';
 import CustomModal from '../../components/CustomModal';
 import AuthService from '../../services/auth';
 import styled from 'styled-components';
@@ -43,12 +57,11 @@ const SearchInput = styled.input`
   font-size: 16px;
 `;
 
-
 const MakeTaButton = styled.button`
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #4caf50; 
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
@@ -86,14 +99,6 @@ const ButtonWrapper = styled.div`
 
 const ViewApplicationsbyFacultyID: React.FC = () => {
   const navigate = useNavigate();
-  
-
-
-
-
-
-
-
 
   const [isOpen, setIsOpen] = useState(false); // State to control the CustomModal visibility
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null); // Store timeout ID for clearing
@@ -160,7 +165,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
     setIsOpen(false);
     setTimeoutId(null);
   };
-  
+
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -178,8 +183,8 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   };
 
   /**
- * Log out the user, delete user from localStorage
- */
+   * Log out the user, delete user from localStorage
+   */
   const handleLogout = function () {
     localStorage.removeItem('user');
     setUser(null);
@@ -188,16 +193,22 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   };
 
   /**
-   * Navigate to the corresponding user profile. 
+   * Navigate to the corresponding user profile.
    */
   const handleProfile = function () {
     // Guard clause.
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
 
     // Navigate to student/faculty profile.
-    if (user.role === 'student') { navigate('/student-profile'); }
-    else if (user.role === 'faculty') { navigate('/faculty-profile'); }
-    else if (user.role === 'admin') { navigate('/admin-profile'); }
+    if (user.role === 'student') {
+      navigate('/student-profile');
+    } else if (user.role === 'faculty') {
+      navigate('/faculty-profile');
+    } else if (user.role === 'admin') {
+      navigate('/admin-profile');
+    }
   };
 
   const renderContent = () => {
@@ -210,7 +221,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         <>
           {/* If the user is a student, display their work list */}
           {user && user.role === 'student' && (
-            <Container maxWidth='sm' style={{ marginTop: '20px' }}>
+            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
               <TAJobDisplayComponent />
             </Container>
           )}
@@ -225,7 +236,6 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
     // Example navigation (adjust the path as needed)
     navigate(`/performance/${applicationId}`); // Backend url may not be implemented yet
   };
-
 
   // Columns configuration for MUI DataGrid
   const columns = [
@@ -321,7 +331,9 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
       try {
         const userId = AuthService.getCurrentUser()?.id; // Assuming getCurrentUser returns user object
         if (userId) {
-          const taApplications = await AuthService.getTaApplicationsByFacultyId(userId);
+          const taApplications = await AuthService.getTaApplicationsByFacultyId(
+            userId
+          );
           setApplications(taApplications);
           setOriginalApplications(taApplications);
         }
@@ -424,9 +436,9 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
   return (
     <>
       {/* Navigation Bar division */}
-      {<TopNav/>}
+      {<TopNav />}
 
-        <CustomModal
+      <CustomModal
         isOpen={isOpen}
         message="You've been inactive for a while. Do you want to continue your session?"
         onStay={handleStayLoggedIn}
@@ -448,7 +460,7 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           onRowSelectionModelChange={onRowsSelectionHandler}
           rowSelectionModel={selectionModel}
         />
-        <ButtonColumn>      
+        <ButtonColumn>
           {/* Button to make student TA*/}
           <MakeTaButton onClick={makeTA}>Make TA</MakeTaButton>
 
@@ -475,12 +487,12 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
         {currentApplication && <MockResume application={currentApplication} />}
       </div>
 
-        <List
-          component="nav"
-          aria-label="Device settings"
-          sx={{ bgcolor: 'background.paper' }}
-        >
-          {/* <ListItemButton
+      <List
+        component="nav"
+        aria-label="Device settings"
+        sx={{ bgcolor: 'background.paper' }}
+      >
+        {/* <ListItemButton
             id="lock-button"
             aria-haspopup="listbox"
             aria-controls="lock-menu"
@@ -512,17 +524,16 @@ const ViewApplicationsbyFacultyID: React.FC = () => {
           ))} */}
       </Menu>
       <div>
-      {/* Text box that spans the page, will fill it with about us and stuff BWG */}
-      <Paper style={{ padding: '20px' }}>
-        <Typography variant="body1">
-          Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
-          Engineering students to find TA jobs.
-        </Typography>
-      </Paper>
+        {/* Text box that spans the page, will fill it with about us and stuff BWG */}
+        <Paper style={{ padding: '20px' }}>
+          <Typography variant="body1">
+            Welcome to CS5/7328 TA Job Site! This site is for SMU Lyle School of
+            Engineering students to find TA jobs.
+          </Typography>
+        </Paper>
       </div>
     </>
   );
-
 };
 
 export default ViewApplicationsbyFacultyID;
