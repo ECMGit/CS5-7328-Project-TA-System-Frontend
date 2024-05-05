@@ -41,6 +41,7 @@ import ViewStudents from './pages/Admin/ViewStudents';
 import ViewFaculties from './pages/Admin/ViewFaculties';
 import ViewCourses from './pages/Admin/ViewCourses';
 import CreateMessage from './pages/user/CreateMessage';
+
 import CourseDetail from './pages/Admin/ViewCourseDetail';
 
 // TODO: Merge following page with above viewAllCourses page, we only need one page for viewing courses
@@ -61,6 +62,8 @@ import { MainLayout } from './components/MainLayout';
 import { AdminFeedbackPage } from './pages/feedback/AdminFeedbackPage';
 import { IndividualFeedbackPage } from './pages/feedback/IndividualFeedbackPage';
 import AboutUs from './pages/AboutUs';
+import Messages from './pages/user/Messages';
+
 import ViewApplicationsByJobID from './pages/application/ViewApplicationsByJobID';
 
 // adds jsonwebtoken if present to each api request
@@ -181,6 +184,7 @@ function PrivateRoutePerformanceReview({
   return <Navigate to="/unauthoried" />;
 }
 
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -226,6 +230,8 @@ const App: React.FC = () => {
           <Route path="/student-profile" element={<PrivateRoute role="student"><StudentProfile /></PrivateRoute>} />
 
           <Route path="/inbox" element={<Inbox />} />
+          <Route path="/inbox/:messageId" element={<Messages />} />
+
 
           <Route index element={<Navigate to="/home" />} />
           <Route path="/inbox" element={<Inbox />} />
