@@ -5,10 +5,13 @@ import CustomModal from './CustomModal'; // Adjust the import path as necessary
 
 /*
 HOW TO USE
-1. Import useAutoLogout from '../components/AutoLogOut', or from '../../components/AutoLogOut' depending on file location.
-2. Create a modal using const { Modal } = useAutoLogout();. This must be created in your function with your other const
+1. Import useAutoLogout from '../components/AutoLogOut', 
+  or from '../../components/AutoLogOut' depending on file location.
+2. Create a modal using const { Modal } = useAutoLogout();. 
+  This must be created in your function with your other const
 variables.
-3. Insert the modal onto the page with {Modal} in the return statement. Best inserted at the end before the end of your
+3. Insert the modal onto the page with {Modal} in the return statement. 
+  Best inserted at the end before the end of your
 last container.
 */
 
