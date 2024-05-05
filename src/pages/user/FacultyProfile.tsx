@@ -392,7 +392,7 @@ const FacultyProfile: React.FC = () => {
       const applications = await ApplyService.getTaApplicationsByTaJobId(jobId);
       
       // Optionally, check if the applications data is empty or not
-      if (!applications || applications.length == 0) {
+      if (!applications || applications.length === 0) {
         console.warn(`No applications found for job ${jobId}`);
         // Optionally, you might want to handle the case when no applications are found
         // For example, redirect to a 'no data' page or display a message
