@@ -84,7 +84,9 @@ const CreateTask: React.FC = () => {
   const navigate = useNavigate();
 
   const storedUser = localStorage.getItem('user');
-
+  // IMPORTANT:
+  //When assigning a task, the system uses the Faculty member's 'id' from the User table NOT 'userID' from Faculty table
+  //When assigning the task to the student, it uses the Student's 'userID' from the Student table
   const handleSubmit = () => {
     const userId = JSON.parse(storedUser!).id; 
     api.createTask(
@@ -189,7 +191,7 @@ const CreateTask: React.FC = () => {
           <Button 
             component={RouterLink} 
             variant="text" 
-            to='/tasks' 
+            to='/home' 
             sx={{ mt: 4, mb: 3 }} 
           >
             Home
