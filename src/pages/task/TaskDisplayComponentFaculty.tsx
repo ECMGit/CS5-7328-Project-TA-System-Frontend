@@ -131,7 +131,7 @@ const ViewAssignedTasks: React.FC = () => {
     fetchTasks();
   }, [storedUser]);
 
-  if (!tasks.length) {
+  if (!tasks || !tasks.length) {
     return (
       <div>
      <div>
