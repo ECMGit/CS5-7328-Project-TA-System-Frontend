@@ -78,8 +78,9 @@ export default function AboutUs() {
             <Grid item xs={2}/>
             
         {/* </Box> */}
+        {Modal}
         </Grid>
-          {Modal}
+        
         
     );
 }

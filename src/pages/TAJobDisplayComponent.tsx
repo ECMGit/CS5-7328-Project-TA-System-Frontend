@@ -73,8 +73,9 @@ const TAJobDisplayComponent = () => {
                 ))}
             </div>
             {taJobs.length === 0 && <Typography>No job openings available.</Typography>}
+            {Modal}
         </Container>
-      {Modal}
+      
 
     );
 };
