@@ -19,6 +19,7 @@ import {
 import { Link } from 'react-router-dom';
 import { blue, grey } from '@mui/material/colors';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useAutoLogout from '../../components/AutoLogOut';
 
 interface User {
   id: number;
@@ -65,6 +66,7 @@ const MessageItem = ({ message }: { message: UserMessage }) => {
 };
 
 const MessagesList = () => {
+  const { Modal } = useAutoLogout();
   const [messages, setMessages] = useState<UserMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -126,6 +128,7 @@ const MessagesList = () => {
                 <MessageItem key={message.id} message={message} />
               ))}
             </List>
+      {Modal}
           </Paper>
         )}
       </Box>

@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import CourseService from '../../services/course';
 // 确保 courseData 类型正确导入，这里假设你已经正确地从后端类型定义中导入
 import { courseData } from './courseData';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const AddCourse: React.FC = () => {
+    const { Modal } = useAutoLogout();
     const [title, setTitle] = useState('');
     const [courseCode, setCourseCode] = useState('');
     const [description, setDescription] = useState('');
@@ -83,6 +85,7 @@ const AddCourse: React.FC = () => {
                     )}
                 </Box>
             </Box>
+            {Modal}
         </Container>
     );
 };

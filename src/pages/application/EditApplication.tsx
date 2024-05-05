@@ -6,6 +6,7 @@ import ApplyService from '../../services/apply';
 import useAutoLogout from '../../components/AutoLogOut';
 
 const EditApplication = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [application, setApplication] = useState({
@@ -44,16 +45,6 @@ const EditApplication = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: 10 * 60 * 1000, // Use the defined timeout duration
-    logoutFunction: () => {
-      console.log('called');
-      localStorage.clear(); 
-      console.log('go to login');
-      navigate('/login'); 
-      
-    },
-  });
   // // Handle file change
   // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   if (e.target.files) {

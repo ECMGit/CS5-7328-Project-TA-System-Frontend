@@ -4,8 +4,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { FeedbackList } from '../../components/feedback/FeedbackList';
 import { SubmitFeedbackForm } from '../../components/feedback/SubmitFeedbackForm';
 import FeedbackService, { FeedbackItem } from '../../services/feedback';
+import useAutoLogout from '../../components/AutoLogOut';
 
 export const StudentFeatureRequestPage = () => {
+  const { Modal } = useAutoLogout();
   const [loading, setLoading] = useState(true);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [hasMore, setHasMore] = useState(true);  //If there are more feedback to load
@@ -58,6 +60,7 @@ export const StudentFeatureRequestPage = () => {
           <FeedbackList feedback={visibleFeedback} />
         </InfiniteScroll>
       )}
+      {Modal}
     </Box>
   );
 };

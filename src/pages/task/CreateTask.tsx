@@ -6,9 +6,10 @@ import { Container, Typography, Avatar, Box, Input, TextField, FormHelperText, B
 import { LoadingButton } from '@mui/lab';
 
 import api from '../../services/taskform';
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 const CreateTask: React.FC = () => {
+  const { Modal } = useAutoLogout();
   // State hooks for form fields and validation errors
   //   const [faculty_id, setFaculty_id] = useState(''); // COmes from later check
   const [student_id, setStudent_id] = useState('');
@@ -199,6 +200,7 @@ const CreateTask: React.FC = () => {
           <FormHelperText>{message}</FormHelperText>
         </Box>
       </Box>
+      {Modal}
     </Container>
   );
 };

@@ -12,10 +12,10 @@ import AvatarWrapper from '../../components/AvatarWrapper';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import TopNav from '../../components/TopNav';
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 const EditJobPage: React.FC = () => {
-
+    const { Modal } = useAutoLogout();
     const { jobId } = useParams<{ jobId: string }>();
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
@@ -210,6 +210,7 @@ const EditJobPage: React.FC = () => {
                         <FormHelperText>{message}</FormHelperText>
                     </Box>
                 </Box>
+                {Modal}
             </Container>
         </div>
     );

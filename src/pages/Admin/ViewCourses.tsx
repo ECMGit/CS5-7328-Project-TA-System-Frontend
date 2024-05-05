@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminService from '../../services/admin';
 import {
   Typography,
-} from '@mui/material';
+} from '@mui/material';import useAutoLogout from '../../components/AutoLogOut';
 
 export type CourseData = {
   id: number;
@@ -22,6 +22,7 @@ export type CourseData = {
 };
 
 export const ViewCourse: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const navigate =useNavigate();
   const [course, setCourse] = useState<CourseData[]>([]);
   const [searchID, setSearchID] = useState('');
@@ -133,6 +134,7 @@ export const ViewCourse: React.FC = () => {
           Engineering students to find TA jobs.
         </Typography>
       </Title>
+      {Modal}
     </Container>
     
   );

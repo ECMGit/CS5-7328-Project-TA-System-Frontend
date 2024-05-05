@@ -10,7 +10,8 @@ import {
 import AdminService from '../../services/admin';
 import {
   Typography,
-} from '@mui/material';
+} from '@mui/material';import useAutoLogout from '../../components/AutoLogOut';
+
 export type StudentData = {
   UserId: number;
   year: number;
@@ -27,6 +28,7 @@ export type UserData = {
 };
 
 const ViewStudents: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [students, setStudents] = useState<StudentData[]>([]);
   const [searchID, setSearchID] = useState('');
   const [searchSmuID, setSearchSmuID] = useState('');
@@ -136,6 +138,7 @@ const ViewStudents: React.FC = () => {
           Engineering students to find TA jobs.
         </Typography>
       </Titles>
+      {Modal}
     </Container>
   );
 };

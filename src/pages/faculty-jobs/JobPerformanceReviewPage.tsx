@@ -11,8 +11,10 @@ import {
   Box,
   Grid,
 } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const PerformanceReview: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const location = useLocation();
   const taInfo = location.state?.taInfo;
 
@@ -212,6 +214,7 @@ const PerformanceReview: React.FC = () => {
           </Typography>
         </Box>
       )}
+      {Modal}
     </Container>
   );
 };

@@ -5,6 +5,8 @@ import { Grid, Button, Box, Typography, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import MUI Icon for back button
 import { Link, useNavigate } from 'react-router-dom';
 
+import useAutoLogout from '../../components/AutoLogOut';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -20,6 +22,7 @@ interface Task {
 }
 
 const ViewCurrentTasks: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');
@@ -138,6 +141,7 @@ const ViewCurrentTasks: React.FC = () => {
           No Tasks Available
         </Typography>
       )}
+      {Modal}
     </Box>
   );
 };

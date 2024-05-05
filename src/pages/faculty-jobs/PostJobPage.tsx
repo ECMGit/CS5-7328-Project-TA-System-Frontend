@@ -13,6 +13,7 @@ import AvatarWrapper from '../../components/AvatarWrapper';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
 import { UserContext } from '../../provider';
+import useAutoLogout from '../../components/AutoLogOut';
 
 interface Course {
   courseID: number;
@@ -22,6 +23,7 @@ interface Course {
 
 const PostJob: React.FC = () => {
   // State hooks for form fields and validation errors
+  const { Modal } = useAutoLogout();
   const [title, setTitle] = useState('');
   const [courseId, setCourseId] = useState('');
   const [courseSchedule, setCourseSchedule] = useState('');
@@ -287,6 +289,7 @@ const PostJob: React.FC = () => {
             <FormHelperText>{message}</FormHelperText>
           </Box>
         </Box>
+        {Modal}
       </Container>
     </>
   );

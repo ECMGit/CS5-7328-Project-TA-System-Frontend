@@ -12,9 +12,7 @@ import api from '../../services/faculty-job';
 import { UserContext } from '../../provider';
 import AdminDashboard from '../AdminDashboard';
 import TAJobDisplayComponent from '../TAJobDisplayComponent';
-
-
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 const ViewJobs: React.FC = () => {
 
@@ -38,6 +36,7 @@ const ViewJobs: React.FC = () => {
     return <div>Loading...</div>; // or any other fallback UI
   }
 
+  const { Modal } = useAutoLogout();
   const { user, setUser } = userContext;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -276,7 +275,7 @@ const ViewJobs: React.FC = () => {
             </ButtonWrapper>
           ))}
         </ButtonColumn>
-
+        {Modal}
 
       </FlexContainer>
       {/* <Container>

@@ -9,6 +9,8 @@ interface Contributor {
   login: string;
 }
 
+import useAutoLogout from '../components/AutoLogOut';
+
 export default function AboutUs() {
     const [contributors, setContributors] = useState<Contributor[]>([]);
 
@@ -21,6 +23,7 @@ export default function AboutUs() {
         fetchContributors();
     }, []);
 
+  const { Modal } = useAutoLogout();
     return (
         <Grid sx={{ flexGrow: 1 }} container spacing={2}>
         {/* // <Box sx={{ px: 4, py: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 20 }}> */}
@@ -76,6 +79,7 @@ export default function AboutUs() {
             
         {/* </Box> */}
         </Grid>
+          {Modal}
         
     );
 }

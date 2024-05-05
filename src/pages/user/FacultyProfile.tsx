@@ -26,6 +26,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import TopNav from '../../components/TopNav';
+import useAutoLogout from '../../components/AutoLogOut';
+
 interface Job {
   id: number;
   title: string;
@@ -42,6 +44,7 @@ interface Job {
 }
 
 const FacultyProfile: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [department, setDepartment] = useState<string>('');
@@ -377,7 +380,8 @@ const FacultyProfile: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-      </Container>
+        {Modal}
+    </Container>
     </>
   );
 

@@ -22,6 +22,7 @@ import TAJobService from '../../services/tajob';
 import TopNav from '../../components/TopNav';
 import { alignProperty } from '@mui/material/styles/cssUtils';
 import { AlignHorizontalRight } from '@mui/icons-material';
+import useAutoLogout from '../../components/AutoLogOut';
 
 interface Course {
   id: number;
@@ -48,6 +49,7 @@ interface Job {
 }
 
 const StudentProfile: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [graduationYear, setGraduationYear] = useState<string>('');
@@ -517,7 +519,8 @@ const StudentProfile: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-      </Container>
+        {Modal}
+    </Container>
     </>
   );
 

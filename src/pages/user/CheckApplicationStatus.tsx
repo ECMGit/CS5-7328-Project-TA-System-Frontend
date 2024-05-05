@@ -1,7 +1,9 @@
 import React from 'react'; // page to check the status of individual applications 
 import { Container, Paper, Typography, Button } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const CheckApplicationStatus = () => {
+  const { Modal } = useAutoLogout();
   // Function to simulate checking the application status
   const checkStatus = () => {
     alert("Application Status: Under Review");
@@ -18,6 +20,7 @@ const CheckApplicationStatus = () => {
           Check Application Status
         </Button>
       </Paper>
+      {Modal}
     </Container>
   );
 };

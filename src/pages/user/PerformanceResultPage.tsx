@@ -13,6 +13,7 @@ import {
   Typography,
   IconButton
 } from '@mui/material';
+import useAutoLogout from '../../components/AutoLogOut';
 
 type PerformanceResult = {
   taUserId: number;
@@ -29,6 +30,7 @@ type PerformanceResult = {
 const ratingToPercentage = (rating: number) => (rating / 10) * 100;
 
 const PerformanceResultPage: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const [results, setResults] = useState<PerformanceResult[]>([]);
   const location = useLocation();
   const currentTaId = location.state?.user.id;
@@ -141,6 +143,7 @@ const PerformanceResultPage: React.FC = () => {
           </Card>
         ))}
       </Box>
+      {Modal}
     </Container>
   );
 };

@@ -13,7 +13,7 @@ import { useParams ,useNavigate } from 'react-router-dom';
 import { DataGrid, GridColDef, GridFilterModel ,GridToolbar } from '@mui/x-data-grid';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Chip from '@mui/material/Chip';
-
+import useAutoLogout from '../../components/AutoLogOut';
 
 export type TAApplication = {
   id: number;
@@ -48,6 +48,7 @@ export type CourseData = {
   };
 
 const ViewCourseDetail: React.FC = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams<{ id: string }>();
   const [taJobs, setTaJobs] = useState<TAJob[]>([]);
   const [taApplication, setTaApplication] = useState<TAApplication[]>([]);
@@ -252,6 +253,7 @@ const ViewCourseDetail: React.FC = () => {
           Engineering students to find TA jobs.
         </Typography>
       </Paper>
+        {Modal}
     </Container>
     
   );

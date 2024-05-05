@@ -4,8 +4,10 @@ import { Container, Typography, Button, Box, TextField } from '@mui/material';
 
 import CourseService from '../../services/course';
 import { courseData } from './courseData';
+import useAutoLogout from '../../components/AutoLogOut';
 
 const EditCourse: React.FC = () => {
+    const { Modal } = useAutoLogout();
     const [course, setCourse] = useState<courseData>({ id: 0, title: '', courseCode: '', description: '' });
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
@@ -106,6 +108,7 @@ const EditCourse: React.FC = () => {
                     )}
                 </Box>
             </Box>
+            {Modal}
         </Container>
     );
 };

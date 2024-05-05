@@ -24,6 +24,7 @@ import StudentDashboard from './StudentDashboard';
 
 // Define a functional component called 'Home' using the React.FC (Functional Component) type.
 const Home: React.FC = () => {
+  const { Modal } = useAutoLogout();
   // Initialize a 'user' state variable using the 'useState' hook, initially set to 'null'.
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -87,20 +88,6 @@ const Home: React.FC = () => {
   const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes
 
   const logoutFunction = () => navigate('/login'); // Define your logout action
-
-  // Use the auto-logout hook
-  const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: TIMEOUT_DURATION, // Use the defined timeout duration
-    logoutFunction: () => {
-      console.log('called');
-      localStorage.clear(); 
-      setUser(null); 
-      setIsLoggedIn(false); 
-      console.log('go to login');
-      navigate('/login'); 
-      
-    },
-  });
 
   // Use the 'useEffect' hook to execute code after the component renders.
   useEffect(() => {

@@ -67,6 +67,7 @@ function ApplicationPage() {
   // Basic Information
   // TODO: these ids need to come from previous endpoinds in the future
 
+  const { Modal } = useAutoLogout();
   const [studentId, setStudentId] = useState<number>(1);
   //set the course id to the course id from the url
   const [courseId, setCourseId] = useState<number>(1);
@@ -141,16 +142,6 @@ function ApplicationPage() {
   /**
    * Submission handler
    */
-  const { Modal, closeModal } = useAutoLogout({
-    timeoutDuration: 10 * 60 * 1000, // Use the defined timeout duration
-    logoutFunction: () => {
-      console.log('called');
-      localStorage.clear(); 
-      console.log('go to login');
-      navigate('/login'); 
-      
-    },
-  });
   const handleSubmit = function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // Get the data in json format.

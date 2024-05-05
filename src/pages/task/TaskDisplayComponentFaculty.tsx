@@ -9,6 +9,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import useAutoLogout from '../../components/AutoLogOut';
+
 interface Task {
   facultyId: number;
   studentId: number;
@@ -108,6 +110,7 @@ const ViewAssignedTasks: React.FC = () => {
     }
   }, []);
 
+  const { Modal } = useAutoLogout();
   const userContext = useContext(UserContext);
   const [tasks, setTasks] = useState<Task[]>([]);
   const storedUser = localStorage.getItem('user');

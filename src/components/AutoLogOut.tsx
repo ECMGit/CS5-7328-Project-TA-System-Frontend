@@ -1,22 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { timeoutWaitTime, timeoutDialogTime } from '../config';
 import CustomModal from './CustomModal'; // Adjust the import path as necessary
 
-interface UseAutoLogoutProps {
-  timeoutDuration: number;
-  logoutFunction: () => void;
-}
+/*
+HOW TO USE
+1. Import useAutoLogout from '../components/AutoLogOut', 
+  or from '../../components/AutoLogOut' depending on file location.
+2. Create a modal using const { Modal } = useAutoLogout();. 
+  This must be created in your function with your other const
+variables.
+3. Insert the modal onto the page with {Modal} in the return statement. 
+  Best inserted at the end before the end of your
+last container.
+*/
 
-const useAutoLogout = ({ timeoutDuration, logoutFunction }: UseAutoLogoutProps) => {
+const useAutoLogout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoutTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutDuration = timeoutWaitTime;
+  const timeoutDialog = timeoutDialogTime;
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalOpen(true); 
     // Start a logout countdown once the modal is shown
     logoutTimerRef.current = setTimeout(() => {
-      logoutFunction(); // Log out the user automatically if no response
-    }, 20000); // Give the user 20 seconds to respond to the modal
+      console.log('called');
+      localStorage.clear();
+      //setUser(null); //Some pages might need something like this
+      //setIsLoggedIn(false);
+      console.log('go to login');
+      navigate('/login');  // Log out the user automatically if no response
+    }, timeoutDialog); // Give the user timeDialog milliseconds to respond to the modal
   };
   const handleUserActivity = () => {
     setIsModalOpen(false); 
@@ -48,7 +65,7 @@ const useAutoLogout = ({ timeoutDuration, logoutFunction }: UseAutoLogoutProps) 
       if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
       if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
     };
-  }, [timeoutDuration, logoutFunction]);
+  }, []); // Stop Condition
 
   return {
     Modal: (
@@ -58,7 +75,10 @@ const useAutoLogout = ({ timeoutDuration, logoutFunction }: UseAutoLogoutProps) 
         onStay={handleUserActivity} // User decides to stay logged in
         onLeave={() => { // User decides to log out or does not respond in time
           if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
-          logoutFunction();
+          console.log('called');
+          localStorage.clear();
+          console.log('go to login');
+          navigate('/login');  // Log out the user automatically if no response
         }}
       />
     ),

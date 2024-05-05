@@ -15,8 +15,10 @@ import FeedbackService, { FeedbackComment } from '../../services/feedback';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FeedbackDetailsView } from './FeedbackDetailsView';
 import { UserContext } from '../../provider'; // Import UserContext
+import useAutoLogout from '../../components/AutoLogOut';
 
 export const IndividualFeedbackPage = () => {
+  const { Modal } = useAutoLogout();
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();

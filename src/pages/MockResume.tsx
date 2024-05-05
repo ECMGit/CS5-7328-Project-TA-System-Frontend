@@ -8,6 +8,7 @@ import { TAApplicationData } from './application/ViewApplications';
 import { Container,ApplicantTitle, ApplicantInfo } from '../pages/user/styledComponents';
 // Used for buttons
 import { Button } from '@mui/material';
+import useAutoLogout from '../components/AutoLogOut';
 
 // Define the 'Props' type, specifying that it should contain an 'application' property of type 'TAApplicationData'.
 type Props = {
@@ -15,7 +16,9 @@ type Props = {
 }
 
 // Define a React functional component called 'MockResume' that takes 'Props' as its props.
-const MockResume: React.FC<Props> = ({ application }) => {return (
+const MockResume: React.FC<Props> = ({ application }) => {
+  const { Modal } = useAutoLogout();
+  return (
   // Render the component and return JSX.
   <Container>
     <ApplicantTitle>Applicant {application.studentId}</ApplicantTitle>
@@ -34,6 +37,7 @@ const MockResume: React.FC<Props> = ({ application }) => {return (
       {' '}
       Edit Application{' '}
     </Button>
+    {Modal}
   </Container>
 );
 };
